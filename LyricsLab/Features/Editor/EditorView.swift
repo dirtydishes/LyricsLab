@@ -26,6 +26,9 @@ struct EditorView: View {
     @State private var sectionTask: Task<Void, Never>?
     @State private var sectionBrackets: [SectionBracket] = []
 
+    @State private var isArrangeSectionsPresented = false
+    @State private var editorCommand: EditorCommand?
+
     var body: some View {
         ZStack {
             themeManager.theme.backgroundGradient
@@ -50,6 +53,7 @@ struct EditorView: View {
                     selectedRange: $lyricsSelectedRange,
                     isFocused: $isLyricsFocused,
                     endRhymeTailLength: $composition.endRhymeTailLength,
+                    editorCommand: $editorCommand,
                     sectionBrackets: sectionBrackets,
                     onSetSectionOverride: { anchor, bars in
                         applySectionOverride(anchor: anchor, barCount: bars)
@@ -100,6 +104,38 @@ struct EditorView: View {
         }
         .navigationTitle(composition.title.isEmpty ? "Untitled" : composition.title)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            #if canImport(UIKit)
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    isLyricsFocused = false
+                    isArrangeSectionsPresented = true
+                } label: {
+                    Image(systemName: "arrow.up.arrow.down.text.horizontal")
+                }
+                .accessibilityLabel("Arrange Sections")
+            }
+            #endif
+        }
+        #if canImport(UIKit)
+        .sheet(isPresented: $isArrangeSectionsPresented) {
+            NavigationStack {
+                ArrangeSectionsSheet(
+                    sourceText: composition.lyrics,
+                    sourceSelectedRange: lyricsSelectedRange
+                ) { result in
+                    editorCommand = .replaceText(
+                        text: result.text,
+                        selectedRange: result.selectedRange,
+                        undoActionName: "Rearrange Sections"
+                    )
+                    isLyricsFocused = true
+                }
+            }
+            .environmentObject(themeManager)
+            .tint(themeManager.theme.accent)
+        }
+        #endif
         .onAppear {
             composition.lastOpenedAt = Date()
             isLyricsFocused = true

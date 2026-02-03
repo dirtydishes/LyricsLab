@@ -53,6 +53,17 @@ final class EditorTextViewController: UIViewController {
         sectionGutterView.setNeedsDisplay()
     }
 
+    func applyCommand(_ command: EditorCommand) -> Bool {
+        // Avoid interfering with IME composition.
+        guard textView.markedTextRange == nil else { return false }
+
+        switch command.kind {
+        case let .replaceText(nextText, nextSelectedRange, undoActionName):
+            replaceTextAndSelection(text: nextText, selectedRange: nextSelectedRange, undoActionName: undoActionName)
+            return true
+        }
+    }
+
     func update(
         text: String,
         selectedRange: NSRange,
@@ -236,6 +247,45 @@ final class EditorTextViewController: UIViewController {
         isApplyingExternalSelection = true
         textView.selectedRange = clamped
         isApplyingExternalSelection = false
+    }
+
+    private func clampSelectedRange(_ range: NSRange, textLength: Int) -> NSRange {
+        var clamped = range
+        if clamped.location < 0 { clamped.location = 0 }
+        if clamped.location > textLength { clamped.location = textLength }
+        if clamped.length < 0 { clamped.length = 0 }
+        if clamped.location + clamped.length > textLength {
+            clamped.length = max(0, textLength - clamped.location)
+        }
+        return clamped
+    }
+
+    private func replaceTextAndSelection(text: String, selectedRange: NSRange, undoActionName: String) {
+        let oldText = textView.text ?? ""
+        let oldSelection = textView.selectedRange
+
+        if oldText == text && oldSelection == selectedRange {
+            return
+        }
+
+        if let undoManager = textView.undoManager {
+            undoManager.registerUndo(withTarget: self) { target in
+                target.replaceTextAndSelection(text: oldText, selectedRange: oldSelection, undoActionName: undoActionName)
+            }
+            undoManager.setActionName(undoActionName)
+        }
+
+        let clamped = clampSelectedRange(selectedRange, textLength: (text as NSString).length)
+
+        isPerformingProgrammaticEdit = true
+        textView.text = text
+        textView.selectedRange = clamped
+        isPerformingProgrammaticEdit = false
+
+        onTextChanged?(textView.text)
+        onSelectionChanged?(textView.selectedRange)
+        sectionGutterView.setNeedsDisplay()
+        ensureCaretVisible(reason: .externalUpdate, animated: false)
     }
 
     private func applyHighlightsIfNeeded(_ highlights: [TextHighlight]) {
