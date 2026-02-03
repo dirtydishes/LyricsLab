@@ -1,12 +1,14 @@
 import SwiftUI
 import SwiftData
 import Foundation
+import UniformTypeIdentifiers
 
 struct EditorView: View {
     @Environment(\.modelContext) private var modelContext
     @Bindable var composition: Composition
 
     @EnvironmentObject private var themeManager: ThemeManager
+    @EnvironmentObject private var audioPlayer: AudioPlayer
 
     @State private var lyricsSelectedRange = NSRange(location: 0, length: 0)
     @State private var isLyricsFocused = false
@@ -21,6 +23,8 @@ struct EditorView: View {
     @State private var suggestionsTask: Task<Void, Never>?
 
     @State private var suggestions: [String] = []
+    @State private var isShowingAudioImporter = false
+    @State private var showingAudioError = false
 
     var body: some View {
         ZStack {
@@ -48,10 +52,20 @@ struct EditorView: View {
                     highlights: textHighlights,
                     suggestions: suggestions,
                     isLoadingSuggestions: !rhymeServiceReady,
+                    miniPlayerTitle: audioPlayer.track?.displayName,
+                    miniPlayerIsPlaying: audioPlayer.isPlaying,
+                    miniPlayerIsLoading: audioPlayer.isLoading,
+                    onMiniPlayerTogglePlayPause: {
+                        audioPlayer.togglePlayPause()
+                    },
+                    onMiniPlayerStop: {
+                        audioPlayer.stop()
+                    },
                     preferredColorScheme: themeManager.theme.colorScheme,
                     preferredTextColor: themeManager.theme.textPrimary,
                     preferredTintColor: themeManager.theme.accent
                 )
+                .ignoresSafeArea(.keyboard, edges: .bottom)
                 #else
                 LyricsTextView(
                     text: $composition.lyrics,
@@ -66,6 +80,16 @@ struct EditorView: View {
                     EmptyView()
                 }
 
+                if let title = audioPlayer.track?.displayName {
+                    EditorMiniPlayerBar(
+                        title: title,
+                        isPlaying: audioPlayer.isPlaying,
+                        isLoading: audioPlayer.isLoading,
+                        onTogglePlayPause: { audioPlayer.togglePlayPause() },
+                        onStop: { audioPlayer.stop() }
+                    )
+                }
+
                 EditorSuggestionsBar(suggestions: suggestions, isLoading: !rhymeServiceReady) { word in
                     insertSuggestionFallback(word)
                 }
@@ -74,6 +98,42 @@ struct EditorView: View {
         }
         .navigationTitle(composition.title.isEmpty ? "Untitled" : composition.title)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    isShowingAudioImporter = true
+                } label: {
+                    Image(systemName: "music.note")
+                }
+                .accessibilityLabel("Import Audio")
+            }
+        }
+        .fileImporter(
+            isPresented: $isShowingAudioImporter,
+            allowedContentTypes: [.audio],
+            allowsMultipleSelection: false
+        ) { result in
+            switch result {
+            case .success(let urls):
+                guard let url = urls.first else { return }
+                audioPlayer.importAndLoad(from: url)
+            case .failure(let error):
+                audioPlayer.lastErrorMessage = error.localizedDescription
+                showingAudioError = true
+            }
+        }
+        .onChange(of: audioPlayer.lastErrorMessage) {
+            if audioPlayer.lastErrorMessage != nil {
+                showingAudioError = true
+            }
+        }
+        .alert("Audio Error", isPresented: $showingAudioError) {
+            Button("OK") {
+                audioPlayer.lastErrorMessage = nil
+            }
+        } message: {
+            Text(audioPlayer.lastErrorMessage ?? "Unknown error.")
+        }
         .onAppear {
             composition.lastOpenedAt = Date()
             isLyricsFocused = true
@@ -252,5 +312,6 @@ struct EditorView_Previews: PreviewProvider {
         }
         .modelContainer(for: Composition.self, inMemory: true)
         .environmentObject(ThemeManager())
+        .environmentObject(AudioPlayer())
     }
 }

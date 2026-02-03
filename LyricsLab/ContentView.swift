@@ -14,5 +14,6 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
             .modelContainer(for: Composition.self, inMemory: true)
             .environmentObject(ThemeManager())
+            .environmentObject(AudioPlayer())
     }
 }

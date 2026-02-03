@@ -10,6 +10,11 @@ struct EditorTextViewControllerRepresentable: UIViewControllerRepresentable {
     var highlights: [TextHighlight]
     var suggestions: [String]
     var isLoadingSuggestions: Bool
+    var miniPlayerTitle: String?
+    var miniPlayerIsPlaying: Bool
+    var miniPlayerIsLoading: Bool
+    var onMiniPlayerTogglePlayPause: () -> Void
+    var onMiniPlayerStop: () -> Void
 
     var preferredColorScheme: ColorScheme? = nil
     var preferredTextColor: Color? = nil
@@ -43,10 +48,15 @@ struct EditorTextViewControllerRepresentable: UIViewControllerRepresentable {
             highlights: highlights,
             suggestions: suggestions,
             isLoadingSuggestions: isLoadingSuggestions,
+            miniPlayerTitle: miniPlayerTitle,
+            miniPlayerIsPlaying: miniPlayerIsPlaying,
+            miniPlayerIsLoading: miniPlayerIsLoading,
             preferredColorScheme: preferredColorScheme,
             preferredTextColor: preferredTextColor,
             preferredTintColor: preferredTintColor
         )
+        uiViewController.onMiniPlayerTogglePlayPause = onMiniPlayerTogglePlayPause
+        uiViewController.onMiniPlayerStop = onMiniPlayerStop
     }
 }
 
