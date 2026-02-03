@@ -17,8 +17,11 @@ final class EditorTextViewController: UIViewController {
     var onFocusChanged: ((Bool) -> Void)?
     var onSuggestionAccepted: ((String) -> Void)?
     var onEndRhymeTailLengthChanged: ((Int) -> Void)?
+    var onSetSectionOverride: ((String, Int?) -> Void)?
 
     private(set) var textView = UITextView()
+
+    private let sectionGutterView = EditorSectionGutterView()
 
     private var suggestionsHostingController: UIHostingController<EditorSuggestionsBar>?
 
@@ -33,6 +36,8 @@ final class EditorTextViewController: UIViewController {
 
     private var lastAppliedHighlights: [TextHighlight] = []
 
+    private var lastAppliedSectionBrackets: [SectionBracket] = []
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clear
@@ -45,6 +50,18 @@ final class EditorTextViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         ensureCaretVisible(reason: .layout, animated: false)
+        sectionGutterView.setNeedsDisplay()
+    }
+
+    func applyCommand(_ command: EditorCommand) -> Bool {
+        // Avoid interfering with IME composition.
+        guard textView.markedTextRange == nil else { return false }
+
+        switch command.kind {
+        case let .replaceText(nextText, nextSelectedRange, undoActionName):
+            replaceTextAndSelection(text: nextText, selectedRange: nextSelectedRange, undoActionName: undoActionName)
+            return true
+        }
     }
 
     func update(
@@ -56,6 +73,7 @@ final class EditorTextViewController: UIViewController {
         isLoadingSuggestions: Bool,
         barPosition: BarPosition?,
         endRhymeTailLength: Int,
+        sectionBrackets: [SectionBracket],
         preferredColorScheme: ColorScheme?,
         preferredTextColor: Color?,
         preferredTintColor: Color?
@@ -64,6 +82,7 @@ final class EditorTextViewController: UIViewController {
         applyTextIfNeeded(text)
         applySelectionIfNeeded(selectedRange)
         applyHighlightsIfNeeded(highlights)
+        applySectionBracketsIfNeeded(sectionBrackets)
         updateSuggestionsBar(
             suggestions: suggestions,
             isLoading: isLoadingSuggestions,
@@ -78,12 +97,56 @@ final class EditorTextViewController: UIViewController {
         textView.backgroundColor = .clear
         textView.font = UIFont.preferredFont(forTextStyle: .body)
         textView.adjustsFontForContentSizeCategory = true
-        textView.textContainerInset = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+        // Reserve a small gutter for section brackets.
+        textView.textContainerInset = UIEdgeInsets(top: 12, left: 56, bottom: 12, right: 12)
         textView.keyboardDismissMode = .interactive
         textView.alwaysBounceVertical = true
 
         textView.delegate = self
         textView.scrollsToTop = true
+
+        sectionGutterView.textView = textView
+        sectionGutterView.translatesAutoresizingMaskIntoConstraints = false
+        sectionGutterView.onTapBracket = { [weak self] bracket in
+            self?.presentSectionOverrideSheet(for: bracket)
+        }
+        textView.addSubview(sectionGutterView)
+        NSLayoutConstraint.activate([
+            sectionGutterView.leadingAnchor.constraint(equalTo: textView.leadingAnchor),
+            sectionGutterView.trailingAnchor.constraint(equalTo: textView.trailingAnchor),
+            sectionGutterView.topAnchor.constraint(equalTo: textView.topAnchor),
+            sectionGutterView.bottomAnchor.constraint(equalTo: textView.bottomAnchor),
+        ])
+    }
+
+    private func applySectionBracketsIfNeeded(_ next: [SectionBracket]) {
+        guard next != lastAppliedSectionBrackets else { return }
+        lastAppliedSectionBrackets = next
+        sectionGutterView.brackets = next
+    }
+
+    private func presentSectionOverrideSheet(for bracket: SectionBracket) {
+        let title = bracket.labelText ?? "Section"
+        let message = "Lock this stanza to a bar count"
+
+        let sheet = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
+
+        for bars in [4, 8, 12, 16] {
+            sheet.addAction(UIAlertAction(title: "\(bars) bars", style: .default) { [weak self] _ in
+                self?.onSetSectionOverride?(bracket.anchor, bars)
+            })
+        }
+        sheet.addAction(UIAlertAction(title: "Clear Override", style: .destructive) { [weak self] _ in
+            self?.onSetSectionOverride?(bracket.anchor, nil)
+        })
+        sheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+
+        if let pop = sheet.popoverPresentationController {
+            pop.sourceView = sectionGutterView
+            pop.sourceRect = CGRect(x: 28, y: sectionGutterView.bounds.midY, width: 1, height: 1)
+        }
+
+        present(sheet, animated: true)
     }
 
     private func configureSuggestionsBar() {
@@ -184,6 +247,45 @@ final class EditorTextViewController: UIViewController {
         isApplyingExternalSelection = true
         textView.selectedRange = clamped
         isApplyingExternalSelection = false
+    }
+
+    private func clampSelectedRange(_ range: NSRange, textLength: Int) -> NSRange {
+        var clamped = range
+        if clamped.location < 0 { clamped.location = 0 }
+        if clamped.location > textLength { clamped.location = textLength }
+        if clamped.length < 0 { clamped.length = 0 }
+        if clamped.location + clamped.length > textLength {
+            clamped.length = max(0, textLength - clamped.location)
+        }
+        return clamped
+    }
+
+    private func replaceTextAndSelection(text: String, selectedRange: NSRange, undoActionName: String) {
+        let oldText = textView.text ?? ""
+        let oldSelection = textView.selectedRange
+
+        if oldText == text && oldSelection == selectedRange {
+            return
+        }
+
+        if let undoManager = textView.undoManager {
+            undoManager.registerUndo(withTarget: self) { target in
+                target.replaceTextAndSelection(text: oldText, selectedRange: oldSelection, undoActionName: undoActionName)
+            }
+            undoManager.setActionName(undoActionName)
+        }
+
+        let clamped = clampSelectedRange(selectedRange, textLength: (text as NSString).length)
+
+        isPerformingProgrammaticEdit = true
+        textView.text = text
+        textView.selectedRange = clamped
+        isPerformingProgrammaticEdit = false
+
+        onTextChanged?(textView.text)
+        onSelectionChanged?(textView.selectedRange)
+        sectionGutterView.setNeedsDisplay()
+        ensureCaretVisible(reason: .externalUpdate, animated: false)
     }
 
     private func applyHighlightsIfNeeded(_ highlights: [TextHighlight]) {
@@ -334,6 +436,7 @@ extension EditorTextViewController: UITextViewDelegate {
         guard !isPerformingProgrammaticEdit else { return }
         onTextChanged?(textView.text)
         ensureCaretVisible(reason: .typing, animated: false)
+        sectionGutterView.setNeedsDisplay()
     }
 
     func textViewDidChangeSelection(_ textView: UITextView) {
@@ -353,6 +456,10 @@ extension EditorTextViewController: UITextViewDelegate {
 }
 
 extension EditorTextViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        sectionGutterView.setNeedsDisplay()
+    }
+
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         isUserScrolling = true
     }

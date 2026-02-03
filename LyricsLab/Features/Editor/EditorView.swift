@@ -23,6 +23,12 @@ struct EditorView: View {
     @State private var suggestions: [String] = []
     @State private var barPosition: BarPosition?
 
+    @State private var sectionTask: Task<Void, Never>?
+    @State private var sectionBrackets: [SectionBracket] = []
+
+    @State private var isArrangeSectionsPresented = false
+    @State private var editorCommand: EditorCommand?
+
     var body: some View {
         ZStack {
             themeManager.theme.backgroundGradient
@@ -47,6 +53,11 @@ struct EditorView: View {
                     selectedRange: $lyricsSelectedRange,
                     isFocused: $isLyricsFocused,
                     endRhymeTailLength: $composition.endRhymeTailLength,
+                    editorCommand: $editorCommand,
+                    sectionBrackets: sectionBrackets,
+                    onSetSectionOverride: { anchor, bars in
+                        applySectionOverride(anchor: anchor, barCount: bars)
+                    },
                     highlights: textHighlights,
                     suggestions: suggestions,
                     isLoadingSuggestions: !rhymeServiceReady,
@@ -93,6 +104,38 @@ struct EditorView: View {
         }
         .navigationTitle(composition.title.isEmpty ? "Untitled" : composition.title)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            #if canImport(UIKit)
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    isLyricsFocused = false
+                    isArrangeSectionsPresented = true
+                } label: {
+                    Image(systemName: "arrow.up.arrow.down.text.horizontal")
+                }
+                .accessibilityLabel("Arrange Sections")
+            }
+            #endif
+        }
+        #if canImport(UIKit)
+        .sheet(isPresented: $isArrangeSectionsPresented) {
+            NavigationStack {
+                ArrangeSectionsSheet(
+                    sourceText: composition.lyrics,
+                    sourceSelectedRange: lyricsSelectedRange
+                ) { result in
+                    editorCommand = .replaceText(
+                        text: result.text,
+                        selectedRange: result.selectedRange,
+                        undoActionName: "Rearrange Sections"
+                    )
+                    isLyricsFocused = true
+                }
+            }
+            .environmentObject(themeManager)
+            .tint(themeManager.theme.accent)
+        }
+        #endif
         .onAppear {
             composition.lastOpenedAt = Date()
             isLyricsFocused = true
@@ -110,6 +153,7 @@ struct EditorView: View {
 
             scheduleRhymeAnalysis()
             refreshAssist()
+            scheduleSectionDetection()
         }
         .onChange(of: composition.title) {
             scheduleAutosave()
@@ -118,12 +162,16 @@ struct EditorView: View {
             scheduleAutosave()
             scheduleRhymeAnalysis()
             refreshAssist()
+            scheduleSectionDetection()
         }
         .onChange(of: composition.endRhymeTailLength) {
             // End-rhyme tail length affects both highlights (end groups) and suggestion targeting.
             scheduleAutosave()
             scheduleRhymeAnalysis()
             refreshAssist()
+        }
+        .onChange(of: composition.sectionOverridesBlob) {
+            scheduleSectionDetection()
         }
         .onChange(of: lyricsSelectedRange) {
             refreshAssist()
@@ -140,6 +188,9 @@ struct EditorView: View {
 
             suggestionsTask?.cancel()
             suggestionsTask = nil
+
+            sectionTask?.cancel()
+            sectionTask = nil
 
             warmUpTask?.cancel()
             warmUpTask = nil
@@ -210,6 +261,31 @@ struct EditorView: View {
                 barPosition = result.barPosition
                 rhymeServiceReady = true
             }
+        }
+    }
+
+    private func scheduleSectionDetection() {
+        sectionTask?.cancel()
+        sectionTask = Task {
+            try? await Task.sleep(for: .milliseconds(350))
+
+            let snapshot = await MainActor.run { composition.lyrics }
+            let overridesBlob = await MainActor.run { composition.sectionOverridesBlob }
+            let next = SectionDetector.detectBrackets(text: snapshot, overridesBlob: overridesBlob)
+
+            guard !Task.isCancelled else { return }
+            await MainActor.run {
+                sectionBrackets = next
+            }
+        }
+    }
+
+    private func applySectionOverride(anchor: String, barCount: Int?) {
+        let next = SectionDetector.applyOverride(blob: composition.sectionOverridesBlob, anchor: anchor, barCount: barCount)
+        if composition.sectionOverridesBlob != next {
+            composition.sectionOverridesBlob = next
+            scheduleAutosave()
+            scheduleSectionDetection()
         }
     }
 

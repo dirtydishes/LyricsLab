@@ -29,6 +29,41 @@ struct RhymeEngineTests {
         #expect(sig?.vowelBase == "IH")
     }
 
+    @Test func contextKeywordsIgnoreStopwords() async throws {
+        let text = "I got money on my mind\nMoney and cars on the street\n"
+        let cursor = (text as NSString).length
+        let keywords = ContextScorer.keywords(text: text, cursorLocation: cursor, maxLines: 4)
+        #expect(keywords.contains("money") == true)
+        #expect(keywords.contains("street") == true)
+        #expect(keywords.contains("cars") == true)
+        #expect(keywords.contains("the") == false)
+        #expect(keywords.contains("and") == false)
+    }
+
+    @Test func sectionDetectorSplitsStanzasAndSnapsBarCounts() async throws {
+        let text = "a\nb\nc\nd\n\n1\n2\n3\n4\n5\n6\n7\n8\n"
+        let brackets = SectionDetector.detectBrackets(text: text, overridesBlob: "")
+        #expect(brackets.count == 2)
+
+        #expect(brackets[0].barCount == 4)
+        #expect(brackets[0].labelBars == 4)
+
+        #expect(brackets[1].barCount == 8)
+        #expect(brackets[1].labelBars == 8)
+    }
+
+    @Test func sectionOverrideIsAppliedByAnchor() async throws {
+        let text = "money on my mind\nline2\nline3\nline4\n"
+        let brackets = SectionDetector.detectBrackets(text: text, overridesBlob: "")
+        #expect(brackets.count == 1)
+
+        let anchor = brackets[0].anchor
+        let blob = SectionDetector.applyOverride(blob: "", anchor: anchor, barCount: 8)
+        let after = SectionDetector.detectBrackets(text: text, overridesBlob: blob)
+        #expect(after.first?.isLocked == true)
+        #expect(after.first?.labelBars == 8)
+    }
+
     @Test func bundledCMUDictExistsInAppBundle() async throws {
         let bundle = Bundle(for: CMUDictionary.self)
         let candidates = ["cmudict", "cmudict-0.7b"]
