@@ -25,6 +25,7 @@ struct EditorView: View {
     @State private var suggestions: [String] = []
     @State private var isShowingAudioImporter = false
     @State private var showingAudioError = false
+    @State private var barPosition: BarPosition?
 
     var body: some View {
         ZStack {
@@ -49,6 +50,7 @@ struct EditorView: View {
                     text: $composition.lyrics,
                     selectedRange: $lyricsSelectedRange,
                     isFocused: $isLyricsFocused,
+                    endRhymeTailLength: $composition.endRhymeTailLength,
                     highlights: textHighlights,
                     suggestions: suggestions,
                     isLoadingSuggestions: !rhymeServiceReady,
@@ -60,6 +62,10 @@ struct EditorView: View {
                     },
                     onMiniPlayerStop: {
                         audioPlayer.stop()
+                    },
+                    barPosition: barPosition,
+                    onSuggestionAccepted: { word in
+                        recordSuggestionAcceptance(word)
                     },
                     preferredColorScheme: themeManager.theme.colorScheme,
                     preferredTextColor: themeManager.theme.textPrimary,
@@ -90,8 +96,21 @@ struct EditorView: View {
                     )
                 }
 
-                EditorSuggestionsBar(suggestions: suggestions, isLoading: !rhymeServiceReady) { word in
+                EditorSuggestionsBar(
+                    suggestions: suggestions,
+                    isLoading: !rhymeServiceReady,
+                    barPosition: barPosition,
+                    endRhymeTailLength: composition.endRhymeTailLength,
+                    onSetEndRhymeTailLength: { next in
+                        let clamped = max(1, min(2, next))
+                        if composition.endRhymeTailLength != clamped {
+                            composition.endRhymeTailLength = clamped
+                            try? modelContext.save()
+                        }
+                    }
+                ) { word in
                     insertSuggestionFallback(word)
+                    recordSuggestionAcceptance(word)
                 }
                 #endif
             }
@@ -138,6 +157,8 @@ struct EditorView: View {
             composition.lastOpenedAt = Date()
             isLyricsFocused = true
 
+            ensureCompositionLexiconState()
+
             warmUpTask?.cancel()
             warmUpTask = Task {
                 await RhymeService.shared.warmUp()
@@ -148,7 +169,7 @@ struct EditorView: View {
             }
 
             scheduleRhymeAnalysis()
-            refreshSuggestions()
+            refreshAssist()
         }
         .onChange(of: composition.title) {
             scheduleAutosave()
@@ -156,10 +177,16 @@ struct EditorView: View {
         .onChange(of: composition.lyrics) {
             scheduleAutosave()
             scheduleRhymeAnalysis()
-            refreshSuggestions()
+            refreshAssist()
+        }
+        .onChange(of: composition.endRhymeTailLength) {
+            // End-rhyme tail length affects both highlights (end groups) and suggestion targeting.
+            scheduleAutosave()
+            scheduleRhymeAnalysis()
+            refreshAssist()
         }
         .onChange(of: lyricsSelectedRange) {
-            refreshSuggestions()
+            refreshAssist()
         }
         .onSubmit {
             isLyricsFocused = true
@@ -207,8 +234,8 @@ struct EditorView: View {
             try? await Task.sleep(for: .milliseconds(325))
 
             let snapshot = await MainActor.run { composition.lyrics }
-
-            let analysis = await RhymeService.shared.analyze(text: snapshot)
+            let tailLength = await MainActor.run { max(1, min(2, composition.endRhymeTailLength)) }
+            let analysis = await RhymeService.shared.analyze(text: snapshot, endRhymeTailLength: tailLength)
 
             guard !Task.isCancelled else { return }
             await MainActor.run {
@@ -218,23 +245,46 @@ struct EditorView: View {
         }
     }
 
-    private func refreshSuggestions() {
+    private func refreshAssist() {
         suggestionsTask?.cancel()
 
         let textSnapshot = composition.lyrics
         let cursorSnapshot = lyricsSelectedRange.location
+        let tailLengthSnapshot = max(1, min(2, composition.endRhymeTailLength))
+
+        // Snapshot the lexicon on the main actor (SwiftData), then compute assist off-main.
+        let lexiconSnapshot = UserLexiconStore.fetchTopUserLexiconItems(in: modelContext, limit: 512)
+
         suggestionsTask = Task {
-            let next = await RhymeService.shared.suggestions(
+            let result = await RhymeService.shared.editorAssist(
                 text: textSnapshot,
-                cursorLocation: cursorSnapshot
+                cursorLocation: cursorSnapshot,
+                userLexicon: lexiconSnapshot,
+                endRhymeTailLength: tailLengthSnapshot,
+                maxCount: 12
             )
 
             guard !Task.isCancelled else { return }
             await MainActor.run {
-                suggestions = next
+                suggestions = result.suggestions
+                barPosition = result.barPosition
                 rhymeServiceReady = true
             }
         }
+    }
+
+    private func ensureCompositionLexiconState() {
+        guard composition.lexiconState == nil else { return }
+
+        let state = CompositionLexiconState(composition: composition)
+        composition.lexiconState = state
+        modelContext.insert(state)
+        try? modelContext.save()
+    }
+
+    private func recordSuggestionAcceptance(_ word: String) {
+        UserLexiconStore.recordAcceptedWord(word, in: modelContext)
+        try? modelContext.save()
     }
 
     private func insertSuggestionFallback(_ word: String) {
@@ -310,7 +360,7 @@ struct EditorView_Previews: PreviewProvider {
         NavigationStack {
             EditorView(composition: Composition(title: "Draft", lyrics: "Hello\nWorld"))
         }
-        .modelContainer(for: Composition.self, inMemory: true)
+        .modelContainer(for: [Composition.self, UserLexiconEntry.self, CompositionLexiconState.self], inMemory: true)
         .environmentObject(ThemeManager())
         .environmentObject(AudioPlayer())
     }

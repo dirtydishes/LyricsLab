@@ -6,6 +6,7 @@ struct EditorTextViewControllerRepresentable: UIViewControllerRepresentable {
     @Binding var text: String
     @Binding var selectedRange: NSRange
     @Binding var isFocused: Bool
+    @Binding var endRhymeTailLength: Int
 
     var highlights: [TextHighlight]
     var suggestions: [String]
@@ -15,6 +16,8 @@ struct EditorTextViewControllerRepresentable: UIViewControllerRepresentable {
     var miniPlayerIsLoading: Bool
     var onMiniPlayerTogglePlayPause: () -> Void
     var onMiniPlayerStop: () -> Void
+    var barPosition: BarPosition?
+    var onSuggestionAccepted: ((String) -> Void)?
 
     var preferredColorScheme: ColorScheme? = nil
     var preferredTextColor: Color? = nil
@@ -37,6 +40,14 @@ struct EditorTextViewControllerRepresentable: UIViewControllerRepresentable {
                 isFocused = focused
             }
         }
+        vc.onSuggestionAccepted = { word in
+            onSuggestionAccepted?(word)
+        }
+        vc.onEndRhymeTailLengthChanged = { next in
+            if endRhymeTailLength != next {
+                endRhymeTailLength = next
+            }
+        }
         return vc
     }
 
@@ -48,6 +59,8 @@ struct EditorTextViewControllerRepresentable: UIViewControllerRepresentable {
             highlights: highlights,
             suggestions: suggestions,
             isLoadingSuggestions: isLoadingSuggestions,
+            barPosition: barPosition,
+            endRhymeTailLength: endRhymeTailLength,
             miniPlayerTitle: miniPlayerTitle,
             miniPlayerIsPlaying: miniPlayerIsPlaying,
             miniPlayerIsLoading: miniPlayerIsLoading,
@@ -55,6 +68,9 @@ struct EditorTextViewControllerRepresentable: UIViewControllerRepresentable {
             preferredTextColor: preferredTextColor,
             preferredTintColor: preferredTintColor
         )
+        uiViewController.onSuggestionAccepted = { word in
+            onSuggestionAccepted?(word)
+        }
         uiViewController.onMiniPlayerTogglePlayPause = onMiniPlayerTogglePlayPause
         uiViewController.onMiniPlayerStop = onMiniPlayerStop
     }

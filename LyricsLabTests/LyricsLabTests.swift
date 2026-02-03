@@ -10,8 +10,23 @@ struct RhymeEngineTests {
             wordToRhymeKeys: index.wordToKeys,
             rhymeKeyToWords: index.keyToWords,
             vowelGroupToKeys: index.vowelGroupToKeys,
-            vowelGroupConsonantClassToKeys: index.vowelGroupConsonantClassToKeys
+            vowelGroupConsonantClassToKeys: index.vowelGroupConsonantClassToKeys,
+            wordToSyllableCount: index.wordToSyllables,
+            wordToTail2Keys: index.wordToTail2Keys,
+            tail2KeyToWords: index.tail2KeyToWords,
+            vowelGroupToTail2Keys: index.vowelGroupToTail2Keys,
+            vowelGroupConsonantClassToTail2Keys: index.vowelGroupConsonantClassToTail2Keys
         )
+    }
+
+    @Test func tail2KeyUsesLastTwoVowelSegments() async throws {
+        let key = RhymeKey.tailKey(fromPhonemes: ["T", "AY1", "M", "IH0", "NG"], vowelNucleiCount: 2)
+        #expect(key == "AY1 M IH0 NG")
+    }
+
+    @Test func signatureUsesLastVowelInMultiTailKey() async throws {
+        let sig = RhymeKey.signature(fromRhymeKey: "AY1 M IH0 NG")
+        #expect(sig?.vowelBase == "IH")
     }
 
     @Test func bundledCMUDictExistsInAppBundle() async throws {
@@ -45,6 +60,7 @@ struct RhymeEngineTests {
         #expect(index.keyToWords["AY1 M"]?.contains("rhyme") == true)
         #expect(index.vowelGroupToKeys["diphthong"]?.contains("AY1 M") == true)
         #expect(index.vowelGroupConsonantClassToKeys["diphthong|nasal"]?.contains("AY1 M") == true)
+        #expect(index.wordToSyllables["time"] == 1)
     }
 
     @Test func nearRhymeSimilarityTreatsNasalEndingsAsNear() async throws {
