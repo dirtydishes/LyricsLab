@@ -5,6 +5,7 @@ struct SettingsView: View {
     @AppStorage("icloudSyncEnabled") private var iCloudSyncEnabled = true
 
     @State private var showingRestartAlert = false
+    @State private var showingLaunchWelcome = false
 
     #if DEBUG
     @AppStorage("bypassIAP") private var bypassIAP = false
@@ -46,6 +47,19 @@ struct SettingsView: View {
                     Toggle("Bypass IAP", isOn: $bypassIAP)
                 }
                 #endif
+
+                Section("About") {
+                    HStack {
+                        Text("Version")
+                        Spacer()
+                        Text("1.0 (beta 7)")
+                            .foregroundStyle(.secondary)
+                    }
+
+                    Button("View Welcome Screen") {
+                        showingLaunchWelcome = true
+                    }
+                }
             }
             .scrollContentBackground(.hidden)
         }
@@ -55,6 +69,13 @@ struct SettingsView: View {
         } message: {
             let appName = themeManager.themeID == .davyDollas ? "Lyric$Lab" : "LyricsLab"
             Text("Restart \(appName) to apply your iCloud Sync setting.")
+        }
+        .sheet(isPresented: $showingLaunchWelcome) {
+            LaunchWelcomeView(onDismiss: {
+                showingLaunchWelcome = false
+            })
+            .environmentObject(themeManager)
+            .tint(themeManager.theme.accent)
         }
     }
 }

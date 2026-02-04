@@ -17,6 +17,9 @@ struct HomeView: View {
     @State private var showingSettings = false
     @State private var gearRotation: Angle = .zero
     @State private var newComposition: Composition?
+    @State private var showingLaunchWelcome = false
+
+    @AppStorage("hasSeenLaunchWelcome") private var hasSeenLaunchWelcome = false
 
     private var filteredCompositions: [Composition] {
         let q = debouncedSearchText.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
@@ -49,6 +52,9 @@ struct HomeView: View {
             .searchable(text: $searchText)
             .onAppear {
                 debouncedSearchText = searchText
+                if !hasSeenLaunchWelcome {
+                    showingLaunchWelcome = true
+                }
             }
             .onChange(of: searchText) {
                 searchDebounceTask?.cancel()
@@ -97,6 +103,16 @@ struct HomeView: View {
             .sheet(isPresented: $showingSettings) {
                 NavigationStack {
                     SettingsView()
+                }
+                .environmentObject(themeManager)
+                .tint(themeManager.theme.accent)
+            }
+            .sheet(isPresented: $showingLaunchWelcome, onDismiss: {
+                hasSeenLaunchWelcome = true
+            }) {
+                LaunchWelcomeView {
+                    hasSeenLaunchWelcome = true
+                    showingLaunchWelcome = false
                 }
                 .environmentObject(themeManager)
                 .tint(themeManager.theme.accent)
