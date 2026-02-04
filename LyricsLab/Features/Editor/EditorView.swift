@@ -1,12 +1,14 @@
 import SwiftUI
 import SwiftData
 import Foundation
+import UniformTypeIdentifiers
 
 struct EditorView: View {
     @Environment(\.modelContext) private var modelContext
     @Bindable var composition: Composition
 
     @EnvironmentObject private var themeManager: ThemeManager
+    @EnvironmentObject private var audioPlayer: AudioPlayer
 
     @State private var lyricsSelectedRange = NSRange(location: 0, length: 0)
     @State private var isLyricsFocused = false
@@ -20,8 +22,11 @@ struct EditorView: View {
 
     @State private var suggestionsTask: Task<Void, Never>?
 
-    @State private var suggestions: [String] = []
+    @State private var suggestions: [RhymeSuggestion] = []
+    @State private var isShowingAudioImporter = false
+    @State private var showingAudioError = false
     @State private var barPosition: BarPosition?
+    @State private var isShowingEditorHelp = false
 
     var body: some View {
         ZStack {
@@ -50,14 +55,26 @@ struct EditorView: View {
                     highlights: textHighlights,
                     suggestions: suggestions,
                     isLoadingSuggestions: !rhymeServiceReady,
+                    miniPlayerTitle: audioPlayer.track?.displayName,
+                    miniPlayerIsPlaying: audioPlayer.isPlaying,
+                    miniPlayerIsLoading: audioPlayer.isLoading,
+                    onMiniPlayerTogglePlayPause: {
+                        audioPlayer.togglePlayPause()
+                    },
+                    onMiniPlayerStop: {
+                        audioPlayer.stop()
+                    },
                     barPosition: barPosition,
                     onSuggestionAccepted: { word in
                         recordSuggestionAcceptance(word)
                     },
+                    endRhymeColor: suggestionEndColor,
+                    internalRhymeColor: suggestionInternalColor,
                     preferredColorScheme: themeManager.theme.colorScheme,
                     preferredTextColor: themeManager.theme.textPrimary,
                     preferredTintColor: themeManager.theme.accent
                 )
+                .ignoresSafeArea(.keyboard, edges: .bottom)
                 #else
                 LyricsTextView(
                     text: $composition.lyrics,
@@ -72,6 +89,16 @@ struct EditorView: View {
                     EmptyView()
                 }
 
+                if let title = audioPlayer.track?.displayName {
+                    EditorMiniPlayerBar(
+                        title: title,
+                        isPlaying: audioPlayer.isPlaying,
+                        isLoading: audioPlayer.isLoading,
+                        onTogglePlayPause: { audioPlayer.togglePlayPause() },
+                        onStop: { audioPlayer.stop() }
+                    )
+                }
+
                 EditorSuggestionsBar(
                     suggestions: suggestions,
                     isLoading: !rhymeServiceReady,
@@ -83,7 +110,9 @@ struct EditorView: View {
                             composition.endRhymeTailLength = clamped
                             try? modelContext.save()
                         }
-                    }
+                    },
+                    endRhymeColor: suggestionEndColor,
+                    internalRhymeColor: suggestionInternalColor
                 ) { word in
                     insertSuggestionFallback(word)
                     recordSuggestionAcceptance(word)
@@ -93,6 +122,52 @@ struct EditorView: View {
         }
         .navigationTitle(composition.title.isEmpty ? "Untitled" : composition.title)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItemGroup(placement: .topBarTrailing) {
+                Button {
+                    isShowingEditorHelp = true
+                } label: {
+                    Image(systemName: "questionmark.circle")
+                }
+                .accessibilityLabel("Help")
+
+                Button {
+                    isShowingAudioImporter = true
+                } label: {
+                    Image(systemName: "music.note")
+                }
+                .accessibilityLabel("Import Audio")
+            }
+        }
+        .sheet(isPresented: $isShowingEditorHelp) {
+            EditorHelpSheet(endRhymeColor: suggestionEndColor, internalRhymeColor: suggestionInternalColor)
+        }
+        .fileImporter(
+            isPresented: $isShowingAudioImporter,
+            allowedContentTypes: [.audio],
+            allowsMultipleSelection: false
+        ) { result in
+            switch result {
+            case .success(let urls):
+                guard let url = urls.first else { return }
+                audioPlayer.importAndLoad(from: url)
+            case .failure(let error):
+                audioPlayer.lastErrorMessage = error.localizedDescription
+                showingAudioError = true
+            }
+        }
+        .onChange(of: audioPlayer.lastErrorMessage) {
+            if audioPlayer.lastErrorMessage != nil {
+                showingAudioError = true
+            }
+        }
+        .alert("Audio Error", isPresented: $showingAudioError) {
+            Button("OK") {
+                audioPlayer.lastErrorMessage = nil
+            }
+        } message: {
+            Text(audioPlayer.lastErrorMessage ?? "Unknown error.")
+        }
         .onAppear {
             composition.lastOpenedAt = Date()
             isLyricsFocused = true
@@ -242,6 +317,19 @@ struct EditorView: View {
         isLyricsFocused = true
     }
 
+    private var suggestionEndColor: Color {
+        let palette = themeManager.theme.highlightPalette
+        return palette.first ?? themeManager.theme.accent
+    }
+
+    private var suggestionInternalColor: Color {
+        let palette = themeManager.theme.highlightPalette
+        if palette.count >= 2 {
+            return palette[1]
+        }
+        return themeManager.theme.accent
+    }
+
     private var textHighlights: [TextHighlight] {
         struct RangeKey: Hashable {
             var location: Int
@@ -302,5 +390,6 @@ struct EditorView_Previews: PreviewProvider {
         }
         .modelContainer(for: [Composition.self, UserLexiconEntry.self, CompositionLexiconState.self], inMemory: true)
         .environmentObject(ThemeManager())
+        .environmentObject(AudioPlayer())
     }
 }

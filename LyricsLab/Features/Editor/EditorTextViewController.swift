@@ -12,19 +12,21 @@ final class EditorTextViewController: UIViewController {
         case externalUpdate
     }
 
-    var onTextChanged: ((String) -> Void)?
-    var onSelectionChanged: ((NSRange) -> Void)?
-    var onFocusChanged: ((Bool) -> Void)?
-    var onSuggestionAccepted: ((String) -> Void)?
-    var onEndRhymeTailLengthChanged: ((Int) -> Void)?
+	    var onTextChanged: ((String) -> Void)?
+	    var onSelectionChanged: ((NSRange) -> Void)?
+	    var onFocusChanged: ((Bool) -> Void)?
+	    var onSuggestionAccepted: ((String) -> Void)?
+	    var onEndRhymeTailLengthChanged: ((Int) -> Void)?
+	    var onMiniPlayerTogglePlayPause: (() -> Void)?
+	    var onMiniPlayerStop: (() -> Void)?
 
     private(set) var textView = UITextView()
 
     private var suggestionsHostingController: UIHostingController<EditorSuggestionsBar>?
+    private var miniPlayerHostingController: UIHostingController<EditorMiniPlayerBar>?
 
-    private var textBottomToSuggestionsTop: NSLayoutConstraint?
-    private var textBottomToSafeBottom: NSLayoutConstraint?
     private var suggestionsHeightZero: NSLayoutConstraint?
+    private var miniPlayerHeightZero: NSLayoutConstraint?
 
     private var isApplyingExternalText = false
     private var isApplyingExternalSelection = false
@@ -32,12 +34,16 @@ final class EditorTextViewController: UIViewController {
     private var isUserScrolling = false
 
     private var lastAppliedHighlights: [TextHighlight] = []
+    private var lastMiniPlayerTitle: String?
+    private var lastMiniPlayerIsPlaying: Bool = false
+    private var lastMiniPlayerIsLoading: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clear
 
         configureTextView()
+        configureMiniPlayerBar()
         configureSuggestionsBar()
         configureLayout()
     }
@@ -47,32 +53,40 @@ final class EditorTextViewController: UIViewController {
         ensureCaretVisible(reason: .layout, animated: false)
     }
 
-    func update(
-        text: String,
-        selectedRange: NSRange,
-        isFocused: Bool,
-        highlights: [TextHighlight],
-        suggestions: [String],
-        isLoadingSuggestions: Bool,
-        barPosition: BarPosition?,
-        endRhymeTailLength: Int,
-        preferredColorScheme: ColorScheme?,
-        preferredTextColor: Color?,
-        preferredTintColor: Color?
-    ) {
-        applyAppearance(preferredColorScheme: preferredColorScheme, preferredTextColor: preferredTextColor, preferredTintColor: preferredTintColor)
-        applyTextIfNeeded(text)
-        applySelectionIfNeeded(selectedRange)
-        applyHighlightsIfNeeded(highlights)
-        updateSuggestionsBar(
-            suggestions: suggestions,
-            isLoading: isLoadingSuggestions,
-            barPosition: barPosition,
-            endRhymeTailLength: endRhymeTailLength
-        )
-        setSuggestionsVisible(isFocused)
-        setFocus(isFocused)
-    }
+	    func update(
+	        text: String,
+	        selectedRange: NSRange,
+	        isFocused: Bool,
+	        highlights: [TextHighlight],
+	        suggestions: [RhymeSuggestion],
+	        isLoadingSuggestions: Bool,
+	        barPosition: BarPosition?,
+	        endRhymeTailLength: Int,
+	        miniPlayerTitle: String?,
+	        miniPlayerIsPlaying: Bool,
+	        miniPlayerIsLoading: Bool,
+	        endRhymeColor: Color,
+	        internalRhymeColor: Color,
+	        preferredColorScheme: ColorScheme?,
+	        preferredTextColor: Color?,
+	        preferredTintColor: Color?
+	    ) {
+	        applyAppearance(preferredColorScheme: preferredColorScheme, preferredTextColor: preferredTextColor, preferredTintColor: preferredTintColor)
+	        applyTextIfNeeded(text)
+	        applySelectionIfNeeded(selectedRange)
+	        applyHighlightsIfNeeded(highlights)
+	        updateSuggestionsBar(
+	            suggestions: suggestions,
+	            isLoading: isLoadingSuggestions,
+	            barPosition: barPosition,
+	            endRhymeTailLength: endRhymeTailLength,
+	            endRhymeColor: endRhymeColor,
+	            internalRhymeColor: internalRhymeColor
+	        )
+	        updateMiniPlayerBar(title: miniPlayerTitle, isPlaying: miniPlayerIsPlaying, isLoading: miniPlayerIsLoading)
+	        setSuggestionsVisible(isFocused)
+	        setFocus(isFocused)
+	    }
 
     private func configureTextView() {
         textView.backgroundColor = .clear
@@ -86,20 +100,22 @@ final class EditorTextViewController: UIViewController {
         textView.scrollsToTop = true
     }
 
-    private func configureSuggestionsBar() {
-        let host = UIHostingController(
-            rootView: EditorSuggestionsBar(
-                suggestions: [],
-                isLoading: false,
-                barPosition: nil,
-                endRhymeTailLength: 1,
-                onSetEndRhymeTailLength: { [weak self] next in
-                    self?.onEndRhymeTailLengthChanged?(next)
-                }
-            ) { [weak self] word in
-                self?.insertSuggestion(word)
-            }
-        )
+	    private func configureSuggestionsBar() {
+	        let host = UIHostingController(
+	            rootView: EditorSuggestionsBar(
+	                suggestions: [],
+	                isLoading: false,
+	                barPosition: nil,
+	                endRhymeTailLength: 1,
+	                onSetEndRhymeTailLength: { [weak self] next in
+	                    self?.onEndRhymeTailLengthChanged?(next)
+	                },
+	                endRhymeColor: .blue,
+	                internalRhymeColor: .purple
+	            ) { [weak self] word in
+	                self?.insertSuggestion(word)
+	            }
+	        )
         host.view.backgroundColor = .clear
         host.view.translatesAutoresizingMaskIntoConstraints = false
         host.sizingOptions = [.intrinsicContentSize]
@@ -116,6 +132,33 @@ final class EditorTextViewController: UIViewController {
         suggestionsHostingController = host
     }
 
+    private func configureMiniPlayerBar() {
+        let host = UIHostingController(
+            rootView: EditorMiniPlayerBar(
+                title: "",
+                isPlaying: false,
+                isLoading: false,
+                onTogglePlayPause: { [weak self] in
+                    self?.onMiniPlayerTogglePlayPause?()
+                },
+                onStop: { [weak self] in
+                    self?.onMiniPlayerStop?()
+                }
+            )
+        )
+        host.view.backgroundColor = .clear
+        host.view.translatesAutoresizingMaskIntoConstraints = false
+        host.sizingOptions = [.intrinsicContentSize]
+
+        host.view.setContentCompressionResistancePriority(.required, for: .vertical)
+        host.view.setContentHuggingPriority(.required, for: .vertical)
+
+        addChild(host)
+        view.addSubview(host.view)
+        host.didMove(toParent: self)
+        miniPlayerHostingController = host
+    }
+
     private func configureLayout() {
         textView.translatesAutoresizingMaskIntoConstraints = false
 
@@ -126,29 +169,43 @@ final class EditorTextViewController: UIViewController {
             return
         }
 
-        view.bringSubviewToFront(suggestionsView)
+        guard let miniPlayerView = miniPlayerHostingController?.view else {
+            assertionFailure("Expected miniPlayerHostingController to exist")
+            return
+        }
 
-        textBottomToSuggestionsTop = textView.bottomAnchor.constraint(equalTo: suggestionsView.topAnchor)
-        textBottomToSafeBottom = textView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        view.bringSubviewToFront(suggestionsView)
+        view.bringSubviewToFront(miniPlayerView)
 
         // When suggestions are hidden, collapse their height so the text view can fill.
         suggestionsHeightZero = suggestionsView.heightAnchor.constraint(equalToConstant: 0)
         suggestionsHeightZero?.priority = .required
 
+        // When the mini-player is hidden, collapse it.
+        miniPlayerHeightZero = miniPlayerView.heightAnchor.constraint(equalToConstant: 0)
+        miniPlayerHeightZero?.priority = .required
+
         NSLayoutConstraint.activate([
             textView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             textView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             textView.topAnchor.constraint(equalTo: view.topAnchor),
+            textView.bottomAnchor.constraint(equalTo: miniPlayerView.topAnchor),
+
+            miniPlayerView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            miniPlayerView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            miniPlayerView.bottomAnchor.constraint(equalTo: suggestionsView.topAnchor),
 
             suggestionsView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             suggestionsView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             suggestionsView.bottomAnchor.constraint(equalTo: view.keyboardLayoutGuide.topAnchor),
         ])
 
-        // Default: hidden until focused.
-        textBottomToSafeBottom?.isActive = true
-        textBottomToSuggestionsTop?.isActive = false
+        // Default: hidden until focused (suggestions) and until track loaded (mini-player).
         suggestionsHeightZero?.isActive = true
+        miniPlayerHeightZero?.isActive = true
+
+        suggestionsView.isHidden = true
+        miniPlayerView.isHidden = true
     }
 
     private func applyAppearance(preferredColorScheme: ColorScheme?, preferredTextColor: Color?, preferredTintColor: Color?) {
@@ -216,7 +273,14 @@ final class EditorTextViewController: UIViewController {
         textView.textStorage.endEditing()
     }
 
-    private func updateSuggestionsBar(suggestions: [String], isLoading: Bool, barPosition: BarPosition?, endRhymeTailLength: Int) {
+    private func updateSuggestionsBar(
+        suggestions: [RhymeSuggestion],
+        isLoading: Bool,
+        barPosition: BarPosition?,
+        endRhymeTailLength: Int,
+        endRhymeColor: Color,
+        internalRhymeColor: Color
+    ) {
         guard let host = suggestionsHostingController else { return }
         host.rootView = EditorSuggestionsBar(
             suggestions: suggestions,
@@ -225,9 +289,61 @@ final class EditorTextViewController: UIViewController {
             endRhymeTailLength: endRhymeTailLength,
             onSetEndRhymeTailLength: { [weak self] next in
                 self?.onEndRhymeTailLengthChanged?(next)
-            }
+            },
+            endRhymeColor: endRhymeColor,
+            internalRhymeColor: internalRhymeColor
         ) { [weak self] word in
             self?.insertSuggestion(word)
+        }
+    }
+
+    private func updateMiniPlayerBar(title: String?, isPlaying: Bool, isLoading: Bool) {
+        let resolvedTitle = title?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let shouldShow = (resolvedTitle?.isEmpty == false)
+
+        guard shouldShow || miniPlayerHostingController != nil else { return }
+
+        if shouldShow,
+           resolvedTitle == lastMiniPlayerTitle,
+           isPlaying == lastMiniPlayerIsPlaying,
+           isLoading == lastMiniPlayerIsLoading {
+            setMiniPlayerVisible(true)
+            return
+        }
+
+        lastMiniPlayerTitle = resolvedTitle
+        lastMiniPlayerIsPlaying = isPlaying
+        lastMiniPlayerIsLoading = isLoading
+
+        if shouldShow, let resolvedTitle {
+            miniPlayerHostingController?.rootView = EditorMiniPlayerBar(
+                title: resolvedTitle,
+                isPlaying: isPlaying,
+                isLoading: isLoading,
+                onTogglePlayPause: { [weak self] in
+                    self?.onMiniPlayerTogglePlayPause?()
+                },
+                onStop: { [weak self] in
+                    self?.onMiniPlayerStop?()
+                }
+            )
+            setMiniPlayerVisible(true)
+        } else {
+            setMiniPlayerVisible(false)
+        }
+    }
+
+    private func setMiniPlayerVisible(_ isVisible: Bool) {
+        guard let miniPlayerView = miniPlayerHostingController?.view else { return }
+
+        if isVisible {
+            if miniPlayerHeightZero?.isActive == true {
+                miniPlayerHeightZero?.isActive = false
+            }
+            miniPlayerView.isHidden = false
+        } else {
+            miniPlayerHeightZero?.isActive = true
+            miniPlayerView.isHidden = true
         }
     }
 
@@ -240,12 +356,8 @@ final class EditorTextViewController: UIViewController {
             if suggestionsHeightZero?.isActive == true {
                 suggestionsHeightZero?.isActive = false
             }
-            textBottomToSafeBottom?.isActive = false
-            textBottomToSuggestionsTop?.isActive = true
             suggestionsView.isHidden = false
         } else {
-            textBottomToSuggestionsTop?.isActive = false
-            textBottomToSafeBottom?.isActive = true
             suggestionsHeightZero?.isActive = true
             suggestionsView.isHidden = true
         }

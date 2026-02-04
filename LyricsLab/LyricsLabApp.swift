@@ -6,6 +6,7 @@ import SwiftData
 @main
 struct LyricsLabApp: App {
     @StateObject private var themeManager = ThemeManager()
+    @StateObject private var audioPlayer = AudioPlayer()
 
     private let modelContainer: ModelContainer = {
         do {
@@ -19,6 +20,7 @@ struct LyricsLabApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(themeManager)
+                .environmentObject(audioPlayer)
                 .tint(themeManager.theme.accent)
                 .preferredColorScheme(themeManager.theme.colorScheme)
         }
