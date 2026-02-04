@@ -1,12 +1,16 @@
 import SwiftUI
 
 struct EditorSuggestionsBar: View {
-    var suggestions: [String]
+    var suggestions: [RhymeSuggestion]
     var isLoading: Bool = false
     var barPosition: BarPosition? = nil
     var endRhymeTailLength: Int = 1
     var onSetEndRhymeTailLength: ((Int) -> Void)? = nil
+    var endRhymeColor: Color = .blue
+    var internalRhymeColor: Color = .purple
     var onInsert: (String) -> Void
+
+    @State private var isShowingHelp = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -35,6 +39,17 @@ struct EditorSuggestionsBar: View {
                         Text("2").tag(2)
                     }
                     .pickerStyle(.segmented)
+
+                    Spacer(minLength: 8)
+
+                    Button {
+                        isShowingHelp = true
+                    } label: {
+                        Image(systemName: "questionmark.circle")
+                            .imageScale(.medium)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Help")
                 }
                 .padding(.horizontal, 12)
                 .padding(.bottom, 8)
@@ -54,24 +69,20 @@ struct EditorSuggestionsBar: View {
                         .padding(.horizontal, 14)
                         .padding(.vertical, 10)
                     } else {
-                        ForEach(suggestions, id: \.self) { word in
+                        ForEach(suggestions) { suggestion in
                             Button {
-                                onInsert(word)
+                                onInsert(suggestion.display)
                             } label: {
-                                Text(word)
-                                    .font(.subheadline.weight(.semibold))
-                                    .padding(.horizontal, 12)
-                                    .padding(.vertical, 8)
-                                    .background(
-                                        Capsule(style: .continuous)
-                                            .fill(.ultraThinMaterial)
-                                    )
-                                    .overlay(
-                                        Capsule(style: .continuous)
-                                            .strokeBorder(.primary.opacity(0.12), lineWidth: 1)
-                                    )
+                                SuggestionChip(
+                                    suggestion: suggestion,
+                                    endRhymeColor: endRhymeColor,
+                                    internalRhymeColor: internalRhymeColor
+                                )
                             }
                             .buttonStyle(.plain)
+                            .contextMenu {
+                                SuggestionContextMenu(suggestion: suggestion)
+                            }
                         }
                     }
                 }
@@ -80,6 +91,148 @@ struct EditorSuggestionsBar: View {
             }
         }
         .background(.thinMaterial)
+        .sheet(isPresented: $isShowingHelp) {
+            EditorHelpSheet(endRhymeColor: endRhymeColor, internalRhymeColor: internalRhymeColor)
+        }
+    }
+}
+
+private struct SuggestionChip: View {
+    var suggestion: RhymeSuggestion
+    var endRhymeColor: Color
+    var internalRhymeColor: Color
+
+    private var baseColor: Color {
+        switch suggestion.target {
+        case .endRhyme:
+            return endRhymeColor
+        case .internalRhyme:
+            return internalRhymeColor
+        }
+    }
+
+    private var borderStyle: StrokeStyle {
+        switch suggestion.match {
+        case .exact:
+            return StrokeStyle(lineWidth: 1)
+        case .near:
+            return StrokeStyle(lineWidth: 1, dash: [4, 3])
+        }
+    }
+
+    private var badgeSystemName: String? {
+        if suggestion.isSameAsAnchorWord {
+            return "equal.circle.fill"
+        }
+        if suggestion.isAlreadyUsedNearby {
+            return "repeat.circle.fill"
+        }
+        if suggestion.isPersonal {
+            return "star.circle.fill"
+        }
+        return nil
+    }
+
+    var body: some View {
+        let color = (suggestion.match == .exact) ? baseColor : baseColor.opacity(0.72)
+        HStack(spacing: 8) {
+            Circle()
+                .fill(color)
+                .frame(width: 8, height: 8)
+
+            Text(suggestion.display)
+                .font(.subheadline.weight(.semibold))
+
+            if let badgeSystemName {
+                Image(systemName: badgeSystemName)
+                    .imageScale(.small)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(
+            Capsule(style: .continuous)
+                .fill(.ultraThinMaterial)
+        )
+        .overlay(
+            Capsule(style: .continuous)
+                .strokeBorder(color.opacity(0.30), style: borderStyle)
+        )
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(suggestion.display)
+        .accessibilityHint(SuggestionContextMenu.hintText(for: suggestion))
+    }
+}
+
+private struct SuggestionContextMenu: View {
+    var suggestion: RhymeSuggestion
+
+    static func hintText(for suggestion: RhymeSuggestion) -> String {
+        let target: String
+        switch suggestion.target {
+        case .endRhyme:
+            target = "End rhyme"
+        case .internalRhyme:
+            target = "Internal rhyme"
+        }
+
+        let match: String
+        switch suggestion.match {
+        case .exact:
+            match = "exact"
+        case .near:
+            match = "near"
+        }
+
+        var parts: [String] = ["\(target) (\(match))"]
+        if suggestion.isPersonal { parts.append("boosted") }
+        if suggestion.isAlreadyUsedNearby { parts.append("already used") }
+        if suggestion.isSameAsAnchorWord { parts.append("same as anchor") }
+        return parts.joined(separator: ", ")
+    }
+
+    private var targetTitle: String {
+        switch suggestion.target {
+        case .endRhyme:
+            return "End rhyme"
+        case .internalRhyme:
+            return "Internal rhyme"
+        }
+    }
+
+    private var matchTitle: String {
+        switch suggestion.match {
+        case .exact:
+            return "Perfect match"
+        case .near:
+            return "Near match"
+        }
+    }
+
+    var body: some View {
+        Text("\(targetTitle) • \(matchTitle)")
+
+        if let anchor = suggestion.anchorWord?.trimmingCharacters(in: .whitespacesAndNewlines),
+           !anchor.isEmpty,
+           suggestion.isSameAsAnchorWord {
+            Text("Same as anchor word (“\(anchor)”).")
+        } else if let anchor = suggestion.anchorWord?.trimmingCharacters(in: .whitespacesAndNewlines),
+                  !anchor.isEmpty {
+            switch suggestion.target {
+            case .internalRhyme:
+                Text("Anchored to your last word (“\(anchor)”).")
+            case .endRhyme:
+                Text("Anchored to a recent line ending (“\(anchor)”).")
+            }
+        }
+
+        if suggestion.isPersonal {
+            Text("Boosted because you’ve accepted it before.")
+        }
+        if suggestion.isAlreadyUsedNearby {
+            Text("Already used nearby (we still surface it if it fits).")
+        }
     }
 }
 
@@ -117,7 +270,38 @@ private struct BarRulerView: View {
 struct EditorSuggestionsBar_Previews: PreviewProvider {
     static var previews: some View {
         EditorSuggestionsBar(
-            suggestions: ["time", "rhyme", "shine", "line"],
+            suggestions: [
+                RhymeSuggestion(
+                    display: "time",
+                    normalized: "time",
+                    target: .endRhyme,
+                    match: .exact,
+                    isPersonal: false,
+                    isAlreadyUsedNearby: false,
+                    isSameAsAnchorWord: false,
+                    anchorWord: "time"
+                ),
+                RhymeSuggestion(
+                    display: "rhyme",
+                    normalized: "rhyme",
+                    target: .endRhyme,
+                    match: .near,
+                    isPersonal: true,
+                    isAlreadyUsedNearby: false,
+                    isSameAsAnchorWord: false,
+                    anchorWord: "time"
+                ),
+                RhymeSuggestion(
+                    display: "shine",
+                    normalized: "shine",
+                    target: .internalRhyme,
+                    match: .exact,
+                    isPersonal: false,
+                    isAlreadyUsedNearby: true,
+                    isSameAsAnchorWord: false,
+                    anchorWord: "line"
+                ),
+            ],
             barPosition: BarPosition(step: 6, syllablesBeforeCaret: 7, totalSyllables: 15, lowConfidenceTokenCount: 1),
             endRhymeTailLength: 2,
             onSetEndRhymeTailLength: { _ in }

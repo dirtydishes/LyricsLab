@@ -9,7 +9,7 @@ struct EditorTextViewControllerRepresentable: UIViewControllerRepresentable {
     @Binding var endRhymeTailLength: Int
 
     var highlights: [TextHighlight]
-    var suggestions: [String]
+    var suggestions: [RhymeSuggestion]
     var isLoadingSuggestions: Bool
     var miniPlayerTitle: String?
     var miniPlayerIsPlaying: Bool
@@ -18,6 +18,8 @@ struct EditorTextViewControllerRepresentable: UIViewControllerRepresentable {
     var onMiniPlayerStop: () -> Void
     var barPosition: BarPosition?
     var onSuggestionAccepted: ((String) -> Void)?
+    var endRhymeColor: Color = .blue
+    var internalRhymeColor: Color = .purple
 
     var preferredColorScheme: ColorScheme? = nil
     var preferredTextColor: Color? = nil
@@ -64,6 +66,8 @@ struct EditorTextViewControllerRepresentable: UIViewControllerRepresentable {
             miniPlayerTitle: miniPlayerTitle,
             miniPlayerIsPlaying: miniPlayerIsPlaying,
             miniPlayerIsLoading: miniPlayerIsLoading,
+            endRhymeColor: endRhymeColor,
+            internalRhymeColor: internalRhymeColor,
             preferredColorScheme: preferredColorScheme,
             preferredTextColor: preferredTextColor,
             preferredTintColor: preferredTintColor

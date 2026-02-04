@@ -138,16 +138,16 @@ Prereqs
 Run in Xcode
 1) Open `LyricsLab.xcodeproj`
 2) Select the `LyricsLab` scheme
-3) Run on a simulator or device
+3) Run on a physical device only (no simulator). If no device is connected, pause and connect one.
 
 Run from CLI (build)
 ```bash
-xcodebuild -scheme LyricsLab -configuration Debug   -destination "platform=iOS Simulator,name=iPhone 17 Pro,OS=26.2" build
+xcodebuild -scheme LyricsLab -configuration Debug -destination "generic/platform=iOS" build
 ```
 
 Run tests
 ```bash
-xcodebuild -scheme LyricsLab -destination "platform=iOS Simulator,name=iPhone 17 Pro,OS=26.2" test
+xcodebuild -scheme LyricsLab -destination "platform=iOS,id=YOUR_DEVICE_ID" test
 ```
 
 ---

@@ -5,6 +5,8 @@
 - Cover the rhyme engine core logic with a small set of high-value unit tests.
 - Use UI tests sparingly (smoke tests only).
 - Run expensive tests only on demand or nightly CI.
+- Never use the iOS simulator. Build/run/tests are device-only.
+  - If no device is connected, stop and ask to connect one before proceeding.
 
 ---
 

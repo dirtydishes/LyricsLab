@@ -9,6 +9,6 @@ nonisolated struct BarPosition: Equatable, Sendable {
 }
 
 nonisolated struct RhymeEditorAssistResult: Sendable {
-    var suggestions: [String]
+    var suggestions: [RhymeSuggestion]
     var barPosition: BarPosition?
 }

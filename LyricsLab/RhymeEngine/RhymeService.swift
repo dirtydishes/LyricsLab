@@ -55,11 +55,14 @@ actor RhymeService {
         hasLoadedDictionary = true
 
         let target = inferTarget(text: text, cursorLocation: cursorLocation, endRhymeTailLength: endRhymeTailLength, dictionary: dict)
-        let suggestions: [String]
+        let suggestions: [RhymeSuggestion]
         if let target {
             suggestions = makeSuggestions(
                 targetKey: target.key,
                 targetTailLength: target.tailLength,
+                targetKind: target.kind,
+                anchorWord: target.anchorWord,
+                anchorNormalized: target.anchorNormalized,
                 text: text,
                 cursorLocation: cursorLocation,
                 userLexicon: userLexicon,
@@ -101,7 +104,7 @@ actor RhymeService {
         userLexicon: [UserLexiconItem],
         endRhymeTailLength: Int,
         maxCount: Int = 12
-    ) async -> [String] {
+    ) async -> [RhymeSuggestion] {
         let result = await editorAssist(
             text: text,
             cursorLocation: cursorLocation,
@@ -112,33 +115,46 @@ actor RhymeService {
         return result.suggestions
     }
 
-    func suggestions(text: String, cursorLocation: Int, maxCount: Int = 12) async -> [String] {
+    func suggestions(text: String, cursorLocation: Int, maxCount: Int = 12) async -> [RhymeSuggestion] {
         await suggestions(text: text, cursorLocation: cursorLocation, userLexicon: [], endRhymeTailLength: 1, maxCount: maxCount)
     }
 
     private struct Target {
         var key: String
         var tailLength: Int
+        var kind: RhymeSuggestionTarget
+        var anchorWord: String?
+        var anchorNormalized: String?
     }
 
     private func inferTarget(text: String, cursorLocation: Int, endRhymeTailLength: Int, dictionary: CMUDictionary) -> Target? {
         let endTailLength = max(1, min(2, endRhymeTailLength))
 
-        let schemeKey = RhymeAnalyzer.inferActiveRhymeKey(
-            text: text,
-            cursor: cursorLocation,
-            dictionary: dictionary,
-            lookbackLines: 4,
-            endRhymeTailLength: endTailLength
-        )
-
         if RhymeAnalyzer.isCursorMidLine(text: text, cursor: cursorLocation),
-           let internalKey = RhymeAnalyzer.lastCompletedTokenRhymeKey(text: text, cursor: cursorLocation, dictionary: dictionary) {
-            return Target(key: internalKey, tailLength: 1)
+           let internalTarget = inferInternalTarget(text: text, cursorLocation: cursorLocation, dictionary: dictionary) {
+            return Target(
+                key: internalTarget.key,
+                tailLength: 1,
+                kind: .internalRhyme,
+                anchorWord: internalTarget.anchorWord,
+                anchorNormalized: internalTarget.anchorNormalized
+            )
         }
 
-        if let schemeKey {
-            return Target(key: schemeKey, tailLength: endTailLength)
+        if let endTarget = inferEndRhymeTarget(
+            text: text,
+            cursorLocation: cursorLocation,
+            lookbackLines: 4,
+            endRhymeTailLength: endTailLength,
+            dictionary: dictionary
+        ) {
+            return Target(
+                key: endTarget.key,
+                tailLength: endTailLength,
+                kind: .endRhyme,
+                anchorWord: endTarget.anchorWord,
+                anchorNormalized: endTarget.anchorNormalized
+            )
         }
         return nil
     }
@@ -146,12 +162,15 @@ actor RhymeService {
     private func makeSuggestions(
         targetKey: String,
         targetTailLength: Int,
+        targetKind: RhymeSuggestionTarget,
+        anchorWord: String?,
+        anchorNormalized: String?,
         text: String,
         cursorLocation: Int,
         userLexicon: [UserLexiconItem],
         maxSuggestions: Int,
         dictionary: CMUDictionary
-    ) -> [String] {
+    ) -> [RhymeSuggestion] {
         struct Candidate {
             var normalized: String
             var display: String
@@ -314,7 +333,7 @@ actor RhymeService {
             return a.display < b.display
         }
 
-        var out: [String] = []
+        var out: [RhymeSuggestion] = []
         out.reserveCapacity(maxSuggestions)
 
         var usedLemmas: Set<String> = []
@@ -335,14 +354,30 @@ actor RhymeService {
 
             usedLemmas.insert(lemma)
             countByKey[c.key] = keyCount + 1
-            out.append(c.display)
+
+            let match: RhymeSuggestionMatch = (c.rhymeScore >= 0.999) ? .exact : .near
+            let isPersonal = c.personalScore > 0.0001
+            let isAlreadyUsedNearby = c.usedInTextPenalty > 0.0001
+            let isSameAsAnchor = (anchorNormalized?.isEmpty == false) && (c.normalized == anchorNormalized)
+
+            out.append(
+                RhymeSuggestion(
+                    display: c.display,
+                    normalized: c.normalized,
+                    target: targetKind,
+                    match: match,
+                    isPersonal: isPersonal,
+                    isAlreadyUsedNearby: isAlreadyUsedNearby,
+                    isSameAsAnchorWord: isSameAsAnchor,
+                    anchorWord: anchorWord
+                )
+            )
         }
 
         // Update local recency based on what we actually returned.
-        for w in out {
-            let normalized = CMUDictionary.normalizeWord(w)
-            if !normalized.isEmpty {
-                lastSuggestedTickByWord[normalized] = nowTick
+        for s in out {
+            if !s.normalized.isEmpty {
+                lastSuggestedTickByWord[s.normalized] = nowTick
             }
         }
 
@@ -434,5 +469,114 @@ actor RhymeService {
             totalSyllables: total,
             lowConfidenceTokenCount: lowConfidence
         )
+    }
+
+    private struct AnchorTarget {
+        var key: String
+        var anchorWord: String
+        var anchorNormalized: String
+    }
+
+    private func inferInternalTarget(text: String, cursorLocation: Int, dictionary: CMUDictionary) -> AnchorTarget? {
+        let ns = text as NSString
+        let fullRange = NSRange(location: 0, length: ns.length)
+        guard fullRange.length > 0 else { return nil }
+
+        let clamped = max(0, min(cursorLocation, ns.length))
+
+        var lineRangeAtCursor: NSRange?
+        ns.enumerateSubstrings(in: fullRange, options: [.byLines, .substringNotRequired]) { _, lineRange, _, stop in
+            if NSLocationInRange(clamped, lineRange) || (clamped == ns.length && NSMaxRange(lineRange) == ns.length) {
+                lineRangeAtCursor = lineRange
+                stop.pointee = true
+            }
+        }
+
+        guard let lineRange = lineRangeAtCursor else { return nil }
+        let lineText = ns.substring(with: lineRange)
+        let lineNS = lineText as NSString
+        let cursorInLine = max(0, min(clamped - lineRange.location, lineNS.length))
+
+        let tokens = LyricsTokenizer.tokenize(lineText)
+        let completed = tokens.filter { NSMaxRange($0.rangeInString) <= cursorInLine }
+        guard let last = completed.last else { return nil }
+
+        let anchorWord = last.raw
+        guard let key = dictionary.rhymeKeys(for: anchorWord).first else { return nil }
+
+        let normalized = CMUDictionary.normalizeWord(anchorWord)
+        return AnchorTarget(key: key, anchorWord: anchorWord, anchorNormalized: normalized)
+    }
+
+    private func inferEndRhymeTarget(
+        text: String,
+        cursorLocation: Int,
+        lookbackLines: Int,
+        endRhymeTailLength: Int,
+        dictionary: CMUDictionary
+    ) -> AnchorTarget? {
+        let endTailLength = max(1, min(2, endRhymeTailLength))
+
+        let ns = text as NSString
+        let clamped = max(0, min(cursorLocation, ns.length))
+        let fullRange = NSRange(location: 0, length: ns.length)
+        guard fullRange.length > 0 else { return nil }
+
+        var currentLineIndex: Int?
+        var lineIndex = 0
+        var endings: [(lineIndex: Int, key: String, word: String)] = []
+        endings.reserveCapacity(64)
+
+        ns.enumerateSubstrings(in: fullRange, options: [.byLines, .substringNotRequired]) { _, lineRange, _, _ in
+            if NSLocationInRange(clamped, lineRange) || (clamped == ns.length && NSMaxRange(lineRange) == ns.length) {
+                currentLineIndex = lineIndex
+            }
+
+            guard lineRange.length > 0 else {
+                lineIndex += 1
+                return
+            }
+
+            let lineText = ns.substring(with: lineRange)
+            let tokens = LyricsTokenizer.tokenize(lineText)
+            guard let last = tokens.last else {
+                lineIndex += 1
+                return
+            }
+
+            let word = last.raw
+            let key = dictionary.rhymeKeys(for: word, tailLength: endTailLength).first
+                ?? dictionary.rhymeKeys(for: word).first
+
+            if let key {
+                endings.append((lineIndex: lineIndex, key: key, word: word))
+            }
+            lineIndex += 1
+        }
+
+        guard let currentLineIndex else { return nil }
+
+        let scoped = endings
+            .filter { $0.lineIndex <= currentLineIndex }
+            .suffix(lookbackLines)
+
+        guard !scoped.isEmpty else { return nil }
+
+        var counts: [String: Int] = [:]
+        for e in scoped {
+            counts[e.key, default: 0] += 1
+        }
+
+        if let chosen = scoped.reversed().first(where: { (counts[$0.key] ?? 0) >= 2 }) {
+            let normalized = CMUDictionary.normalizeWord(chosen.word)
+            return AnchorTarget(key: chosen.key, anchorWord: chosen.word, anchorNormalized: normalized)
+        }
+
+        if let fallback = scoped.last(where: { $0.lineIndex == currentLineIndex }) ?? scoped.last {
+            let normalized = CMUDictionary.normalizeWord(fallback.word)
+            return AnchorTarget(key: fallback.key, anchorWord: fallback.word, anchorNormalized: normalized)
+        }
+
+        return nil
     }
 }

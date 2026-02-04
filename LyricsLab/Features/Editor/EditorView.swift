@@ -22,10 +22,11 @@ struct EditorView: View {
 
     @State private var suggestionsTask: Task<Void, Never>?
 
-    @State private var suggestions: [String] = []
+    @State private var suggestions: [RhymeSuggestion] = []
     @State private var isShowingAudioImporter = false
     @State private var showingAudioError = false
     @State private var barPosition: BarPosition?
+    @State private var isShowingEditorHelp = false
 
     var body: some View {
         ZStack {
@@ -67,6 +68,8 @@ struct EditorView: View {
                     onSuggestionAccepted: { word in
                         recordSuggestionAcceptance(word)
                     },
+                    endRhymeColor: suggestionEndColor,
+                    internalRhymeColor: suggestionInternalColor,
                     preferredColorScheme: themeManager.theme.colorScheme,
                     preferredTextColor: themeManager.theme.textPrimary,
                     preferredTintColor: themeManager.theme.accent
@@ -107,7 +110,9 @@ struct EditorView: View {
                             composition.endRhymeTailLength = clamped
                             try? modelContext.save()
                         }
-                    }
+                    },
+                    endRhymeColor: suggestionEndColor,
+                    internalRhymeColor: suggestionInternalColor
                 ) { word in
                     insertSuggestionFallback(word)
                     recordSuggestionAcceptance(word)
@@ -118,7 +123,14 @@ struct EditorView: View {
         .navigationTitle(composition.title.isEmpty ? "Untitled" : composition.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
+            ToolbarItemGroup(placement: .topBarTrailing) {
+                Button {
+                    isShowingEditorHelp = true
+                } label: {
+                    Image(systemName: "questionmark.circle")
+                }
+                .accessibilityLabel("Help")
+
                 Button {
                     isShowingAudioImporter = true
                 } label: {
@@ -126,6 +138,9 @@ struct EditorView: View {
                 }
                 .accessibilityLabel("Import Audio")
             }
+        }
+        .sheet(isPresented: $isShowingEditorHelp) {
+            EditorHelpSheet(endRhymeColor: suggestionEndColor, internalRhymeColor: suggestionInternalColor)
         }
         .fileImporter(
             isPresented: $isShowingAudioImporter,
@@ -300,6 +315,19 @@ struct EditorView: View {
             composition.lyrics += " "
         }
         isLyricsFocused = true
+    }
+
+    private var suggestionEndColor: Color {
+        let palette = themeManager.theme.highlightPalette
+        return palette.first ?? themeManager.theme.accent
+    }
+
+    private var suggestionInternalColor: Color {
+        let palette = themeManager.theme.highlightPalette
+        if palette.count >= 2 {
+            return palette[1]
+        }
+        return themeManager.theme.accent
     }
 
     private var textHighlights: [TextHighlight] {
