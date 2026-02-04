@@ -3,6 +3,13 @@ import Foundation
 nonisolated enum RhymeAnalyzer {
     private static let wordPattern = "[A-Za-z']+"
     private static let maxLineDistance = 3
+    private nonisolated static func cursorBelongsToLine(_ cursor: Int, lineRange: NSRange) -> Bool {
+        // Treat the line end (just before a newline) as belonging to that line.
+        if NSLocationInRange(cursor, lineRange) {
+            return true
+        }
+        return cursor == NSMaxRange(lineRange)
+    }
 
     private struct RangeKey: Hashable {
         var location: Int
@@ -211,7 +218,7 @@ nonisolated enum RhymeAnalyzer {
 
         var foundLineRange: NSRange?
         ns.enumerateSubstrings(in: fullRange, options: [.byLines, .substringNotRequired]) { _, lineRange, _, stop in
-            if NSLocationInRange(clamped, lineRange) || (clamped == ns.length && NSMaxRange(lineRange) == ns.length) {
+            if cursorBelongsToLine(clamped, lineRange: lineRange) {
                 foundLineRange = lineRange
                 stop.pointee = true
             }
@@ -239,7 +246,7 @@ nonisolated enum RhymeAnalyzer {
 
         var foundLineRange: NSRange?
         ns.enumerateSubstrings(in: fullRange, options: [.byLines, .substringNotRequired]) { _, lineRange, _, stop in
-            if NSLocationInRange(clamped, lineRange) || (clamped == ns.length && NSMaxRange(lineRange) == ns.length) {
+            if cursorBelongsToLine(clamped, lineRange: lineRange) {
                 foundLineRange = lineRange
                 stop.pointee = true
             }
@@ -278,7 +285,7 @@ nonisolated enum RhymeAnalyzer {
         endings.reserveCapacity(64)
 
         ns.enumerateSubstrings(in: fullRange, options: [.byLines, .substringNotRequired]) { _, lineRange, _, _ in
-            if NSLocationInRange(clamped, lineRange) || (clamped == ns.length && NSMaxRange(lineRange) == ns.length) {
+            if cursorBelongsToLine(clamped, lineRange: lineRange) {
                 currentLineIndex = lineIndex
             }
 
