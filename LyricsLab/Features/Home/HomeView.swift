@@ -72,7 +72,13 @@ struct HomeView: View {
         }
         .sheet(isPresented: $showingSettings) {
             NavigationStack {
-                SettingsView()
+                SettingsView {
+                    showingSettings = false
+                    Task { @MainActor in
+                        try? await Task.sleep(for: .milliseconds(180))
+                        isShowingShortcutsSheet = true
+                    }
+                }
             }
             .environmentObject(themeManager)
             .tint(themeManager.theme.accent)
@@ -200,11 +206,6 @@ struct HomeView: View {
             ToolbarItem(placement: .topBarLeading) {
                 settingsButton
             }
-
-            ToolbarItemGroup(placement: .topBarTrailing) {
-                sidebarToggleButton
-                shortcutsSheetButton
-            }
         }
     }
 
@@ -277,15 +278,6 @@ struct HomeView: View {
             Image(systemName: "sidebar.left")
         }
         .accessibilityLabel("Toggle Sidebar")
-    }
-
-    private var shortcutsSheetButton: some View {
-        Button {
-            isShowingShortcutsSheet = true
-        } label: {
-            Image(systemName: "command")
-        }
-        .accessibilityLabel("Keyboard Shortcuts")
     }
 
     private var sidebarPlusButton: some View {

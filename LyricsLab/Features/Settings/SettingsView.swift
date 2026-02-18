@@ -4,6 +4,8 @@ struct SettingsView: View {
     @EnvironmentObject private var themeManager: ThemeManager
     @AppStorage("icloudSyncEnabled") private var iCloudSyncEnabled = true
 
+    var onShowKeyboardShortcuts: () -> Void = {}
+
     @State private var showingRestartAlert = false
     @State private var showingLaunchWelcome = false
 
@@ -49,6 +51,12 @@ struct SettingsView: View {
                 #endif
 
                 Section("About") {
+                    Button {
+                        onShowKeyboardShortcuts()
+                    } label: {
+                        Label("Keyboard Shortcuts", systemImage: "command")
+                    }
+
                     HStack {
                         Text("Version")
                         Spacer()
