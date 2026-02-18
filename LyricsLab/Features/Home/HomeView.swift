@@ -21,6 +21,8 @@ struct HomeView: View {
     @State private var showingLaunchWelcome = false
     @State private var splitViewVisibility: NavigationSplitViewVisibility = .all
     @State private var selectedCompositionID: UUID?
+    @State private var isShowingShortcutsSheet = false
+    @FocusState private var isProjectSearchFocused: Bool
 
     @AppStorage("hasSeenLaunchWelcome") private var hasSeenLaunchWelcome = false
 
@@ -41,6 +43,10 @@ struct HomeView: View {
                 iPadBody(isDavyDollas: isDavyDollas)
             } else {
                 iPhoneBody(isDavyDollas: isDavyDollas)
+            }
+
+            if horizontalSizeClass == .regular {
+                iPadKeyboardShortcutCommandHost
             }
         }
         .onAppear {
@@ -70,6 +76,11 @@ struct HomeView: View {
             }
             .environmentObject(themeManager)
             .tint(themeManager.theme.accent)
+        }
+        .sheet(isPresented: $isShowingShortcutsSheet) {
+            KeyboardShortcutsSheet(sections: keyboardShortcutSections)
+                .environmentObject(themeManager)
+                .tint(themeManager.theme.accent)
         }
         .sheet(isPresented: $showingLaunchWelcome, onDismiss: {
             hasSeenLaunchWelcome = true
@@ -113,6 +124,7 @@ struct HomeView: View {
             .scrollContentBackground(.hidden)
             .navigationTitle(isDavyDollas ? "" : "LyricsLab")
             .searchable(text: $searchText, prompt: "Search projects")
+            .searchFocused($isProjectSearchFocused)
             .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
             .toolbarBackgroundVisibility(.visible, for: .navigationBar)
             .toolbar {
@@ -146,7 +158,7 @@ struct HomeView: View {
             iPadDetail
         }
         .navigationSplitViewStyle(.balanced)
-        .onChange(of: compositions.map(\.id)) { ids in
+        .onChange(of: compositions.map(\.id)) { _, ids in
             guard let selectedCompositionID else { return }
             if !ids.contains(selectedCompositionID) {
                 self.selectedCompositionID = nil
@@ -165,6 +177,7 @@ struct HomeView: View {
             .listStyle(.sidebar)
             .scrollContentBackground(.hidden)
             .searchable(text: $searchText, prompt: "Search projects")
+            .searchFocused($isProjectSearchFocused)
             .safeAreaInset(edge: .bottom) {
                 Color.clear.frame(height: 72)
             }
@@ -186,8 +199,9 @@ struct HomeView: View {
                 settingsButton
             }
 
-            ToolbarItem(placement: .topBarTrailing) {
+            ToolbarItemGroup(placement: .topBarTrailing) {
                 sidebarToggleButton
+                shortcutsSheetButton
             }
         }
     }
@@ -263,6 +277,15 @@ struct HomeView: View {
         .accessibilityLabel("Toggle Sidebar")
     }
 
+    private var shortcutsSheetButton: some View {
+        Button {
+            isShowingShortcutsSheet = true
+        } label: {
+            Image(systemName: "command")
+        }
+        .accessibilityLabel("Keyboard Shortcuts")
+    }
+
     private var sidebarPlusButton: some View {
         Button {
             createComposition(presentation: .selectInDetail)
@@ -324,6 +347,142 @@ struct HomeView: View {
         } else {
             splitViewVisibility = .detailOnly
         }
+    }
+
+    private var filteredCompositionIDs: [UUID] {
+        filteredCompositions.map(\.id)
+    }
+
+    private func focusProjectSearch() {
+        guard splitViewVisibility != .detailOnly else { return }
+        isProjectSearchFocused = true
+    }
+
+    private func deleteSelectedCompositionIfPossible() {
+        guard let targetID = HomeKeyboardActions.deletableSelectionID(from: selectedCompositionID),
+              let composition = compositions.first(where: { $0.id == targetID }) else { return }
+        modelContext.delete(composition)
+        selectedCompositionID = nil
+    }
+
+    private func selectNextComposition() {
+        guard let nextID = HomeKeyboardActions.nextSelection(from: selectedCompositionID, in: filteredCompositionIDs) else { return }
+        selectedCompositionID = nextID
+        splitViewVisibility = .all
+    }
+
+    private func selectPreviousComposition() {
+        guard let previousID = HomeKeyboardActions.previousSelection(from: selectedCompositionID, in: filteredCompositionIDs) else { return }
+        selectedCompositionID = previousID
+        splitViewVisibility = .all
+    }
+
+    private var keyboardShortcutSections: [KeyboardShortcutSection] {
+        [
+            KeyboardShortcutSection(
+                title: "Home / Projects",
+                items: [
+                    KeyboardShortcutItem(
+                        title: "New project",
+                        keys: [.command, .character("N")]
+                    ),
+                    KeyboardShortcutItem(
+                        title: "Settings",
+                        keys: [.command, .character(",")]
+                    ),
+                    KeyboardShortcutItem(
+                        title: "Toggle sidebar",
+                        keys: [.command, .character("\\")]
+                    ),
+                    KeyboardShortcutItem(
+                        title: "Focus project search",
+                        keys: [.command, .character("F")],
+                        context: "When the sidebar is visible"
+                    ),
+                    KeyboardShortcutItem(
+                        title: "Delete selected project",
+                        keys: [.command, .delete],
+                        context: "Selection required"
+                    ),
+                    KeyboardShortcutItem(
+                        title: "Select next project",
+                        keys: [.option, .command, .arrowDown]
+                    ),
+                    KeyboardShortcutItem(
+                        title: "Select previous project",
+                        keys: [.option, .command, .arrowUp]
+                    ),
+                    KeyboardShortcutItem(
+                        title: "Show keyboard shortcuts",
+                        keys: [.command, .character("?")]
+                    )
+                ]
+            ),
+            KeyboardShortcutSection(
+                title: "Editor",
+                items: [
+                    KeyboardShortcutItem(
+                        title: "Editor help",
+                        keys: [.option, .command, .character("H")]
+                    ),
+                    KeyboardShortcutItem(
+                        title: "Import audio",
+                        keys: [.command, .character("O")]
+                    )
+                ]
+            )
+        ]
+    }
+
+    private var iPadKeyboardShortcutCommandHost: some View {
+        HStack(spacing: 0) {
+            Button {
+                toggleSidebar()
+            } label: {
+                EmptyView()
+            }
+            .keyboardShortcut("\\", modifiers: .command)
+
+            Button {
+                focusProjectSearch()
+            } label: {
+                EmptyView()
+            }
+            .keyboardShortcut("f", modifiers: .command)
+
+            Button {
+                deleteSelectedCompositionIfPossible()
+            } label: {
+                EmptyView()
+            }
+            .keyboardShortcut(.delete, modifiers: .command)
+            .disabled(HomeKeyboardActions.deletableSelectionID(from: selectedCompositionID) == nil)
+
+            Button {
+                selectNextComposition()
+            } label: {
+                EmptyView()
+            }
+            .keyboardShortcut(.downArrow, modifiers: [.command, .option])
+
+            Button {
+                selectPreviousComposition()
+            } label: {
+                EmptyView()
+            }
+            .keyboardShortcut(.upArrow, modifiers: [.command, .option])
+
+            Button {
+                isShowingShortcutsSheet = true
+            } label: {
+                EmptyView()
+            }
+            .keyboardShortcut("/", modifiers: [.command, .shift])
+        }
+        .frame(width: 1, height: 1)
+        .opacity(0.01)
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
     }
 }
 
@@ -422,7 +581,13 @@ private struct HomeDetailPlaceholder: View {
 
     let systemImage: String
     let message: String
-    let secondaryMessage: String? = nil
+    let secondaryMessage: String?
+
+    init(systemImage: String, message: String, secondaryMessage: String? = nil) {
+        self.systemImage = systemImage
+        self.message = message
+        self.secondaryMessage = secondaryMessage
+    }
 
     var body: some View {
         VStack(spacing: 16) {

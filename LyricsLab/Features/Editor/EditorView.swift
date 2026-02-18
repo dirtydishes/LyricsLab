@@ -130,6 +130,7 @@ struct EditorView: View {
                     Image(systemName: "questionmark.circle")
                 }
                 .accessibilityLabel("Help")
+                .keyboardShortcut("h", modifiers: [.command, .option])
 
                 Button {
                     isShowingAudioImporter = true
@@ -137,6 +138,7 @@ struct EditorView: View {
                     Image(systemName: "music.note")
                 }
                 .accessibilityLabel("Import Audio")
+                .keyboardShortcut("o", modifiers: .command)
             }
         }
         .sheet(isPresented: $isShowingEditorHelp) {
