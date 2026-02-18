@@ -121,6 +121,7 @@ struct HomeView: View {
                 }
                 .onDelete(perform: delete)
             }
+            .animation(.snappy(duration: 0.34, extraBounce: 0.08), value: filteredCompositions.map(\.id))
             .scrollContentBackground(.hidden)
             .navigationTitle(isDavyDollas ? "" : "LyricsLab")
             .searchable(text: $searchText, prompt: "Search projects")
@@ -174,6 +175,7 @@ struct HomeView: View {
                 }
                 .onDelete(perform: delete)
             }
+            .animation(.snappy(duration: 0.34, extraBounce: 0.08), value: filteredCompositions.map(\.id))
             .listStyle(.sidebar)
             .scrollContentBackground(.hidden)
             .searchable(text: $searchText, prompt: "Search projects")

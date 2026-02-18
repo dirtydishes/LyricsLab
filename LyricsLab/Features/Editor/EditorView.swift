@@ -27,6 +27,8 @@ struct EditorView: View {
     @State private var showingAudioError = false
     @State private var barPosition: BarPosition?
     @State private var isShowingEditorHelp = false
+    @State private var editSnapshotAtAppear = EditSnapshot.empty
+    @State private var didTouchAfterAppear = false
 
     var body: some View {
         ZStack {
@@ -171,8 +173,9 @@ struct EditorView: View {
             Text(audioPlayer.lastErrorMessage ?? "Unknown error.")
         }
         .onAppear {
-            composition.lastOpenedAt = Date()
             isLyricsFocused = true
+            editSnapshotAtAppear = currentEditSnapshot
+            didTouchAfterAppear = false
 
             ensureCompositionLexiconState()
 
@@ -209,6 +212,8 @@ struct EditorView: View {
             isLyricsFocused = true
         }
         .onDisappear {
+            let hasEditedSinceAppear = currentEditSnapshot != editSnapshotAtAppear
+
             autosaveTask?.cancel()
             autosaveTask = nil
 
@@ -221,7 +226,12 @@ struct EditorView: View {
             warmUpTask?.cancel()
             warmUpTask = nil
 
-            composition.touch()
+            if hasEditedSinceAppear && !didTouchAfterAppear {
+                withAnimation(.snappy(duration: 0.3, extraBounce: 0.06)) {
+                    composition.touch()
+                }
+            }
+
             do {
                 try modelContext.save()
             } catch {
@@ -235,7 +245,10 @@ struct EditorView: View {
         autosaveTask = Task { [modelContext, composition] in
             try? await Task.sleep(for: .milliseconds(450))
             await MainActor.run {
-                composition.touch()
+                withAnimation(.snappy(duration: 0.3, extraBounce: 0.06)) {
+                    composition.touch()
+                }
+                didTouchAfterAppear = true
                 do {
                     try modelContext.save()
                 } catch {
@@ -319,6 +332,14 @@ struct EditorView: View {
         isLyricsFocused = true
     }
 
+    private var currentEditSnapshot: EditSnapshot {
+        EditSnapshot(
+            title: composition.title,
+            lyrics: composition.lyrics,
+            endRhymeTailLength: composition.endRhymeTailLength
+        )
+    }
+
     private var suggestionEndColor: Color {
         let palette = themeManager.theme.highlightPalette
         return palette.first ?? themeManager.theme.accent
@@ -383,6 +404,14 @@ struct EditorView: View {
 
         return best.values.sorted { $0.range.location < $1.range.location }
     }
+}
+
+private struct EditSnapshot: Equatable {
+    var title: String
+    var lyrics: String
+    var endRhymeTailLength: Int
+
+    static let empty = EditSnapshot(title: "", lyrics: "", endRhymeTailLength: 1)
 }
 
 struct EditorView_Previews: PreviewProvider {
