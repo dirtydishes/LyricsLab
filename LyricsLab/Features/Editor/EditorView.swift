@@ -167,7 +167,7 @@ struct EditorView: View {
             }
         }
         .alert("Audio Error", isPresented: $showingAudioError) {
-            Button("OK") {
+            Button("OK", role: .cancel) {
                 audioPlayer.lastErrorMessage = nil
             }
         } message: {

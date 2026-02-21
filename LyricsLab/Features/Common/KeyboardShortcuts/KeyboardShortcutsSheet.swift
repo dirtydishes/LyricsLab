@@ -26,6 +26,7 @@ struct KeyboardShortcutsSheet: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Done") { dismiss() }
+                        .keyboardShortcut(.escape, modifiers: [])
                 }
             }
         }

@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct SettingsView: View {
+    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var themeManager: ThemeManager
     @AppStorage("icloudSyncEnabled") private var iCloudSyncEnabled = true
     @AppStorage("highContrastRhymeHighlighting") private var highContrastRhymeHighlighting = false
@@ -81,8 +82,16 @@ struct SettingsView: View {
             .scrollContentBackground(.hidden)
         }
         .navigationTitle("Settings")
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Done") {
+                    dismiss()
+                }
+                .keyboardShortcut(.escape, modifiers: [])
+            }
+        }
         .alert("Restart Required", isPresented: $showingRestartAlert) {
-            Button("OK") {}
+            Button("OK", role: .cancel) {}
         } message: {
             let appName = themeManager.themeID == .davyDollas ? "Lyric$Lab" : "LyricsLab"
             Text("Restart \(appName) to apply your iCloud Sync setting.")

@@ -106,6 +106,7 @@ struct HomeView: View {
                             Button("Done") {
                                 newComposition = nil
                             }
+                            .keyboardShortcut(.escape, modifiers: [])
                         }
                     }
             }
