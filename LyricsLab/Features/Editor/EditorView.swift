@@ -9,6 +9,7 @@ struct EditorView: View {
 
     @EnvironmentObject private var themeManager: ThemeManager
     @EnvironmentObject private var audioPlayer: AudioPlayer
+    @AppStorage("highContrastRhymeHighlighting") private var highContrastRhymeHighlighting = false
 
     @State private var lyricsSelectedRange = NSRange(location: 0, length: 0)
     @State private var isLyricsFocused = false
@@ -387,9 +388,19 @@ struct EditorView: View {
                 let key = RangeKey(location: occ.range.location, length: occ.range.length)
 
                 #if canImport(UIKit)
-                let candidate = TextHighlight(range: occ.range, style: style, color: UIColor(c))
+                let candidate = TextHighlight(
+                    range: occ.range,
+                    style: style,
+                    color: UIColor(c),
+                    highContrast: highContrastRhymeHighlighting
+                )
                 #else
-                let candidate = TextHighlight(range: occ.range, style: style, color: c)
+                let candidate = TextHighlight(
+                    range: occ.range,
+                    style: style,
+                    color: c,
+                    highContrast: highContrastRhymeHighlighting
+                )
                 #endif
 
                 if let existing = best[key] {

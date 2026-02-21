@@ -3,6 +3,7 @@ import SwiftUI
 struct SettingsView: View {
     @EnvironmentObject private var themeManager: ThemeManager
     @AppStorage("icloudSyncEnabled") private var iCloudSyncEnabled = true
+    @AppStorage("highContrastRhymeHighlighting") private var highContrastRhymeHighlighting = false
 
     var onShowKeyboardShortcuts: () -> Void = {}
 
@@ -31,6 +32,14 @@ struct SettingsView: View {
                         }
                     }
                     .pickerStyle(.navigationLink)
+                }
+
+                Section {
+                    Toggle("High Contrast Rhyme Highlighting", isOn: $highContrastRhymeHighlighting)
+                } header: {
+                    Text("Accessibility")
+                } footer: {
+                    Text("Boosts rhyme highlight intensity in the editor for clearer visual separation.")
                 }
 
                 Section {
