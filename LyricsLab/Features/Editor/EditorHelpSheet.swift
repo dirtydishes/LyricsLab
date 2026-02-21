@@ -122,6 +122,7 @@ struct EditorHelpSheet: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Done") { dismiss() }
+                        .keyboardShortcut(.cancelAction)
                 }
             }
         }
@@ -201,4 +202,3 @@ private struct HighlightRow: View {
         }
     }
 }
-

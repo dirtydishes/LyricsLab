@@ -1,8 +1,12 @@
 import SwiftUI
 
 struct SettingsView: View {
+    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var themeManager: ThemeManager
     @AppStorage("icloudSyncEnabled") private var iCloudSyncEnabled = true
+    @AppStorage("highContrastRhymeHighlighting") private var highContrastRhymeHighlighting = false
+
+    var onShowKeyboardShortcuts: () -> Void = {}
 
     @State private var showingRestartAlert = false
     @State private var showingLaunchWelcome = false
@@ -32,6 +36,14 @@ struct SettingsView: View {
                 }
 
                 Section {
+                    Toggle("High Contrast Rhyme Highlighting", isOn: $highContrastRhymeHighlighting)
+                } header: {
+                    Text("Accessibility")
+                } footer: {
+                    Text("Boosts rhyme highlight intensity in the editor for clearer visual separation.")
+                }
+
+                Section {
                     Toggle("iCloud Sync", isOn: $iCloudSyncEnabled)
                         .onChange(of: iCloudSyncEnabled) {
                             showingRestartAlert = true
@@ -49,6 +61,12 @@ struct SettingsView: View {
                 #endif
 
                 Section("About") {
+                    Button {
+                        onShowKeyboardShortcuts()
+                    } label: {
+                        Label("Keyboard Shortcuts", systemImage: "command")
+                    }
+
                     HStack {
                         Text("Version")
                         Spacer()
@@ -61,11 +79,21 @@ struct SettingsView: View {
                     }
                 }
             }
+            .id(themeManager.themeID)
+            .environment(\.colorScheme, themeManager.theme.colorScheme)
             .scrollContentBackground(.hidden)
         }
         .navigationTitle("Settings")
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Done") {
+                    dismiss()
+                }
+                .keyboardShortcut(.cancelAction)
+            }
+        }
         .alert("Restart Required", isPresented: $showingRestartAlert) {
-            Button("OK") {}
+            Button("OK", role: .cancel) {}
         } message: {
             let appName = themeManager.themeID == .davyDollas ? "Lyric$Lab" : "LyricsLab"
             Text("Restart \(appName) to apply your iCloud Sync setting.")

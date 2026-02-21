@@ -31,7 +31,7 @@ struct EditorSuggestionsBar: View {
                     Picker(
                         "End rhyme target",
                         selection: Binding(
-                            get: { endRhymeTailLength },
+                            get: { max(1, min(2, endRhymeTailLength)) },
                             set: { onSetEndRhymeTailLength($0) }
                         )
                     ) {

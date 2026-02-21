@@ -95,6 +95,7 @@ struct LaunchWelcomeView: View {
                             Text("Start Writing")
                                 .frame(maxWidth: .infinity)
                         }
+                        .keyboardShortcut(.cancelAction)
                         .buttonStyle(.borderedProminent)
                         .controlSize(.large)
                     }
@@ -108,6 +109,7 @@ struct LaunchWelcomeView: View {
                     Button("Done") {
                         onDismiss()
                     }
+                    .keyboardShortcut(.cancelAction)
                 }
             }
         }

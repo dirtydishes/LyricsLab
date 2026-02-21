@@ -259,15 +259,24 @@ final class EditorTextViewController: UIViewController {
             guard NSMaxRange(h.range) <= fullRange.length else { continue }
             switch h.style {
             case .end:
-                textView.textStorage.addAttribute(.backgroundColor, value: h.color.withAlphaComponent(0.26), range: h.range)
+                let alpha = h.highContrast ? 0.42 : 0.26
+                textView.textStorage.addAttribute(.backgroundColor, value: h.color.withAlphaComponent(alpha), range: h.range)
             case .internal:
-                let style = NSUnderlineStyle.single.rawValue
+                let style: Int
+                if h.highContrast {
+                    style = NSUnderlineStyle.thick.rawValue
+                } else {
+                    style = NSUnderlineStyle.single.rawValue
+                }
                 textView.textStorage.addAttribute(.underlineStyle, value: style, range: h.range)
-                textView.textStorage.addAttribute(.underlineColor, value: h.color.withAlphaComponent(0.68), range: h.range)
+                let alpha = h.highContrast ? 0.95 : 0.68
+                textView.textStorage.addAttribute(.underlineColor, value: h.color.withAlphaComponent(alpha), range: h.range)
             case .near:
-                let style = NSUnderlineStyle.single.rawValue | NSUnderlineStyle.patternDot.rawValue
+                let baseStyle = h.highContrast ? NSUnderlineStyle.thick.rawValue : NSUnderlineStyle.single.rawValue
+                let style = baseStyle | NSUnderlineStyle.patternDot.rawValue
                 textView.textStorage.addAttribute(.underlineStyle, value: style, range: h.range)
-                textView.textStorage.addAttribute(.underlineColor, value: h.color.withAlphaComponent(0.52), range: h.range)
+                let alpha = h.highContrast ? 0.82 : 0.52
+                textView.textStorage.addAttribute(.underlineColor, value: h.color.withAlphaComponent(alpha), range: h.range)
             }
         }
         textView.textStorage.endEditing()

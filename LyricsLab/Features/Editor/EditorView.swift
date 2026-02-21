@@ -9,6 +9,7 @@ struct EditorView: View {
 
     @EnvironmentObject private var themeManager: ThemeManager
     @EnvironmentObject private var audioPlayer: AudioPlayer
+    @AppStorage("highContrastRhymeHighlighting") private var highContrastRhymeHighlighting = false
 
     @State private var lyricsSelectedRange = NSRange(location: 0, length: 0)
     @State private var isLyricsFocused = false
@@ -27,6 +28,7 @@ struct EditorView: View {
     @State private var showingAudioError = false
     @State private var barPosition: BarPosition?
     @State private var isShowingEditorHelp = false
+    @State private var editSnapshotAtAppear = EditSnapshot.empty
 
     var body: some View {
         ZStack {
@@ -130,6 +132,7 @@ struct EditorView: View {
                     Image(systemName: "questionmark.circle")
                 }
                 .accessibilityLabel("Help")
+                .keyboardShortcut("h", modifiers: [.command, .option])
 
                 Button {
                     isShowingAudioImporter = true
@@ -137,6 +140,7 @@ struct EditorView: View {
                     Image(systemName: "music.note")
                 }
                 .accessibilityLabel("Import Audio")
+                .keyboardShortcut("o", modifiers: .command)
             }
         }
         .sheet(isPresented: $isShowingEditorHelp) {
@@ -162,17 +166,15 @@ struct EditorView: View {
             }
         }
         .alert("Audio Error", isPresented: $showingAudioError) {
-            Button("OK") {
+            Button("OK", role: .cancel) {
                 audioPlayer.lastErrorMessage = nil
             }
         } message: {
             Text(audioPlayer.lastErrorMessage ?? "Unknown error.")
         }
         .onAppear {
-            composition.lastOpenedAt = Date()
             isLyricsFocused = true
-
-            ensureCompositionLexiconState()
+            editSnapshotAtAppear = currentEditSnapshot
 
             warmUpTask?.cancel()
             warmUpTask = Task {
@@ -207,6 +209,8 @@ struct EditorView: View {
             isLyricsFocused = true
         }
         .onDisappear {
+            let hasEditedSinceAppear = currentEditSnapshot != editSnapshotAtAppear
+
             autosaveTask?.cancel()
             autosaveTask = nil
 
@@ -219,7 +223,12 @@ struct EditorView: View {
             warmUpTask?.cancel()
             warmUpTask = nil
 
-            composition.touch()
+            if hasEditedSinceAppear {
+                withAnimation(.snappy(duration: 0.3, extraBounce: 0.06)) {
+                    composition.touch()
+                }
+            }
+
             do {
                 try modelContext.save()
             } catch {
@@ -230,10 +239,9 @@ struct EditorView: View {
 
     private func scheduleAutosave() {
         autosaveTask?.cancel()
-        autosaveTask = Task { [modelContext, composition] in
+        autosaveTask = Task { [modelContext] in
             try? await Task.sleep(for: .milliseconds(450))
             await MainActor.run {
-                composition.touch()
                 do {
                     try modelContext.save()
                 } catch {
@@ -288,15 +296,6 @@ struct EditorView: View {
         }
     }
 
-    private func ensureCompositionLexiconState() {
-        guard composition.lexiconState == nil else { return }
-
-        let state = CompositionLexiconState(composition: composition)
-        composition.lexiconState = state
-        modelContext.insert(state)
-        try? modelContext.save()
-    }
-
     private func recordSuggestionAcceptance(_ word: String) {
         UserLexiconStore.recordAcceptedWord(word, in: modelContext)
         try? modelContext.save()
@@ -315,6 +314,14 @@ struct EditorView: View {
             composition.lyrics += " "
         }
         isLyricsFocused = true
+    }
+
+    private var currentEditSnapshot: EditSnapshot {
+        EditSnapshot(
+            title: composition.title,
+            lyrics: composition.lyrics,
+            endRhymeTailLength: composition.endRhymeTailLength
+        )
     }
 
     private var suggestionEndColor: Color {
@@ -364,9 +371,19 @@ struct EditorView: View {
                 let key = RangeKey(location: occ.range.location, length: occ.range.length)
 
                 #if canImport(UIKit)
-                let candidate = TextHighlight(range: occ.range, style: style, color: UIColor(c))
+                let candidate = TextHighlight(
+                    range: occ.range,
+                    style: style,
+                    color: UIColor(c),
+                    highContrast: highContrastRhymeHighlighting
+                )
                 #else
-                let candidate = TextHighlight(range: occ.range, style: style, color: c)
+                let candidate = TextHighlight(
+                    range: occ.range,
+                    style: style,
+                    color: c,
+                    highContrast: highContrastRhymeHighlighting
+                )
                 #endif
 
                 if let existing = best[key] {
@@ -381,6 +398,14 @@ struct EditorView: View {
 
         return best.values.sorted { $0.range.location < $1.range.location }
     }
+}
+
+private struct EditSnapshot: Equatable {
+    var title: String
+    var lyrics: String
+    var endRhymeTailLength: Int
+
+    static let empty = EditSnapshot(title: "", lyrics: "", endRhymeTailLength: 1)
 }
 
 struct EditorView_Previews: PreviewProvider {
