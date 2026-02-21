@@ -23,6 +23,8 @@ struct HomeView: View {
     @State private var selectedCompositionID: UUID?
     @State private var isShowingShortcutsSheet = false
     @FocusState private var isProjectSearchFocused: Bool
+    @State private var isSidebarSearchVisible = false
+    @FocusState private var isSidebarSearchFieldFocused: Bool
 
     @AppStorage("hasSeenLaunchWelcome") private var hasSeenLaunchWelcome = false
 
@@ -82,6 +84,7 @@ struct HomeView: View {
             }
             .environmentObject(themeManager)
             .tint(themeManager.theme.accent)
+            .preferredColorScheme(themeManager.theme.colorScheme)
         }
         .sheet(isPresented: $isShowingShortcutsSheet) {
             KeyboardShortcutsSheet(sections: keyboardShortcutSections)
@@ -106,7 +109,7 @@ struct HomeView: View {
                             Button("Done") {
                                 newComposition = nil
                             }
-                            .keyboardShortcut(.escape, modifiers: [])
+                            .keyboardShortcut(.cancelAction)
                         }
                     }
             }
@@ -176,20 +179,30 @@ struct HomeView: View {
 
     private func iPadSidebar(isDavyDollas: Bool) -> some View {
         ZStack(alignment: .bottomTrailing) {
-            List {
-                ForEach(filteredCompositions) { composition in
-                    iPadSidebarRow(for: composition)
+            VStack(spacing: 0) {
+                if isSidebarSearchVisible {
+                    sidebarSearchField
+                        .padding(.horizontal, 12)
+                        .padding(.top, 6)
+                        .padding(.bottom, 4)
+                        .transition(.move(edge: .top).combined(with: .opacity))
                 }
-                .onDelete(perform: delete)
+
+                List {
+                    ForEach(filteredCompositions) { composition in
+                        iPadSidebarRow(for: composition)
+                    }
+                    .onDelete(perform: delete)
+                }
+                .animation(.snappy(duration: 0.34, extraBounce: 0.08), value: filteredCompositions.map(\.id))
+                .listStyle(.sidebar)
+                .scrollContentBackground(.hidden)
+                .safeAreaInset(edge: .bottom) {
+                    Color.clear.frame(height: 72)
+                }
             }
-            .animation(.snappy(duration: 0.34, extraBounce: 0.08), value: filteredCompositions.map(\.id))
-            .listStyle(.sidebar)
-            .scrollContentBackground(.hidden)
-            .searchable(text: $searchText, prompt: "Search projects")
-            .searchFocused($isProjectSearchFocused)
-            .safeAreaInset(edge: .bottom) {
-                Color.clear.frame(height: 72)
-            }
+            .contentShape(Rectangle())
+            .highPriorityGesture(sidebarSearchRevealGesture, including: .gesture)
 
             sidebarPlusButton
                 .padding(16)
@@ -348,9 +361,81 @@ struct HomeView: View {
         filteredCompositions.map(\.id)
     }
 
+    private var sidebarSearchField: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "magnifyingglass")
+                .foregroundStyle(themeManager.theme.textSecondary)
+
+            TextField("Search projects", text: $searchText)
+                .textInputAutocapitalization(.never)
+                .disableAutocorrection(true)
+                .focused($isSidebarSearchFieldFocused)
+                .submitLabel(.search)
+
+            if !searchText.isEmpty {
+                Button {
+                    searchText = ""
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(themeManager.theme.textSecondary)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Clear Search")
+            }
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
+        .background(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .fill(themeManager.theme.surface.opacity(themeManager.theme.colorScheme == .dark ? 0.86 : 0.94))
+        )
+        .overlay {
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .strokeBorder(themeManager.theme.surface.opacity(0.92), lineWidth: 1)
+        }
+    }
+
+    private var sidebarSearchRevealGesture: some Gesture {
+        DragGesture(minimumDistance: 12)
+            .onChanged { value in
+                guard abs(value.translation.height) > abs(value.translation.width) else { return }
+
+                if value.translation.height > 26 {
+                    showSidebarSearchAndFocus()
+                } else if value.translation.height < -26 {
+                    hideSidebarSearch()
+                }
+            }
+    }
+
+    private func showSidebarSearchAndFocus() {
+        guard !isSidebarSearchVisible else { return }
+        withAnimation(.snappy(duration: 0.18, extraBounce: 0.0)) {
+            isSidebarSearchVisible = true
+        }
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(120))
+            guard isSidebarSearchVisible else { return }
+            isSidebarSearchFieldFocused = true
+        }
+    }
+
+    private func hideSidebarSearch() {
+        guard isSidebarSearchVisible else { return }
+        isSidebarSearchFieldFocused = false
+        searchText = ""
+        withAnimation(.snappy(duration: 0.18, extraBounce: 0.0)) {
+            isSidebarSearchVisible = false
+        }
+    }
+
     private func focusProjectSearch() {
         guard splitViewVisibility != .detailOnly else { return }
-        isProjectSearchFocused = true
+        if horizontalSizeClass == .regular {
+            showSidebarSearchAndFocus()
+        } else {
+            isProjectSearchFocused = true
+        }
     }
 
     private func deleteSelectedCompositionIfPossible() {

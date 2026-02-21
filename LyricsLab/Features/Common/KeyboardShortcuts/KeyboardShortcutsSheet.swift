@@ -5,28 +5,55 @@ struct KeyboardShortcutsSheet: View {
     @EnvironmentObject private var themeManager: ThemeManager
 
     let sections: [KeyboardShortcutSection]
+    @State private var isContentVisible = false
+    @State private var revealTask: Task<Void, Never>?
 
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: 18) {
-                    introCard
+                if isContentVisible {
+                    VStack(alignment: .leading, spacing: 18) {
+                        introCard
 
-                    ForEach(sections) { section in
-                        shortcutSectionCard(section)
+                        ForEach(sections) { section in
+                            shortcutSectionCard(section)
+                        }
                     }
+                    .padding(20)
+                    .frame(maxWidth: 760)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .transition(.opacity)
+                } else {
+                    Color.clear
+                        .frame(height: 1)
                 }
-                .padding(20)
-                .frame(maxWidth: 760)
-                .frame(maxWidth: .infinity, alignment: .center)
             }
+            .scrollIndicators(.hidden)
             .background(themeManager.theme.backgroundGradient.ignoresSafeArea())
             .navigationTitle("Keyboard Shortcuts")
             .navigationBarTitleDisplayMode(.inline)
+            .onAppear {
+                guard !isContentVisible else { return }
+                revealTask?.cancel()
+                revealTask = Task {
+                    try? await Task.sleep(for: .milliseconds(120))
+                    guard !Task.isCancelled else { return }
+                    await MainActor.run {
+                        withAnimation(.easeOut(duration: 0.16)) {
+                            isContentVisible = true
+                        }
+                    }
+                }
+            }
+            .onDisappear {
+                revealTask?.cancel()
+                revealTask = nil
+                isContentVisible = false
+            }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Done") { dismiss() }
-                        .keyboardShortcut(.escape, modifiers: [])
+                        .keyboardShortcut(.cancelAction)
                 }
             }
         }
@@ -44,7 +71,10 @@ struct KeyboardShortcutsSheet: View {
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .background(
+            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                .fill(themeManager.theme.elevatedSurface.opacity(themeManager.theme.colorScheme == .dark ? 0.82 : 0.92))
+        )
         .overlay {
             RoundedRectangle(cornerRadius: 20, style: .continuous)
                 .strokeBorder(themeManager.theme.surface.opacity(0.9), lineWidth: 1)
@@ -63,12 +93,14 @@ struct KeyboardShortcutsSheet: View {
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .background(
+            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                .fill(themeManager.theme.elevatedSurface.opacity(themeManager.theme.colorScheme == .dark ? 0.82 : 0.92))
+        )
         .overlay {
             RoundedRectangle(cornerRadius: 20, style: .continuous)
                 .strokeBorder(themeManager.theme.surface.opacity(0.9), lineWidth: 1)
         }
-        .shadow(color: Color.black.opacity(themeManager.theme.colorScheme == .dark ? 0.2 : 0.08), radius: 12, x: 0, y: 6)
     }
 }
 
@@ -130,7 +162,10 @@ private struct KeyboardShortcutKeyCap: View {
             .lineLimit(1)
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
-            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .background(
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .fill(themeManager.theme.surface.opacity(themeManager.theme.colorScheme == .dark ? 0.82 : 0.95))
+            )
             .overlay {
                 RoundedRectangle(cornerRadius: 10, style: .continuous)
                     .strokeBorder(themeManager.theme.surface.opacity(0.92), lineWidth: 1)

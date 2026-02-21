@@ -29,7 +29,6 @@ struct EditorView: View {
     @State private var barPosition: BarPosition?
     @State private var isShowingEditorHelp = false
     @State private var editSnapshotAtAppear = EditSnapshot.empty
-    @State private var didTouchAfterAppear = false
 
     var body: some View {
         ZStack {
@@ -176,9 +175,6 @@ struct EditorView: View {
         .onAppear {
             isLyricsFocused = true
             editSnapshotAtAppear = currentEditSnapshot
-            didTouchAfterAppear = false
-
-            ensureCompositionLexiconState()
 
             warmUpTask?.cancel()
             warmUpTask = Task {
@@ -227,7 +223,7 @@ struct EditorView: View {
             warmUpTask?.cancel()
             warmUpTask = nil
 
-            if hasEditedSinceAppear && !didTouchAfterAppear {
+            if hasEditedSinceAppear {
                 withAnimation(.snappy(duration: 0.3, extraBounce: 0.06)) {
                     composition.touch()
                 }
@@ -243,13 +239,9 @@ struct EditorView: View {
 
     private func scheduleAutosave() {
         autosaveTask?.cancel()
-        autosaveTask = Task { [modelContext, composition] in
+        autosaveTask = Task { [modelContext] in
             try? await Task.sleep(for: .milliseconds(450))
             await MainActor.run {
-                withAnimation(.snappy(duration: 0.3, extraBounce: 0.06)) {
-                    composition.touch()
-                }
-                didTouchAfterAppear = true
                 do {
                     try modelContext.save()
                 } catch {
@@ -302,15 +294,6 @@ struct EditorView: View {
                 rhymeServiceReady = true
             }
         }
-    }
-
-    private func ensureCompositionLexiconState() {
-        guard composition.lexiconState == nil else { return }
-
-        let state = CompositionLexiconState(composition: composition)
-        composition.lexiconState = state
-        modelContext.insert(state)
-        try? modelContext.save()
     }
 
     private func recordSuggestionAcceptance(_ word: String) {

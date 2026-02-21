@@ -79,6 +79,8 @@ struct SettingsView: View {
                     }
                 }
             }
+            .id(themeManager.themeID)
+            .environment(\.colorScheme, themeManager.theme.colorScheme)
             .scrollContentBackground(.hidden)
         }
         .navigationTitle("Settings")
@@ -87,7 +89,7 @@ struct SettingsView: View {
                 Button("Done") {
                     dismiss()
                 }
-                .keyboardShortcut(.escape, modifiers: [])
+                .keyboardShortcut(.cancelAction)
             }
         }
         .alert("Restart Required", isPresented: $showingRestartAlert) {
