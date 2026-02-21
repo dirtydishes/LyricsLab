@@ -25,35 +25,47 @@ struct EditorTextViewControllerRepresentable: UIViewControllerRepresentable {
     var preferredTextColor: Color? = nil
     var preferredTintColor: Color? = nil
 
+    private func wireCallbacks(for vc: EditorTextViewController) {
+        let textBinding = $text
+        vc.onTextChanged = { next in
+            if textBinding.wrappedValue != next {
+                textBinding.wrappedValue = next
+            }
+        }
+
+        let selectedRangeBinding = $selectedRange
+        vc.onSelectionChanged = { next in
+            if selectedRangeBinding.wrappedValue != next {
+                selectedRangeBinding.wrappedValue = next
+            }
+        }
+
+        let focusBinding = $isFocused
+        vc.onFocusChanged = { focused in
+            if focusBinding.wrappedValue != focused {
+                focusBinding.wrappedValue = focused
+            }
+        }
+
+        let endRhymeBinding = $endRhymeTailLength
+        vc.onEndRhymeTailLengthChanged = { next in
+            if endRhymeBinding.wrappedValue != next {
+                endRhymeBinding.wrappedValue = next
+            }
+        }
+    }
+
     func makeUIViewController(context: Context) -> EditorTextViewController {
         let vc = EditorTextViewController()
-        vc.onTextChanged = { next in
-            if text != next {
-                text = next
-            }
-        }
-        vc.onSelectionChanged = { next in
-            if selectedRange != next {
-                selectedRange = next
-            }
-        }
-        vc.onFocusChanged = { focused in
-            if isFocused != focused {
-                isFocused = focused
-            }
-        }
+        wireCallbacks(for: vc)
         vc.onSuggestionAccepted = { word in
             onSuggestionAccepted?(word)
-        }
-        vc.onEndRhymeTailLengthChanged = { next in
-            if endRhymeTailLength != next {
-                endRhymeTailLength = next
-            }
         }
         return vc
     }
 
     func updateUIViewController(_ uiViewController: EditorTextViewController, context: Context) {
+        wireCallbacks(for: uiViewController)
         uiViewController.update(
             text: text,
             selectedRange: selectedRange,
