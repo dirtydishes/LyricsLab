@@ -8,17 +8,21 @@ final class EditorTextViewController: UIViewController {
         case typing
         case insertion
         case focus
-        case layout
         case externalUpdate
     }
 
-	    var onTextChanged: ((String) -> Void)?
-	    var onSelectionChanged: ((NSRange) -> Void)?
-	    var onFocusChanged: ((Bool) -> Void)?
-	    var onSuggestionAccepted: ((String) -> Void)?
-	    var onEndRhymeTailLengthChanged: ((Int) -> Void)?
-	    var onMiniPlayerTogglePlayPause: (() -> Void)?
-	    var onMiniPlayerStop: (() -> Void)?
+    var onTextChanged: ((String) -> Void)?
+    var onSelectionChanged: ((NSRange) -> Void)?
+    var onFocusChanged: ((Bool) -> Void)?
+    var onSuggestionAccepted: ((String) -> Void)?
+    var onEndRhymeTailLengthChanged: ((Int) -> Void)?
+    var onMiniPlayerTogglePlayPause: (() -> Void)?
+    var onMiniPlayerStop: (() -> Void)?
+    var onMiniPlayerMarkLoopStart: (() -> Void)?
+    var onMiniPlayerMarkLoopEnd: (() -> Void)?
+    var onMiniPlayerToggleLoop: (() -> Void)?
+    var onMiniPlayerClearLoop: (() -> Void)?
+    var onUndoStateChanged: ((Bool, Bool) -> Void)?
 
     private(set) var textView = UITextView()
 
@@ -34,9 +38,38 @@ final class EditorTextViewController: UIViewController {
     private var isUserScrolling = false
 
     private var lastAppliedHighlights: [TextHighlight] = []
-    private var lastMiniPlayerTitle: String?
-    private var lastMiniPlayerIsPlaying: Bool = false
-    private var lastMiniPlayerIsLoading: Bool = false
+    private var pendingHighlights: [TextHighlight]?
+    private var lastSuggestionsRenderState: SuggestionsRenderState?
+    private var lastSuggestionsEndColor: UIColor?
+    private var lastSuggestionsInternalColor: UIColor?
+    private var lastMiniPlayerRenderState: MiniPlayerRenderState?
+
+    private struct SuggestionsRenderState: Equatable {
+        var suggestions: [RhymeSuggestion]
+        var isLoading: Bool
+        var barPosition: BarPosition?
+        var endRhymeTailLength: Int
+    }
+
+    private struct MiniPlayerRenderState: Equatable {
+        var title: String?
+        var isPlaying: Bool
+        var isLoading: Bool
+        var currentTime: TimeInterval
+        var duration: TimeInterval
+        var meterLevels: [CGFloat]
+        var loopStartTime: TimeInterval?
+        var loopEndTime: TimeInterval?
+        var isLoopEnabled: Bool
+    }
+
+    var canUndo: Bool {
+        textView.undoManager?.canUndo ?? false
+    }
+
+    var canRedo: Bool {
+        textView.undoManager?.canRedo ?? false
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,45 +81,62 @@ final class EditorTextViewController: UIViewController {
         configureLayout()
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        ensureCaretVisible(reason: .layout, animated: false)
+    func update(
+        text: String,
+        selectedRange: NSRange,
+        isFocused: Bool,
+        highlights: [TextHighlight],
+        suggestions: [RhymeSuggestion],
+        isLoadingSuggestions: Bool,
+        isSuggestionsEnabled: Bool,
+        barPosition: BarPosition?,
+        endRhymeTailLength: Int,
+        miniPlayerTitle: String?,
+        miniPlayerIsPlaying: Bool,
+        miniPlayerIsLoading: Bool,
+        miniPlayerCurrentTime: TimeInterval,
+        miniPlayerDuration: TimeInterval,
+        miniPlayerMeterLevels: [CGFloat],
+        miniPlayerLoopStart: TimeInterval?,
+        miniPlayerLoopEnd: TimeInterval?,
+        miniPlayerLoopEnabled: Bool,
+        endRhymeColor: Color,
+        internalRhymeColor: Color,
+        preferredColorScheme: ColorScheme?,
+        preferredTextColor: Color?,
+        preferredTintColor: Color?
+    ) {
+        applyAppearance(preferredColorScheme: preferredColorScheme, preferredTextColor: preferredTextColor, preferredTintColor: preferredTintColor)
+        let isActivelyEditing = isFocused && textView.isFirstResponder
+        let textDidChange = applyTextIfNeeded(text, allowExternalSync: !isActivelyEditing)
+        _ = applySelectionIfNeeded(selectedRange, allowExternalSync: !isActivelyEditing)
+        applyHighlightsIfNeeded(highlights)
+        updateSuggestionsBar(
+            suggestions: suggestions,
+            isLoading: isLoadingSuggestions,
+            barPosition: barPosition,
+            endRhymeTailLength: endRhymeTailLength,
+            endRhymeColor: endRhymeColor,
+            internalRhymeColor: internalRhymeColor
+        )
+        updateMiniPlayerBar(
+            title: miniPlayerTitle,
+            isPlaying: miniPlayerIsPlaying,
+            isLoading: miniPlayerIsLoading,
+            currentTime: miniPlayerCurrentTime,
+            duration: miniPlayerDuration,
+            meterLevels: miniPlayerMeterLevels,
+            loopStartTime: miniPlayerLoopStart,
+            loopEndTime: miniPlayerLoopEnd,
+            isLoopEnabled: miniPlayerLoopEnabled
+        )
+        setSuggestionsVisible(isFocused && isSuggestionsEnabled)
+        setFocus(isFocused)
+        if textDidChange {
+            ensureCaretVisible(reason: .externalUpdate, animated: false)
+        }
+        reportUndoAvailability()
     }
-
-	    func update(
-	        text: String,
-	        selectedRange: NSRange,
-	        isFocused: Bool,
-	        highlights: [TextHighlight],
-	        suggestions: [RhymeSuggestion],
-	        isLoadingSuggestions: Bool,
-	        barPosition: BarPosition?,
-	        endRhymeTailLength: Int,
-	        miniPlayerTitle: String?,
-	        miniPlayerIsPlaying: Bool,
-	        miniPlayerIsLoading: Bool,
-	        endRhymeColor: Color,
-	        internalRhymeColor: Color,
-	        preferredColorScheme: ColorScheme?,
-	        preferredTextColor: Color?,
-	        preferredTintColor: Color?
-	    ) {
-	        applyAppearance(preferredColorScheme: preferredColorScheme, preferredTextColor: preferredTextColor, preferredTintColor: preferredTintColor)
-	        applyTextIfNeeded(text)
-	        applySelectionIfNeeded(selectedRange)
-	        applyHighlightsIfNeeded(highlights)
-	        updateSuggestionsBar(
-	            suggestions: suggestions,
-	            isLoading: isLoadingSuggestions,
-	            barPosition: barPosition,
-	            endRhymeTailLength: endRhymeTailLength,
-	            endRhymeColor: endRhymeColor,
-	            internalRhymeColor: internalRhymeColor
-	        )
-	        updateMiniPlayerBar(title: miniPlayerTitle, isPlaying: miniPlayerIsPlaying, isLoading: miniPlayerIsLoading)
-	        setSuggestionsVisible(isFocused)
-	        setFocus(isFocused)
-	    }
 
     private func configureTextView() {
         textView.backgroundColor = .clear
@@ -100,22 +150,22 @@ final class EditorTextViewController: UIViewController {
         textView.scrollsToTop = true
     }
 
-	    private func configureSuggestionsBar() {
-	        let host = UIHostingController(
-	            rootView: EditorSuggestionsBar(
-	                suggestions: [],
-	                isLoading: false,
-	                barPosition: nil,
-	                endRhymeTailLength: 1,
-	                onSetEndRhymeTailLength: { [weak self] next in
-	                    self?.onEndRhymeTailLengthChanged?(next)
-	                },
-	                endRhymeColor: .blue,
-	                internalRhymeColor: .purple
-	            ) { [weak self] word in
-	                self?.insertSuggestion(word)
-	            }
-	        )
+    private func configureSuggestionsBar() {
+        let host = UIHostingController(
+            rootView: EditorSuggestionsBar(
+                suggestions: [],
+                isLoading: false,
+                barPosition: nil,
+                endRhymeTailLength: 1,
+                onSetEndRhymeTailLength: { [weak self] next in
+                    self?.onEndRhymeTailLengthChanged?(next)
+                },
+                endRhymeColor: .blue,
+                internalRhymeColor: .purple
+            ) { [weak self] word in
+                self?.insertSuggestion(word)
+            }
+        )
         host.view.backgroundColor = .clear
         host.view.translatesAutoresizingMaskIntoConstraints = false
         host.sizingOptions = [.intrinsicContentSize]
@@ -138,11 +188,29 @@ final class EditorTextViewController: UIViewController {
                 title: "",
                 isPlaying: false,
                 isLoading: false,
+                currentTime: 0,
+                duration: 0,
+                meterLevels: Array(repeating: 0.08, count: 10),
+                loopStartTime: nil,
+                loopEndTime: nil,
+                isLoopEnabled: false,
                 onTogglePlayPause: { [weak self] in
                     self?.onMiniPlayerTogglePlayPause?()
                 },
                 onStop: { [weak self] in
                     self?.onMiniPlayerStop?()
+                },
+                onMarkLoopStart: { [weak self] in
+                    self?.onMiniPlayerMarkLoopStart?()
+                },
+                onMarkLoopEnd: { [weak self] in
+                    self?.onMiniPlayerMarkLoopEnd?()
+                },
+                onToggleLoop: { [weak self] in
+                    self?.onMiniPlayerToggleLoop?()
+                },
+                onClearLoop: { [weak self] in
+                    self?.onMiniPlayerClearLoop?()
                 }
             )
         )
@@ -220,14 +288,17 @@ final class EditorTextViewController: UIViewController {
         }
     }
 
-    private func applyTextIfNeeded(_ nextText: String) {
-        guard textView.text != nextText else { return }
+    private func applyTextIfNeeded(_ nextText: String, allowExternalSync: Bool) -> Bool {
+        guard allowExternalSync else { return false }
+        guard textView.text != nextText else { return false }
         isApplyingExternalText = true
         textView.text = nextText
         isApplyingExternalText = false
+        return true
     }
 
-    private func applySelectionIfNeeded(_ nextRange: NSRange) {
+    private func applySelectionIfNeeded(_ nextRange: NSRange, allowExternalSync: Bool) -> Bool {
+        guard allowExternalSync else { return false }
         let textLength = (textView.text as NSString).length
         var clamped = nextRange
         if clamped.location < 0 { clamped.location = 0 }
@@ -237,15 +308,24 @@ final class EditorTextViewController: UIViewController {
             clamped.length = max(0, textLength - clamped.location)
         }
 
-        guard textView.selectedRange != clamped else { return }
+        guard textView.selectedRange != clamped else { return false }
         isApplyingExternalSelection = true
         textView.selectedRange = clamped
         isApplyingExternalSelection = false
+        return true
     }
 
     private func applyHighlightsIfNeeded(_ highlights: [TextHighlight]) {
-        guard highlights != lastAppliedHighlights else { return }
+        guard highlights != lastAppliedHighlights else {
+            pendingHighlights = nil
+            return
+        }
+        if isUserScrolling {
+            pendingHighlights = highlights
+            return
+        }
         lastAppliedHighlights = highlights
+        pendingHighlights = nil
 
         let fullRange = NSRange(location: 0, length: (textView.text as NSString).length)
         guard fullRange.length > 0 else { return }
@@ -273,6 +353,11 @@ final class EditorTextViewController: UIViewController {
         textView.textStorage.endEditing()
     }
 
+    private func applyPendingHighlightsIfNeeded() {
+        guard let pendingHighlights else { return }
+        applyHighlightsIfNeeded(pendingHighlights)
+    }
+
     private func updateSuggestionsBar(
         suggestions: [RhymeSuggestion],
         isLoading: Bool,
@@ -282,6 +367,25 @@ final class EditorTextViewController: UIViewController {
         internalRhymeColor: Color
     ) {
         guard let host = suggestionsHostingController else { return }
+
+        let nextState = SuggestionsRenderState(
+            suggestions: suggestions,
+            isLoading: isLoading,
+            barPosition: barPosition,
+            endRhymeTailLength: endRhymeTailLength
+        )
+        let nextEndColor = UIColor(endRhymeColor)
+        let nextInternalColor = UIColor(internalRhymeColor)
+        let endColorUnchanged = (lastSuggestionsEndColor?.isEqual(nextEndColor) ?? false)
+        let internalColorUnchanged = (lastSuggestionsInternalColor?.isEqual(nextInternalColor) ?? false)
+        if lastSuggestionsRenderState == nextState, endColorUnchanged, internalColorUnchanged {
+            return
+        }
+
+        lastSuggestionsRenderState = nextState
+        lastSuggestionsEndColor = nextEndColor
+        lastSuggestionsInternalColor = nextInternalColor
+
         host.rootView = EditorSuggestionsBar(
             suggestions: suggestions,
             isLoading: isLoading,
@@ -297,34 +401,66 @@ final class EditorTextViewController: UIViewController {
         }
     }
 
-    private func updateMiniPlayerBar(title: String?, isPlaying: Bool, isLoading: Bool) {
+    private func updateMiniPlayerBar(
+        title: String?,
+        isPlaying: Bool,
+        isLoading: Bool,
+        currentTime: TimeInterval,
+        duration: TimeInterval,
+        meterLevels: [CGFloat],
+        loopStartTime: TimeInterval?,
+        loopEndTime: TimeInterval?,
+        isLoopEnabled: Bool
+    ) {
         let resolvedTitle = title?.trimmingCharacters(in: .whitespacesAndNewlines)
         let shouldShow = (resolvedTitle?.isEmpty == false)
 
         guard shouldShow || miniPlayerHostingController != nil else { return }
 
-        if shouldShow,
-           resolvedTitle == lastMiniPlayerTitle,
-           isPlaying == lastMiniPlayerIsPlaying,
-           isLoading == lastMiniPlayerIsLoading {
-            setMiniPlayerVisible(true)
+        let nextState = MiniPlayerRenderState(
+            title: resolvedTitle,
+            isPlaying: isPlaying,
+            isLoading: isLoading,
+            currentTime: currentTime,
+            duration: duration,
+            meterLevels: meterLevels,
+            loopStartTime: loopStartTime,
+            loopEndTime: loopEndTime,
+            isLoopEnabled: isLoopEnabled
+        )
+        if lastMiniPlayerRenderState == nextState {
             return
         }
-
-        lastMiniPlayerTitle = resolvedTitle
-        lastMiniPlayerIsPlaying = isPlaying
-        lastMiniPlayerIsLoading = isLoading
+        lastMiniPlayerRenderState = nextState
 
         if shouldShow, let resolvedTitle {
             miniPlayerHostingController?.rootView = EditorMiniPlayerBar(
                 title: resolvedTitle,
                 isPlaying: isPlaying,
                 isLoading: isLoading,
+                currentTime: currentTime,
+                duration: duration,
+                meterLevels: meterLevels,
+                loopStartTime: loopStartTime,
+                loopEndTime: loopEndTime,
+                isLoopEnabled: isLoopEnabled,
                 onTogglePlayPause: { [weak self] in
                     self?.onMiniPlayerTogglePlayPause?()
                 },
                 onStop: { [weak self] in
                     self?.onMiniPlayerStop?()
+                },
+                onMarkLoopStart: { [weak self] in
+                    self?.onMiniPlayerMarkLoopStart?()
+                },
+                onMarkLoopEnd: { [weak self] in
+                    self?.onMiniPlayerMarkLoopEnd?()
+                },
+                onToggleLoop: { [weak self] in
+                    self?.onMiniPlayerToggleLoop?()
+                },
+                onClearLoop: { [weak self] in
+                    self?.onMiniPlayerClearLoop?()
                 }
             )
             setMiniPlayerVisible(true)
@@ -373,12 +509,29 @@ final class EditorTextViewController: UIViewController {
                 textView.resignFirstResponder()
             }
         }
+        reportUndoAvailability()
+    }
+
+    private func reportUndoAvailability() {
+        onUndoStateChanged?(canUndo, canRedo)
+    }
+
+    func performUndo() {
+        textView.undoManager?.undo()
+        onTextChanged?(textView.text)
+        onSelectionChanged?(textView.selectedRange)
+        reportUndoAvailability()
+    }
+
+    func performRedo() {
+        textView.undoManager?.redo()
+        onTextChanged?(textView.text)
+        onSelectionChanged?(textView.selectedRange)
+        reportUndoAvailability()
     }
 
     private func ensureCaretVisible(reason: EnsureCaretReason, animated: Bool) {
-        // Let UIKit keep the caret visible during user-driven typing.
         if isUserScrolling {
-            // Don't fight the user's scroll.
             return
         }
         guard textView.isFirstResponder else { return }
@@ -392,14 +545,22 @@ final class EditorTextViewController: UIViewController {
         target.origin.y -= paddingTop
         target.size.height += paddingTop + paddingBottom
 
-        // Avoid excessive scrolling during background updates.
-        switch reason {
-        case .insertion, .focus:
-            break
-        case .typing, .layout, .externalUpdate:
-            break
+        let inset = textView.adjustedContentInset
+        let visibleRect = CGRect(
+            x: textView.contentOffset.x,
+            y: textView.contentOffset.y + inset.top,
+            width: textView.bounds.width,
+            height: max(0, textView.bounds.height - inset.top - inset.bottom)
+        )
+        let isOutOfView = target.minY < visibleRect.minY || target.maxY > visibleRect.maxY
+        if !isOutOfView {
+            return
         }
 
+        switch reason {
+        case .typing, .insertion, .focus, .externalUpdate:
+            break
+        }
         textView.scrollRectToVisible(target, animated: animated)
     }
 
@@ -437,6 +598,7 @@ final class EditorTextViewController: UIViewController {
         onSuggestionAccepted?(word)
 
         ensureCaretVisible(reason: .insertion, animated: false)
+        reportUndoAvailability()
     }
 }
 
@@ -446,6 +608,7 @@ extension EditorTextViewController: UITextViewDelegate {
         guard !isPerformingProgrammaticEdit else { return }
         onTextChanged?(textView.text)
         ensureCaretVisible(reason: .typing, animated: false)
+        reportUndoAvailability()
     }
 
     func textViewDidChangeSelection(_ textView: UITextView) {
@@ -457,10 +620,12 @@ extension EditorTextViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         onFocusChanged?(true)
         ensureCaretVisible(reason: .focus, animated: false)
+        reportUndoAvailability()
     }
 
     func textViewDidEndEditing(_ textView: UITextView) {
         onFocusChanged?(false)
+        reportUndoAvailability()
     }
 }
 
@@ -472,11 +637,13 @@ extension EditorTextViewController: UIScrollViewDelegate {
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if !decelerate {
             isUserScrolling = false
+            applyPendingHighlightsIfNeeded()
         }
     }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         isUserScrolling = false
+        applyPendingHighlightsIfNeeded()
     }
 }
 

@@ -1,5 +1,6 @@
 import Foundation
 import Testing
+import SwiftData
 
 @testable import LyricsLab
 
@@ -162,5 +163,109 @@ struct RhymeEngineTests {
         let cursor = ("It's time" as NSString).length
         let key = RhymeAnalyzer.lastCompletedTokenRhymeKey(text: text, cursor: cursor, dictionary: dict)
         #expect(key == "AY1 M")
+    }
+}
+
+@MainActor
+struct RevisionStoreTests {
+    private func makeContainer() throws -> ModelContainer {
+        let schema = Schema([
+            Composition.self,
+            CompositionRevision.self,
+            UserLexiconEntry.self,
+            CompositionLexiconState.self,
+        ])
+        let configuration = ModelConfiguration(
+            schema: schema,
+            isStoredInMemoryOnly: true,
+            cloudKitDatabase: .none
+        )
+        return try ModelContainer(for: schema, configurations: [configuration])
+    }
+
+    @Test func autoBackupSkipsDuplicateSnapshots() throws {
+        let container = try makeContainer()
+        let context = container.mainContext
+        let composition = Composition(title: "Draft", lyrics: "Line one")
+        context.insert(composition)
+
+        let first = RevisionStore.captureAutoBackupIfNeeded(for: composition, in: context)
+        let second = RevisionStore.captureAutoBackupIfNeeded(for: composition, in: context)
+
+        #expect(first != nil)
+        #expect(second == nil)
+        #expect(composition.revisions.count == 1)
+    }
+
+    @Test func milestoneCriteriaIncludesLineCharacterAndRatioPaths() throws {
+        let lineMetrics = RevisionStore.makeMetrics(
+            oldTitle: "",
+            oldLyrics: "a\nb",
+            newTitle: "",
+            newLyrics: "a\nx\ny\nz"
+        )
+        #expect(lineMetrics.changedLineCount >= 3)
+        #expect(RevisionStore.qualifiesAsMilestone(metrics: lineMetrics))
+
+        let oldChars = String(repeating: "a", count: 10)
+        let newChars = oldChars + String(repeating: "b", count: 130)
+        let charMetrics = RevisionStore.makeMetrics(
+            oldTitle: "",
+            oldLyrics: oldChars,
+            newTitle: "",
+            newLyrics: newChars
+        )
+        #expect(charMetrics.changedCharCount >= 120)
+        #expect(RevisionStore.qualifiesAsMilestone(metrics: charMetrics))
+
+        let ratioMetrics = RevisionStore.makeMetrics(
+            oldTitle: "",
+            oldLyrics: "abcde",
+            newTitle: "",
+            newLyrics: ""
+        )
+        #expect(ratioMetrics.changeRatio >= 0.10)
+        #expect(RevisionStore.qualifiesAsMilestone(metrics: ratioMetrics))
+    }
+
+    @Test func manualBackupAlwaysCreatesRevisionEvenWithoutChanges() throws {
+        let container = try makeContainer()
+        let context = container.mainContext
+        let composition = Composition(title: "Draft", lyrics: "One line")
+        context.insert(composition)
+
+        _ = RevisionStore.createManualBackup(for: composition, in: context)
+        _ = RevisionStore.createManualBackup(for: composition, in: context)
+
+        #expect(composition.revisions.count == 2)
+        #expect(composition.revisions.allSatisfy { $0.trigger == .manual })
+    }
+
+    @Test func restoreCreatesPreRestoreBackupBeforeApplyingSnapshot() throws {
+        let container = try makeContainer()
+        let context = container.mainContext
+        let composition = Composition(title: "Draft", lyrics: "First")
+        context.insert(composition)
+
+        let snapshot = RevisionStore.createManualBackup(for: composition, in: context)
+        composition.lyrics = "Changed"
+
+        let restored = RevisionStore.restore(revision: snapshot, into: composition, in: context)
+
+        #expect(restored)
+        #expect(composition.lyrics == "First")
+        #expect(composition.revisions.contains(where: { $0.trigger == .preRestore && $0.lyricsSnapshot == "Changed" }))
+    }
+
+    @Test func lineDiffMetricsCaptureReorderedBlocksAsChanges() throws {
+        let metrics = RevisionStore.makeMetrics(
+            oldTitle: "",
+            oldLyrics: "line 1\nline 2\nline 3\nline 4",
+            newTitle: "",
+            newLyrics: "line 3\nline 4\nline 1\nline 2"
+        )
+
+        #expect(metrics.changedLineCount > 0)
+        #expect(metrics.changedCharCount > 0)
     }
 }

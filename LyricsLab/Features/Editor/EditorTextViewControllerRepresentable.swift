@@ -11,11 +11,22 @@ struct EditorTextViewControllerRepresentable: UIViewControllerRepresentable {
     var highlights: [TextHighlight]
     var suggestions: [RhymeSuggestion]
     var isLoadingSuggestions: Bool
+    var isSuggestionsEnabled: Bool
     var miniPlayerTitle: String?
     var miniPlayerIsPlaying: Bool
     var miniPlayerIsLoading: Bool
+    var miniPlayerCurrentTime: TimeInterval
+    var miniPlayerDuration: TimeInterval
+    var miniPlayerMeterLevels: [CGFloat]
+    var miniPlayerLoopStart: TimeInterval?
+    var miniPlayerLoopEnd: TimeInterval?
+    var miniPlayerLoopEnabled: Bool
     var onMiniPlayerTogglePlayPause: () -> Void
     var onMiniPlayerStop: () -> Void
+    var onMiniPlayerMarkLoopStart: () -> Void
+    var onMiniPlayerMarkLoopEnd: () -> Void
+    var onMiniPlayerToggleLoop: () -> Void
+    var onMiniPlayerClearLoop: () -> Void
     var barPosition: BarPosition?
     var onSuggestionAccepted: ((String) -> Void)?
     var endRhymeColor: Color = .blue
@@ -24,22 +35,30 @@ struct EditorTextViewControllerRepresentable: UIViewControllerRepresentable {
     var preferredColorScheme: ColorScheme? = nil
     var preferredTextColor: Color? = nil
     var preferredTintColor: Color? = nil
+    var undoBridge: EditorTextUndoBridge? = nil
 
     func makeUIViewController(context: Context) -> EditorTextViewController {
         let vc = EditorTextViewController()
+        undoBridge?.attach(controller: vc)
         vc.onTextChanged = { next in
-            if text != next {
-                text = next
+            DispatchQueue.main.async {
+                if text != next {
+                    text = next
+                }
             }
         }
         vc.onSelectionChanged = { next in
-            if selectedRange != next {
-                selectedRange = next
+            DispatchQueue.main.async {
+                if selectedRange != next {
+                    selectedRange = next
+                }
             }
         }
         vc.onFocusChanged = { focused in
-            if isFocused != focused {
-                isFocused = focused
+            DispatchQueue.main.async {
+                if isFocused != focused {
+                    isFocused = focused
+                }
             }
         }
         vc.onSuggestionAccepted = { word in
@@ -48,6 +67,11 @@ struct EditorTextViewControllerRepresentable: UIViewControllerRepresentable {
         vc.onEndRhymeTailLengthChanged = { next in
             if endRhymeTailLength != next {
                 endRhymeTailLength = next
+            }
+        }
+        vc.onUndoStateChanged = { canUndo, canRedo in
+            DispatchQueue.main.async {
+                undoBridge?.updateAvailability(canUndo: canUndo, canRedo: canRedo)
             }
         }
         return vc
@@ -61,22 +85,38 @@ struct EditorTextViewControllerRepresentable: UIViewControllerRepresentable {
             highlights: highlights,
             suggestions: suggestions,
             isLoadingSuggestions: isLoadingSuggestions,
+            isSuggestionsEnabled: isSuggestionsEnabled,
             barPosition: barPosition,
             endRhymeTailLength: endRhymeTailLength,
             miniPlayerTitle: miniPlayerTitle,
             miniPlayerIsPlaying: miniPlayerIsPlaying,
             miniPlayerIsLoading: miniPlayerIsLoading,
+            miniPlayerCurrentTime: miniPlayerCurrentTime,
+            miniPlayerDuration: miniPlayerDuration,
+            miniPlayerMeterLevels: miniPlayerMeterLevels,
+            miniPlayerLoopStart: miniPlayerLoopStart,
+            miniPlayerLoopEnd: miniPlayerLoopEnd,
+            miniPlayerLoopEnabled: miniPlayerLoopEnabled,
             endRhymeColor: endRhymeColor,
             internalRhymeColor: internalRhymeColor,
             preferredColorScheme: preferredColorScheme,
             preferredTextColor: preferredTextColor,
             preferredTintColor: preferredTintColor
         )
+        uiViewController.onUndoStateChanged = { canUndo, canRedo in
+            DispatchQueue.main.async {
+                undoBridge?.updateAvailability(canUndo: canUndo, canRedo: canRedo)
+            }
+        }
         uiViewController.onSuggestionAccepted = { word in
             onSuggestionAccepted?(word)
         }
         uiViewController.onMiniPlayerTogglePlayPause = onMiniPlayerTogglePlayPause
         uiViewController.onMiniPlayerStop = onMiniPlayerStop
+        uiViewController.onMiniPlayerMarkLoopStart = onMiniPlayerMarkLoopStart
+        uiViewController.onMiniPlayerMarkLoopEnd = onMiniPlayerMarkLoopEnd
+        uiViewController.onMiniPlayerToggleLoop = onMiniPlayerToggleLoop
+        uiViewController.onMiniPlayerClearLoop = onMiniPlayerClearLoop
     }
 }
 

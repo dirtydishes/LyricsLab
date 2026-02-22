@@ -5,6 +5,7 @@ enum PersistenceFactory {
     static func makeContainer(iCloudSyncEnabled: Bool) throws -> ModelContainer {
         let schema = Schema([
             Composition.self,
+            CompositionRevision.self,
             UserLexiconEntry.self,
             CompositionLexiconState.self,
         ])

@@ -23,6 +23,9 @@ struct LyricsLabApp: App {
                 .environmentObject(audioPlayer)
                 .tint(themeManager.theme.accent)
                 .preferredColorScheme(themeManager.theme.colorScheme)
+                .task(priority: .utility) {
+                    await RhymeService.shared.warmUp()
+                }
         }
         .modelContainer(modelContainer)
     }
