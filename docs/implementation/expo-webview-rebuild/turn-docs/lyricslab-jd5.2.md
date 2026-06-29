@@ -50,7 +50,15 @@ Reviewer skill:
 
 `thermo-nuclear-code-quality-review`
 
-Not started.
+2026-06-29 review thread:
+
+- Phase scope stayed bounded to native song persistence and shell work: `Song` / `SongId`, repository CRUD/search, Songs route, editor route, native title editing, and debounced title persistence.
+- No real lyric body WebView editing, Tiptap/editor-web package, WebView bridge, keyboard suggestion bar, rhyme logic, or highlighting was added.
+- Non-route provider code stayed outside `apps/mobile/src/app`; the repository provider lives in `apps/mobile/src/songs/SongRepositoryProvider.tsx`, while route files live under `apps/mobile/app`.
+- Repository layering is acceptable for this phase: Expo SQLite is isolated behind `SongRecordStore`, and Node tests exercise repository behavior through the in-memory adapter.
+- No file crossed the 1k-line threshold, and no generated/source churn outside the mobile app shell, dependency lockfile, and phase turn doc was found.
+- Repair made: clean installs failed because `react-dom@19.2.7` floated into the lockfile while the app pins `react@19.2.3`; pinned `react-dom` exactly to `19.2.3` in `apps/mobile/package.json` and `apps/mobile/package-lock.json`.
+- Findings remaining: none.
 
 ## CI And Gates
 
@@ -58,8 +66,22 @@ CI owner: reviewer/verification agents
 
 Current implementation-thread gate state: local gates passed; hosted CI not inspected by this thread.
 
+Reviewer gate state: repaired local clean-install blocker; local gates passed after repair. Hosted GitHub checks are unavailable with evidence because PR `statusCheckRollup` is empty.
+
 Evidence:
 
+- `gh pr view 11 --json number,title,state,isDraft,baseRefName,headRefName,headRefOid,mergeStateStatus,statusCheckRollup,url` passed; PR #11 is open draft, base `lavender/expo-webview-rebuild-test`, head `lavender/lyricslab-jd5-2-song-persistence-app-shell`, head SHA `7250639f27552e938c906cb5570c442afc5f0501` at inspection time, `mergeStateStatus` `UNKNOWN`, and `statusCheckRollup` `[]`.
+- Initial review-worktree `npm --prefix apps/mobile run typecheck` and `npm --prefix apps/mobile test -- songRepository.test.ts` failed because `tsc` and `jest` were not installed before dependency install.
+- Initial review-worktree `npm --prefix apps/mobile ci` failed with `ERESOLVE`: `react-dom@19.2.7` required peer `react@^19.2.7` while the app pins `react@19.2.3`.
+- Review repair commit `21929c6` pins `react-dom` to `19.2.3`, matching the app's exact `react` version and making the lockfile reproducible.
+- Final `npm --prefix apps/mobile ci` passed; npm installed 946 packages, reported the existing `react-native-worklets` peer override warning, and reported 10 moderate vulnerabilities in the dependency graph.
+- Final `npm --prefix apps/mobile run typecheck` passed with `tsc --noEmit`.
+- Final `npm --prefix apps/mobile test -- songRepository.test.ts` passed; Jest reported 1 suite and 4 tests passing.
+- Final `npm --prefix apps/mobile test` passed; Jest reported 1 suite and 4 tests passing.
+- Final `cd apps/mobile && npx expo config --type public` passed; resolved SDK `56.0.0`, plugins `expo-sqlite` and `expo-router`, and platforms `ios`, `android`, and `web`.
+- Final `CI=1 EXPO_NO_TELEMETRY=1 timeout 25s npm --prefix apps/mobile run start -- --port 8096` reached `Starting Metro Bundler` and `Waiting on http://localhost:8096`; exit code `124` was the intentional timeout. Follow-up `ss -tulpen | rg ':8096\b'` returned no listener.
+- Final `cd apps/mobile && CI=1 EXPO_NO_TELEMETRY=1 npx expo export --platform ios --output-dir /tmp/lyricslab-mobile-export-jd5-2-review-final-20260629` passed; Expo bundled `node_modules/expo-router/entry.js` for iOS with 1113 modules and exported to `/tmp/lyricslab-mobile-export-jd5-2-review-final-20260629`.
+- Manual device smoke for tapping create, editing the title, returning to Songs, and searching by title remains blocked in this environment: `command -v adb` and `command -v xcrun` both returned exit code 1 with no path on this Debian host.
 - `npm --prefix apps/mobile ci` passed; npm installed 849 packages and reported 10 moderate severity vulnerabilities in the dependency graph.
 - `npx expo install expo-router react-native-safe-area-context react-native-screens expo-linking expo-constants` passed from `apps/mobile`; npm reported peer override warnings around `react-native-worklets`, and Expo added the `expo-router` config plugin.
 - `npm --prefix apps/mobile test -- songRepository.test.ts` passed; Jest reported 1 suite and 4 tests passing.
@@ -77,6 +99,8 @@ Evidence:
 - Base: `lavender/expo-webview-rebuild-test`
 - Commits:
   - `6d2e9af` - `feat: add song persistence app shell`
+  - `7250639` - `docs: record phase 2 pr state`
+  - `21929c6` - `fix mobile clean install`
 
 ## Beads Updates
 
@@ -100,5 +124,8 @@ None yet.
 Implementation closeout state: PR-ready after draft PR creation.
 
 - Status: `pr-ready`
+- Review status: `repaired`
+- CI state: `ci-unavailable-with-evidence`
+- Review callback state: ready after pushing review repair/evidence to PR branch.
 - Callback target: orchestrator thread `019f141a-a9e0-76c0-96b9-401376bb75f4`
-- Beads: not advanced by this implementation thread per orchestrator instruction.
+- Beads: not advanced by implementation or review threads per orchestrator instruction.
