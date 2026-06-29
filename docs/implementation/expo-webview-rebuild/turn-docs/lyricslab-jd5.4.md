@@ -93,6 +93,7 @@ Evidence:
   - Merged active base `origin/lavender/expo-webview-rebuild-test` into the PR head after GitHub reported `mergeable: CONFLICTING`.
   - Preserved the orchestrator's implementation-callback Beads/loop-state updates and the reviewer repair/evidence in this turn doc.
   - Post-merge gates passed: `npm --prefix apps/mobile test` (`3 passed`, `14 passed`), `npm --prefix apps/mobile run typecheck`, `npm --prefix apps/editor-web test` (`1 passed`, `4 passed`), and `npm --prefix apps/editor-web run build` (`52 modules transformed`, built in `359ms`).
+  - Final PR status after the merge repair recomputed as `mergeable: MERGEABLE`; `statusCheckRollup` remained empty.
 
 ## PR And Commits
 
@@ -115,6 +116,7 @@ Commits:
 - `docs: record phase 4 pr state` - final PR-state turn-doc update on top of the implementation commit.
 - Review repair commit on PR branch - `fix stale webview body save ordering`; serializes body saves, adds body persistence tests, and records reviewer evidence.
 - Review merge repair commit on PR branch - merges active base to clear the PR conflict and preserves implementation-callback plus review evidence.
+- Review closeout doc update on PR branch - records final mergeability and callback-ready evidence.
 
 ## Beads Updates
 
