@@ -102,6 +102,7 @@ Evidence:
 - Final `cd apps/mobile && CI=1 EXPO_NO_TELEMETRY=1 npx expo export --platform ios --output-dir /tmp/lyricslab-mobile-export-jd5-2-review-final-20260629` passed; Expo bundled `node_modules/expo-router/entry.js` for iOS with 1113 modules and exported to `/tmp/lyricslab-mobile-export-jd5-2-review-final-20260629`.
 - Manual device smoke for tapping create, editing the title, returning to Songs, and searching by title remains blocked in this environment: `command -v adb` and `command -v xcrun` both returned exit code 1 with no path on this Debian host.
 - After merging base commit `f4adb0b` to clear the PR merge conflict, `npm --prefix apps/mobile run typecheck` and `npm --prefix apps/mobile test` both passed again.
+- Final review `gh pr view 11 --json number,title,state,isDraft,baseRefName,headRefName,headRefOid,mergeStateStatus,statusCheckRollup,url` after the base merge reported `mergeStateStatus` `CLEAN` and `statusCheckRollup` `[]`.
 
 ## PR And Commits
 
@@ -114,6 +115,7 @@ Evidence:
   - `6d2e9af` - `feat: add song persistence app shell`
   - `7250639` - `docs: record phase 2 pr state`
   - `21929c6` - `fix mobile clean install`
+  - `9f4dca8` - `merge expo webview rebuild base`
 
 ## Beads Updates
 
