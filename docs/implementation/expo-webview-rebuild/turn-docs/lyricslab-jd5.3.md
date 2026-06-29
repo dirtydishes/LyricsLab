@@ -24,11 +24,20 @@ Out of scope: React Native WebView integration, native persistence bridge, offli
 
 ## Implementation Log
 
-Not started.
+2026-06-29 implementation thread:
+
+- Created `apps/editor-web/` as a standalone Vite + TypeScript package.
+- Installed minimal editor runtime dependencies: `@tiptap/core` and `@tiptap/starter-kit`.
+- Added a plain lyric body Tiptap editor with StarterKit formatting nodes/marks disabled beyond paragraph/text editing.
+- Added typed bridge envelopes for `editorReady`, `contentChanged`, `selectionChanged`, `editorFocused`, `editorBlurred`, and `editorError`.
+- Exposed WebView-callable commands at `window.LyricsLabEditor`: `loadSong`, `insertSuggestion`, `focusEditor`, and placeholder `setTheme`.
+- Added `lyricslab:bridge-message` browser `CustomEvent` emission alongside `window.ReactNativeWebView.postMessage` so the standalone editor can be smoke-tested before native integration.
+- Added pure TypeScript suggestion-context extraction and Vitest coverage.
+- Kept React Native WebView integration, native persistence bridge, offline mobile bundling, and rhyme highlighting/decorations out of scope.
 
 ## Subagent Swarms
 
-Not started.
+Not used. The selected phase was narrow enough for direct implementation in this worker thread.
 
 ## Review
 
@@ -36,25 +45,45 @@ Reviewer skill:
 
 `thermo-nuclear-code-quality-review`
 
-Not started.
+Not started. Review is owned by a later orchestrator-created review thread.
 
 ## CI And Gates
 
 CI owner: reviewer/verification agents
 
-Current CI state: `not-started`
+Current CI state: `implementation-local-gates-passed`
 
 Evidence:
 
-Not started.
+- `npm --prefix apps/editor-web test` passed on 2026-06-29.
+  - Vitest `v4.1.9`.
+  - Test files: `1 passed (1)`.
+  - Tests: `4 passed (4)`.
+- `npm --prefix apps/editor-web run build` passed on 2026-06-29.
+  - Runs `tsc --noEmit && vite build`.
+  - Vite `v8.1.0`.
+  - Output included `✓ 52 modules transformed` and `✓ built`.
+- Browser/dev smoke passed on 2026-06-29.
+  - Dev server: `npm --prefix apps/editor-web run dev -- --host 127.0.0.1 --port 5174`.
+  - Browser: `/usr/bin/chromium --headless=new` driven through DevTools Protocol against `http://127.0.0.1:5174/`.
+  - Verified bridge events included `editorReady`, `contentChanged`, `selectionChanged`, and `editorFocused`.
+  - Verified command results: `loadSong: true`, `focusEditor: true`, `insertSuggestion: true`.
+  - Verified latest content included typed text `second line` and inserted suggestion `glow`.
+  - Verified latest selection context had `selectionEmpty: true`, `currentLineText: "second lineglow "`, `previousToken: "lineglow"`, and `wordBeforeCursor: ""`.
 
 ## PR And Commits
 
-Not started.
+Implementation branch: `lavender/lyricslab-jd5-3-tiptap-editor-web-bundle`
+
+Draft PR: pending.
+
+Commits: pending.
 
 ## Beads Updates
 
 2026-06-29: Orchestrator marked `lyricslab-jd5.3` `in_progress` after selector chose it as the next ready phase.
+
+2026-06-29: Implementation thread made no Beads updates; Beads/loop-state closeout remains orchestrator-owned.
 
 ## Follow-Ups Filed
 
@@ -65,7 +94,10 @@ None yet.
 - Continue from `lavender/expo-webview-rebuild-test`, not `feat/expo-webview-rebuild`.
 - Phase 3 owns standalone editor-web only; mobile integration starts in Phase 4.
 - Quality gates: `npm --prefix apps/editor-web run build`, suggestion-context tests if added, browser/dev smoke for typing bridge messages, and exercised `loadSong` / `insertSuggestion` commands.
+- `apps/editor-web/src/bridge.ts` emits typed JSON envelopes through `window.ReactNativeWebView.postMessage` and dispatches `lyricslab:bridge-message` for browser/dev verification.
+- WebView commands live on `window.LyricsLabEditor`; Phase 4 can call `loadSong`, `insertSuggestion`, `focusEditor`, and `setTheme`.
+- `contentChanged` snapshots include both `bodyJson` and `bodyText`; `selectionChanged` includes `wordBeforeCursor`, `currentLineText`, `previousToken`, and `selectionEmpty`.
 
 ## Closeout
 
-Not started.
+Implementation complete locally; draft PR pending.
