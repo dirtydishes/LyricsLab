@@ -117,12 +117,16 @@ Commits:
 - Review repair commit on PR branch - `fix stale webview body save ordering`; serializes body saves, adds body persistence tests, and records reviewer evidence.
 - Review merge repair commit on PR branch - merges active base to clear the PR conflict and preserves implementation-callback plus review evidence.
 - Review closeout doc update on PR branch - records final mergeability and callback-ready evidence.
+- Orchestrator marked PR #13 ready and merged it into `lavender/expo-webview-rebuild-test` after receiving the review callback.
+- Merge commit: `8c5b935c58c4c73c51bc4b43b14e09f406e056e0`
 
 ## Beads Updates
 
 2026-06-29: Orchestrator marked `lyricslab-jd5.4` `in_progress` after selector chose it as the next ready phase.
 
 2026-06-29: Orchestrator recorded the implementation callback in Beads before launching the review thread.
+
+2026-06-29: Orchestrator recorded the review callback in Beads, marked PR #13 ready, merged PR #13, and closed `lyricslab-jd5.4` with review/CI evidence.
 
 ## Follow-Ups Filed
 
@@ -138,6 +142,12 @@ None yet.
 
 ## Closeout
 
-Implementation PR is open as draft PR #13 against `lavender/expo-webview-rebuild-test`.
+Phase 4 closed by orchestrator on 2026-06-29.
 
-Implementation callback status: ready to send after this turn-doc update is committed and pushed.
+- PR: https://github.com/dirtydishes/lyricslab/pull/13
+- PR state: merged into `lavender/expo-webview-rebuild-test`
+- Merge commit: `8c5b935c58c4c73c51bc4b43b14e09f406e056e0`
+- Review status: `repaired`
+- CI state: `ci-unavailable-with-evidence`
+- Remaining findings: none
+- Next ready Beads phase: `lyricslab-jd5.5`

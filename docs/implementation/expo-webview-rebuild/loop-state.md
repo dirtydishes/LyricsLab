@@ -10,13 +10,13 @@ Stream: `expo-webview-rebuild`
 
 Workflow: `orchestrator-callback`
 
-Current phase: Phase 4 - WebView bridge and body persistence
+Current phase: none
 
-Current Beads issue: `lyricslab-jd5.4`
+Current Beads issue: none
 
-Current PR: https://github.com/dirtydishes/lyricslab/pull/13
+Current PR: none
 
-Last completed phase: Phase 3 - Tiptap editor web bundle (`lyricslab-jd5.3`)
+Last completed phase: Phase 4 - WebView bridge and body persistence (`lyricslab-jd5.4`)
 
 Blocked: no
 
@@ -47,10 +47,10 @@ Blocked: no
 | 1 | `lyricslab-jd5.1` | closed; review repaired; CI unavailable with evidence; replayed on `lavender/expo-webview-rebuild-test` | https://github.com/dirtydishes/lyricslab/pull/10 | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.1.md` |
 | 2 | `lyricslab-jd5.2` | closed; review repaired; CI unavailable with evidence; merged into `lavender/expo-webview-rebuild-test` | https://github.com/dirtydishes/lyricslab/pull/11 | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.2.md` |
 | 3 | `lyricslab-jd5.3` | closed; review repaired; CI unavailable with evidence; merged into `lavender/expo-webview-rebuild-test` | https://github.com/dirtydishes/lyricslab/pull/12 | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.3.md` |
-| 4 | `lyricslab-jd5.4` | implementation PR ready, review pending | https://github.com/dirtydishes/lyricslab/pull/13 | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.4.md` |
+| 4 | `lyricslab-jd5.4` | closed; review repaired; CI unavailable with evidence; merged into `lavender/expo-webview-rebuild-test` | https://github.com/dirtydishes/lyricslab/pull/13 | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.4.md` |
 | 5 | `lyricslab-jd5.5` | pending | none | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.5.md` |
 | 6 | `lyricslab-jd5.6` | pending | none | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.6.md` |
 
 ## Last Coordinator Update
 
-2026-06-29: Implementation callback received for `lyricslab-jd5.4`. Draft PR #13 is open from `lavender/lyricslab-jd5-4-webview-bridge-body-persistence` into `lavender/expo-webview-rebuild-test`; mobile/editor-web local gates were reported green, manual Expo device/simulator smoke was unavailable, and GitHub status checks were empty at callback time. Review thread is being launched with `thermo-nuclear-code-quality-review` and CI ownership.
+2026-06-29: Review callback received for `lyricslab-jd5.4` with status `repaired` and CI state `ci-unavailable-with-evidence`. PR #13 was marked ready and merged into `lavender/expo-webview-rebuild-test` at merge commit `8c5b935c58c4c73c51bc4b43b14e09f406e056e0`. Beads issue `lyricslab-jd5.4` was closed. Beads now reports `lyricslab-jd5.5` as the next ready phase.
