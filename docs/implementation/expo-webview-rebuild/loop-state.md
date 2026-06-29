@@ -10,13 +10,13 @@ Stream: `expo-webview-rebuild`
 
 Workflow: `orchestrator-callback`
 
-Current phase: Phase 5 - Keyboard suggestion bar and insertion
+Current phase: none
 
-Current Beads issue: `lyricslab-jd5.5`
+Current Beads issue: none
 
-Current PR: https://github.com/dirtydishes/lyricslab/pull/14
+Current PR: none
 
-Last completed phase: Phase 4 - WebView bridge and body persistence (`lyricslab-jd5.4`)
+Last completed phase: Phase 5 - Keyboard suggestion bar and insertion (`lyricslab-jd5.5`)
 
 Blocked: no
 
@@ -48,9 +48,9 @@ Blocked: no
 | 2 | `lyricslab-jd5.2` | closed; review repaired; CI unavailable with evidence; merged into `lavender/expo-webview-rebuild-test` | https://github.com/dirtydishes/lyricslab/pull/11 | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.2.md` |
 | 3 | `lyricslab-jd5.3` | closed; review repaired; CI unavailable with evidence; merged into `lavender/expo-webview-rebuild-test` | https://github.com/dirtydishes/lyricslab/pull/12 | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.3.md` |
 | 4 | `lyricslab-jd5.4` | closed; review repaired; CI unavailable with evidence; merged into `lavender/expo-webview-rebuild-test` | https://github.com/dirtydishes/lyricslab/pull/13 | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.4.md` |
-| 5 | `lyricslab-jd5.5` | implementation PR ready, review pending | https://github.com/dirtydishes/lyricslab/pull/14 | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.5.md` |
+| 5 | `lyricslab-jd5.5` | closed; review repaired; CI unavailable with evidence; merged into `lavender/expo-webview-rebuild-test` | https://github.com/dirtydishes/lyricslab/pull/14 | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.5.md` |
 | 6 | `lyricslab-jd5.6` | pending | none | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.6.md` |
 
 ## Last Coordinator Update
 
-2026-06-29: Implementation callback received for `lyricslab-jd5.5`. Draft PR #14 is open from `lavender/lyricslab-jd5-5-keyboard-suggestions-insertion` into `lavender/expo-webview-rebuild-test`; mobile local gates were reported green, manual/device smoke was unavailable, and GitHub status checks were empty at callback time. Review thread is being launched with `thermo-nuclear-code-quality-review` and CI ownership.
+2026-06-29: Review callback received for `lyricslab-jd5.5` with status `repaired` and CI state `ci-unavailable-with-evidence`. PR #14 was marked ready and merged into `lavender/expo-webview-rebuild-test` at merge commit `e5b4f44a4725deab1cb415ba0a5fef1c161d84a6`. Beads issue `lyricslab-jd5.5` was closed. Beads now reports `lyricslab-jd5.6` as the next ready phase.
