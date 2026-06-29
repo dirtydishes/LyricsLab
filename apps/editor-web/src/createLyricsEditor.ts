@@ -208,8 +208,7 @@ function isJsonContent(value: unknown): value is JSONContent {
 }
 
 function normalizeSuggestion(command: InsertSuggestionCommand) {
-  const rawWord = typeof command === 'string' ? command : command.word;
-  return rawWord.trim();
+  return command.word.trim();
 }
 
 function getEditorSnapshot(editor: Editor) {

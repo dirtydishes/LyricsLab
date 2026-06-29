@@ -57,7 +57,6 @@ export function LyricsEditorScreen({
   );
   const editorWebViewRef = useRef<EditorWebViewHandle>(null);
   const latestBodyRef = useRef<EditorBodySnapshot | null>(null);
-  const latestSelectionContextRef = useRef<SuggestionContext | null>(null);
   const lastSavedBodyRef = useRef<EditorBodySnapshot>({
     bodyJson: null,
     bodyText: '',
@@ -105,7 +104,6 @@ export function LyricsEditorScreen({
           bodyText: nextSong?.bodyText ?? '',
         };
         latestBodyRef.current = lastSavedBodyRef.current;
-        latestSelectionContextRef.current = null;
         setIsBodyEditorFocused(false);
         setSelectionContext(null);
         lastSavedTitleRef.current = nextSong?.title ?? '';
@@ -270,14 +268,12 @@ export function LyricsEditorScreen({
   }, []);
 
   const handleSelectionChanged = useCallback((context: SuggestionContext) => {
-    latestSelectionContextRef.current = context;
     setSelectionContext(context);
   }, []);
 
   const handleEditorFocused = useCallback(
     (context: SuggestionContext) => {
       clearBodyEditorBlurTimeout();
-      latestSelectionContextRef.current = context;
       setSelectionContext(context);
       setIsBodyEditorFocused(true);
     },
@@ -286,7 +282,6 @@ export function LyricsEditorScreen({
 
   const handleEditorBlurred = useCallback(
     (context: SuggestionContext) => {
-      latestSelectionContextRef.current = context;
       setSelectionContext(context);
       clearBodyEditorBlurTimeout();
       bodyEditorBlurTimeoutRef.current = setTimeout(() => {
