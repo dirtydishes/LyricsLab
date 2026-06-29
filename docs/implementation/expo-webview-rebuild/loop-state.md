@@ -26,6 +26,7 @@ Blocked: no
 - Use a WebView-hosted Tiptap editor for lyric body editing.
 - Keep the first stream focused on editor viability and basic songs flow.
 - Defer rhyme highlighting, iCloud, IAP, audio, AI, and theme parity.
+- Phase 6 implementation recommendation: continue the Expo/WebView rebuild with follow-ups. Offline/local editor loading passed automated Chromium smoke without a dev server; real-device Expo runtime checklist remains required before Swift removal or main-lane migration cleanup.
 
 ## Context To Keep
 
@@ -39,6 +40,8 @@ Blocked: no
 - Do not delete or restructure the Swift app in this stream.
 - Continue the implementation stream from branch `lavender/expo-webview-rebuild-test`.
 - `feat/expo-webview-rebuild` is only the original loop-doc base after the Phase 1 merge was moved off it.
+- Phase 6 generated offline HTML lives at `apps/mobile/src/editor/generated/editorHtml.ts` and is rebuilt with `npm --prefix apps/mobile run build:editor-html`.
+- Phase 6 follow-ups filed: `lyricslab-bhs` real-device checklist, `lyricslab-xoc` generated HTML freshness guard, and `lyricslab-gg4` offline rhyme-backed suggestions.
 
 ## Phase Ledger
 

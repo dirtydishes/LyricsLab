@@ -2,6 +2,8 @@
 
 import {
   BRIDGE_MESSAGE_VERSION,
+  LOCAL_EDITOR_WEBVIEW_BASE_URL,
+  createEditorWebViewSource,
   createInsertSuggestionJavaScript,
   createLoadSongJavaScript,
   editorWebUrlFromExpoHost,
@@ -133,5 +135,21 @@ describe('editor native bridge', () => {
     expect(normalizeEditorWebUrl('http://127.0.0.1:5174')).toBe(
       'http://127.0.0.1:5174/',
     );
+  });
+
+  it('uses local editor HTML by default and remote URLs only when configured', () => {
+    expect(createEditorWebViewSource('<html></html>')).toEqual({
+      baseUrl: LOCAL_EDITOR_WEBVIEW_BASE_URL,
+      html: '<html></html>',
+    });
+    expect(createEditorWebViewSource('<html></html>', '   ')).toEqual({
+      baseUrl: LOCAL_EDITOR_WEBVIEW_BASE_URL,
+      html: '<html></html>',
+    });
+    expect(
+      createEditorWebViewSource('<html></html>', 'http://127.0.0.1:5174'),
+    ).toEqual({
+      uri: 'http://127.0.0.1:5174/',
+    });
   });
 });
