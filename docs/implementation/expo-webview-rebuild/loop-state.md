@@ -52,8 +52,8 @@ Blocked: no
 | 3 | `lyricslab-jd5.3` | closed; review repaired; CI unavailable with evidence; merged into `lavender/expo-webview-rebuild-test` | https://github.com/dirtydishes/lyricslab/pull/12 | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.3.md` |
 | 4 | `lyricslab-jd5.4` | closed; review repaired; CI unavailable with evidence; merged into `lavender/expo-webview-rebuild-test` | https://github.com/dirtydishes/lyricslab/pull/13 | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.4.md` |
 | 5 | `lyricslab-jd5.5` | closed; review repaired; CI unavailable with evidence; merged into `lavender/expo-webview-rebuild-test` | https://github.com/dirtydishes/lyricslab/pull/14 | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.5.md` |
-| 6 | `lyricslab-jd5.6` | in progress | none | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.6.md` |
+| 6 | `lyricslab-jd5.6` | implementation PR ready, review pending | https://github.com/dirtydishes/lyricslab/pull/15 | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.6.md` |
 
 ## Last Coordinator Update
 
-2026-06-29: Selector subagent chose `lyricslab-jd5.6` as the final ready child. Beads issue `lyricslab-jd5.6` was marked in progress. Implementation must continue from `lavender/expo-webview-rebuild-test` and open the final phase PR against that branch.
+2026-06-29: Implementation callback received for `lyricslab-jd5.6`. Draft PR #15 is open from `lavender/lyricslab-jd5-6-offline-bundle-viability-gate` into `lavender/expo-webview-rebuild-test`; automated gates and offline `file://` smoke were reported green, manual device checklist remains blocked by the Linux environment, and GitHub status checks were empty at callback time. Review thread is being launched with `thermo-nuclear-code-quality-review` and CI ownership.
