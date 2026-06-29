@@ -12,6 +12,12 @@ import {
 } from 'react-native';
 
 import { EditorWebView } from './EditorWebView';
+import {
+  bodySnapshotsEqual,
+  createAsyncTaskQueue,
+  mergeBodySaveResult,
+  type AsyncTaskQueue,
+} from './bodyPersistence';
 import type { EditorBodySnapshot, SuggestionContext } from './bridge';
 import type { SongRepository } from '../songs/songRepository';
 import type { Song, SongId } from '../songs/types';
@@ -39,6 +45,7 @@ export function LyricsEditorScreen({
   );
   const [song, setSong] = useState<Song | null>(null);
   const [title, setTitle] = useState('');
+  const bodySaveQueueRef = useRef<AsyncTaskQueue | null>(null);
   const latestBodyRef = useRef<EditorBodySnapshot | null>(null);
   const latestSelectionContextRef = useRef<SuggestionContext | null>(null);
   const lastSavedBodyRef = useRef<EditorBodySnapshot>({
@@ -48,6 +55,7 @@ export function LyricsEditorScreen({
   const lastSavedTitleRef = useRef('');
   const titleRef = useRef('');
   const currentSongId = song?.id ?? null;
+  bodySaveQueueRef.current ??= createAsyncTaskQueue();
 
   useEffect(() => {
     titleRef.current = title;
@@ -132,11 +140,10 @@ export function LyricsEditorScreen({
     [currentSongId, repository],
   );
 
-  const saveBody = useCallback(
-    async (nextBody: EditorBodySnapshot | null) => {
+  const persistBody = useCallback(
+    async (nextBody: EditorBodySnapshot) => {
       if (
         !currentSongId ||
-        !nextBody ||
         bodySnapshotsEqual(nextBody, lastSavedBodyRef.current)
       ) {
         return null;
@@ -173,6 +180,23 @@ export function LyricsEditorScreen({
       }
     },
     [currentSongId, repository],
+  );
+
+  const saveBody = useCallback(
+    (nextBody: EditorBodySnapshot | null) => {
+      if (!nextBody) {
+        return Promise.resolve(null);
+      }
+
+      const bodySaveQueue = bodySaveQueueRef.current;
+
+      if (!bodySaveQueue) {
+        return Promise.resolve(null);
+      }
+
+      return bodySaveQueue.enqueue(() => persistBody(nextBody));
+    },
+    [persistBody],
   );
 
   useEffect(() => {
@@ -301,49 +325,6 @@ export function LyricsEditorScreen({
 
 function toErrorMessage(error: unknown) {
   return error instanceof Error ? error.message : 'Something went wrong';
-}
-
-function mergeBodySaveResult(
-  currentSong: Song,
-  updatedSong: Song,
-  savedBody: EditorBodySnapshot,
-): Song {
-  if (
-    bodySnapshotsEqual(
-      { bodyJson: currentSong.bodyJson, bodyText: currentSong.bodyText },
-      savedBody,
-    )
-  ) {
-    return {
-      ...updatedSong,
-      title: currentSong.title,
-    };
-  }
-
-  return {
-    ...updatedSong,
-    bodyJson: currentSong.bodyJson,
-    bodyText: currentSong.bodyText,
-    title: currentSong.title,
-  };
-}
-
-function bodySnapshotsEqual(
-  left: EditorBodySnapshot,
-  right: EditorBodySnapshot,
-) {
-  return (
-    left.bodyText === right.bodyText &&
-    stringifyBodyJson(left.bodyJson) === stringifyBodyJson(right.bodyJson)
-  );
-}
-
-function stringifyBodyJson(value: unknown) {
-  try {
-    return JSON.stringify(value ?? null);
-  } catch {
-    return '';
-  }
 }
 
 const styles = StyleSheet.create({

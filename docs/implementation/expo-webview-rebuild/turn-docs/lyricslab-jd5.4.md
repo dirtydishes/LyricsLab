@@ -45,13 +45,19 @@ Reviewer skill:
 
 `thermo-nuclear-code-quality-review`
 
-Not started.
+2026-06-29 review thread:
+
+- Scope confirmed: Phase 4 stayed limited to native WebView loading, typed bridge parsing/sending, body load after `editorReady`, debounced `contentChanged` persistence, latest selection context storage, and `bodyText` search/preview behavior.
+- Scope exclusions confirmed: no native keyboard suggestion UI, no native suggestion insertion interaction, no offline bundled WebView loading, and no rhyme highlighting/decorations were added.
+- Thermo-nuclear finding repaired: the implementation guarded the UI against older body save results, but debounced/back-flush saves could still overlap at the repository layer. A slower older `updateSong` could finish after a newer body save and leave persisted `bodyText` stale.
+- Repair: extracted focused body persistence policy into `apps/mobile/src/editor/bodyPersistence.ts`, serialized body save tasks in `LyricsEditorScreen`, and added `apps/mobile/src/editor/__tests__/bodyPersistence.test.ts` coverage for stale save ordering plus merge behavior.
+- Findings remaining: none.
 
 ## CI And Gates
 
 CI owner: reviewer/verification agents
 
-Current CI state: `not-started`; implementation local gates passed.
+Current CI state: `ci-unavailable-with-evidence`; reviewer made a bounded repair and all feasible local gates passed. GitHub reports no PR status checks for this branch.
 
 Evidence:
 
@@ -71,6 +77,20 @@ Evidence:
   - `npm --prefix apps/editor-web test` passed on 2026-06-29: Vitest `1 passed (1)`, `4 passed (4)`.
   - `npm --prefix apps/editor-web run build` passed on 2026-06-29: `tsc --noEmit && vite build`, `52 modules transformed`, `built in 340ms`.
 - Manual/device smoke for "body edits persist after navigating away/back" was not run in this worker environment because no Expo device session or simulator runtime was available. Closest automated evidence is the native bridge parser/sender test coverage plus repository update/search persistence coverage in `npm --prefix apps/mobile test`.
+- Reviewer PR status check on 2026-06-29:
+  - `gh pr view 13 --repo dirtydishes/lyricslab --json url,state,isDraft,mergeable,reviewDecision,statusCheckRollup,headRefName,baseRefName,commits` reported PR #13 open as a draft from `lavender/lyricslab-jd5-4-webview-bridge-body-persistence` into `lavender/expo-webview-rebuild-test`; `statusCheckRollup` was empty and `mergeable` was `UNKNOWN`.
+  - `gh pr checks 13 --repo dirtydishes/lyricslab` reported no checks on the branch.
+- Reviewer local gates after repair on 2026-06-29:
+  - `npm --prefix apps/mobile ci` passed; npm reported existing Expo peer/deprecation warnings and 10 moderate audit findings.
+  - `npm --prefix apps/mobile test` passed: Jest suites `3 passed, 3 total`; tests `14 passed, 14 total`. Coverage now includes bridge parsing/sending, body save serialization, stale save merge behavior, and repository search after body updates.
+  - `npm --prefix apps/mobile run typecheck` passed: `tsc --noEmit`.
+  - `npm --prefix apps/editor-web ci` passed; npm reported 0 vulnerabilities.
+  - `npm --prefix apps/editor-web test` passed: Vitest files `1 passed (1)`; tests `4 passed (4)`.
+  - `npm --prefix apps/editor-web run build` passed: `tsc --noEmit && vite build`, `52 modules transformed`, built in `759ms`.
+  - `git diff --check` passed.
+- Reviewer manual/device smoke blocker on 2026-06-29:
+  - No Android or iOS runtime was available in this Debian worktree: `command -v adb` returned nothing, `command -v xcrun` returned nothing, and `/dev/kvm` was absent.
+  - Body-edit persistence after navigating away/back and search finding body text were therefore not manually smoke-tested; closest automated evidence is the body save serialization test plus repository body search tests in `npm --prefix apps/mobile test`.
 
 ## PR And Commits
 
@@ -82,6 +102,7 @@ Commits:
 
 - `f0d308e` - `feat: wire webview body persistence`
 - `docs: record phase 4 pr state` - final PR-state turn-doc update on top of the implementation commit.
+- Review repair commit on PR branch - `fix stale webview body save ordering`; serializes body saves, adds body persistence tests, and records reviewer evidence.
 
 ## Beads Updates
 
