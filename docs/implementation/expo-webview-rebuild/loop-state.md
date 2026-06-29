@@ -10,13 +10,13 @@ Stream: `expo-webview-rebuild`
 
 Workflow: `orchestrator-callback`
 
-Current phase: Phase 6 - Offline bundle and viability gate
+Current phase: none
 
-Current Beads issue: `lyricslab-jd5.6`
+Current Beads issue: none
 
-Current PR: https://github.com/dirtydishes/lyricslab/pull/15
+Current PR: none
 
-Last completed phase: Phase 5 - Keyboard suggestion bar and insertion (`lyricslab-jd5.5`)
+Last completed phase: Phase 6 - Offline bundle and viability gate (`lyricslab-jd5.6`)
 
 Blocked: no
 
@@ -52,8 +52,8 @@ Blocked: no
 | 3 | `lyricslab-jd5.3` | closed; review repaired; CI unavailable with evidence; merged into `lavender/expo-webview-rebuild-test` | https://github.com/dirtydishes/lyricslab/pull/12 | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.3.md` |
 | 4 | `lyricslab-jd5.4` | closed; review repaired; CI unavailable with evidence; merged into `lavender/expo-webview-rebuild-test` | https://github.com/dirtydishes/lyricslab/pull/13 | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.4.md` |
 | 5 | `lyricslab-jd5.5` | closed; review repaired; CI unavailable with evidence; merged into `lavender/expo-webview-rebuild-test` | https://github.com/dirtydishes/lyricslab/pull/14 | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.5.md` |
-| 6 | `lyricslab-jd5.6` | implementation PR ready, review pending | https://github.com/dirtydishes/lyricslab/pull/15 | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.6.md` |
+| 6 | `lyricslab-jd5.6` | closed; review repaired; CI unavailable with evidence; merged into `lavender/expo-webview-rebuild-test` | https://github.com/dirtydishes/lyricslab/pull/15 | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.6.md` |
 
 ## Last Coordinator Update
 
-2026-06-29: Implementation callback received for `lyricslab-jd5.6`. Draft PR #15 is open from `lavender/lyricslab-jd5-6-offline-bundle-viability-gate` into `lavender/expo-webview-rebuild-test`; automated gates and offline `file://` smoke were reported green, manual device checklist remains blocked by the Linux environment, and GitHub status checks were empty at callback time. Review thread is being launched with `thermo-nuclear-code-quality-review` and CI ownership.
+2026-06-29: Review callback received for `lyricslab-jd5.6` with status `repaired` and CI state `ci-unavailable-with-evidence`. PR #15 was marked ready and merged into `lavender/expo-webview-rebuild-test` at merge commit `b5b8d533ccb540c7ff8bacb74533be33c6039b21`. Beads issue `lyricslab-jd5.6` was closed. All phase children are closed; stream is in storyboard closeout.

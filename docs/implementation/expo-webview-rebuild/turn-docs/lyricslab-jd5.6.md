@@ -117,6 +117,10 @@ GitHub state observed by orchestrator after callback:
 - Mergeable: `MERGEABLE`
 - Status checks: empty `statusCheckRollup`
 
+Orchestrator marked PR #15 ready and merged it into `lavender/expo-webview-rebuild-test` after receiving the review callback.
+
+Merge commit: `b5b8d533ccb540c7ff8bacb74533be33c6039b21`
+
 ## Beads Updates
 
 2026-06-29: Orchestrator marked `lyricslab-jd5.6` `in_progress` after selector chose it as the final ready phase.
@@ -126,6 +130,8 @@ GitHub state observed by orchestrator after callback:
 2026-06-29: Orchestrator recorded the implementation callback in Beads before launching the review thread.
 
 2026-06-29: Review thread verified follow-up issues `lyricslab-bhs`, `lyricslab-xoc`, and `lyricslab-gg4` exist and remain open without advancing `lyricslab-jd5.6`.
+
+2026-06-29: Orchestrator recorded the review callback in Beads, marked PR #15 ready, merged PR #15, and closed `lyricslab-jd5.6` with review/CI evidence.
 
 ## Follow-Ups Filed
 
@@ -144,4 +150,13 @@ GitHub state observed by orchestrator after callback:
 
 ## Closeout
 
-Review resolved with no remaining findings. Hosted CI is unavailable with evidence because GitHub reports no checks for this PR branch; local review gates and offline Chromium smoke passed. Real-device Expo runtime validation remains the `lyricslab-bhs` follow-up before Swift removal or main-lane cleanup.
+Phase 6 closed by orchestrator on 2026-06-29.
+
+- PR: https://github.com/dirtydishes/lyricslab/pull/15
+- PR state: merged into `lavender/expo-webview-rebuild-test`
+- Merge commit: `b5b8d533ccb540c7ff8bacb74533be33c6039b21`
+- Review status: `repaired`
+- CI state: `ci-unavailable-with-evidence`
+- Remaining findings: none
+- Final viability decision: continue Expo/WebView rebuild with follow-ups; real-device Expo runtime validation remains required before Swift removal or main-lane migration cleanup.
+- Stream state: all six phase children are closed; storyboard closeout remains.
