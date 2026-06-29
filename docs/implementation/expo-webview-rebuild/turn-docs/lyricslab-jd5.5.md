@@ -84,7 +84,8 @@ Evidence:
 - Reviewer also ran `npm --prefix apps/editor-web test`: passed, 1 test file and 4 tests.
 - Reviewer ran `git diff --check`: passed.
 - Reviewer checked GitHub PR state before repair: PR #14 was open/draft with empty `statusCheckRollup`, head `bb501253449ca995878873bf4490d592f9fd0503`, and mergeable state `CONFLICTING` after the base branch advanced with orchestrator bookkeeping.
-- Hosted CI is unavailable with evidence: GitHub `statusCheckRollup` was empty for PR #14, so there were no hosted checks to rerun or wait on.
+- Reviewer pushed the repaired head to `lavender/lyricslab-jd5-5-keyboard-suggestions-insertion`; GitHub then reported PR #14 as open/draft, base `lavender/expo-webview-rebuild-test`, mergeable `MERGEABLE`, and empty `statusCheckRollup`.
+- Hosted CI is unavailable with evidence: `gh pr checks 14 --repo dirtydishes/lyricslab --watch=false` reported no checks for the PR branch, so there were no hosted checks to rerun or wait on.
 - Manual/device smoke for body editor focus, keyboard appearance, bar appearance, horizontal scrolling, repeated taps at the visible cursor, and keyboard/focus stability was not feasible in this Debian reviewer worker: `command -v adb` exited 1 and `command -v xcrun` exited 1, so there was no Android device/emulator or iOS toolchain path available. Closest automated evidence is provider coverage, bridge command injection coverage, mobile typecheck, full mobile Jest, editor-web build/test, and static review of WebView-owned insertion.
 
 ## PR And Commits
@@ -96,6 +97,8 @@ Commits:
 - `919b02a847d5a3b3de43fc47b1cfd05c12534612` - `add keyboard suggestion insertion`
 - `bb501253449ca995878873bf4490d592f9fd0503` - `record phase five pr details`
 - `31cd47d` - `tighten suggestion bridge contract`
+- `758641b` - `merge expo webview rebuild base`
+- final review evidence closeout commit recorded this reviewer section
 
 GitHub state observed by orchestrator after callback:
 
@@ -105,6 +108,14 @@ GitHub state observed by orchestrator after callback:
 - Merge state: `CLEAN`
 - Mergeable: `MERGEABLE`
 - Status checks: empty `statusCheckRollup`
+
+GitHub state observed by reviewer after repair push:
+
+- Base: `lavender/expo-webview-rebuild-test`
+- Draft: yes
+- Mergeable: `MERGEABLE`
+- Status checks: empty `statusCheckRollup`
+- `gh pr checks`: no checks reported on the PR branch
 
 ## Beads Updates
 
