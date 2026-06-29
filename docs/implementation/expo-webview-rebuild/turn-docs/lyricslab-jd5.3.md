@@ -24,7 +24,18 @@ Out of scope: React Native WebView integration, native persistence bridge, offli
 
 ## Implementation Log
 
-Not started.
+Implementation callback received on 2026-06-29.
+
+- Status: `pr-ready`
+- Branch: `lavender/lyricslab-jd5-3-tiptap-editor-web-bundle`
+- PR: https://github.com/dirtydishes/lyricslab/pull/12
+- Commits:
+  - `417d037b2a2b43090d63becffcbe3481710261ce`
+  - `ece4e49be8910ab82878440dbdb5e389d6b81d6b`
+- Bridge messages are typed envelopes emitted through `window.ReactNativeWebView.postMessage` and browser `CustomEvent` `lyricslab:bridge-message`.
+- WebView commands are exposed on `window.LyricsLabEditor`: `loadSong`, `insertSuggestion`, `focusEditor`, and `setTheme`.
+- `contentChanged` includes `bodyJson` and `bodyText`; `selectionChanged` includes `wordBeforeCursor`, `currentLineText`, `previousToken`, and `selectionEmpty`.
+- Phase 3 intentionally does not include React Native WebView integration, native persistence bridge, offline bundling, or rhyme decorations.
 
 ## Subagent Swarms
 
@@ -46,15 +57,28 @@ Current CI state: `not-started`
 
 Evidence:
 
-Not started.
+- Implementation thread reported `npm --prefix apps/editor-web test` passed with Vitest v4.1.9, 1 test file passing, and 4 tests passing.
+- Implementation thread reported `npm --prefix apps/editor-web run build` passed with `tsc --noEmit && vite build`, Vite v8.1.0, 52 modules transformed, and build completed.
+- Implementation thread reported browser/dev smoke passed with Vite dev server at `http://127.0.0.1:5174/` driven by `/usr/bin/chromium --headless=new` through DevTools Protocol. It observed `editorReady`, `contentChanged`, `selectionChanged`, and `editorFocused`; `loadSong`, `focusEditor`, and `insertSuggestion` returned true; latest content included typed text second line and inserted suggestion `glow`.
 
 ## PR And Commits
 
-Not started.
+Draft PR: https://github.com/dirtydishes/lyricslab/pull/12
+
+GitHub state observed by orchestrator after callback:
+
+- Head: `lavender/lyricslab-jd5-3-tiptap-editor-web-bundle`
+- Base: `lavender/expo-webview-rebuild-test`
+- Draft: yes
+- Merge state: `UNKNOWN`
+- Mergeable: `UNKNOWN`
+- Status checks: empty `statusCheckRollup`
 
 ## Beads Updates
 
 2026-06-29: Orchestrator marked `lyricslab-jd5.3` `in_progress` after selector chose it as the next ready phase.
+
+2026-06-29: Orchestrator recorded the implementation callback in Beads before launching the review thread.
 
 ## Follow-Ups Filed
 
