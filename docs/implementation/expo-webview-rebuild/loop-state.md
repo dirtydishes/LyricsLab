@@ -10,9 +10,9 @@ Stream: `expo-webview-rebuild`
 
 Workflow: `orchestrator-callback`
 
-Current phase: none
+Current phase: Phase 3 - Tiptap editor web bundle
 
-Current Beads issue: none
+Current Beads issue: `lyricslab-jd5.3`
 
 Current PR: none
 
@@ -46,11 +46,11 @@ Blocked: no
 |---|---|---|---|---|
 | 1 | `lyricslab-jd5.1` | closed; review repaired; CI unavailable with evidence; replayed on `lavender/expo-webview-rebuild-test` | https://github.com/dirtydishes/lyricslab/pull/10 | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.1.md` |
 | 2 | `lyricslab-jd5.2` | closed; review repaired; CI unavailable with evidence; merged into `lavender/expo-webview-rebuild-test` | https://github.com/dirtydishes/lyricslab/pull/11 | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.2.md` |
-| 3 | `lyricslab-jd5.3` | pending | none | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.3.md` |
+| 3 | `lyricslab-jd5.3` | in progress | none | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.3.md` |
 | 4 | `lyricslab-jd5.4` | pending | none | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.4.md` |
 | 5 | `lyricslab-jd5.5` | pending | none | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.5.md` |
 | 6 | `lyricslab-jd5.6` | pending | none | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.6.md` |
 
 ## Last Coordinator Update
 
-2026-06-29: Review callback received for `lyricslab-jd5.2` with status `repaired` and CI state `ci-unavailable-with-evidence`. PR #11 was marked ready and merged into `lavender/expo-webview-rebuild-test` at merge commit `8469d4a99dbe3641b0ad39d07f540a01dd695882`. Beads issue `lyricslab-jd5.2` was closed. Beads now reports `lyricslab-jd5.3` as the next ready phase.
+2026-06-29: Selector subagent chose `lyricslab-jd5.3` as the only next ready child. Beads issue `lyricslab-jd5.3` was marked in progress. Implementation must continue from `lavender/expo-webview-rebuild-test` and open the next PR against that branch.

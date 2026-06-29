@@ -8,11 +8,19 @@ This is the single Markdown turn doc for the phase.
 
 ## Phase Selection
 
-Not started.
+Selected by selector subagent on 2026-06-29.
+
+- Beads issue: `lyricslab-jd5.3`
+- Phase: Tiptap editor web bundle
+- Active stream branch: `lavender/expo-webview-rebuild-test`
+- Expected PR base: `lavender/expo-webview-rebuild-test`
+- Why ready: Beads reports `lyricslab-jd5.3` as the only ready child; blocker `lyricslab-jd5.2` is closed. Phases 4-6 remain dependency-blocked.
 
 ## Scope
 
-See phase doc.
+Create `apps/editor-web/` with Vite + TypeScript, a minimal Tiptap editor, typed bridge messages, WebView-callable `loadSong`, `insertSuggestion`, `focusEditor`, optional `setTheme`, and suggestion-context tests if practical.
+
+Out of scope: React Native WebView integration, native persistence bridge, offline bundling into mobile, and rhyme highlighting/decorations.
 
 ## Implementation Log
 
@@ -46,7 +54,7 @@ Not started.
 
 ## Beads Updates
 
-Not started.
+2026-06-29: Orchestrator marked `lyricslab-jd5.3` `in_progress` after selector chose it as the next ready phase.
 
 ## Follow-Ups Filed
 
@@ -54,7 +62,9 @@ None yet.
 
 ## Context To Keep
 
-Not started.
+- Continue from `lavender/expo-webview-rebuild-test`, not `feat/expo-webview-rebuild`.
+- Phase 3 owns standalone editor-web only; mobile integration starts in Phase 4.
+- Quality gates: `npm --prefix apps/editor-web run build`, suggestion-context tests if added, browser/dev smoke for typing bridge messages, and exercised `loadSong` / `insertSuggestion` commands.
 
 ## Closeout
 
