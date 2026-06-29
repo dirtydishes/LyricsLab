@@ -40,6 +40,18 @@ Out of scope: real lyric body WebView editing, Tiptap/editor-web, WebView bridge
 - Installed Expo Router and its Expo-compatible dependencies with `npx expo install expo-router react-native-safe-area-context react-native-screens expo-linking expo-constants`.
 - Removed the Phase 1 placeholder screen/test modules and the old `App.tsx` / `index.ts` entrypoint now that `expo-router/entry` owns app startup.
 
+Implementation callback received on 2026-06-29.
+
+- Status: `pr-ready`
+- Branch: `lavender/lyricslab-jd5-2-song-persistence-app-shell`
+- PR: https://github.com/dirtydishes/lyricslab/pull/11
+- Commits:
+  - `6d2e9af2a3f0d1599f3e4a98930a81d536e2f3c6`
+  - `7250639f27552e938c906cb5570c442afc5f0501`
+- Expo Router is now installed and `apps/mobile/package.json` uses `expo-router/entry`.
+- Runtime song persistence uses Expo SQLite through the `SongRecordStore` adapter; Node tests use the in-memory adapter.
+- The lyric body area remains a placeholder; no WebView, Tiptap, bridge, suggestion bar, rhyme logic, or highlighting was added.
+
 ## Subagent Swarms
 
 Not used. This was a narrow implementation phase with direct local gates.
@@ -70,7 +82,14 @@ Reviewer gate state: repaired local clean-install blocker; local gates passed af
 
 Evidence:
 
-- `gh pr view 11 --json number,title,state,isDraft,baseRefName,headRefName,headRefOid,mergeStateStatus,statusCheckRollup,url` passed; PR #11 is open draft, base `lavender/expo-webview-rebuild-test`, head `lavender/lyricslab-jd5-2-song-persistence-app-shell`, head SHA `7250639f27552e938c906cb5570c442afc5f0501` at inspection time, `mergeStateStatus` `UNKNOWN`, and `statusCheckRollup` `[]`.
+- Implementation thread reported `npm --prefix apps/mobile test -- songRepository.test.ts` passed with 1 suite and 4 tests passing.
+- Implementation thread reported `npm --prefix apps/mobile run typecheck` passed with `tsc --noEmit`.
+- Implementation thread reported `npm --prefix apps/mobile test` passed with 1 suite and 4 tests passing.
+- Implementation thread reported `cd apps/mobile && npx expo config --type public` passed, resolving SDK 56.0.0 with `expo-sqlite` and `expo-router` plugins.
+- Implementation thread reported `CI=1 EXPO_NO_TELEMETRY=1 timeout 25s npm --prefix apps/mobile run start -- --port 8094` reached `Starting Metro Bundler` and `Waiting on http://localhost:8094`; exit 124 was the intentional timeout and `ss` showed no listener left behind.
+- Implementation thread reported `CI=1 EXPO_NO_TELEMETRY=1 npx expo export --platform ios --output-dir /tmp/lyricslab-mobile-export-jd5-2` passed and bundled `expo-router/entry.js` for iOS with 1113 modules.
+- Manual device smoke for create song, edit title, return to Songs, and search by title is blocked in this thread because the Debian host has no `adb` and no `xcrun`; closest evidence is repository create/update/search coverage plus Expo Router start/export checks.
+- Review `gh pr view 11 --json number,title,state,isDraft,baseRefName,headRefName,headRefOid,mergeStateStatus,statusCheckRollup,url` passed before repair push; PR #11 was open draft, base `lavender/expo-webview-rebuild-test`, head `lavender/lyricslab-jd5-2-song-persistence-app-shell`, head SHA `7250639f27552e938c906cb5570c442afc5f0501`, `mergeStateStatus` `UNKNOWN`, and `statusCheckRollup` `[]`.
 - Initial review-worktree `npm --prefix apps/mobile run typecheck` and `npm --prefix apps/mobile test -- songRepository.test.ts` failed because `tsc` and `jest` were not installed before dependency install.
 - Initial review-worktree `npm --prefix apps/mobile ci` failed with `ERESOLVE`: `react-dom@19.2.7` required peer `react@^19.2.7` while the app pins `react@19.2.3`.
 - Review repair commit `21929c6` pins `react-dom` to `19.2.3`, matching the app's exact `react` version and making the lockfile reproducible.
@@ -82,21 +101,15 @@ Evidence:
 - Final `CI=1 EXPO_NO_TELEMETRY=1 timeout 25s npm --prefix apps/mobile run start -- --port 8096` reached `Starting Metro Bundler` and `Waiting on http://localhost:8096`; exit code `124` was the intentional timeout. Follow-up `ss -tulpen | rg ':8096\b'` returned no listener.
 - Final `cd apps/mobile && CI=1 EXPO_NO_TELEMETRY=1 npx expo export --platform ios --output-dir /tmp/lyricslab-mobile-export-jd5-2-review-final-20260629` passed; Expo bundled `node_modules/expo-router/entry.js` for iOS with 1113 modules and exported to `/tmp/lyricslab-mobile-export-jd5-2-review-final-20260629`.
 - Manual device smoke for tapping create, editing the title, returning to Songs, and searching by title remains blocked in this environment: `command -v adb` and `command -v xcrun` both returned exit code 1 with no path on this Debian host.
-- `npm --prefix apps/mobile ci` passed; npm installed 849 packages and reported 10 moderate severity vulnerabilities in the dependency graph.
-- `npx expo install expo-router react-native-safe-area-context react-native-screens expo-linking expo-constants` passed from `apps/mobile`; npm reported peer override warnings around `react-native-worklets`, and Expo added the `expo-router` config plugin.
-- `npm --prefix apps/mobile test -- songRepository.test.ts` passed; Jest reported 1 suite and 4 tests passing.
-- `npm --prefix apps/mobile run typecheck` passed with `tsc --noEmit`.
-- `npm --prefix apps/mobile test` passed; Jest reported 1 suite and 4 tests passing.
-- `cd apps/mobile && npx expo config --type public` passed; resolved SDK `56.0.0`, plugins `expo-sqlite` and `expo-router`, and platforms `ios`, `android`, and `web`.
-- `CI=1 EXPO_NO_TELEMETRY=1 timeout 25s npm --prefix apps/mobile run start -- --port 8094` reached `Starting Metro Bundler` and `Waiting on http://localhost:8094`; exit code `124` was the intentional timeout. Follow-up `ss -tulpen | rg ':8094' || true` showed no listener left behind.
-- `CI=1 EXPO_NO_TELEMETRY=1 npx expo export --platform ios --output-dir /tmp/lyricslab-mobile-export-jd5-2` passed from `apps/mobile`; Expo bundled `node_modules/expo-router/entry.js` for iOS with 1113 modules and exported to `/tmp/lyricslab-mobile-export-jd5-2`.
-- Manual device smoke for tapping create, editing the title, returning to Songs, and searching by title is blocked in this environment: this Debian host has no `adb` and no `xcrun`, so no Android emulator or iOS simulator/device target is available from the thread. Closest evidence is the repository create/update/search test coverage plus the Expo Router start/export checks above.
+- After merging base commit `f4adb0b` to clear the PR merge conflict, `npm --prefix apps/mobile run typecheck` and `npm --prefix apps/mobile test` both passed again.
 
 ## PR And Commits
 
 - Draft PR: https://github.com/dirtydishes/lyricslab/pull/11
 - Branch: `lavender/lyricslab-jd5-2-song-persistence-app-shell`
 - Base: `lavender/expo-webview-rebuild-test`
+- GitHub state observed by orchestrator after implementation callback: draft yes; merge state `CLEAN`; mergeable `MERGEABLE`; status checks empty `statusCheckRollup`.
+- Review thread observed `mergeStateStatus` `DIRTY` after its first push because base commit `f4adb0b` had landed on `lavender/expo-webview-rebuild-test`; review merged the current base into the PR branch before callback.
 - Commits:
   - `6d2e9af` - `feat: add song persistence app shell`
   - `7250639` - `docs: record phase 2 pr state`
@@ -105,6 +118,8 @@ Evidence:
 ## Beads Updates
 
 2026-06-29: Orchestrator marked `lyricslab-jd5.2` `in_progress` after selector chose it as the next ready phase.
+
+2026-06-29: Orchestrator recorded the implementation callback in Beads before launching the review thread.
 
 ## Follow-Ups Filed
 
@@ -116,7 +131,7 @@ None yet.
 - Phase 2 owns native app shell and song persistence only.
 - Quality gates: repository tests, `npm --prefix apps/mobile run typecheck`, and manual smoke for create song, edit title, return to Songs, and search by title when feasible.
 - Expo Router is now installed and `apps/mobile/package.json` uses `expo-router/entry`.
-- Keep non-route providers out of `apps/mobile/src/app/`; Expo Router will treat `src/app` as the route root if that directory exists.
+- Keep non-route providers out of `apps/mobile/src/app`; Expo Router treats `src/app` as the route root if it exists.
 - Runtime persistence uses Expo SQLite through the `SongRecordStore` adapter; Node tests use the in-memory adapter.
 
 ## Closeout
