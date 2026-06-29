@@ -75,9 +75,11 @@ Evidence:
 
 Implementation branch: `lavender/lyricslab-jd5-3-tiptap-editor-web-bundle`
 
-Draft PR: pending.
+Draft PR: https://github.com/dirtydishes/lyricslab/pull/12
 
-Commits: pending.
+Commits:
+
+- `417d037` - `feat: add tiptap editor web bundle`
 
 ## Beads Updates
 
@@ -100,4 +102,6 @@ None yet.
 
 ## Closeout
 
-Implementation complete locally; draft PR pending.
+Implementation complete locally. Draft PR opened for orchestrator-owned review handoff:
+
+- https://github.com/dirtydishes/lyricslab/pull/12
