@@ -85,6 +85,11 @@ Evidence:
   - Draft: yes
   - Mergeable: `CONFLICTING`
   - Status checks: empty `statusCheckRollup`
+- GitHub PR state after review repair push:
+  - Observed repaired head before this final doc-only evidence update: `2970fcb4739b63727e46e3adfc7284b793d5ebec`
+  - Draft: yes
+  - Mergeable: `MERGEABLE`
+  - Status checks: empty `statusCheckRollup`
 - `npm --prefix apps/editor-web ci` passed on 2026-06-29.
   - Installed 91 packages from `apps/editor-web/package-lock.json`.
   - Audit reported 0 vulnerabilities.
@@ -115,7 +120,7 @@ Commits:
 
 - `417d037` - `feat: add tiptap editor web bundle`
 - `ece4e49` - `docs: record phase 3 pr closeout`
-- Review repair commit: merge active base and record review evidence.
+- `2970fcb` - `docs: record phase 3 review evidence`
 
 ## Beads Updates
 
