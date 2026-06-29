@@ -24,7 +24,18 @@ Out of scope: React Native WebView integration, native persistence bridge, offli
 
 ## Implementation Log
 
-Implementation callback received on 2026-06-29.
+2026-06-29 implementation thread:
+
+- Created `apps/editor-web/` as a standalone Vite + TypeScript package.
+- Installed minimal editor runtime dependencies: `@tiptap/core` and `@tiptap/starter-kit`.
+- Added a plain lyric body Tiptap editor with StarterKit formatting nodes/marks disabled beyond paragraph/text editing.
+- Added typed bridge envelopes for `editorReady`, `contentChanged`, `selectionChanged`, `editorFocused`, `editorBlurred`, and `editorError`.
+- Exposed WebView-callable commands at `window.LyricsLabEditor`: `loadSong`, `insertSuggestion`, `focusEditor`, and placeholder `setTheme`.
+- Added `lyricslab:bridge-message` browser `CustomEvent` emission alongside `window.ReactNativeWebView.postMessage` so the standalone editor can be smoke-tested before native integration.
+- Added pure TypeScript suggestion-context extraction and Vitest coverage.
+- Kept React Native WebView integration, native persistence bridge, offline mobile bundling, and rhyme highlighting/decorations out of scope.
+
+Implementation callback received on 2026-06-29:
 
 - Status: `pr-ready`
 - Branch: `lavender/lyricslab-jd5-3-tiptap-editor-web-bundle`
@@ -39,7 +50,7 @@ Implementation callback received on 2026-06-29.
 
 ## Subagent Swarms
 
-Not started.
+Not used. The selected phase was narrow enough for direct implementation in this worker thread.
 
 ## Review
 
@@ -47,38 +58,77 @@ Reviewer skill:
 
 `thermo-nuclear-code-quality-review`
 
-Not started.
+2026-06-29 review thread:
+
+- Confirmed Phase 3 stayed inside `apps/editor-web/` plus this turn doc.
+- Confirmed no React Native WebView integration, native persistence bridge, mobile offline bundling, or rhyme highlighting/decorations were added.
+- Strict maintainability review found the bridge surface narrow and typed, command entry points bounded, lifecycle cleanup present through `destroy()`, no file-size blowup, and no schema/decorations overreach.
+- Remaining findings: none.
+
+Repairs:
+
+- Merged the active base branch to clear PR mergeability and resolved the shared turn-doc conflict.
+- No editor runtime code changes were needed in review.
 
 ## CI And Gates
 
 CI owner: reviewer/verification agents
 
-Current CI state: `not-started`
+Current CI state: `ci-unavailable-with-evidence`
 
 Evidence:
 
-- Implementation thread reported `npm --prefix apps/editor-web test` passed with Vitest v4.1.9, 1 test file passing, and 4 tests passing.
-- Implementation thread reported `npm --prefix apps/editor-web run build` passed with `tsc --noEmit && vite build`, Vite v8.1.0, 52 modules transformed, and build completed.
-- Implementation thread reported browser/dev smoke passed with Vite dev server at `http://127.0.0.1:5174/` driven by `/usr/bin/chromium --headless=new` through DevTools Protocol. It observed `editorReady`, `contentChanged`, `selectionChanged`, and `editorFocused`; `loadSong`, `focusEditor`, and `insertSuggestion` returned true; latest content included typed text second line and inserted suggestion `glow`.
+- GitHub PR state before review repair:
+  - PR: https://github.com/dirtydishes/lyricslab/pull/12
+  - Head: `lavender/lyricslab-jd5-3-tiptap-editor-web-bundle`
+  - Base: `lavender/expo-webview-rebuild-test`
+  - Draft: yes
+  - Mergeable: `CONFLICTING`
+  - Status checks: empty `statusCheckRollup`
+- GitHub PR state after review repair push:
+  - Observed repaired head before this final doc-only evidence update: `2970fcb4739b63727e46e3adfc7284b793d5ebec`
+  - Draft: yes
+  - Mergeable: `MERGEABLE`
+  - Status checks: empty `statusCheckRollup`
+- `npm --prefix apps/editor-web ci` passed on 2026-06-29.
+  - Installed 91 packages from `apps/editor-web/package-lock.json`.
+  - Audit reported 0 vulnerabilities.
+- `npm --prefix apps/editor-web test` passed on 2026-06-29.
+  - Vitest `v4.1.9`.
+  - Test files: `1 passed (1)`.
+  - Tests: `4 passed (4)`.
+- `npm --prefix apps/editor-web run build` passed on 2026-06-29.
+  - Runs `tsc --noEmit && vite build`.
+  - Vite `v8.1.0`.
+  - Output included `✓ 52 modules transformed` and `✓ built`.
+- Browser/dev smoke passed on 2026-06-29.
+  - Dev server: `npm --prefix apps/editor-web run dev -- --host 127.0.0.1 --port 5174`.
+  - Browser: `/usr/bin/chromium --headless=new` driven through DevTools Protocol against `http://127.0.0.1:5174/`.
+  - Verified bridge events through both `window.ReactNativeWebView.postMessage` and browser `CustomEvent` `lyricslab:bridge-message`.
+  - Observed bridge event types included `editorReady`, `contentChanged`, `selectionChanged`, and `editorFocused`.
+  - Verified command results: `loadSong: true`, `focusEditor: true`, `insertSuggestion: true`.
+  - Verified latest `bodyText`: `"first bar\nsecond lineglow typed "`.
+  - Verified latest selection context had `selectionEmpty: true`, `currentLineText: "second lineglow typed "`, `previousToken: "typed"`, and `wordBeforeCursor: ""`.
 
 ## PR And Commits
 
+Implementation branch: `lavender/lyricslab-jd5-3-tiptap-editor-web-bundle`
+
 Draft PR: https://github.com/dirtydishes/lyricslab/pull/12
 
-GitHub state observed by orchestrator after callback:
+Commits:
 
-- Head: `lavender/lyricslab-jd5-3-tiptap-editor-web-bundle`
-- Base: `lavender/expo-webview-rebuild-test`
-- Draft: yes
-- Merge state: `UNKNOWN`
-- Mergeable: `UNKNOWN`
-- Status checks: empty `statusCheckRollup`
+- `417d037` - `feat: add tiptap editor web bundle`
+- `ece4e49` - `docs: record phase 3 pr closeout`
+- `2970fcb` - `docs: record phase 3 review evidence`
 
 ## Beads Updates
 
 2026-06-29: Orchestrator marked `lyricslab-jd5.3` `in_progress` after selector chose it as the next ready phase.
 
 2026-06-29: Orchestrator recorded the implementation callback in Beads before launching the review thread.
+
+2026-06-29: Review thread made no Beads updates; Beads/loop-state closeout remains orchestrator-owned.
 
 ## Follow-Ups Filed
 
@@ -89,7 +139,12 @@ None yet.
 - Continue from `lavender/expo-webview-rebuild-test`, not `feat/expo-webview-rebuild`.
 - Phase 3 owns standalone editor-web only; mobile integration starts in Phase 4.
 - Quality gates: `npm --prefix apps/editor-web run build`, suggestion-context tests if added, browser/dev smoke for typing bridge messages, and exercised `loadSong` / `insertSuggestion` commands.
+- `apps/editor-web/src/bridge.ts` emits typed JSON envelopes through `window.ReactNativeWebView.postMessage` and dispatches `lyricslab:bridge-message` for browser/dev verification.
+- WebView commands live on `window.LyricsLabEditor`; Phase 4 can call `loadSong`, `insertSuggestion`, `focusEditor`, and `setTheme`.
+- `contentChanged` snapshots include both `bodyJson` and `bodyText`; `selectionChanged` includes `wordBeforeCursor`, `currentLineText`, `previousToken`, and `selectionEmpty`.
 
 ## Closeout
 
-Not started.
+Review complete locally. Draft PR remains open for orchestrator-owned closeout:
+
+- https://github.com/dirtydishes/lyricslab/pull/12
