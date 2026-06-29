@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "embedded",
+  "dolt_database": "lyricslab",
+  "project_id": "21ffe74f-91fb-418c-b70c-673ceb1025e6"
+}
