@@ -51,7 +51,7 @@ Not started.
 
 CI owner: reviewer/verification agents
 
-Current CI state: `not-started`
+Current CI state: `not-started`; implementation local gates passed.
 
 Evidence:
 
@@ -76,9 +76,12 @@ Evidence:
 
 Implementation branch: `lavender/lyricslab-jd5-4-webview-bridge-body-persistence`
 
-Draft PR: pending
+Draft PR: https://github.com/dirtydishes/lyricslab/pull/13
 
-Commits: pending
+Commits:
+
+- `f0d308e` - `feat: wire webview body persistence`
+- `docs: record phase 4 pr state` - final PR-state turn-doc update on top of the implementation commit.
 
 ## Beads Updates
 
@@ -98,4 +101,6 @@ None yet.
 
 ## Closeout
 
-Implementation PR creation pending.
+Implementation PR is open as draft PR #13 against `lavender/expo-webview-rebuild-test`.
+
+Implementation callback status: ready to send after this turn-doc update is committed and pushed.
