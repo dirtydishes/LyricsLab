@@ -111,6 +111,8 @@ Evidence:
 - Base: `lavender/expo-webview-rebuild-test`
 - GitHub state observed by orchestrator after implementation callback: draft yes; merge state `CLEAN`; mergeable `MERGEABLE`; status checks empty `statusCheckRollup`.
 - Review thread observed `mergeStateStatus` `DIRTY` after its first push because base commit `f4adb0b` had landed on `lavender/expo-webview-rebuild-test`; review merged the current base into the PR branch before callback.
+- Orchestrator marked PR #11 ready and merged it into `lavender/expo-webview-rebuild-test` after receiving the review callback.
+- Merge commit: `8469d4a99dbe3641b0ad39d07f540a01dd695882`
 - Commits:
   - `6d2e9af` - `feat: add song persistence app shell`
   - `7250639` - `docs: record phase 2 pr state`
@@ -122,6 +124,8 @@ Evidence:
 2026-06-29: Orchestrator marked `lyricslab-jd5.2` `in_progress` after selector chose it as the next ready phase.
 
 2026-06-29: Orchestrator recorded the implementation callback in Beads before launching the review thread.
+
+2026-06-29: Orchestrator recorded the review callback in Beads, marked PR #11 ready, merged PR #11, and closed `lyricslab-jd5.2` with review/CI evidence.
 
 ## Follow-Ups Filed
 
@@ -144,5 +148,8 @@ Implementation closeout state: PR-ready after draft PR creation.
 - Review status: `repaired`
 - CI state: `ci-unavailable-with-evidence`
 - Review callback state: ready after pushing review repair/evidence to PR branch.
+- PR state: merged into `lavender/expo-webview-rebuild-test`
+- Merge commit: `8469d4a99dbe3641b0ad39d07f540a01dd695882`
 - Callback target: orchestrator thread `019f141a-a9e0-76c0-96b9-401376bb75f4`
-- Beads: not advanced by implementation or review threads per orchestrator instruction.
+- Beads: closed by orchestrator after PR merge and review callback.
+- Next ready Beads phase: `lyricslab-jd5.3`
