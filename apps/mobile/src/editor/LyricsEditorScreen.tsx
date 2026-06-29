@@ -11,10 +11,13 @@ import {
   View,
 } from 'react-native';
 
+import { EditorWebView } from './EditorWebView';
+import type { EditorBodySnapshot, SuggestionContext } from './bridge';
 import type { SongRepository } from '../songs/songRepository';
 import type { Song, SongId } from '../songs/types';
 
 const TITLE_SAVE_DEBOUNCE_MS = 450;
+const BODY_SAVE_DEBOUNCE_MS = 550;
 
 type LyricsEditorScreenProps = {
   onBack: () => void;
@@ -29,11 +32,22 @@ export function LyricsEditorScreen({
 }: LyricsEditorScreenProps) {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSavingBody, setIsSavingBody] = useState(false);
   const [isSavingTitle, setIsSavingTitle] = useState(false);
+  const [pendingBody, setPendingBody] = useState<EditorBodySnapshot | null>(
+    null,
+  );
   const [song, setSong] = useState<Song | null>(null);
   const [title, setTitle] = useState('');
+  const latestBodyRef = useRef<EditorBodySnapshot | null>(null);
+  const latestSelectionContextRef = useRef<SuggestionContext | null>(null);
+  const lastSavedBodyRef = useRef<EditorBodySnapshot>({
+    bodyJson: null,
+    bodyText: '',
+  });
   const lastSavedTitleRef = useRef('');
   const titleRef = useRef('');
+  const currentSongId = song?.id ?? null;
 
   useEffect(() => {
     titleRef.current = title;
@@ -55,6 +69,12 @@ export function LyricsEditorScreen({
 
         setSong(nextSong);
         setTitle(nextSong?.title ?? '');
+        lastSavedBodyRef.current = {
+          bodyJson: nextSong?.bodyJson ?? null,
+          bodyText: nextSong?.bodyText ?? '',
+        };
+        latestBodyRef.current = lastSavedBodyRef.current;
+        latestSelectionContextRef.current = null;
         lastSavedTitleRef.current = nextSong?.title ?? '';
 
         if (!nextSong) {
@@ -80,19 +100,27 @@ export function LyricsEditorScreen({
 
   const saveTitle = useCallback(
     async (nextTitle: string) => {
-      if (!song || nextTitle === lastSavedTitleRef.current) {
-        return song;
+      if (!currentSongId || nextTitle === lastSavedTitleRef.current) {
+        return null;
       }
 
       setIsSavingTitle(true);
       setError(null);
 
       try {
-        const updatedSong = await repository.updateSong(song.id, {
+        const updatedSong = await repository.updateSong(currentSongId, {
           title: nextTitle,
         });
         lastSavedTitleRef.current = updatedSong.title;
-        setSong(updatedSong);
+        setSong((currentSong) =>
+          currentSong?.id === updatedSong.id
+            ? {
+                ...updatedSong,
+                bodyJson: currentSong.bodyJson,
+                bodyText: currentSong.bodyText,
+              }
+            : updatedSong,
+        );
         return updatedSong;
       } catch (saveError) {
         setError(toErrorMessage(saveError));
@@ -101,11 +129,54 @@ export function LyricsEditorScreen({
         setIsSavingTitle(false);
       }
     },
-    [repository, song],
+    [currentSongId, repository],
+  );
+
+  const saveBody = useCallback(
+    async (nextBody: EditorBodySnapshot | null) => {
+      if (
+        !currentSongId ||
+        !nextBody ||
+        bodySnapshotsEqual(nextBody, lastSavedBodyRef.current)
+      ) {
+        return null;
+      }
+
+      setIsSavingBody(true);
+      setError(null);
+
+      try {
+        const updatedSong = await repository.updateSong(currentSongId, {
+          bodyJson: nextBody.bodyJson,
+          bodyText: nextBody.bodyText,
+        });
+        lastSavedBodyRef.current = {
+          bodyJson: updatedSong.bodyJson,
+          bodyText: updatedSong.bodyText,
+        };
+        setSong((currentSong) =>
+          currentSong?.id === updatedSong.id
+            ? mergeBodySaveResult(currentSong, updatedSong, nextBody)
+            : updatedSong,
+        );
+        setPendingBody((currentPendingBody) =>
+          currentPendingBody && bodySnapshotsEqual(currentPendingBody, nextBody)
+            ? null
+            : currentPendingBody,
+        );
+        return updatedSong;
+      } catch (saveError) {
+        setError(toErrorMessage(saveError));
+        return null;
+      } finally {
+        setIsSavingBody(false);
+      }
+    },
+    [currentSongId, repository],
   );
 
   useEffect(() => {
-    if (!song || title === lastSavedTitleRef.current) {
+    if (!currentSongId || title === lastSavedTitleRef.current) {
       return undefined;
     }
 
@@ -116,10 +187,48 @@ export function LyricsEditorScreen({
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [saveTitle, song, title]);
+  }, [currentSongId, saveTitle, title]);
+
+  useEffect(() => {
+    if (
+      !pendingBody ||
+      bodySnapshotsEqual(pendingBody, lastSavedBodyRef.current)
+    ) {
+      return undefined;
+    }
+
+    const timeoutId = setTimeout(() => {
+      void saveBody(pendingBody);
+    }, BODY_SAVE_DEBOUNCE_MS);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [pendingBody, saveBody]);
+
+  const handleBodyChanged = useCallback((nextBody: EditorBodySnapshot) => {
+    latestBodyRef.current = nextBody;
+    setPendingBody(nextBody);
+    setSong((currentSong) =>
+      currentSong
+        ? {
+            ...currentSong,
+            bodyJson: nextBody.bodyJson,
+            bodyText: nextBody.bodyText,
+          }
+        : currentSong,
+    );
+  }, []);
+
+  const handleSelectionChanged = useCallback((context: SuggestionContext) => {
+    latestSelectionContextRef.current = context;
+  }, []);
 
   async function navigateBack() {
-    await saveTitle(titleRef.current);
+    await Promise.all([
+      saveTitle(titleRef.current),
+      saveBody(latestBodyRef.current),
+    ]);
     onBack();
   }
 
@@ -144,7 +253,7 @@ export function LyricsEditorScreen({
               <Text style={styles.backButtonText}>Back</Text>
             </Pressable>
             <Text style={styles.saveState}>
-              {isSavingTitle ? 'Saving' : 'Saved'}
+              {isSavingTitle || isSavingBody ? 'Saving' : 'Saved'}
             </Text>
           </View>
 
@@ -169,11 +278,15 @@ export function LyricsEditorScreen({
 
               {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
-              <View style={styles.bodyPlaceholder}>
-                <Text style={styles.bodyText}>
-                  {song.bodyText.trim() || 'Lyrics body'}
-                </Text>
-              </View>
+              <EditorWebView
+                bodyJson={song.bodyJson}
+                bodyText={song.bodyText}
+                onContentChanged={handleBodyChanged}
+                onEditorError={(message) => {
+                  setError(message.message);
+                }}
+                onSelectionChanged={handleSelectionChanged}
+              />
             </>
           ) : (
             <View style={styles.centerState}>
@@ -188,6 +301,49 @@ export function LyricsEditorScreen({
 
 function toErrorMessage(error: unknown) {
   return error instanceof Error ? error.message : 'Something went wrong';
+}
+
+function mergeBodySaveResult(
+  currentSong: Song,
+  updatedSong: Song,
+  savedBody: EditorBodySnapshot,
+): Song {
+  if (
+    bodySnapshotsEqual(
+      { bodyJson: currentSong.bodyJson, bodyText: currentSong.bodyText },
+      savedBody,
+    )
+  ) {
+    return {
+      ...updatedSong,
+      title: currentSong.title,
+    };
+  }
+
+  return {
+    ...updatedSong,
+    bodyJson: currentSong.bodyJson,
+    bodyText: currentSong.bodyText,
+    title: currentSong.title,
+  };
+}
+
+function bodySnapshotsEqual(
+  left: EditorBodySnapshot,
+  right: EditorBodySnapshot,
+) {
+  return (
+    left.bodyText === right.bodyText &&
+    stringifyBodyJson(left.bodyJson) === stringifyBodyJson(right.bodyJson)
+  );
+}
+
+function stringifyBodyJson(value: unknown) {
+  try {
+    return JSON.stringify(value ?? null);
+  } catch {
+    return '';
+  }
 }
 
 const styles = StyleSheet.create({
@@ -247,19 +403,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
     marginBottom: 12,
-  },
-  bodyPlaceholder: {
-    backgroundColor: '#ffffff',
-    borderColor: '#d6dae1',
-    borderRadius: 8,
-    borderWidth: 1,
-    flex: 1,
-    padding: 16,
-  },
-  bodyText: {
-    color: '#4b5563',
-    fontSize: 17,
-    lineHeight: 26,
   },
   centerState: {
     alignItems: 'center',
