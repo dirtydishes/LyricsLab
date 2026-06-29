@@ -2,6 +2,7 @@
 
 import {
   BRIDGE_MESSAGE_VERSION,
+  createInsertSuggestionJavaScript,
   createLoadSongJavaScript,
   editorWebUrlFromExpoHost,
   normalizeEditorWebUrl,
@@ -106,6 +107,22 @@ describe('editor native bridge', () => {
         bodyText: 'persisted body',
       },
     ]);
+  });
+
+  it('creates executable insertSuggestion JavaScript for the WebView command surface', () => {
+    const calls: unknown[] = [];
+    const script = createInsertSuggestionJavaScript('midnight');
+
+    Function('window', script)({
+      LyricsLabEditor: {
+        insertSuggestion(command: unknown) {
+          calls.push(command);
+          return true;
+        },
+      },
+    });
+
+    expect(calls).toEqual([{ word: 'midnight' }]);
   });
 
   it('resolves editor dev URLs from Expo host metadata', () => {
