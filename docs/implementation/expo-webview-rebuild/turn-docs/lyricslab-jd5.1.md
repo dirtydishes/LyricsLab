@@ -67,7 +67,9 @@ Evidence:
 
 ## PR And Commits
 
-Pending commit/PR at time of this turn-doc update.
+- Draft PR: https://github.com/dirtydishes/lyricslab/pull/10
+- Commits:
+  - `2fd81ef` - `feat: add expo mobile workspace foundation`
 
 ## Beads Updates
 
@@ -87,4 +89,4 @@ None yet.
 
 ## Closeout
 
-Implementation local gates complete. Awaiting commit, push, draft PR, and orchestrator callback.
+Implementation local gates complete. Draft PR opened for reviewer handoff. Awaiting orchestrator callback and reviewer thread.
