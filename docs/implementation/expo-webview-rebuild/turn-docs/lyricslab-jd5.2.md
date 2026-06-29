@@ -72,7 +72,11 @@ Evidence:
 
 ## PR And Commits
 
-Pending at implementation-thread documentation time.
+- Draft PR: https://github.com/dirtydishes/lyricslab/pull/11
+- Branch: `lavender/lyricslab-jd5-2-song-persistence-app-shell`
+- Base: `lavender/expo-webview-rebuild-test`
+- Commits:
+  - `6d2e9af` - `feat: add song persistence app shell`
 
 ## Beads Updates
 
@@ -93,4 +97,8 @@ None yet.
 
 ## Closeout
 
-Implementation closeout pending commit, push, draft PR, and callback.
+Implementation closeout state: PR-ready after draft PR creation.
+
+- Status: `pr-ready`
+- Callback target: orchestrator thread `019f141a-a9e0-76c0-96b9-401376bb75f4`
+- Beads: not advanced by this implementation thread per orchestrator instruction.
