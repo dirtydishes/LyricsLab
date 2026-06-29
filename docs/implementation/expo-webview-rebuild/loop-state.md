@@ -4,7 +4,7 @@ Canonical tracker: Beads epic `lyricslab-jd5`
 
 This file is a compact resume aid only. If this file disagrees with Beads, Beads wins.
 
-Status: active
+Status: complete
 
 Stream: `expo-webview-rebuild`
 
@@ -56,4 +56,4 @@ Blocked: no
 
 ## Last Coordinator Update
 
-2026-06-29: Review callback received for `lyricslab-jd5.6` with status `repaired` and CI state `ci-unavailable-with-evidence`. PR #15 was marked ready and merged into `lavender/expo-webview-rebuild-test` at merge commit `b5b8d533ccb540c7ff8bacb74533be33c6039b21`. Beads issue `lyricslab-jd5.6` was closed. All phase children are closed; stream is in storyboard closeout.
+2026-06-29: Storyboard closeout generated `docs/implementation/expo-webview-rebuild/storyboard-post-run-06-29-2026.html` after all six phases and the epic were closed. `impeccable` was unavailable and skipped. `@pierre/diffs` was installed under `apps/editor-web`, and the storyboard was verified with six server-rendered diff blocks from `@pierre/diffs/ssr`.
