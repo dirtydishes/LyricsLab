@@ -65,8 +65,8 @@ Current CI state: `ci-unavailable-with-evidence`; local review gates passed afte
 
 Evidence:
 
-- GitHub PR check inspection: `gh pr view 10 --repo dirtydishes/lyricslab --json statusCheckRollup,headRefOid,mergeStateStatus` returned head `9a19cd76c7944cc9416f0315c31164e85e50739c`, merge state `CLEAN`, and `statusCheckRollup: []`.
-- GitHub commit status inspection: `gh api repos/dirtydishes/lyricslab/commits/9a19cd76c7944cc9416f0315c31164e85e50739c/status` returned `total_count: 0` and `statuses: []`.
+- GitHub PR check inspection on the pushed review head: `gh pr view 10 --repo dirtydishes/lyricslab --json statusCheckRollup,headRefOid,mergeStateStatus` returned merge state `CLEAN` and `statusCheckRollup: []`.
+- GitHub commit status inspection on the pushed review head returned `total_count: 0` and `statuses: []`.
 - Initial review worktree gate attempt showed dependencies were absent (`tsc: not found`, `jest: not found`, Expo plugin resolution missing for `expo-sqlite`), so the reviewer ran `npm --prefix apps/mobile ci`.
 - `npm --prefix apps/mobile ci` - passed; installed 849 packages from the committed lockfile.
 - `npm --prefix apps/mobile run typecheck` - passed with `tsc --noEmit`.
@@ -82,6 +82,7 @@ Evidence:
   - `2fd81ef` - `feat: add expo mobile workspace foundation`
   - `9a19cd7` - `docs: record phase 1 pr state`
   - review repair - `fix mobile scripts and record phase 1 review`
+  - review evidence correction - `record final review ci evidence`
 
 ## Beads Updates
 
