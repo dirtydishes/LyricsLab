@@ -98,6 +98,24 @@ describe('songRepository', () => {
     await expect(repository.searchSongs('')).resolves.toHaveLength(3);
   });
 
+  it('searches lyric body text after body updates persist', async () => {
+    const repository = createRepository();
+    const song = await repository.createSong({
+      bodyText: 'starter line',
+      title: 'Working Draft',
+    });
+
+    await repository.updateSong(song.id, {
+      bodyJson: { type: 'doc', content: [] },
+      bodyText: 'fresh bridge phrase',
+    });
+
+    await expect(repository.searchSongs('fresh phrase')).resolves.toMatchObject([
+      { id: song.id, bodyText: 'fresh bridge phrase' },
+    ]);
+    await expect(repository.searchSongs('starter')).resolves.toEqual([]);
+  });
+
   it('normalizes blank created titles and rejects updates for unknown songs', async () => {
     const repository = createRepository();
     const song = await repository.createSong({ title: '   ' });
