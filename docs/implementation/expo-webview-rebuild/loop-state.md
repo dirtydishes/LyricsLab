@@ -16,7 +16,7 @@ Current Beads issue: none
 
 Current PR: none
 
-Last completed phase: none
+Last completed phase: Phase 1 - Expo workspace foundation (`lyricslab-jd5.1`)
 
 Blocked: no
 
@@ -37,12 +37,14 @@ Blocked: no
 - WebView owns body editing/cursor/selection/editor JSON.
 - Store `bodyJson` and `bodyText`; do not store HTML as canonical state.
 - Do not delete or restructure the Swift app in this stream.
+- Continue the implementation stream from branch `lavender/expo-webview-rebuild-test`.
+- `feat/expo-webview-rebuild` is only the original loop-doc base after the Phase 1 merge was moved off it.
 
 ## Phase Ledger
 
 | Phase | Beads Issue | Status | PR | Turn Doc |
 |---|---|---|---|---|
-| 1 | `lyricslab-jd5.1` | pending | none | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.1.md` |
+| 1 | `lyricslab-jd5.1` | closed; review repaired; CI unavailable with evidence; replayed on `lavender/expo-webview-rebuild-test` | https://github.com/dirtydishes/lyricslab/pull/10 | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.1.md` |
 | 2 | `lyricslab-jd5.2` | pending | none | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.2.md` |
 | 3 | `lyricslab-jd5.3` | pending | none | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.3.md` |
 | 4 | `lyricslab-jd5.4` | pending | none | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.4.md` |
@@ -51,4 +53,4 @@ Blocked: no
 
 ## Last Coordinator Update
 
-Loop created and phased. Corrected workflow to `orchestrator-callback`; implementation not started.
+2026-06-29: Phase 1 was closed in Beads after review callback `repaired` with CI state `ci-unavailable-with-evidence`. PR #10 was marked ready and merged, then the implementation was moved to test branch `lavender/expo-webview-rebuild-test`; `feat/expo-webview-rebuild` was restored to the pre-Phase-1 base. Beads now reports `lyricslab-jd5.2` as the next ready phase.
