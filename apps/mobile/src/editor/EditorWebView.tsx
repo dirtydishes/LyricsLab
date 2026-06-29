@@ -16,17 +16,16 @@ import {
 import { WebView, type WebViewMessageEvent } from 'react-native-webview';
 
 import {
+  createEditorWebViewSource,
   createFocusEditorJavaScript,
   createInsertSuggestionJavaScript,
   createLoadSongJavaScript,
-  DEFAULT_EDITOR_WEB_PORT,
-  editorWebUrlFromExpoHost,
-  normalizeEditorWebUrl,
   parseEditorBridgeMessage,
   type EditorBodySnapshot,
   type EditorErrorMessage,
   type SuggestionContext,
 } from './bridge';
+import { editorHtml } from './generated/editorHtml';
 
 declare const process:
   | {
@@ -77,12 +76,10 @@ export const EditorWebView = forwardRef<EditorWebViewHandle, EditorWebViewProps>
       bodyText,
     };
 
-    const resolvedEditorUrl = useMemo(() => {
-      return normalizeEditorWebUrl(
-        editorUrl ??
-          getConfiguredEditorUrl() ??
-          editorWebUrlFromExpoHost(Constants.expoConfig?.hostUri) ??
-          `http://127.0.0.1:${DEFAULT_EDITOR_WEB_PORT}/`,
+    const editorSource = useMemo(() => {
+      return createEditorWebViewSource(
+        editorHtml,
+        editorUrl ?? getConfiguredEditorUrl(),
       );
     }, [editorUrl]);
 
@@ -167,7 +164,7 @@ export const EditorWebView = forwardRef<EditorWebViewHandle, EditorWebViewProps>
               <Text style={styles.errorText}>Editor failed to load</Text>
             </View>
           )}
-          source={{ uri: resolvedEditorUrl }}
+          source={editorSource}
           style={styles.webView}
         />
       </View>

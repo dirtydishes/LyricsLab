@@ -1,5 +1,6 @@
 export const BRIDGE_MESSAGE_VERSION = 1;
 export const DEFAULT_EDITOR_WEB_PORT = 5174;
+export const LOCAL_EDITOR_WEBVIEW_BASE_URL = 'https://lyricslab.local/';
 
 export type EditorBodySnapshot = {
   bodyJson: unknown | null;
@@ -65,6 +66,15 @@ export type BridgeParseResult =
       reason: string;
     };
 
+export type EditorWebViewSource =
+  | {
+      baseUrl: typeof LOCAL_EDITOR_WEBVIEW_BASE_URL;
+      html: string;
+    }
+  | {
+      uri: string;
+    };
+
 export function parseEditorBridgeMessage(rawMessage: string): BridgeParseResult {
   let parsed: unknown;
 
@@ -110,6 +120,22 @@ export function editorWebUrlFromExpoHost(hostUri: string | null | undefined) {
   }
 
   return `http://${host}:${DEFAULT_EDITOR_WEB_PORT}/`;
+}
+
+export function createEditorWebViewSource(
+  editorHtml: string,
+  configuredEditorUrl?: string | null,
+): EditorWebViewSource {
+  if (configuredEditorUrl?.trim()) {
+    return {
+      uri: normalizeEditorWebUrl(configuredEditorUrl),
+    };
+  }
+
+  return {
+    baseUrl: LOCAL_EDITOR_WEBVIEW_BASE_URL,
+    html: editorHtml,
+  };
 }
 
 function parseBridgeEnvelope(value: unknown): BridgeParseResult {
