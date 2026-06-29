@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -11,7 +11,8 @@ import {
   View,
 } from 'react-native';
 
-import { EditorWebView } from './EditorWebView';
+import { EditorWebView, type EditorWebViewHandle } from './EditorWebView';
+import { SuggestionBar } from './SuggestionBar';
 import {
   bodySnapshotsEqual,
   createAsyncTaskQueue,
@@ -19,11 +20,13 @@ import {
   type AsyncTaskQueue,
 } from './bodyPersistence';
 import type { EditorBodySnapshot, SuggestionContext } from './bridge';
+import { staticSuggestionProvider, type WordSuggestion } from './suggestions';
 import type { SongRepository } from '../songs/songRepository';
 import type { Song, SongId } from '../songs/types';
 
 const TITLE_SAVE_DEBOUNCE_MS = 450;
 const BODY_SAVE_DEBOUNCE_MS = 550;
+const BODY_EDITOR_BLUR_GRACE_MS = 180;
 
 type LyricsEditorScreenProps = {
   onBack: () => void;
@@ -40,14 +43,20 @@ export function LyricsEditorScreen({
   const [isLoading, setIsLoading] = useState(true);
   const [isSavingBody, setIsSavingBody] = useState(false);
   const [isSavingTitle, setIsSavingTitle] = useState(false);
+  const [isBodyEditorFocused, setIsBodyEditorFocused] = useState(false);
   const [pendingBody, setPendingBody] = useState<EditorBodySnapshot | null>(
     null,
   );
+  const [selectionContext, setSelectionContext] =
+    useState<SuggestionContext | null>(null);
   const [song, setSong] = useState<Song | null>(null);
   const [title, setTitle] = useState('');
   const bodySaveQueueRef = useRef<AsyncTaskQueue | null>(null);
+  const bodyEditorBlurTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
+  const editorWebViewRef = useRef<EditorWebViewHandle>(null);
   const latestBodyRef = useRef<EditorBodySnapshot | null>(null);
-  const latestSelectionContextRef = useRef<SuggestionContext | null>(null);
   const lastSavedBodyRef = useRef<EditorBodySnapshot>({
     bodyJson: null,
     bodyText: '',
@@ -57,9 +66,22 @@ export function LyricsEditorScreen({
   const currentSongId = song?.id ?? null;
   bodySaveQueueRef.current ??= createAsyncTaskQueue();
 
+  const clearBodyEditorBlurTimeout = useCallback(() => {
+    if (bodyEditorBlurTimeoutRef.current) {
+      clearTimeout(bodyEditorBlurTimeoutRef.current);
+      bodyEditorBlurTimeoutRef.current = null;
+    }
+  }, []);
+
   useEffect(() => {
     titleRef.current = title;
   }, [title]);
+
+  useEffect(() => {
+    return () => {
+      clearBodyEditorBlurTimeout();
+    };
+  }, [clearBodyEditorBlurTimeout]);
 
   useEffect(() => {
     let isMounted = true;
@@ -82,7 +104,8 @@ export function LyricsEditorScreen({
           bodyText: nextSong?.bodyText ?? '',
         };
         latestBodyRef.current = lastSavedBodyRef.current;
-        latestSelectionContextRef.current = null;
+        setIsBodyEditorFocused(false);
+        setSelectionContext(null);
         lastSavedTitleRef.current = nextSong?.title ?? '';
 
         if (!nextSong) {
@@ -245,8 +268,46 @@ export function LyricsEditorScreen({
   }, []);
 
   const handleSelectionChanged = useCallback((context: SuggestionContext) => {
-    latestSelectionContextRef.current = context;
+    setSelectionContext(context);
   }, []);
+
+  const handleEditorFocused = useCallback(
+    (context: SuggestionContext) => {
+      clearBodyEditorBlurTimeout();
+      setSelectionContext(context);
+      setIsBodyEditorFocused(true);
+    },
+    [clearBodyEditorBlurTimeout],
+  );
+
+  const handleEditorBlurred = useCallback(
+    (context: SuggestionContext) => {
+      setSelectionContext(context);
+      clearBodyEditorBlurTimeout();
+      bodyEditorBlurTimeoutRef.current = setTimeout(() => {
+        setIsBodyEditorFocused(false);
+        bodyEditorBlurTimeoutRef.current = null;
+      }, BODY_EDITOR_BLUR_GRACE_MS);
+    },
+    [clearBodyEditorBlurTimeout],
+  );
+
+  const suggestions = useMemo(() => {
+    if (!isBodyEditorFocused) {
+      return [];
+    }
+
+    return staticSuggestionProvider.getSuggestions(selectionContext);
+  }, [isBodyEditorFocused, selectionContext]);
+
+  const handleSuggestionSelected = useCallback(
+    (suggestion: WordSuggestion) => {
+      clearBodyEditorBlurTimeout();
+      setIsBodyEditorFocused(true);
+      editorWebViewRef.current?.insertSuggestion(suggestion.word);
+    },
+    [clearBodyEditorBlurTimeout],
+  );
 
   async function navigateBack() {
     await Promise.all([
@@ -305,12 +366,22 @@ export function LyricsEditorScreen({
               <EditorWebView
                 bodyJson={song.bodyJson}
                 bodyText={song.bodyText}
+                onEditorBlurred={handleEditorBlurred}
                 onContentChanged={handleBodyChanged}
                 onEditorError={(message) => {
                   setError(message.message);
                 }}
+                onEditorFocused={handleEditorFocused}
                 onSelectionChanged={handleSelectionChanged}
+                ref={editorWebViewRef}
               />
+
+              {isBodyEditorFocused ? (
+                <SuggestionBar
+                  onSelectSuggestion={handleSuggestionSelected}
+                  suggestions={suggestions}
+                />
+              ) : null}
             </>
           ) : (
             <View style={styles.centerState}>

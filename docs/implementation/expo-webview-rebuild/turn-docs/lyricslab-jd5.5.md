@@ -24,7 +24,18 @@ Out of scope: rhyme suggestions, rhyme highlighting, a full custom editor toolba
 
 ## Implementation Log
 
-Implementation callback received on 2026-06-29.
+2026-06-29 implementation worker:
+
+- Created implementation branch `lavender/lyricslab-jd5-5-keyboard-suggestions-insertion` from `origin/lavender/expo-webview-rebuild-test`.
+- Added `apps/mobile/src/editor/suggestions.ts`, a pure TypeScript placeholder word suggestion provider with stable IDs, deterministic ordering, light context follow-ups from the previous completed token, fallback suggestions, dedupe, and filtering for the current active token.
+- Added `apps/mobile/src/editor/SuggestionBar.tsx`, a horizontal native `ScrollView` suggestion bar using `keyboardShouldPersistTaps="always"` and fixed-height suggestion buttons.
+- Extended `apps/mobile/src/editor/bridge.ts` with typed `insertSuggestion` and `focusEditor` WebView command script helpers.
+- Converted `EditorWebView` to expose a small imperative handle with `insertSuggestion(word)` and `focusEditor()`, and propagated `editorFocused` / `editorBlurred` messages to the native screen.
+- Wired `LyricsEditorScreen` to track body editor focus and latest WebView selection context, show the bar only while the body editor is focused, and send tapped suggestions back into the WebView via `insertSuggestion`.
+- Kept keyboard positioning to the existing `KeyboardAvoidingView` approach. No keyboard-controller dependency was added.
+- Added a short native blur grace period before hiding the bar so a WebView blur during a native suggestion tap does not immediately remove the press target.
+
+2026-06-29 orchestrator recorded the implementation callback:
 
 - Status: `pr-ready`
 - Branch: `lavender/lyricslab-jd5-5-keyboard-suggestions-insertion`
@@ -38,7 +49,7 @@ Implementation callback received on 2026-06-29.
 
 ## Subagent Swarms
 
-Not started.
+None. This worker kept the phase implementation single-threaded and did not launch review threads.
 
 ## Review
 
@@ -46,25 +57,48 @@ Reviewer skill:
 
 `thermo-nuclear-code-quality-review`
 
-Not started.
+2026-06-29 reviewer:
+
+- Confirmed Phase 5 stayed within scope: native horizontal suggestion bar, simple pure TypeScript suggestion provider, focus-driven bar visibility, typed native command injection to WebView, and insertion delegated to the existing WebView command surface.
+- Confirmed no rhyme-powered suggestions, rhyme highlighting, `react-native-keyboard-controller` dependency, or full custom editor toolbar were added.
+- Repair: narrowed the editor-web `InsertSuggestionCommand` contract from `string | { word: string }` to only `{ word: string }`, matching the native bridge payload and removing a fallback branch from `normalizeSuggestion`.
+- Repair: removed the dead `latestSelectionContextRef` mirror from `LyricsEditorScreen`; `selectionContext` state is the single source used by the suggestion provider.
+- Repair: merged the active `origin/lavender/expo-webview-rebuild-test` base into the PR branch to clear GitHub's conflicting merge state caused by orchestrator bookkeeping in Beads, loop-state, and this shared turn doc.
+- Findings remaining: none.
 
 ## CI And Gates
 
 CI owner: reviewer/verification agents
 
-Current CI state: `not-started`
+Current CI state: `ci-unavailable-with-evidence`.
 
 Evidence:
 
-- Implementation thread reported `npm --prefix apps/mobile ci` passed after initial `jest`-not-found setup blocker; npm reported peer/deprecation/audit warnings only.
-- Implementation thread reported `npm --prefix apps/mobile test -- suggestions.test.ts` passed with 1 suite and 4 tests.
-- Implementation thread reported `npm --prefix apps/mobile run typecheck` passed with `tsc --noEmit`.
-- Implementation thread reported `npm --prefix apps/mobile test` passed with 4 suites and 19 tests.
-- Manual/device smoke was not feasible in the Debian worker because `command -v adb` exited 1 and `command -v xcrun` exited 1; closest automated evidence is provider tests, bridge command injection tests, mobile typecheck, and full mobile Jest.
+- Implementation thread reported initial `npm --prefix apps/mobile test -- suggestions.test.ts` failed before dependency install because `jest` was not present in `apps/mobile/node_modules` (`sh: 1: jest: not found`).
+- Reviewer reran `npm --prefix apps/mobile ci`: passed. npm reported existing peer/deprecation/audit warnings, but installed lockfile dependencies successfully.
+- Reviewer reran `npm --prefix apps/mobile test -- suggestions.test.ts`: passed, 1 test suite and 4 tests.
+- Reviewer reran `npm --prefix apps/mobile run typecheck`: passed (`tsc --noEmit`).
+- Reviewer reran `npm --prefix apps/mobile test`: passed, 4 test suites and 19 tests.
+- Because the reviewer repaired editor-web bridge typing, reviewer also ran `npm --prefix apps/editor-web ci`: passed with 0 vulnerabilities.
+- Reviewer also ran `npm --prefix apps/editor-web run build`: passed (`tsc --noEmit && vite build`, 52 modules transformed).
+- Reviewer also ran `npm --prefix apps/editor-web test`: passed, 1 test file and 4 tests.
+- Reviewer ran `git diff --check`: passed.
+- Reviewer checked GitHub PR state before repair: PR #14 was open/draft with empty `statusCheckRollup`, head `bb501253449ca995878873bf4490d592f9fd0503`, and mergeable state `CONFLICTING` after the base branch advanced with orchestrator bookkeeping.
+- Reviewer pushed the repaired head to `lavender/lyricslab-jd5-5-keyboard-suggestions-insertion`; GitHub then reported PR #14 as open/draft, base `lavender/expo-webview-rebuild-test`, mergeable `MERGEABLE`, and empty `statusCheckRollup`.
+- Hosted CI is unavailable with evidence: `gh pr checks 14 --repo dirtydishes/lyricslab --watch=false` reported no checks for the PR branch, so there were no hosted checks to rerun or wait on.
+- Manual/device smoke for body editor focus, keyboard appearance, bar appearance, horizontal scrolling, repeated taps at the visible cursor, and keyboard/focus stability was not feasible in this Debian reviewer worker: `command -v adb` exited 1 and `command -v xcrun` exited 1, so there was no Android device/emulator or iOS toolchain path available. Closest automated evidence is provider coverage, bridge command injection coverage, mobile typecheck, full mobile Jest, editor-web build/test, and static review of WebView-owned insertion.
 
 ## PR And Commits
 
 Draft PR: https://github.com/dirtydishes/lyricslab/pull/14
+
+Commits:
+
+- `919b02a847d5a3b3de43fc47b1cfd05c12534612` - `add keyboard suggestion insertion`
+- `bb501253449ca995878873bf4490d592f9fd0503` - `record phase five pr details`
+- `31cd47d` - `tighten suggestion bridge contract`
+- `758641b` - `merge expo webview rebuild base`
+- final review evidence closeout commit recorded this reviewer section
 
 GitHub state observed by orchestrator after callback:
 
@@ -74,6 +108,14 @@ GitHub state observed by orchestrator after callback:
 - Merge state: `CLEAN`
 - Mergeable: `MERGEABLE`
 - Status checks: empty `statusCheckRollup`
+
+GitHub state observed by reviewer after repair push:
+
+- Base: `lavender/expo-webview-rebuild-test`
+- Draft: yes
+- Mergeable: `MERGEABLE`
+- Status checks: empty `statusCheckRollup`
+- `gh pr checks`: no checks reported on the PR branch
 
 ## Beads Updates
 
@@ -90,8 +132,9 @@ None yet.
 - Continue from `lavender/expo-webview-rebuild-test`, not `feat/expo-webview-rebuild`.
 - Phase 5 owns keyboard suggestions and insertion. Phase 6 owns offline bundling and final viability gate.
 - Quality gates: suggestion provider tests, mobile typecheck, manual smoke for focus body editor, keyboard/bar appearance, horizontal scrolling, and repeated taps inserting at the visible cursor while focus/keyboard remain stable when feasible.
-- Real keyboard/device smoke remains for review or Phase 6 because this implementation worker had no `adb` or `xcrun` runtime.
+- Native suggestion taps call `EditorWebView.insertSuggestion(word)`, which injects the existing WebView `window.LyricsLabEditor.insertSuggestion({ word })` command. Native does not edit lyric body text directly.
+- Real keyboard/device smoke remains for Phase 6 because this review worker had no `adb` or `xcrun` runtime.
 
 ## Closeout
 
-Not started.
+Review resolved with repair. Local automated gates passed, hosted CI is unavailable with evidence, manual device smoke is blocked by this Debian worker environment, and no maintainability findings remain.

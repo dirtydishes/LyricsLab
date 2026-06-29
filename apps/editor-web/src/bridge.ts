@@ -56,11 +56,9 @@ export type LoadSongCommand = {
   bodyText?: string;
 };
 
-export type InsertSuggestionCommand =
-  | string
-  | {
-      word: string;
-    };
+export type InsertSuggestionCommand = {
+  word: string;
+};
 
 export type SetThemeCommand = {
   theme?: 'light' | 'dark' | string;

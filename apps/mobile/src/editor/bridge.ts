@@ -6,6 +6,10 @@ export type EditorBodySnapshot = {
   bodyText: string;
 };
 
+export type InsertSuggestionCommand = {
+  word: string;
+};
+
 export type SuggestionContext = {
   currentLineText: string;
   previousToken: string;
@@ -78,6 +82,14 @@ export function createLoadSongJavaScript(snapshot: EditorBodySnapshot) {
     bodyJson: snapshot.bodyJson,
     bodyText: snapshot.bodyText,
   });
+}
+
+export function createInsertSuggestionJavaScript(word: string) {
+  return createEditorCommandJavaScript('insertSuggestion', { word });
+}
+
+export function createFocusEditorJavaScript() {
+  return createEditorCommandJavaScript('focusEditor', undefined);
 }
 
 export function normalizeEditorWebUrl(rawUrl: string) {
