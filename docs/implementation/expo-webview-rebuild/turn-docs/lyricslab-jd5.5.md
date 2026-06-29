@@ -66,9 +66,11 @@ Evidence:
 
 Implementation branch: `lavender/lyricslab-jd5-5-keyboard-suggestions-insertion`
 
-PR: pending push/open.
+PR: https://github.com/dirtydishes/lyricslab/pull/14
 
-Commits: pending.
+Commits:
+
+- `919b02a847d5a3b3de43fc47b1cfd05c12534612` - `add keyboard suggestion insertion`
 
 ## Beads Updates
 
@@ -88,4 +90,4 @@ None yet.
 
 ## Closeout
 
-Implementation gates passed locally; draft PR pending.
+Implementation gates passed locally and draft PR #14 is open for review.
