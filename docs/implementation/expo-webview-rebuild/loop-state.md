@@ -10,9 +10,9 @@ Stream: `expo-webview-rebuild`
 
 Workflow: `orchestrator-callback`
 
-Current phase: none
+Current phase: Phase 2 - Song persistence and app shell
 
-Current Beads issue: none
+Current Beads issue: `lyricslab-jd5.2`
 
 Current PR: none
 
@@ -45,7 +45,7 @@ Blocked: no
 | Phase | Beads Issue | Status | PR | Turn Doc |
 |---|---|---|---|---|
 | 1 | `lyricslab-jd5.1` | closed; review repaired; CI unavailable with evidence; replayed on `lavender/expo-webview-rebuild-test` | https://github.com/dirtydishes/lyricslab/pull/10 | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.1.md` |
-| 2 | `lyricslab-jd5.2` | pending | none | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.2.md` |
+| 2 | `lyricslab-jd5.2` | in progress | none | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.2.md` |
 | 3 | `lyricslab-jd5.3` | pending | none | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.3.md` |
 | 4 | `lyricslab-jd5.4` | pending | none | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.4.md` |
 | 5 | `lyricslab-jd5.5` | pending | none | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.5.md` |
@@ -53,4 +53,4 @@ Blocked: no
 
 ## Last Coordinator Update
 
-2026-06-29: Phase 1 was closed in Beads after review callback `repaired` with CI state `ci-unavailable-with-evidence`. PR #10 was marked ready and merged, then the implementation was moved to test branch `lavender/expo-webview-rebuild-test`; `feat/expo-webview-rebuild` was restored to the pre-Phase-1 base. Beads now reports `lyricslab-jd5.2` as the next ready phase.
+2026-06-29: Selector subagent chose `lyricslab-jd5.2` as the only next ready child. Beads issue `lyricslab-jd5.2` was marked in progress. Implementation must continue from `lavender/expo-webview-rebuild-test` and open the next PR against that branch.
