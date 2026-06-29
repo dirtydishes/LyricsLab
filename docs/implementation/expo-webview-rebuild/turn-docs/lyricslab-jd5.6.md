@@ -74,7 +74,10 @@ Manual device checklist:
 
 ## PR And Commits
 
-Pending.
+- Branch: `lavender/lyricslab-jd5-6-offline-bundle-viability-gate`
+- Draft PR: https://github.com/dirtydishes/lyricslab/pull/15
+- Commits:
+  - `20fda54879eb4391c8858a7eaa1ea6447caba9a1` - `add offline editor bundle gate`
 
 ## Beads Updates
 

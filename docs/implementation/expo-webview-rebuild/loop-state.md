@@ -14,7 +14,7 @@ Current phase: Phase 6 - Offline bundle and viability gate
 
 Current Beads issue: `lyricslab-jd5.6`
 
-Current PR: none
+Current PR: https://github.com/dirtydishes/lyricslab/pull/15
 
 Last completed phase: Phase 5 - Keyboard suggestion bar and insertion (`lyricslab-jd5.5`)
 
