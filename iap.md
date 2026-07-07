@@ -17,7 +17,7 @@
   - `Bypass IAP`
   - when ON, all premium gates return “unlocked”
 
-## StoreKit 2 (post-MVP)
+## Store integration (post-MVP)
 - Subscription product: `LyricsLab Plus`
 - Restore purchases flow
-- Receipt validation strategy (TBD; keep minimal early)
+- Expo/native purchase path TBD; keep minimal early.

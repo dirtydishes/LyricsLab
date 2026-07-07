@@ -1,0 +1,37 @@
+{
+  "expo": {
+    "name": "LyricsLab",
+    "slug": "lyricslab-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.dirtydishes.lyricslab-mobile",
+      "infoPlist": {
+        "NSLocalNetworkUsageDescription": "LyricsLab needs local network access to connect to the Expo development server on this computer.",
+        "NSBonjourServices": [
+          "_expo._tcp.",
+          "_exporelay._tcp."
+        ]
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-sqlite",
+      "expo-router"
+    ]
+  }
+}

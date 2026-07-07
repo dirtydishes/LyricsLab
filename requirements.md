@@ -1,66 +1,57 @@
-# requirements.md — LyricsLab
+# requirements.md - LyricsLab Expo Rebuild
 
-## MVP (must ship)
-### Core writing experience
-- Compositions list (Home) with:
-  - Create, open, delete compositions
-  - Search that matches both title and lyrics (case-insensitive)
-- Editor with:
-  - Title field at top
-  - Lyrics editing (fast, stable, good cursor behavior)
-  - Rhyme grouping + highlighting:
-    - End rhymes
-    - Internal rhymes (within a line and connected across lines)
-        - Connect across up to 4 lines (sliding window)
-        - Matching end word can be grouped with an internal rhyme
-  - Near rhymes (slant rhymes)
-  - Keyboard accessory bar with horizontally scrolling rhyme suggestions
-- Settings:
-  - Accessed via spinning gear button on Home
-  - Theme switcher (default themes included)
-  - iCloud sync toggle (default ON)
+## MVP Requirements
 
-### Themes (unlocked)
-- RetroFuturistic (default)
-- Plain Light
-- Plain Dark
-- DirtyDishes (Catppuccin Mocha lavender-inspired)
+Core writing:
+- Create, open, rename, search, and delete songs.
+- Edit lyric body with stable cursor behavior.
+- Persist title, `bodyJson`, and `bodyText` locally.
+- Search must match titles and lyric body text.
+- Keep the editor usable offline.
 
-### Non-functional requirements
-- Fast and efficient:
-  - Debounce rhyme analysis
-  - Cache CMU dict parse
-  - Avoid heavy blur in scrolling regions
-- Offline-first:
-  - CMU dict local is primary rhyme source
-- Privacy:
-  - No external calls in MVP (unless user explicitly opts in post-MVP)
+Editor bridge:
+- Load a song into the WebView editor.
+- Receive body changes from the WebView.
+- Receive cursor/suggestion context from the WebView.
+- Insert a native suggestion at the editor cursor.
+- Use generated offline editor HTML instead of depending on a dev server at runtime.
 
-## Post-MVP (planned; not required)
-- External rhyme API fallback (IAP-locked)
-- AI co-writer suggestions (IAP-locked)
-- Music player expansions:
-  - Apple Music (IAP-locked)
-  - YouTube (IAP-locked; policy review needed)
-- Custom themes beyond defaults (IAP-locked)
-- Custom icons beyond defaults (IAP-locked)
-- Advanced export (PDF), collaboration, etc.
+Suggestions:
+- Keep the native suggestion bar reachable while typing.
+- Suggestions must be deterministic and non-disruptive.
+- CMU-backed rhyme suggestions are the next core upgrade; placeholder suggestions are only acceptable during the rebuild foundation.
+- The CMU dictionary source lives at `data/cmudict.txt` until the TypeScript rhyme module chooses its runtime format.
 
-## Monetization requirements
-- Paid features show a “pretty little” paywall card when accessed.
-- Free trial (details TBD).
-- Dev-only setting: “Bypass IAP” for development/testing.
+Non-functional:
+- Typing should remain responsive.
+- Expensive analysis must be debounced or moved out of the hot typing path.
+- No lyric content logging.
+- No external APIs in MVP.
 
-## Decisions (to finalize early)
-1) Persistence: SwiftData+CloudKit vs CoreData+CloudKit.
-2) Editor: `UITextView` wrapper (recommended) vs pure SwiftUI (likely insufficient for highlights).
-3) Near-rhyme similarity metric + thresholds.
-4) Search indexing approach: in-memory filter vs stored `searchBlob`.
+## Post-MVP Or Explicitly Scoped Later
 
-## Acceptance criteria (MVP)
-- Typing remains responsive with rhyme highlighting enabled.
-- Rhyme highlights are stable and understandable (no flicker, no random regrouping).
-- Suggestions insert correctly at cursor.
-- Search returns results from lyrics body and titles.
-- Theme switching keeps editor readable (contrast).
-- iCloud sync works on two devices (basic sanity test).
+- Rhyme highlighting and richer visual grouping.
+- Full CMU dictionary port and caching.
+- Theme parity with highlight palettes.
+- Local audio playback and loop points.
+- iCloud/sync.
+- IAP/paywall.
+- AI collaborator room.
+- External rhyme APIs.
+
+## Decisions
+
+- Active app shell: Expo/React Native.
+- Active body editor: WebView-hosted Tiptap.
+- Active local store: SQLite via `expo-sqlite`.
+- Canonical body storage: `bodyJson` and `bodyText`.
+- Generated HTML is build output, not product data.
+- CMU dictionary data is shared product data, not old Swift app code.
+- Real-device validation is required before declaring the Expo rebuild the primary product lane.
+
+## Acceptance Criteria For The Rebuild Foundation
+
+- `npm test`, `npm run typecheck`, `npm run editor:test`, and `npm run build:editor-html` pass.
+- `npx expo config --type public` resolves without config errors.
+- Physical-device checklist in `testing.md` passes.
+- A fresh checkout can install, build the editor HTML, and start the Expo app from the repo root.

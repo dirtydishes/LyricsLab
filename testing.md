@@ -1,117 +1,63 @@
-# testing.md — Test strategy (lean + fast)
+# testing.md - LyricsLab Expo Rebuild
 
-## Goals
-- Keep feedback loops fast (seconds, not minutes).
-- Cover the rhyme engine core logic with a small set of high-value unit tests.
-- Use UI tests sparingly (smoke tests only).
-- Run expensive tests only on demand or nightly CI.
-- Never use the iOS simulator. Build/run/tests are device-only.
-  - If no device is connected, stop and ask to connect one before proceeding.
+## Fast Local Gates
 
----
+Run these before closing most code changes:
 
-## Test tiers (when to run)
+```bash
+npm test
+npm run typecheck
+npm run editor:test
+```
 
-### Tier 0 — “Always” (local + CI on every PR)
-Target runtime: < 30–60 seconds.
-- Small unit tests only:
-  - Rhyme key extraction correctness (a few golden pairs)
-  - Suggestion ranking basic rules (exact > near)
-  - Search matching title+lyrics (2–3 cases)
-- No UI tests
-- No large dictionary parsing benchmarks
+Run this whenever `packages/editor-web` changes or when WebView loading behavior changes:
 
-### Tier 1 — “PR Gate” (CI only, optional locally)
-Target runtime: < 2–4 minutes.
-- Adds:
-  - CMU dict parse sanity test (tiny sample dict, not full `cmudict.txt`)
-  - Persistence save/load smoke test (local store only)
-- Still avoids XCUITest unless absolutely needed
+```bash
+npm run build:editor-html
+```
 
-### Tier 2 — “Nightly / Manual”
-Target runtime: can be longer.
-- Full integration checks:
-  - iCloud/CloudKit behaviors (if implemented)
-  - UI smoke flows (1–2 tests max)
-  - Performance measurements (typing latency, dict parse time) as Instruments runs,
-    not unit tests
+Use this as a config sanity check when Expo dependencies or `app.json` change:
 
----
+```bash
+npx expo config --type public
+```
 
-## What we test (minimal set)
+## Coverage Priorities
 
-## 1) RhymeEngine (Tier 0)
-### 1.1 Rhyme key extraction (golden cases)
-Use a hardcoded mini phoneme map; do NOT require CMU parsing.
+- `src/songs/`
+  - Repository create/update/delete/search behavior.
+  - SQLite implementation tests where feasible without device-only APIs.
+- `src/editor/bridge.ts`
+  - Parse only known bridge messages.
+  - Generate safe WebView command scripts.
+- `src/editor/bodyPersistence.ts`
+  - Preserve stale-save ordering and merge behavior.
+- `src/editor/suggestions.ts`
+  - Deterministic suggestion ids, filtering, and ordering.
+- `packages/editor-web/src/`
+  - Suggestion context extraction.
+  - Bridge message emission.
+  - Future editor command behavior.
 
-Cases (examples; keep to ~6–10 total assertions):
-- Exact rhyme should match:
-  - “time” vs “rhyme”
-  - “cat” vs “hat”
-- Non-rhyme should differ:
-  - “time” vs “team”
-- Handles punctuation normalization:
-  - “time,” -> “time”
-- Handles case:
-  - “Time” -> “time”
+## Manual Device Checklist
 
-### 1.2 Suggestion ordering
-Given a target rhyme key:
-- Exact rhymes appear before near rhymes
-- Ordering is deterministic (stable sort)
+The Expo rebuild is not validated as the daily app until this passes on a physical iPhone:
 
-## 2) Search (Tier 0)
-- Query matches title
-- Query matches lyrics
-- Case-insensitive match
-(3 tests max)
+- App launches through the Expo dev-client flow.
+- Create a song.
+- Edit title and body.
+- Keyboard appears without covering the editor unexpectedly.
+- Suggestion bar stays reachable while typing.
+- Insert suggestion at cursor.
+- Navigate away and back; title/body persist.
+- Search finds title and body text.
+- Kill and relaunch; local songs remain.
+- Airplane mode does not break the core writing flow.
 
-## 3) Persistence (Tier 1)
-- Save + load one `Composition` (title + lyrics)
-- Update `updatedAt` changes when editing
-(Keep it to 1–2 tests)
+Record device, iOS version, command used, and any screenshots or screen recordings in the relevant implementation note or Beads issue.
 
----
+## What Not To Add Yet
 
-## What we do NOT test frequently
-- Full `cmudict.txt` parsing in unit tests (too slow, too flaky in CI).
-- UI tests for every PR (they’re slow and brittle).
-- CloudKit in CI by default (painful + environment-dependent).
-
----
-
-## Performance verification (manual / nightly)
-Instead of constant performance tests:
-- Run Instruments Time Profiler manually when:
-  - editor feels laggy
-  - rhyme highlighting changes
-  - dictionary parsing/indexing changes
-- Keep a simple checklist in `perf-checklist.md` (optional):
-  - Typing latency with rhyme highlighting ON
-  - Time to first suggestions (cold start vs warm cache)
-  - Memory footprint of dictionary index
-
----
-
-## UI tests (Tier 2 only; keep to 1–2)
-If we keep any XCUITests at all, make them smoke-only:
-1) Create composition → type line → close → reopen → text persists
-2) Search finds lyrics match
-
-If they get flaky, disable by default and run manually.
-
----
-
-## CI recommendations
-- PR pipeline:
-  - Tier 0 always
-  - Tier 1 on PR merge or “Run Extended Tests” label
-- Nightly:
-  - Tier 2
-
----
-
-## Practical tips to keep tests fast
-- Use a tiny test dictionary fixture (10–50 entries) for parser tests.
-- Prefer pure functions for rhyme key and similarity so they’re easy to test.
-- Avoid spinning up the whole SwiftUI app in tests unless absolutely necessary.
+- Broad UI snapshots before the visual system exists.
+- Cloud/IAP/AI tests before those features are in scope.
+- Slow full-dictionary or performance benchmarks in the default test command.

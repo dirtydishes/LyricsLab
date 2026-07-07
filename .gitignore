@@ -1,17 +1,44 @@
 .DS_Store
 
-# Xcode
-**/xcuserdata/
-**/*.xcuserstate
+# Dependencies
+node_modules/
+packages/*/node_modules/
 
-# SwiftPM / Xcode build artifacts
-.build/
-DerivedData/
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+.metro-health-check*
+
+# Generated native folders
+/ios/
+/android/
+
+# Editor web package
+packages/editor-web/dist/
+
+# Native credentials and local env
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.pem
+.env*.local
+
+# Build/cache noise
+*.tsbuildinfo
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+.kotlin/
+*.orig.*
 
 # Local analysis artifacts
 token-usage-output.txt
 
-# Beads / Dolt files (added by bd init)
+# Beads / Dolt files
 .dolt/
 *.db
 .beads-credential-key
