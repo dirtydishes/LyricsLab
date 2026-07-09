@@ -60,14 +60,26 @@ export function getWordSuggestions(
   context: SuggestionContext | null,
   maxSuggestions = MAX_SUGGESTIONS,
 ): WordSuggestion[] {
+  if (maxSuggestions <= 0 || context?.selectionEmpty === false) {
+    return [];
+  }
+
   const previousToken = normalizeToken(context?.previousToken ?? '');
   const activeWord = normalizeToken(context?.wordBeforeCursor ?? '');
   const contextualWords = previousToken ? FOLLOW_UP_WORDS[previousToken] : [];
   const words = uniqueWords([...(contextualWords ?? []), ...DEFAULT_WORDS]);
-  const blockedWords = new Set([previousToken, activeWord].filter(Boolean));
+  const blockedWords = new Set([previousToken].filter(Boolean));
 
   return words
-    .filter((word) => !blockedWords.has(normalizeToken(word)))
+    .filter((word) => {
+      const normalizedWord = normalizeToken(word);
+
+      if (blockedWords.has(normalizedWord)) {
+        return false;
+      }
+
+      return !activeWord || !normalizedWord.startsWith(activeWord);
+    })
     .slice(0, maxSuggestions)
     .map((word) => ({
       id: `word:${normalizeToken(word)}`,
@@ -94,5 +106,8 @@ function uniqueWords(words: readonly string[]) {
 }
 
 function normalizeToken(token: string) {
-  return token.trim().toLowerCase();
+  return token
+    .trim()
+    .toLowerCase()
+    .replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, '');
 }

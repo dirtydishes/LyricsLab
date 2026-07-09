@@ -10,6 +10,7 @@ const editorDistDir = path.join(editorPackageDir, 'dist');
 const editorHtmlPath = path.join(editorDistDir, 'index.html');
 const generatedDir = path.join(repoRoot, 'src/editor/generated');
 const generatedFilePath = path.join(generatedDir, 'editorHtml.ts');
+const checkMode = parseArgs(process.argv.slice(2));
 
 const assetRefs = [];
 const html = await readFile(editorHtmlPath, 'utf8');
@@ -17,12 +18,58 @@ const bundledHtml = inlineStylesheets(inlineScripts(html));
 
 assertNoExternalDistAssets(bundledHtml);
 
-await mkdir(generatedDir, { recursive: true });
-await writeFile(generatedFilePath, createGeneratedModule(bundledHtml), 'utf8');
+const generatedModule = createGeneratedModule(bundledHtml);
 
-console.log(
-  `Wrote ${path.relative(repoRoot, generatedFilePath)} with ${assetRefs.length} inlined assets.`,
-);
+if (checkMode) {
+  await checkGeneratedModule(generatedModule);
+} else {
+  await mkdir(generatedDir, { recursive: true });
+  await writeFile(generatedFilePath, generatedModule, 'utf8');
+
+  console.log(
+    `Wrote ${path.relative(repoRoot, generatedFilePath)} with ${assetRefs.length} inlined assets.`,
+  );
+}
+
+function parseArgs(args) {
+  if (args.length === 0) {
+    return false;
+  }
+
+  if (args.length === 1 && args[0] === '--check') {
+    return true;
+  }
+
+  console.error('Usage: node scripts/build-editor-html.mjs [--check]');
+  process.exit(1);
+}
+
+async function checkGeneratedModule(expectedModule) {
+  const relativeGeneratedFilePath = path.relative(repoRoot, generatedFilePath);
+  let currentModule;
+
+  try {
+    currentModule = await readFile(generatedFilePath, 'utf8');
+  } catch (error) {
+    if (error?.code === 'ENOENT') {
+      console.error(
+        `Generated editor HTML is missing: ${relativeGeneratedFilePath}. Run \`npm run build:editor-html\` to create it.`,
+      );
+      process.exit(1);
+    }
+
+    throw error;
+  }
+
+  if (currentModule !== expectedModule) {
+    console.error(
+      `Generated editor HTML is stale: ${relativeGeneratedFilePath}. Run \`npm run build:editor-html\` to refresh it.`,
+    );
+    process.exit(1);
+  }
+
+  console.log(`Generated editor HTML is fresh: ${relativeGeneratedFilePath}.`);
+}
 
 function inlineScripts(sourceHtml) {
   return sourceHtml.replace(

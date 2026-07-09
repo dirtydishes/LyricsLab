@@ -31,7 +31,7 @@ describe('extractSuggestionContext', () => {
     });
   });
 
-  it('uses only the active line for currentLineText', () => {
+  it('uses only the active line for currentLineText and tokens', () => {
     expect(
       extractSuggestionContext({
         selectionEmpty: false,
@@ -45,15 +45,71 @@ describe('extractSuggestionContext', () => {
     });
   });
 
-  it('normalizes carriage return line endings', () => {
+  it('does not read previousToken from earlier lines', () => {
     expect(
       extractSuggestionContext({
         selectionEmpty: true,
-        textBeforeCursor: 'first bar\r\nsecond ',
+        textBeforeCursor: 'first bar\nflo',
       }),
     ).toEqual({
-      currentLineText: 'second ',
-      previousToken: 'second',
+      currentLineText: 'flo',
+      previousToken: '',
+      selectionEmpty: true,
+      wordBeforeCursor: 'flo',
+    });
+  });
+
+  it('strips leading and trailing punctuation from tokens while preserving raw case', () => {
+    expect(
+      extractSuggestionContext({
+        selectionEmpty: true,
+        textBeforeCursor: 'we can\'t "DREAM!"',
+      }),
+    ).toEqual({
+      currentLineText: 'we can\'t "DREAM!"',
+      previousToken: "can't",
+      selectionEmpty: true,
+      wordBeforeCursor: 'DREAM',
+    });
+  });
+
+  it('strips punctuation from a completed previous token', () => {
+    expect(
+      extractSuggestionContext({
+        selectionEmpty: true,
+        textBeforeCursor: 'cold, ',
+      }),
+    ).toEqual({
+      currentLineText: 'cold, ',
+      previousToken: 'cold',
+      selectionEmpty: true,
+      wordBeforeCursor: '',
+    });
+  });
+
+  it('passes false only when the editor selection is non-empty', () => {
+    expect(
+      extractSuggestionContext({
+        selectionEmpty: false,
+        textBeforeCursor: 'Cold room',
+      }),
+    ).toEqual({
+      currentLineText: 'Cold room',
+      previousToken: 'Cold',
+      selectionEmpty: false,
+      wordBeforeCursor: 'room',
+    });
+  });
+
+  it('normalizes carriage return and CRLF line endings', () => {
+    expect(
+      extractSuggestionContext({
+        selectionEmpty: true,
+        textBeforeCursor: 'first bar\rsecond bar\r\nThird ',
+      }),
+    ).toEqual({
+      currentLineText: 'Third ',
+      previousToken: 'Third',
       selectionEmpty: true,
       wordBeforeCursor: '',
     });

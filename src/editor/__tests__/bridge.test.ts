@@ -4,6 +4,7 @@ import {
   BRIDGE_MESSAGE_VERSION,
   LOCAL_EDITOR_WEBVIEW_BASE_URL,
   createEditorWebViewSource,
+  createFocusEditorJavaScript,
   createInsertSuggestionJavaScript,
   createLoadSongJavaScript,
   editorWebUrlFromExpoHost,
@@ -12,6 +13,74 @@ import {
 } from '../bridge';
 
 describe('editor native bridge', () => {
+  const selectionContext = {
+    currentLineText: 'writing late night',
+    previousToken: 'late',
+    selectionEmpty: true,
+    wordBeforeCursor: 'night',
+  };
+
+  it.each([
+    [
+      'editorReady',
+      {
+        bodyJson: { type: 'doc', content: [] },
+        bodyText: 'ready body',
+        type: 'editorReady',
+      },
+    ],
+    [
+      'contentChanged',
+      {
+        bodyJson: { type: 'doc', content: [] },
+        bodyText: 'first bar',
+        type: 'contentChanged',
+      },
+    ],
+    [
+      'selectionChanged',
+      {
+        context: selectionContext,
+        type: 'selectionChanged',
+      },
+    ],
+    [
+      'editorFocused',
+      {
+        context: selectionContext,
+        type: 'editorFocused',
+      },
+    ],
+    [
+      'editorBlurred',
+      {
+        context: selectionContext,
+        type: 'editorBlurred',
+      },
+    ],
+    [
+      'editorError',
+      {
+        code: 'editor-runtime-error',
+        message: 'Editor command failed',
+        stack: 'Error: Editor command failed',
+        type: 'editorError',
+      },
+    ],
+  ])('accepts %s messages from the WebView', (_type, message) => {
+    expect(
+      parseEditorBridgeMessage(
+        JSON.stringify({
+          version: BRIDGE_MESSAGE_VERSION,
+          ...message,
+        }),
+      ),
+    ).toEqual({
+      ok: true,
+      message,
+    });
+  });
+
   it('parses contentChanged snapshots from the WebView', () => {
     const result = parseEditorBridgeMessage(
       JSON.stringify({
@@ -37,12 +106,7 @@ describe('editor native bridge', () => {
       JSON.stringify({
         version: BRIDGE_MESSAGE_VERSION,
         type: 'selectionChanged',
-        context: {
-          currentLineText: 'writing late night',
-          previousToken: 'late',
-          selectionEmpty: true,
-          wordBeforeCursor: 'night',
-        },
+        context: selectionContext,
       }),
     );
 
@@ -50,12 +114,7 @@ describe('editor native bridge', () => {
       ok: true,
       message: {
         type: 'selectionChanged',
-        context: {
-          currentLineText: 'writing late night',
-          previousToken: 'late',
-          selectionEmpty: true,
-          wordBeforeCursor: 'night',
-        },
+        context: selectionContext,
       },
     });
   });
@@ -85,6 +144,76 @@ describe('editor native bridge', () => {
         }),
       ),
     ).toEqual({ ok: false, reason: 'invalid-body-json' });
+  });
+
+  it.each([
+    ['non-object envelope', null, 'message-not-object'],
+    [
+      'unsupported envelope version',
+      {
+        bodyJson: { type: 'doc' },
+        bodyText: 'ignored',
+        type: 'contentChanged',
+        version: 999,
+      },
+      'unsupported-version',
+    ],
+    [
+      'malformed selection context',
+      {
+        context: {
+          ...selectionContext,
+          selectionEmpty: 'yes',
+        },
+        type: 'selectionChanged',
+        version: BRIDGE_MESSAGE_VERSION,
+      },
+      'invalid-selection-context',
+    ],
+    [
+      'malformed editor error',
+      {
+        code: 'editor-runtime-error',
+        message: 42,
+        type: 'editorError',
+        version: BRIDGE_MESSAGE_VERSION,
+      },
+      'invalid-editor-error',
+    ],
+    [
+      'malformed editor error stack',
+      {
+        code: 'editor-runtime-error',
+        message: 'Editor failed',
+        stack: 42,
+        type: 'editorError',
+        version: BRIDGE_MESSAGE_VERSION,
+      },
+      'invalid-editor-error-stack',
+    ],
+    [
+      'malformed bodyText',
+      {
+        bodyJson: { type: 'doc' },
+        bodyText: null,
+        type: 'contentChanged',
+        version: BRIDGE_MESSAGE_VERSION,
+      },
+      'invalid-body-text',
+    ],
+    [
+      'unknown message type',
+      {
+        type: 'songSaved',
+        version: BRIDGE_MESSAGE_VERSION,
+      },
+      'unknown-message-type',
+    ],
+  ])('rejects %s', (_label, envelope, reason) => {
+    expect(parseEditorBridgeMessage(JSON.stringify(envelope))).toEqual({
+      ok: false,
+      reason,
+    });
   });
 
   it('creates executable loadSong JavaScript for the WebView command surface', () => {
@@ -125,6 +254,47 @@ describe('editor native bridge', () => {
     });
 
     expect(calls).toEqual([{ word: 'midnight' }]);
+  });
+
+  it('creates executable focusEditor JavaScript with an undefined payload', () => {
+    const calls: unknown[] = [];
+    const script = createFocusEditorJavaScript();
+
+    Function('window', script)({
+      LyricsLabEditor: {
+        focusEditor(command: unknown) {
+          calls.push(command);
+          return true;
+        },
+      },
+    });
+
+    expect(calls).toEqual([undefined]);
+  });
+
+  it('keeps generated command payloads escaped as data', () => {
+    const calls: unknown[] = [];
+    const script = createInsertSuggestionJavaScript(
+      'midnight"; window.__bridgeEscaped = false; //',
+    );
+    const windowObject = {
+      __bridgeEscaped: true,
+      LyricsLabEditor: {
+        insertSuggestion(command: unknown) {
+          calls.push(command);
+          return true;
+        },
+      },
+    };
+
+    Function('window', script)(windowObject);
+
+    expect(windowObject.__bridgeEscaped).toBe(true);
+    expect(calls).toEqual([
+      {
+        word: 'midnight"; window.__bridgeEscaped = false; //',
+      },
+    ]);
   });
 
   it('resolves editor dev URLs from Expo host metadata', () => {

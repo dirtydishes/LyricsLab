@@ -12,11 +12,19 @@ npm run editor:test
 
 `npm test` should keep `src/rhyme/` coverage fast, deterministic, offline, and fixture-sized once the module exists.
 
-Run this whenever `packages/editor-web` changes or when WebView loading behavior changes:
+Run this freshness gate whenever `packages/editor-web`, generated editor HTML, or WebView loading behavior changes:
+
+```bash
+npm run check:editor-html
+```
+
+If the freshness gate reports stale generated editor HTML, repair it with:
 
 ```bash
 npm run build:editor-html
 ```
+
+After repair, re-run `npm run check:editor-html` and any phase-specific editor gates.
 
 Use this as a config sanity check when Expo dependencies or `app.json` change:
 
