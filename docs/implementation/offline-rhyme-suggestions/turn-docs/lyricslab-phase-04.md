@@ -104,7 +104,10 @@ Evidence:
 
 ## PR And Commits
 
-Pending implementation PR creation.
+- PR: `https://github.com/dirtydishes/lyricslab/pull/19`
+- Branch: `lavender/offline-rhyme-phase-04`
+- Base: `lavender/expo-clean-rebuild`
+- Implementation commit: `112c0d3bf2404e322ec295d2be7ae0338d8149a5` (`add cmu rhyme artifact pipeline`)
 
 ## Beads Updates
 
