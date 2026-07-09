@@ -16,7 +16,7 @@ Current Beads issue: none
 
 Current PR: none
 
-Last completed phase: 02 (`lyricslab-xoc`)
+Last completed phase: 03 (`lyricslab-8um.1`)
 
 Blocked: no
 
@@ -43,7 +43,7 @@ Blocked: no
 | 00 | `lyricslab-8um.3` | closed | none | `turn-docs/lyricslab-phase-00.md` |
 | 01 | `lyricslab-8um.5` | closed | `https://github.com/dirtydishes/lyricslab/pull/16` | `turn-docs/lyricslab-phase-01.md` |
 | 02 | `lyricslab-xoc` | closed | `https://github.com/dirtydishes/lyricslab/pull/17` | `turn-docs/lyricslab-phase-02.md` |
-| 03 | `lyricslab-8um.1` | open | none | `turn-docs/lyricslab-phase-03.md` |
+| 03 | `lyricslab-8um.1` | closed | `https://github.com/dirtydishes/lyricslab/pull/18` | `turn-docs/lyricslab-phase-03.md` |
 | 04 | `lyricslab-8um.4` | open | none | `turn-docs/lyricslab-phase-04.md` |
 | 05 | `lyricslab-gg4` | open | none | `turn-docs/lyricslab-phase-05.md` |
 | 06 | `lyricslab-8um.2` | open | none | `turn-docs/lyricslab-phase-06.md` |
@@ -51,4 +51,4 @@ Blocked: no
 
 ## Last Coordinator Update
 
-Phase 02 closed after PR #17 merged into `lavender/expo-clean-rebuild` at merge commit `fca3a8313d65a3e40091b22ff88c28d942deaf62`. Thermo-nuclear review approved with `ci-unavailable-with-evidence`; `npm test`, `npm run typecheck`, `npm run editor:test`, `npm run check:editor-html`, and `git diff --check` passed. `bd ready --json` now selects Phase 03 (`lyricslab-8um.1`) as the next expected phase.
+Phase 03 closed after PR #18 merged into `lavender/expo-clean-rebuild` at merge commit `8915da340e707eb7cfff8cd99f0a73bdcffb5afb`. Thermo-nuclear review repaired the pure rhyme core surface and reported `ci-unavailable-with-evidence`; `npm test`, `npm run typecheck`, `git diff --check`, and the forbidden `src/rhyme` dependency/logging/network scan passed. `bd ready --json` now selects Phase 04 (`lyricslab-8um.4`) as the next expected phase.
