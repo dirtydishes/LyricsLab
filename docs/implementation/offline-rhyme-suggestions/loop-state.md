@@ -16,7 +16,7 @@ Current Beads issue: none
 
 Current PR: none
 
-Last completed phase: none
+Last completed phase: 00 (`lyricslab-8um.3`)
 
 Blocked: no
 
@@ -40,7 +40,7 @@ Blocked: no
 
 | Phase | Beads Issue | Status | PR | Turn Doc |
 |---|---|---|---|---|
-| 00 | `lyricslab-8um.3` | open | none | `turn-docs/lyricslab-phase-00.md` |
+| 00 | `lyricslab-8um.3` | closed | none | `turn-docs/lyricslab-phase-00.md` |
 | 01 | `lyricslab-8um.5` | open | none | `turn-docs/lyricslab-phase-01.md` |
 | 02 | `lyricslab-xoc` | open | none | `turn-docs/lyricslab-phase-02.md` |
 | 03 | `lyricslab-8um.1` | open | none | `turn-docs/lyricslab-phase-03.md` |
@@ -51,4 +51,4 @@ Blocked: no
 
 ## Last Coordinator Update
 
-Loop created. Beads epic `lyricslab-8um` is `in_progress`; `bd ready --json` selects Phase 00 (`lyricslab-8um.3`). Implementation run has not started.
+Phase 00 closed after attached local implementation verification and thermo-nuclear review. No PR was required for the bootstrap verification phase. `bd ready --json` now selects Phase 01 (`lyricslab-8um.5`) as the next expected phase.
