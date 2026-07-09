@@ -35,6 +35,21 @@ describe('suggestion provider', () => {
     );
   });
 
+  it('returns no suggestions when the editor selection is not empty', () => {
+    expect(
+      getWordSuggestions(
+        createContext({
+          selectionEmpty: false,
+        }),
+      ),
+    ).toEqual([]);
+  });
+
+  it('returns no suggestions when the requested maximum is zero or lower', () => {
+    expect(getWordSuggestions(createContext(), 0)).toEqual([]);
+    expect(getWordSuggestions(createContext(), -1)).toEqual([]);
+  });
+
   it('prefers contextual follow-up words for the previous completed token', () => {
     expect(
       staticSuggestionProvider
@@ -54,6 +69,55 @@ describe('suggestion provider', () => {
 
     expect(suggestions).not.toContain('my');
     expect(suggestions).not.toContain('mind');
+  });
+
+  it('normalizes punctuation and case for contextual lookup and blocking', () => {
+    const suggestions = getWordSuggestions(
+      createContext({
+        previousToken: 'THE,',
+        wordBeforeCursor: 'Night!',
+      }),
+      4,
+    );
+
+    expect(suggestions).toEqual([
+      { id: 'word:city', word: 'city' },
+      { id: 'word:room', word: 'room' },
+      { id: 'word:light', word: 'light' },
+      { id: 'word:again', word: 'again' },
+    ]);
+  });
+
+  it('keeps internal token punctuation distinct while trimming token edges', () => {
+    expect(
+      getWordSuggestions(
+        createContext({
+          wordBeforeCursor: "'late-night'",
+        }),
+        24,
+      ).map((suggestion) => suggestion.word),
+    ).toContain('late');
+  });
+
+  it('deduplicates contextual and fallback words after normalization', () => {
+    expect(
+      getWordSuggestions(
+        createContext({
+          previousToken: 'the',
+        }),
+      ).filter((suggestion) => suggestion.id === 'word:night'),
+    ).toHaveLength(1);
+  });
+
+  it('excludes suggestions prefixed by the active word', () => {
+    expect(
+      getWordSuggestions(
+        createContext({
+          previousToken: 'the',
+          wordBeforeCursor: 'ni',
+        }),
+      ).map((suggestion) => suggestion.word),
+    ).not.toContain('night');
   });
 
   it('keeps stable ids and respects the requested maximum', () => {

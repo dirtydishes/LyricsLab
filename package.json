@@ -30,6 +30,7 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "build:editor-html": "npm --prefix packages/editor-web run build && node scripts/build-editor-html.mjs",
+    "check:editor-html": "npm --prefix packages/editor-web run build && node scripts/build-editor-html.mjs --check",
     "editor:build": "npm --prefix packages/editor-web run build",
     "editor:test": "npm --prefix packages/editor-web test",
     "typecheck": "tsc --noEmit",

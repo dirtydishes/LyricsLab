@@ -16,8 +16,8 @@ export function extractSuggestionContext({
 }: SuggestionContextInput): SuggestionContext {
   const normalizedText = normalizeLineEndings(textBeforeCursor);
   const currentLineText = getCurrentLineText(normalizedText);
-  const wordBeforeCursor = getWordBeforeCursor(currentLineText);
-  const previousToken = getPreviousToken(normalizedText, wordBeforeCursor);
+  const { previousToken, wordBeforeCursor } =
+    getLineLocalTokens(currentLineText);
 
   return {
     currentLineText,
@@ -36,19 +36,35 @@ function getCurrentLineText(textBeforeCursor: string) {
   return textBeforeCursor.slice(lastLineBreakIndex + 1);
 }
 
-function getWordBeforeCursor(currentLineText: string) {
-  if (currentLineText.length === 0 || /\s$/.test(currentLineText)) {
-    return '';
-  }
+function getLineLocalTokens(currentLineText: string) {
+  const rawTokens = currentLineText.match(/\S+/g) ?? [];
+  const hasWordBeforeCursor =
+    currentLineText.length > 0 && !/\s$/.test(currentLineText);
+  const wordBeforeCursor = hasWordBeforeCursor
+    ? cleanToken(rawTokens.at(-1) ?? '')
+    : '';
+  const completedTokens = hasWordBeforeCursor
+    ? rawTokens.slice(0, -1)
+    : rawTokens;
 
-  return currentLineText.match(/\S+$/)?.[0] ?? '';
+  return {
+    previousToken: getLastCleanToken(completedTokens),
+    wordBeforeCursor,
+  };
 }
 
-function getPreviousToken(textBeforeCursor: string, wordBeforeCursor: string) {
-  const completedText =
-    wordBeforeCursor.length > 0
-      ? textBeforeCursor.slice(0, -wordBeforeCursor.length)
-      : textBeforeCursor;
+function getLastCleanToken(tokens: readonly string[]) {
+  for (let index = tokens.length - 1; index >= 0; index -= 1) {
+    const token = cleanToken(tokens[index]);
 
-  return completedText.trimEnd().match(/\S+$/)?.[0] ?? '';
+    if (token) {
+      return token;
+    }
+  }
+
+  return '';
+}
+
+function cleanToken(token: string) {
+  return token.replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, '');
 }
