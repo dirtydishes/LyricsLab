@@ -45,13 +45,19 @@ Reviewer skill:
 
 `thermo-nuclear-code-quality-review`
 
-Pending reviewer thread/callback.
+Reviewer outcome: repaired and approved.
+
+Findings:
+
+- No product-scope, architecture-boundary, or research-mapping findings remain.
+- Repair made during review: completed this turn doc's PR/review/CI evidence so it matches the two implementation commits and final gate state.
+- PR #16 was open, non-draft, and GitHub reported `MERGEABLE` with no status checks configured when reviewed.
 
 ## CI And Gates
 
 CI owner: reviewer/verification agents
 
-Current CI state: `local-gates-passed`
+Current CI state: `ci-repaired-and-green`
 
 Evidence:
 
@@ -62,7 +68,7 @@ Evidence:
 - `npm test` passed: 4 suites, 20 tests.
 - `npm run typecheck` passed.
 - `git diff --check` passed.
-- Reviewer to confirm docs-only scope and final gate evidence.
+- Reviewer confirmed docs-only scope and reran `npm test`, `npm run typecheck`, and `git diff --check` after the turn-doc repair.
 
 ## PR And Commits
 
@@ -73,6 +79,7 @@ PR: `https://github.com/dirtydishes/lyricslab/pull/16`
 Commits:
 
 - `8730a48` - `lock offline rhyme mvp scope`
+- `60fed09` - `record phase one pr details`
 
 ## Beads Updates
 
@@ -95,4 +102,4 @@ Follow-up context preserved for orchestrator/Phase 07: normalize `PRODUCT.md` an
 
 ## Closeout
 
-Open. Pending implementation PR/commit metadata, gate evidence, and thermo-nuclear review callback.
+Open. Pending orchestrator closeout after thermo-nuclear review callback.
