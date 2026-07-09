@@ -114,21 +114,27 @@ Evidence:
 - `gh pr view 19 --repo dirtydishes/lyricslab --json number,url,state,isDraft,baseRefName,headRefName,headRefOid,mergeable,reviewDecision,statusCheckRollup,commits`: PR #19 open draft, base `lavender/expo-clean-rebuild`, head `lavender/offline-rhyme-phase-04`, head SHA `09d7d23c7324a7a92a0dce3805d1257385d44248` before reviewer commit, mergeable `MERGEABLE`, hosted `statusCheckRollup: []`.
 - `gh pr checks 19 --repo dirtydishes/lyricslab`: no checks reported on `lavender/offline-rhyme-phase-04`.
 - `git diff --check`: passed after repair and turn-doc update.
+- Orchestrator closeout marked PR #19 ready, rechecked head `c5142ec0babe0036f043254a7dc702ffdabcafc4` as non-draft, `CLEAN`, `MERGEABLE`, and with hosted `statusCheckRollup: []`, then merged it into `lavender/expo-clean-rebuild`.
 
 ## PR And Commits
 
 - PR: `https://github.com/dirtydishes/lyricslab/pull/19`
 - Branch: `lavender/offline-rhyme-phase-04`
 - Base: `lavender/expo-clean-rebuild`
+- Final PR head: `c5142ec0babe0036f043254a7dc702ffdabcafc4`
+- Merge commit: `0f717d9856b984f500af6f4c7d1e321a6498d2cb`
 - Implementation commit: `112c0d3bf2404e322ec295d2be7ae0338d8149a5` (`add cmu rhyme artifact pipeline`)
 - Implementation evidence commit: `09d7d23c7324a7a92a0dce3805d1257385d44248` (`record phase four pr details`)
-- Review repair/evidence commit: this reviewer update in PR #19
+- Review repair/evidence commit: `ad6db02e5641b3620d0ddfb69bd929c62293528b` (`tighten phase four artifact smoke evidence`)
+- Orchestrator Beads export commit: `c5142ec0babe0036f043254a7dc702ffdabcafc4` (`record phase four review callback`)
 
 ## Beads Updates
 
 Claimed `lyricslab-8um.4` with `bd update lyricslab-8um.4 --claim`.
 
-The implementation worker did not close Beads issues; closeout remains the orchestrator's responsibility after review and merge.
+The implementation and review workers did not close Beads issues. After PR #19 merged, the orchestrator closed `lyricslab-8um.4` with repaired review, `ci-unavailable-with-evidence`, local gate evidence, and no findings remaining.
+
+`bd ready --json` now selects Phase 05 (`lyricslab-gg4`) as the next ready issue.
 
 ## Follow-Ups Filed
 
@@ -145,4 +151,4 @@ None.
 
 ## Closeout
 
-Review complete; no Beads issue was closed and PR merge remains the orchestrator's responsibility.
+Closed by the orchestrator after PR #19 merged into `lavender/expo-clean-rebuild`. Thermo-nuclear review repaired the full-dictionary smoke gate and found no remaining issues. Hosted CI was unavailable with evidence, local artifact/test/typecheck/smoke gates passed, and Beads now routes the loop to Phase 05 (`lyricslab-gg4`).
