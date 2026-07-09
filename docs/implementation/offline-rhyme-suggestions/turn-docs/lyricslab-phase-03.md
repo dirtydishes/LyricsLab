@@ -27,11 +27,11 @@ Swarm-first planning completed before broad implementation edits.
 
 Integrated plan:
 
-1. Add `src/rhyme/types.ts` with a pragmatic strict TypeScript model for CMU phones, pronunciations, lexemes, rhyme tails, indexes, queries, and exact-rhyme candidates.
+1. Keep the strict TypeScript model close to the owning modules for this fixture phase; avoid a standalone future-facing type layer until Phase 04 needs a broader artifact contract.
 2. Add `src/rhyme/normalize.ts` for lyric/dictionary token normalization. It should be pure, exportable for future integration, and keep edge-trimming behavior compatible with the existing suggestion provider while avoiding imports from `src/editor/`.
 3. Add `src/rhyme/cmuParser.ts` for fixture-scale CMU-style parsing: blank/comment skip, inline `#` comment strip, `WORD(n)` alternate parsing, phone stress parsing, and deterministic grouping by normalized word.
 4. Add `src/rhyme/rhymeTail.ts` for last-stressed-vowel exact tail extraction. It should preserve ARPAbet stress digits in tail keys and return `null` for no stressed vowel instead of inventing fallback tails.
-5. Add `src/rhyme/rhymeIndex.ts` and `src/rhyme/ranking.ts` for pure in-memory exact candidate generation and deterministic ranking. The query path should not touch filesystem, network, React, React Native, WebView, SQLite, Tiptap, or editor bridge types.
+5. Add `src/rhyme/rhymeIndex.ts` for pure in-memory exact candidate generation and deterministic ranking. The query path should not touch filesystem, network, React, React Native, WebView, SQLite, Tiptap, or editor bridge types.
 6. Add a small `src/rhyme/__fixtures__/` CMU-style fixture and focused Jest tests under `src/rhyme/__tests__/`.
 7. Export the public core from `src/rhyme/index.ts`, but do not export fixtures or add native/editor integration in this phase.
 
@@ -51,7 +51,6 @@ Implemented:
 - `src/rhyme/cmuParser.ts` parses small CMU-style fixtures, strips comments, handles alternate suffixes, and produces normalized dictionary entries.
 - `src/rhyme/rhymeTail.ts` parses ARPAbet phone tokens and extracts exact tails from the last stressed CMU vowel through the word end.
 - `src/rhyme/rhymeIndex.ts` builds a pure in-memory exact-tail index, skips no-tail pronunciations from lookup, excludes source/excluded tokens, dedupes alternates by normalized target word, and returns deterministic exact candidates.
-- `src/rhyme/ranking.ts` keeps the exact-only ranking helper deterministic with inert `slantSimilarity: null` metadata.
 - `src/rhyme/index.ts` provides the public pure API for parsing fixtures, building the index, extracting tails, and finding exact rhymes/candidates.
 - `src/rhyme/__fixtures__/smallCmuFixture.ts` and `src/rhyme/__tests__/` cover parser, normalization, tail extraction, alternates, candidate generation, ranking, and dependency guards.
 
@@ -88,17 +87,30 @@ Reviewer skill:
 
 `thermo-nuclear-code-quality-review`
 
-Pending.
+Status: repaired and approved.
+
+Findings repaired:
+
+- Removed the unused standalone `src/rhyme/types.ts` model. It duplicated module-local contracts and only supplied aliases to `normalize.ts`, so keeping it would have made Phase 04 artifact typing look more established than it was.
+- Removed the unused standalone `src/rhyme/ranking.ts` helper and its isolated test. Deterministic exact ranking is now kept in the candidate generation path that actually returns suggestions, with integration coverage in `candidateRanking.integration.test.ts`.
+- Removed the duplicate internal CMU-entry adapter from `src/rhyme/rhymeIndex.ts`; CMU parsing/grouping remains owned by the public module boundary in `src/rhyme/index.ts`.
+- Reused the internal `ExactRhymeCandidate` type in the public API instead of redefining the same shape and remapping every candidate.
+
+Review result:
+
+- No remaining structural blockers found after repair.
+- `src/rhyme/` remains pure synchronous TypeScript with no React, React Native, WebView, SQLite, Tiptap, editor-module, network, filesystem-runtime-load, phrase-rhyme, highlighting, or non-inert slant-ranking dependency.
+- Exact ranking is deterministic and covered through candidate generation integration tests; slant metadata remains inert as `null`.
 
 ## CI And Gates
 
 CI owner: reviewer/verification agents
 
-Current CI state: `local-gates-pass-implementation`
+Current CI state: `local-gates-pass-review-repair`
 
 Evidence:
 
-- `npm test`: passed, 11 suites, 81 tests
+- `npm test`: passed, 10 suites, 74 tests
 - `npm run typecheck`: passed
 - `git diff --check`: passed
 - forbidden dependency/logging scan for `src/rhyme`: no matches for React, React Native, WebView, SQLite, Tiptap/editor imports, network calls, or `console.*`
@@ -109,6 +121,7 @@ Evidence:
 - Branch: `lavender/offline-rhyme-phase-03`
 - Base: `lavender/expo-clean-rebuild`
 - Commit subject: `add pure rhyme core fixtures`
+- Review repair/evidence commit subject: `simplify pure rhyme core review surface`
 
 ## Beads Updates
 
@@ -128,4 +141,4 @@ None.
 
 ## Closeout
 
-Open.
+Review resolved. Orchestrator owns PR merge, Beads closeout, and next-phase selection.

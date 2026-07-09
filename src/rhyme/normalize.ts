@@ -1,4 +1,6 @@
-import type { NormalizedLyricToken, RawLyricToken } from './types';
+export type RawLyricToken = string;
+
+export type NormalizedLyricToken = string;
 
 const CURLY_APOSTROPHE_PATTERN = /[\u2018\u2019\u201A\u201B\u02BC\uFF07]/gu;
 const TOKEN_EDGE_PATTERN = /^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu;

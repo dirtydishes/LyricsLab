@@ -7,6 +7,7 @@ import { normalizeRhymeToken } from './normalize';
 import {
   buildRhymeIndex as buildIndexedRhymeIndex,
   findExactRhymeCandidates as findIndexedExactRhymeCandidates,
+  type ExactRhymeCandidate as IndexedExactRhymeCandidate,
   type ParsedRhymeLexeme,
   type RhymeIndex as IndexedRhymeIndex,
 } from './rhymeIndex';
@@ -36,15 +37,7 @@ export type ExactRhymeQuery = {
   maxResults?: number;
 };
 
-export type ExactRhymeCandidate = {
-  id: string;
-  kind: 'exact';
-  normalizedWord: string;
-  rhymeTailKey: string;
-  score: 1;
-  slantSimilarity: null;
-  word: string;
-};
+export type ExactRhymeCandidate = IndexedExactRhymeCandidate;
 
 export function parseCmuDictionary(source: string): CmuPronunciationEntry[] {
   return parseCmuDictionarySource(source);
@@ -124,15 +117,7 @@ export function findExactRhymeCandidates(
   return findIndexedExactRhymeCandidates(index, query.anchor, {
     excludeTokens: query.excludedWords,
     maxCandidates: query.maxResults,
-  }).map((candidate) => ({
-    id: `rhyme:exact:${candidate.normalizedWord}`,
-    kind: 'exact',
-    normalizedWord: candidate.normalizedWord,
-    rhymeTailKey: candidate.rhymeTailKey,
-    score: 1,
-    slantSimilarity: null,
-    word: candidate.normalizedWord,
-  }));
+  });
 }
 
 export function extractRhymeTail(

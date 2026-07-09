@@ -2,7 +2,6 @@
 
 import {
   buildRhymeIndex,
-  createRhymeIndex,
   extractExactRhymeTail,
   findExactRhymeCandidates,
   normalizeRhymeToken,
@@ -175,42 +174,5 @@ describe('rhyme index', () => {
       },
     ]);
     expect(index.lexemesByToken.get('light')?.pronunciations).toHaveLength(2);
-  });
-
-  it('creates an index from parsed CMU-style entries', () => {
-    const index = createRhymeIndex([
-      {
-        displayWord: 'TIME',
-        normalizedWord: 'time',
-        phonemes: ['T', 'AY1', 'M'],
-      },
-      {
-        displayWord: 'RHYME',
-        normalizedWord: 'rhyme',
-        phonemes: ['R', 'AY1', 'M'],
-      },
-      {
-        displayWord: 'CLIMB',
-        normalizedWord: 'climb',
-        phonemes: ['K', 'L', 'AY1', 'M'],
-      },
-    ]);
-
-    expect(
-      findExactRhymeCandidates(index, {
-        anchor: 'time',
-        excludedWords: ['climb'],
-      }),
-    ).toEqual([
-      {
-        id: 'rhyme:exact:rhyme',
-        kind: 'exact',
-        normalizedWord: 'rhyme',
-        rhymeTailKey: 'AY1 M',
-        score: 1,
-        slantSimilarity: null,
-        word: 'rhyme',
-      },
-    ]);
   });
 });

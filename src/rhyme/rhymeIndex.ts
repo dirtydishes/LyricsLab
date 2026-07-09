@@ -14,12 +14,6 @@ export type ParsedRhymeLexeme = {
   readonly pronunciations: readonly ParsedRhymePronunciation[];
 };
 
-export type ParsedCmuDictionaryEntry = {
-  readonly displayWord?: string;
-  readonly normalizedWord: string;
-  readonly phonemes: readonly string[];
-};
-
 export type IndexedRhymePronunciation = {
   readonly lexeme: IndexedRhymeLexeme;
   readonly phones: readonly string[];
@@ -138,41 +132,6 @@ export function buildRhymeIndex(
     lexemesByToken,
     tailIndex,
   };
-}
-
-export function createRhymeIndex(
-  entries: readonly ParsedCmuDictionaryEntry[],
-): RhymeIndex {
-  const lexemesByToken = new Map<string, ParsedRhymeLexeme>();
-
-  for (const entry of entries) {
-    const normalizedWord = normalizeRhymeToken(entry.normalizedWord);
-
-    if (!normalizedWord) {
-      continue;
-    }
-
-    const existingLexeme = lexemesByToken.get(normalizedWord);
-    const pronunciation = {
-      phones: entry.phonemes,
-    };
-
-    if (existingLexeme) {
-      lexemesByToken.set(normalizedWord, {
-        ...existingLexeme,
-        pronunciations: [...existingLexeme.pronunciations, pronunciation],
-      });
-      continue;
-    }
-
-    lexemesByToken.set(normalizedWord, {
-      normalizedWord,
-      pronunciations: [pronunciation],
-      word: normalizedWord,
-    });
-  }
-
-  return buildRhymeIndex([...lexemesByToken.values()]);
 }
 
 export function findExactRhymeCandidates(
