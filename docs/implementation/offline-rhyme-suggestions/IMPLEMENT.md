@@ -75,7 +75,7 @@ Install `@pierre/diffs` in the target repo if missing. Every diff must use `@pie
 
 | Beads Issue | Phase | Phase Doc | Depends On | Status |
 |---|---|---|---|---|
-| `lyricslab-8um.3` | 00: Tracker and loop bootstrap | `00-tracker-loop-bootstrap.md` | none | open |
+| `lyricslab-8um.3` | 00: Tracker and loop bootstrap | `00-tracker-loop-bootstrap.md` | none | closed |
 | `lyricslab-8um.5` | 01: Product scope lock | `01-product-scope-lock.md` | `lyricslab-8um.3` | open |
 | `lyricslab-xoc` | 02: Editor baseline and suggestion contract | `02-editor-baseline-suggestion-contract.md` | `lyricslab-8um.5` | open |
 | `lyricslab-8um.1` | 03: Pure rhyme core with fixtures | `03-pure-rhyme-core-fixtures.md` | `lyricslab-xoc` | open |
@@ -96,4 +96,3 @@ Install `@pierre/diffs` in the target repo if missing. Every diff must use `@pie
 ## Branch And PR Policy
 
 One active implementation PR at a time. Use branch prefix `lavender/`. The loop was created from `lavender/expo-clean-rebuild`; implementation workers should target the active Expo rebuild base unless the phase doc or orchestrator explicitly overrides it.
-
