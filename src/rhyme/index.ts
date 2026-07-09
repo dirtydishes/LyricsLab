@@ -16,7 +16,23 @@ import {
 } from './rhymeTail';
 
 export { normalizeRhymeToken };
+export {
+  assertRhymeIndexArtifact,
+  getRhymeIndexArtifactBuildInfo,
+  loadRhymeIndexFromArtifact,
+  RHYME_INDEX_ARTIFACT_FORMAT,
+  RHYME_INDEX_ARTIFACT_VERSION,
+} from './artifact';
 export type { CmuPronunciationEntry };
+export type {
+  CompactRhymeIndexArtifact,
+  RhymeArtifactLexeme,
+  RhymeArtifactPronunciation,
+  RhymeArtifactPronunciationTuple,
+  RhymeArtifactWordTuple,
+  RhymeIndexArtifact,
+  RhymeIndexArtifactBuildInfo,
+} from './artifact';
 
 export type RhymeIndex = IndexedRhymeIndex;
 

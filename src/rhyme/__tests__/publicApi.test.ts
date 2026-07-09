@@ -29,9 +29,12 @@ describe('rhyme public API', () => {
           buildRhymeIndex: expect.any(Function),
           extractRhymeTail: expect.any(Function),
           findExactRhymes: expect.any(Function),
+          loadRhymeIndexFromArtifact: expect.any(Function),
           normalizeRhymeToken: expect.any(Function),
           parseCmuDictionary: expect.any(Function),
           parseCmuDictionaryLines: expect.any(Function),
+          RHYME_INDEX_ARTIFACT_FORMAT: 'lyricslab.rhyme-index',
+          RHYME_INDEX_ARTIFACT_VERSION: 1,
         }),
       );
     });
