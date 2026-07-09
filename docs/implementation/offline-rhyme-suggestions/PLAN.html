@@ -1,0 +1,1322 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Offline Rhyme Suggestions MVP Plan</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --page: oklch(96.8% 0.011 85);
+        --surface: oklch(99.2% 0.005 85);
+        --surface-soft: oklch(94.6% 0.014 85);
+        --surface-rose: oklch(95.2% 0.024 8);
+        --ink: oklch(20.6% 0.027 274);
+        --ink-soft: oklch(34% 0.031 274);
+        --muted: oklch(43% 0.032 274);
+        --line: oklch(84.5% 0.018 82);
+        --line-strong: oklch(73% 0.026 82);
+        --accent: oklch(56.5% 0.18 8);
+        --accent-strong: oklch(46% 0.18 8);
+        --accent-quiet: oklch(91.8% 0.045 8);
+        --blue: oklch(45% 0.13 250);
+        --green: oklch(41% 0.105 150);
+        --yellow: oklch(54% 0.12 78);
+        --radius: 12px;
+        --radius-small: 8px;
+        --measure: 72ch;
+        --nav-width: 18rem;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background: var(--page);
+        color: var(--ink);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        font-size: 16px;
+        line-height: 1.6;
+        letter-spacing: 0;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      a {
+        color: var(--accent-strong);
+        text-decoration-color: color-mix(in oklch, var(--accent) 35%, transparent);
+        text-underline-offset: 0.18em;
+      }
+
+      a:hover {
+        text-decoration-color: var(--accent-strong);
+      }
+
+      code {
+        border: 1px solid color-mix(in oklch, var(--line) 74%, white);
+        border-radius: 0.35rem;
+        background: color-mix(in oklch, var(--surface-soft) 62%, white);
+        color: var(--ink-soft);
+        font-family:
+          "SFMono-Regular", ui-monospace, "Cascadia Code", Consolas, monospace;
+        font-size: 0.91em;
+        overflow-wrap: anywhere;
+        padding: 0.08rem 0.28rem;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(0, var(--nav-width)) minmax(0, 1fr);
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        position: sticky;
+        top: 0;
+        align-self: start;
+        height: 100vh;
+        overflow: auto;
+        border-right: 1px solid var(--line);
+        background: color-mix(in oklch, var(--surface) 76%, var(--page));
+        padding: 1.4rem 1rem 1.2rem;
+      }
+
+      .brand {
+        display: grid;
+        gap: 0.45rem;
+        padding: 0 0.25rem 1.25rem;
+      }
+
+      .brand strong {
+        color: var(--ink);
+        font-size: 0.98rem;
+        line-height: 1.2;
+      }
+
+      .brand span {
+        color: var(--muted);
+        font-size: 0.82rem;
+        line-height: 1.4;
+      }
+
+      nav {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .nav-group {
+        display: grid;
+        gap: 0.25rem;
+      }
+
+      .nav-title {
+        color: var(--muted);
+        font-size: 0.72rem;
+        font-weight: 760;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .nav-link {
+        display: block;
+        border-radius: var(--radius-small);
+        color: var(--ink-soft);
+        font-size: 0.9rem;
+        line-height: 1.25;
+        padding: 0.5rem 0.62rem;
+        text-decoration: none;
+      }
+
+      .nav-link:hover {
+        background: var(--accent-quiet);
+        color: var(--accent-strong);
+      }
+
+      main {
+        min-width: 0;
+        padding: 3rem min(5vw, 4rem) 5rem;
+      }
+
+      .hero,
+      .section,
+      .phase {
+        max-width: 74rem;
+      }
+
+      .hero {
+        display: grid;
+        gap: 1.25rem;
+        padding-bottom: 2.25rem;
+      }
+
+      .label-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        min-height: 1.8rem;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: var(--surface);
+        color: var(--ink-soft);
+        font-size: 0.82rem;
+        font-weight: 680;
+        line-height: 1;
+        padding: 0.4rem 0.72rem;
+      }
+
+      .pill.accent {
+        border-color: color-mix(in oklch, var(--accent) 36%, var(--line));
+        background: var(--accent-quiet);
+        color: var(--accent-strong);
+      }
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        margin: 0;
+        color: var(--ink);
+        letter-spacing: -0.02em;
+        text-wrap: balance;
+      }
+
+      h1 {
+        max-width: 13ch;
+        font-size: 3.2rem;
+        line-height: 0.98;
+      }
+
+      h2 {
+        font-size: 1.65rem;
+        line-height: 1.12;
+      }
+
+      h3 {
+        font-size: 1.22rem;
+        line-height: 1.2;
+      }
+
+      h4 {
+        font-size: 0.92rem;
+        letter-spacing: 0;
+        line-height: 1.2;
+      }
+
+      p {
+        max-width: var(--measure);
+        margin: 0;
+        color: var(--ink-soft);
+        text-wrap: pretty;
+      }
+
+      .lede {
+        max-width: 64ch;
+        color: var(--ink-soft);
+        font-size: 1.12rem;
+        line-height: 1.55;
+      }
+
+      .meta-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+        gap: 0.75rem;
+        max-width: 62rem;
+      }
+
+      .meta-item {
+        min-width: 0;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-small);
+        background: var(--surface);
+        padding: 0.8rem 0.9rem;
+      }
+
+      .meta-item span {
+        display: block;
+        color: var(--muted);
+        font-size: 0.76rem;
+        font-weight: 720;
+        line-height: 1.2;
+      }
+
+      .meta-item strong {
+        display: block;
+        margin-top: 0.25rem;
+        color: var(--ink);
+        font-size: 0.96rem;
+        line-height: 1.25;
+        overflow-wrap: anywhere;
+      }
+
+      .section {
+        border-top: 1px solid var(--line);
+        padding-top: 2rem;
+        margin-top: 2.2rem;
+      }
+
+      .section-header {
+        display: grid;
+        gap: 0.65rem;
+        margin-bottom: 1.15rem;
+      }
+
+      .split {
+        display: grid;
+        grid-template-columns: minmax(0, 1.05fr) minmax(18rem, 0.75fr);
+        gap: 1.1rem;
+        align-items: start;
+      }
+
+      .callout {
+        border: 1px solid color-mix(in oklch, var(--accent) 30%, var(--line));
+        border-radius: var(--radius);
+        background: var(--surface-rose);
+        padding: 1rem;
+      }
+
+      .callout p {
+        color: color-mix(in oklch, var(--accent-strong) 35%, var(--ink));
+        font-size: 0.94rem;
+      }
+
+      .plain-list,
+      .check-list {
+        display: grid;
+        gap: 0.62rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .plain-list li,
+      .check-list li {
+        color: var(--ink-soft);
+      }
+
+      .check-list li {
+        position: relative;
+        padding-left: 1.45rem;
+      }
+
+      .check-list li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.58em;
+        width: 0.48rem;
+        height: 0.48rem;
+        border-radius: 999px;
+        background: var(--accent);
+      }
+
+      .sequence {
+        display: grid;
+        gap: 0.6rem;
+        counter-reset: step;
+      }
+
+      .sequence-item {
+        display: grid;
+        grid-template-columns: 2.2rem minmax(0, 1fr);
+        gap: 0.8rem;
+        align-items: start;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-small);
+        background: var(--surface);
+        padding: 0.82rem;
+      }
+
+      .sequence-item::before {
+        counter-increment: step;
+        content: counter(step, decimal-leading-zero);
+        display: grid;
+        place-items: center;
+        width: 2.2rem;
+        height: 2.2rem;
+        border-radius: 999px;
+        background: var(--ink);
+        color: var(--surface);
+        font-size: 0.75rem;
+        font-weight: 760;
+      }
+
+      .sequence-item strong {
+        color: var(--ink);
+      }
+
+      .sequence-item p {
+        margin-top: 0.18rem;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .phase-map {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface);
+        overflow: hidden;
+      }
+
+      .phase-map th,
+      .phase-map td {
+        border-bottom: 1px solid var(--line);
+        padding: 0.72rem 0.85rem;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      .phase-map th {
+        background: var(--surface-soft);
+        color: var(--ink);
+        font-size: 0.78rem;
+        font-weight: 760;
+      }
+
+      .phase-map td {
+        color: var(--ink-soft);
+        font-size: 0.92rem;
+      }
+
+      .phase-map tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .phase {
+        border-top: 1px solid var(--line);
+        margin-top: 2.4rem;
+        padding-top: 2rem;
+      }
+
+      .phase-head {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 1rem;
+        align-items: start;
+        margin-bottom: 1rem;
+      }
+
+      .phase-title {
+        display: grid;
+        gap: 0.55rem;
+      }
+
+      .phase-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 3.1rem;
+        height: 3.1rem;
+        border-radius: 999px;
+        background: var(--ink);
+        color: var(--surface);
+        font-weight: 780;
+      }
+
+      .phase-body {
+        display: grid;
+        grid-template-columns: minmax(0, 0.95fr) minmax(19rem, 0.78fr);
+        gap: 1rem;
+      }
+
+      .panel {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface);
+        padding: 1rem;
+      }
+
+      .panel h4 {
+        margin-bottom: 0.65rem;
+      }
+
+      .panel + .panel {
+        margin-top: 0.75rem;
+      }
+
+      .stack {
+        display: grid;
+        gap: 0.78rem;
+      }
+
+      .tag-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        margin-top: 0.75rem;
+      }
+
+      .tag {
+        border-radius: 999px;
+        background: var(--surface-soft);
+        color: var(--muted);
+        font-size: 0.78rem;
+        font-weight: 680;
+        line-height: 1;
+        padding: 0.42rem 0.58rem;
+      }
+
+      .tag.red {
+        background: var(--accent-quiet);
+        color: var(--accent-strong);
+      }
+
+      .tag.blue {
+        background: oklch(92.5% 0.042 250);
+        color: var(--blue);
+      }
+
+      .tag.green {
+        background: oklch(92.2% 0.052 150);
+        color: var(--green);
+      }
+
+      .tag.yellow {
+        background: oklch(92.8% 0.06 78);
+        color: var(--yellow);
+      }
+
+      .compact {
+        display: grid;
+        gap: 0.5rem;
+        margin: 0;
+        padding-left: 1.1rem;
+      }
+
+      .compact li {
+        color: var(--ink-soft);
+        padding-left: 0.1rem;
+      }
+
+      .command {
+        display: block;
+        overflow-x: auto;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-small);
+        background: var(--ink);
+        color: oklch(96.5% 0.006 85);
+        font-family:
+          "SFMono-Regular", ui-monospace, "Cascadia Code", Consolas, monospace;
+        font-size: 0.86rem;
+        line-height: 1.55;
+        padding: 0.85rem;
+        white-space: pre;
+      }
+
+      .footer-note {
+        max-width: var(--measure);
+        margin-top: 3rem;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.9rem;
+        padding-top: 1rem;
+      }
+
+      @media (max-width: 980px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+
+        .sidebar {
+          position: static;
+          height: auto;
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+        }
+
+        nav {
+          grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+        }
+
+        main {
+          padding: 2rem 1rem 4rem;
+        }
+
+        h1 {
+          max-width: 16ch;
+          font-size: 2.35rem;
+        }
+
+        .split,
+        .phase-body {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 680px) {
+        .phase-head {
+          grid-template-columns: 1fr;
+        }
+
+        .phase-number {
+          width: 2.6rem;
+          height: 2.6rem;
+        }
+
+        .phase-map {
+          display: block;
+          overflow-x: auto;
+          white-space: nowrap;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+      }
+
+      @media print {
+        body {
+          background: white;
+        }
+
+        .layout {
+          display: block;
+        }
+
+        .sidebar {
+          display: none;
+        }
+
+        main {
+          padding: 0;
+        }
+
+        .phase,
+        .section {
+          break-inside: avoid;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="sidebar" aria-label="Plan navigation">
+        <div class="brand">
+          <strong>Offline Rhyme Suggestions MVP</strong>
+          <span>Combined implementation plan for the Expo LyricsLab loop.</span>
+        </div>
+        <nav>
+          <div class="nav-group">
+            <div class="nav-title">Plan</div>
+            <a class="nav-link" href="#plain-language-plan">Plain Language Plan</a>
+            <a class="nav-link" href="#loop-rules">Loop Rules</a>
+            <a class="nav-link" href="#phase-map">Phase Map</a>
+            <a class="nav-link" href="#autonomy">Autonomy</a>
+          </div>
+          <div class="nav-group">
+            <div class="nav-title">Phases</div>
+            <a class="nav-link" href="#phase-00">00 Tracker Bootstrap</a>
+            <a class="nav-link" href="#phase-01">01 Product Scope</a>
+            <a class="nav-link" href="#phase-02">02 Editor Contract</a>
+            <a class="nav-link" href="#phase-03">03 Rhyme Core</a>
+            <a class="nav-link" href="#phase-04">04 CMU Artifact</a>
+            <a class="nav-link" href="#phase-05">05 Native Suggestions</a>
+            <a class="nav-link" href="#phase-06">06 Slant Ranking</a>
+            <a class="nav-link" href="#phase-07">07 Evidence Closeout</a>
+          </div>
+        </nav>
+      </aside>
+
+      <main>
+        <header class="hero">
+          <div class="label-row" aria-label="Plan metadata">
+            <span class="pill accent">orchestrator-callback</span>
+            <span class="pill">Beads epic <code>lyricslab-8um</code></span>
+            <span class="pill">generated July 9, 2026</span>
+          </div>
+          <h1>Build offline rhyme suggestions without disturbing the writing surface.</h1>
+          <p class="lede">
+            This plan turns the research report into an executable LyricsLab MVP
+            loop. The app keeps its current Expo/WebView boundary, stores lyric
+            bodies as JSON plus text, and replaces placeholder suggestions with
+            deterministic, offline CMU-backed rhyme suggestions in the native
+            suggestion bar.
+          </p>
+          <div class="meta-grid">
+            <div class="meta-item">
+              <span>Primary outcome</span>
+              <strong>Useful rhyme suggestions while typing stays fast.</strong>
+            </div>
+            <div class="meta-item">
+              <span>Canonical tracker</span>
+              <strong>Beads epic <code>lyricslab-8um</code></strong>
+            </div>
+            <div class="meta-item">
+              <span>First ready issue</span>
+              <strong><code>lyricslab-8um.3</code> Phase 00</strong>
+            </div>
+            <div class="meta-item">
+              <span>Execution rule</span>
+              <strong>One active implementation PR at a time.</strong>
+            </div>
+          </div>
+        </header>
+
+        <section class="section" id="plain-language-plan">
+          <div class="section-header">
+            <h2>Plain Language Plan</h2>
+            <p>
+              LyricsLab already has the pieces of a mobile writing app: local
+              songs, an editor WebView, selection context, and a native suggestion
+              bar. This loop makes the suggestion bar smarter without turning the
+              editor into a new product.
+            </p>
+          </div>
+
+          <div class="split">
+            <div class="stack">
+              <p>
+                The work starts by locking scope. The MVP is not full rhyme
+                visualization, not a chatbot, and not cloud ranking. It is a
+                small, reliable offline feature: when the writer is drafting a
+                lyric, the app can look at the most useful nearby word, find
+                deterministic rhyme candidates from CMU-style pronunciations, and
+                offer a short list that can be inserted at the caret.
+              </p>
+              <p>
+                Implementation then protects the editor contract before adding
+                engine behavior. First the current suggestion and selection paths
+                get tests. Then a pure TypeScript rhyme core is built with small
+                fixtures. After that, the full CMU dictionary is converted into a
+                deterministic runtime artifact so the app never parses raw
+                dictionary text on the typing path.
+              </p>
+              <p>
+                Only once those layers are stable does the plan replace
+                placeholder suggestions. The native bar stays the product surface;
+                the smarter provider sits behind it. Final phases improve ranking,
+                measure performance, record evidence, and file follow-up work for
+                the bigger ideas that are intentionally outside this MVP.
+              </p>
+            </div>
+
+            <aside class="callout">
+              <p>
+                The editor bridge remains narrow. This loop does not add highlight
+                span protocols, Tiptap decorations, phrase-rhyme visualization,
+                AI services, sync, IAP, audio, neural ranking, or teachable slant
+                preferences unless a later product decision explicitly widens
+                scope.
+              </p>
+            </aside>
+          </div>
+        </section>
+
+        <section class="section" id="loop-rules">
+          <div class="section-header">
+            <h2>Loop Rules</h2>
+            <p>
+              These are the operating rules for the autonomous implementation
+              loop. If Beads and this file disagree, Beads wins.
+            </p>
+          </div>
+
+          <div class="split">
+            <div class="panel">
+              <h3>How Work Moves</h3>
+              <ol class="compact">
+                <li>Select exactly one ready Beads child issue.</li>
+                <li>Run the selector gate before launching implementation.</li>
+                <li>Read the linked phase doc and update the matching turn doc.</li>
+                <li>Launch implementation with the required scout and helper swarms.</li>
+                <li>Review with <code>thermo-nuclear-code-quality-review</code>.</li>
+                <li>Let reviewer or CI agents own gate repair when CI exists.</li>
+                <li>Close the phase only after review, gates, Beads, and turn docs agree.</li>
+              </ol>
+            </div>
+
+            <div class="panel">
+              <h3>Hard Boundaries</h3>
+              <ul class="check-list">
+                <li>Do not log user lyric content.</li>
+                <li>Do not store HTML as canonical lyric state.</li>
+                <li>Do not widen the WebView bridge for highlighting in this loop.</li>
+                <li>Do not parse full CMU data on each typing update.</li>
+                <li>Do not open parallel implementation PRs unless the phase says so.</li>
+                <li>File follow-ups instead of absorbing post-MVP work.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="phase-map">
+          <div class="section-header">
+            <h2>Phase Map</h2>
+            <p>
+              The loop is serialized: <code>00 -> 01 -> 02 -> 03 -> 04 -> 05 -> 06 -> 07</code>.
+              The imported follow-ups <code>lyricslab-xoc</code>,
+              <code>lyricslab-gg4</code>, and <code>lyricslab-bhs</code> become
+              Phase 02, Phase 05, and Phase 07.
+            </p>
+          </div>
+
+          <table class="phase-map">
+            <thead>
+              <tr>
+                <th>Phase</th>
+                <th>Beads Issue</th>
+                <th>Plain-English Outcome</th>
+                <th>Depends On</th>
+                <th>Phase Doc</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>00</td>
+                <td><code>lyricslab-8um.3</code></td>
+                <td>Make the loop durable and runnable before app code changes.</td>
+                <td>none</td>
+                <td><a href="00-tracker-loop-bootstrap.md">tracker bootstrap</a></td>
+              </tr>
+              <tr>
+                <td>01</td>
+                <td><code>lyricslab-8um.5</code></td>
+                <td>Lock the MVP boundary across product, architecture, and testing docs.</td>
+                <td><code>lyricslab-8um.3</code></td>
+                <td><a href="01-product-scope-lock.md">product scope</a></td>
+              </tr>
+              <tr>
+                <td>02</td>
+                <td><code>lyricslab-xoc</code></td>
+                <td>Protect the editor baseline and suggestion contract.</td>
+                <td><code>lyricslab-8um.5</code></td>
+                <td><a href="02-editor-baseline-suggestion-contract.md">editor contract</a></td>
+              </tr>
+              <tr>
+                <td>03</td>
+                <td><code>lyricslab-8um.1</code></td>
+                <td>Build the pure TypeScript rhyme core with fixtures.</td>
+                <td><code>lyricslab-xoc</code></td>
+                <td><a href="03-pure-rhyme-core-fixtures.md">rhyme core</a></td>
+              </tr>
+              <tr>
+                <td>04</td>
+                <td><code>lyricslab-8um.4</code></td>
+                <td>Generate a deterministic CMU runtime artifact and indexes.</td>
+                <td><code>lyricslab-8um.1</code></td>
+                <td><a href="04-cmu-artifact-pipeline.md">CMU artifact</a></td>
+              </tr>
+              <tr>
+                <td>05</td>
+                <td><code>lyricslab-gg4</code></td>
+                <td>Replace placeholder suggestions with offline rhyme-backed suggestions.</td>
+                <td><code>lyricslab-8um.4</code></td>
+                <td><a href="05-native-suggestion-integration.md">native integration</a></td>
+              </tr>
+              <tr>
+                <td>06</td>
+                <td><code>lyricslab-8um.2</code></td>
+                <td>Add explainable slant ranking and performance evidence.</td>
+                <td><code>lyricslab-gg4</code></td>
+                <td><a href="06-slant-ranking-performance-guard.md">slant ranking</a></td>
+              </tr>
+              <tr>
+                <td>07</td>
+                <td><code>lyricslab-bhs</code></td>
+                <td>Close the loop with gates, device evidence, follow-ups, and storyboard.</td>
+                <td><code>lyricslab-8um.2</code></td>
+                <td><a href="07-device-evidence-closeout.md">closeout</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section" id="autonomy">
+          <div class="section-header">
+            <h2>Autonomy Model</h2>
+            <p>
+              Most of this loop can run autonomously when the tracker and branch
+              state are clean. The loop should pause for human input only where
+              the work depends on unavailable device evidence, a product scope
+              decision, broken credentials, or unresolved review and CI state.
+            </p>
+          </div>
+
+          <div class="sequence">
+            <div class="sequence-item">
+              <div>
+                <strong>Selector chooses the next ready issue.</strong>
+                <p>Beads should currently route Phase 00. Later phases unlock one at a time.</p>
+              </div>
+            </div>
+            <div class="sequence-item">
+              <div>
+                <strong>Implementation thread owns the selected slice.</strong>
+                <p>It reads the phase doc, scopes the edit, uses helper swarms, and opens one PR.</p>
+              </div>
+            </div>
+            <div class="sequence-item">
+              <div>
+                <strong>Reviewer thread owns critique and repair routing.</strong>
+                <p>Review is strict, evidence-first, and recorded in the existing phase turn doc.</p>
+              </div>
+            </div>
+            <div class="sequence-item">
+              <div>
+                <strong>Closeout selector decides whether to continue.</strong>
+                <p>The loop proceeds by default unless blocked, interrupted, or review/CI is unresolved.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <article class="phase" id="phase-00">
+          <div class="phase-head">
+            <div class="phase-title">
+              <div class="label-row">
+                <span class="pill accent">Phase 00</span>
+                <span class="pill"><code>lyricslab-8um.3</code></span>
+              </div>
+              <h2>Tracker and Loop Bootstrap</h2>
+              <p>
+                Make the offline-rhyme-suggestions loop durable and runnable
+                before any app implementation begins.
+              </p>
+            </div>
+            <div class="phase-number">00</div>
+          </div>
+
+          <div class="phase-body">
+            <div class="panel">
+              <h3>What Happens</h3>
+              <p>
+                Verify Beads, preserve the imported tracker state, generate loop
+                docs, prompts, schemas, and turn-doc placeholders, and keep all
+                callback targets runtime-bound with
+                <code>RUNTIME_ORCHESTRATOR_THREAD_ID</code>.
+              </p>
+              <div class="tag-row">
+                <span class="tag red">docs only</span>
+                <span class="tag">no app code</span>
+                <span class="tag blue">loop setup</span>
+              </div>
+            </div>
+            <div class="stack">
+              <div class="panel">
+                <h4>Done When</h4>
+                <ul class="compact">
+                  <li>Beads routes the first ready phase.</li>
+                  <li>Loop docs and schemas exist.</li>
+                  <li>No concrete callback target is baked into artifacts.</li>
+                  <li>No app code changes are made.</li>
+                </ul>
+              </div>
+              <div class="panel">
+                <h4>Quality Gates</h4>
+                <ul class="compact">
+                  <li><code>bd ready --json</code></li>
+                  <li><code>bd show lyricslab-8um --json</code></li>
+                  <li><code>bd export -o .beads/issues.jsonl</code></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="phase" id="phase-01">
+          <div class="phase-head">
+            <div class="phase-title">
+              <div class="label-row">
+                <span class="pill accent">Phase 01</span>
+                <span class="pill"><code>lyricslab-8um.5</code></span>
+              </div>
+              <h2>Product Scope Lock</h2>
+              <p>
+                Make the product docs say the same thing about what this MVP is,
+                what it is not, and how future work should be filed.
+              </p>
+            </div>
+            <div class="phase-number">01</div>
+          </div>
+
+          <div class="phase-body">
+            <div class="panel">
+              <h3>What Happens</h3>
+              <p>
+                Update <code>requirements.md</code>, <code>plan.md</code>,
+                <code>architecture.md</code>, and <code>testing.md</code> so
+                implementation agents build deterministic offline CMU-backed
+                native suggestions, not the whole future rhyme engine.
+              </p>
+              <div class="tag-row">
+                <span class="tag red">MVP boundary</span>
+                <span class="tag">docs</span>
+                <span class="tag yellow">scope control</span>
+              </div>
+            </div>
+            <div class="stack">
+              <div class="panel">
+                <h4>Done When</h4>
+                <ul class="compact">
+                  <li>Product docs agree on MVP versus post-MVP scope.</li>
+                  <li><code>src/rhyme/</code> is documented as the module boundary.</li>
+                  <li>Every major research recommendation maps to this loop or a follow-up.</li>
+                </ul>
+              </div>
+              <div class="panel">
+                <h4>Quality Gates</h4>
+                <ul class="compact">
+                  <li><code>npm test</code></li>
+                  <li><code>npm run typecheck</code></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="phase" id="phase-02">
+          <div class="phase-head">
+            <div class="phase-title">
+              <div class="label-row">
+                <span class="pill accent">Phase 02</span>
+                <span class="pill"><code>lyricslab-xoc</code></span>
+              </div>
+              <h2>Editor Baseline and Suggestion Contract</h2>
+              <p>
+                Protect typing, cursor, selection, insertion, and generated
+                editor bundle behavior before swapping the suggestion source.
+              </p>
+            </div>
+            <div class="phase-number">02</div>
+          </div>
+
+          <div class="phase-body">
+            <div class="panel">
+              <h3>What Happens</h3>
+              <p>
+                Audit the native suggestion code, bridge context, editor-web
+                selection context, and generated HTML freshness. Define the MVP
+                suggestion payload and provider expectations without widening the
+                bridge for highlights or decorations.
+              </p>
+              <div class="tag-row">
+                <span class="tag blue">editor</span>
+                <span class="tag green">tests</span>
+                <span class="tag">bridge contract</span>
+              </div>
+            </div>
+            <div class="stack">
+              <div class="panel">
+                <h4>Done When</h4>
+                <ul class="compact">
+                  <li>Placeholder suggestion behavior remains covered.</li>
+                  <li>Future rhyme provider can plug in behind the same seam.</li>
+                  <li>Selection context and generated HTML freshness are tested or documented.</li>
+                </ul>
+              </div>
+              <div class="panel">
+                <h4>Quality Gates</h4>
+                <ul class="compact">
+                  <li><code>npm test</code></li>
+                  <li><code>npm run typecheck</code></li>
+                  <li><code>npm run editor:test</code></li>
+                  <li><code>npm run build:editor-html</code></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="phase" id="phase-03">
+          <div class="phase-head">
+            <div class="phase-title">
+              <div class="label-row">
+                <span class="pill accent">Phase 03</span>
+                <span class="pill"><code>lyricslab-8um.1</code></span>
+              </div>
+              <h2>Pure Rhyme Core With Fixtures</h2>
+              <p>
+                Build the deterministic TypeScript rhyme module with small
+                fixtures before introducing the full dictionary artifact.
+              </p>
+            </div>
+            <div class="phase-number">03</div>
+          </div>
+
+          <div class="phase-body">
+            <div class="panel">
+              <h3>What Happens</h3>
+              <p>
+                Add <code>src/rhyme/</code>, parse CMU-style entries and
+                alternate pronunciations, normalize tokens without logging lyric
+                content, extract last-stressed-vowel rhyme tails, generate exact
+                candidates, and rank them deterministically.
+              </p>
+              <div class="tag-row">
+                <span class="tag blue">pure TypeScript</span>
+                <span class="tag green">fixtures</span>
+                <span class="tag">no React dependency</span>
+              </div>
+            </div>
+            <div class="stack">
+              <div class="panel">
+                <h4>Done When</h4>
+                <ul class="compact">
+                  <li>Parser, normalization, tail extraction, alternates, and ranking have focused tests.</li>
+                  <li>The module is independent of React Native, WebView, SQLite, and Tiptap.</li>
+                  <li>No external APIs or lyric-content logging are introduced.</li>
+                </ul>
+              </div>
+              <div class="panel">
+                <h4>Quality Gates</h4>
+                <ul class="compact">
+                  <li><code>npm test</code></li>
+                  <li><code>npm run typecheck</code></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="phase" id="phase-04">
+          <div class="phase-head">
+            <div class="phase-title">
+              <div class="label-row">
+                <span class="pill accent">Phase 04</span>
+                <span class="pill"><code>lyricslab-8um.4</code></span>
+              </div>
+              <h2>CMU Artifact Pipeline</h2>
+              <p>
+                Convert <code>data/cmudict.txt</code> into a practical runtime
+                artifact so typing never pays the raw-dictionary parse cost.
+              </p>
+            </div>
+            <div class="phase-number">04</div>
+          </div>
+
+          <div class="phase-body">
+            <div class="panel">
+              <h3>What Happens</h3>
+              <p>
+                Add a deterministic build or prep script, produce a compact
+                runtime artifact or typed module, build word and rhyme-tail
+                indexes, and document regeneration. Default tests stay fast and
+                fixture-based.
+              </p>
+              <div class="tag-row">
+                <span class="tag blue">data pipeline</span>
+                <span class="tag green">deterministic</span>
+                <span class="tag yellow">performance</span>
+              </div>
+            </div>
+            <div class="stack">
+              <div class="panel">
+                <h4>Done When</h4>
+                <ul class="compact">
+                  <li>Full dictionary artifact regenerates deterministically.</li>
+                  <li>Runtime code does not parse raw CMU data on the typing path.</li>
+                  <li>Regeneration and verification commands are documented.</li>
+                </ul>
+              </div>
+              <div class="panel">
+                <h4>Quality Gates</h4>
+                <ul class="compact">
+                  <li><code>npm test</code></li>
+                  <li><code>npm run typecheck</code></li>
+                  <li>Optional non-default CMU smoke or benchmark command.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="phase" id="phase-05">
+          <div class="phase-head">
+            <div class="phase-title">
+              <div class="label-row">
+                <span class="pill accent">Phase 05</span>
+                <span class="pill"><code>lyricslab-gg4</code></span>
+              </div>
+              <h2>Native Suggestion Integration</h2>
+              <p>
+                Replace placeholder suggestions with offline rhyme-backed
+                suggestions through the existing native suggestion provider seam.
+              </p>
+            </div>
+            <div class="phase-number">05</div>
+          </div>
+
+          <div class="phase-body">
+            <div class="panel">
+              <h3>What Happens</h3>
+              <p>
+                Wire the rhyme engine into <code>src/editor/suggestions.ts</code>.
+                Pick a useful anchor from <code>SuggestionContext</code>, exclude
+                duplicates and awkward repeats, preserve stable IDs, and keep
+                deterministic fallback behavior when no rhyme anchor exists.
+              </p>
+              <div class="tag-row">
+                <span class="tag red">product-visible</span>
+                <span class="tag blue">native bar</span>
+                <span class="tag green">deterministic</span>
+              </div>
+            </div>
+            <div class="stack">
+              <div class="panel">
+                <h4>Done When</h4>
+                <ul class="compact">
+                  <li>Suggestion bar uses the offline rhyme-backed provider.</li>
+                  <li>Insertion at cursor remains unchanged.</li>
+                  <li>Suggestions stay deterministic, limited, and non-disruptive.</li>
+                  <li>Typing path remains cheap.</li>
+                </ul>
+              </div>
+              <div class="panel">
+                <h4>Quality Gates</h4>
+                <ul class="compact">
+                  <li><code>npm test</code></li>
+                  <li><code>npm run typecheck</code></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="phase" id="phase-06">
+          <div class="phase-head">
+            <div class="phase-title">
+              <div class="label-row">
+                <span class="pill accent">Phase 06</span>
+                <span class="pill"><code>lyricslab-8um.2</code></span>
+              </div>
+              <h2>Slant Ranking and Performance Guard</h2>
+              <p>
+                Improve suggestion quality with explainable ranking while keeping
+                expensive analysis off the hot typing path.
+              </p>
+            </div>
+            <div class="phase-number">06</div>
+          </div>
+
+          <div class="phase-body">
+            <div class="panel">
+              <h3>What Happens</h3>
+              <p>
+                Add balanced slant scoring, matched-syllable count, stress
+                compatibility, repetition penalties, short internal reason labels
+                if the provider contract supports them, and a non-default
+                performance harness for representative lookups.
+              </p>
+              <div class="tag-row">
+                <span class="tag yellow">ranking</span>
+                <span class="tag green">measured</span>
+                <span class="tag">not neural</span>
+              </div>
+            </div>
+            <div class="stack">
+              <div class="panel">
+                <h4>Done When</h4>
+                <ul class="compact">
+                  <li>Ranking tests explain candidate order.</li>
+                  <li>Performance harness records representative lookup timing.</li>
+                  <li>Default tests remain fast.</li>
+                  <li>Review confirms expensive work is not triggered on every keystroke.</li>
+                </ul>
+              </div>
+              <div class="panel">
+                <h4>Quality Gates</h4>
+                <ul class="compact">
+                  <li><code>npm test</code></li>
+                  <li><code>npm run typecheck</code></li>
+                  <li>Non-default performance harness command if added.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="phase" id="phase-07">
+          <div class="phase-head">
+            <div class="phase-title">
+              <div class="label-row">
+                <span class="pill accent">Phase 07</span>
+                <span class="pill"><code>lyricslab-bhs</code></span>
+              </div>
+              <h2>Device Evidence and Closeout</h2>
+              <p>
+                Finish with automated gates, available physical-device evidence,
+                filed follow-ups, and the final storyboard artifact.
+              </p>
+            </div>
+            <div class="phase-number">07</div>
+          </div>
+
+          <div class="phase-body">
+            <div class="panel">
+              <h3>What Happens</h3>
+              <p>
+                Run all final gates, record whether physical-device validation is
+                available, file follow-ups for intentionally deferred product
+                areas, and generate
+                <code>storyboard-post-run-mm-dd-yyyy.html</code> after the epic is
+                complete.
+              </p>
+              <div class="tag-row">
+                <span class="tag red">closeout</span>
+                <span class="tag green">evidence</span>
+                <span class="tag blue">storyboard</span>
+              </div>
+            </div>
+            <div class="stack">
+              <div class="panel">
+                <h4>Done When</h4>
+                <ul class="compact">
+                  <li>All loop phases are closed or explicitly blocked with evidence.</li>
+                  <li>Review and CI state is resolved.</li>
+                  <li>Device evidence is recorded or explicitly unavailable.</li>
+                  <li>Follow-ups are filed instead of widened into this loop.</li>
+                  <li>Storyboard is generated and verified.</li>
+                </ul>
+              </div>
+              <div class="panel">
+                <h4>Quality Gates</h4>
+                <ul class="compact">
+                  <li><code>npm test</code></li>
+                  <li><code>npm run typecheck</code></li>
+                  <li><code>npm run editor:test</code></li>
+                  <li><code>npm run build:editor-html</code></li>
+                  <li><code>npx expo config --type public</code></li>
+                  <li>Physical-device checklist when available.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <section class="section" id="run-command">
+          <div class="section-header">
+            <h2>Run Surface</h2>
+            <p>
+              The generated loop prompt remains the main operational entry point.
+              Start there when launching the next autonomous run.
+            </p>
+          </div>
+          <pre class="command">docs/implementation/offline-rhyme-suggestions/prompts/run-loop.md</pre>
+          <p class="footer-note">
+            Source docs: <a href="IMPLEMENT.md">IMPLEMENT.md</a>,
+            <a href="00-roadmap.md">00-roadmap.md</a>, phase docs in this
+            directory, and
+            <a href="../../research/rhyme-engine-deep-research-report.md">the rhyme engine research report</a>.
+          </p>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
