@@ -68,9 +68,11 @@ Evidence:
 
 Implementation branch: `lavender/offline-rhyme-phase-01`
 
-PR: pending implementation lead.
+PR: `https://github.com/dirtydishes/lyricslab/pull/16`
 
-Commits: pending implementation lead.
+Commits:
+
+- `8730a48` - `lock offline rhyme mvp scope`
 
 ## Beads Updates
 
