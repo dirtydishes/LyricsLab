@@ -21,6 +21,23 @@ Replace placeholder suggestion behavior with deterministic offline rhyme-backed 
 7. `lyricslab-8um.2` - Phase 06: Slant ranking and performance guard
 8. `lyricslab-bhs` - Phase 07: Device evidence and closeout
 
+## Research Recommendation Map
+
+| Research recommendation | Loop phase or follow-up | Boundary |
+|---|---|---|
+| Exact-tail core | Phase 03 `lyricslab-8um.1` | MVP core inside `src/rhyme/`: strict last-stressed-vowel tail candidate generation with small fixtures. |
+| CMU pronunciation base and artifact | Phase 04 `lyricslab-8um.4` | MVP data pipeline: deterministic generated artifact/indexes from `data/cmudict.txt`; no raw CMU parsing or hot-path SQL lookup while typing. |
+| Native suggestion bar UX | Phase 02 `lyricslab-xoc` and Phase 05 `lyricslab-gg4` | MVP product surface: typed provider contract first, native integration second, with stable IDs, fallback behavior, and no bridge widening. |
+| Weighted slant and explainable ranking | Phase 06 `lyricslab-8um.2` | MVP ranking guard: bounded deterministic slant scoring, matched-syllable/stress/repetition signals, and non-default performance evidence where useful. |
+| Privacy and local-first operation | All MVP phases | No lyric body text, cursor context, search text, rhyme queries, or suggestion candidates should be logged or sent to external services. |
+| Active rhyme or scheme prediction | MVP-lite in Phase 05/06; stronger model follow-up | Use only simple local anchor/family signals if they fit the native provider shape; defer HMM/EM-style section templates and broader scheme modeling. |
+| Evaluation and performance | Phases 03, 06, and 07; broader corpus follow-up | MVP gates cover fixtures, lookup/performance guardrails, and device evidence; annotated corpora, acceptance-rate metrics, and trust studies are post-MVP. |
+| WebView highlighting and decoration spans | Follow-up | Deferred: no ProseMirror/Tiptap decorations, highlight/span packets, or bridge widening in this loop. |
+| Phrase or mosaic rhyme visualization | Follow-up | Deferred: no phrase-rhyme visualization, selected-span extraction UI, or density analysis view in the MVP typing path. |
+| Teachable slant preferences | Follow-up | Deferred: no Strict/Balanced/Loose controls, persistent user-trained families, or learning signals in this loop. |
+| Neural ranking, model inference, and AI collaborator flows | Follow-up | Deferred: MVP remains deterministic, explainable, offline, and CMU-backed with no model or external API dependency. |
+| Sync, IAP, and audio | Follow-up outside this loop | Deferred: Phase 07 may file or confirm follow-ups, but monetization, cloud sync, and recording/audio stay separate from offline rhyme suggestions. |
+
 ## Dependencies
 
 The loop is serialized:
@@ -50,4 +67,3 @@ The imported follow-ups `lyricslab-xoc`, `lyricslab-gg4`, and `lyricslab-bhs` ar
 The final closeout artifact is:
 
 `docs/implementation/offline-rhyme-suggestions/storyboard-post-run-mm-dd-yyyy.html`
-

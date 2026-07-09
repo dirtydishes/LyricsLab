@@ -10,6 +10,8 @@ npm run typecheck
 npm run editor:test
 ```
 
+`npm test` should keep `src/rhyme/` coverage fast, deterministic, offline, and fixture-sized once the module exists.
+
 Run this whenever `packages/editor-web` changes or when WebView loading behavior changes:
 
 ```bash
@@ -34,10 +36,19 @@ npx expo config --type public
   - Preserve stale-save ordering and merge behavior.
 - `src/editor/suggestions.ts`
   - Deterministic suggestion ids, filtering, and ordering.
+- `src/rhyme/`
+  - Pure TypeScript fixture tests for CMU-style parsing, alternate pronunciations, token normalization, last-stressed-vowel rhyme tails, exact candidate generation, and deterministic ordering.
+  - OOV, slang, repeated-word, no-match, and phrase-boundary negative cases.
+  - Privacy and API guard tests where the implementation surface allows: no external rhyme APIs, no network calls in rhyme lookup, and no lyric-content logging.
+  - Hot-path guard tests or fakes showing suggestion refresh does not parse raw `data/cmudict.txt`, scan the full dictionary, or issue SQLite lookups on every typing event.
 - `packages/editor-web/src/`
   - Suggestion context extraction.
   - Bridge message emission.
   - Future editor command behavior.
+
+## Non-Default Rhyme Gates
+
+Full CMU artifact smoke tests and lookup performance checks belong to the CMU artifact and performance phases, not the default `npm test` command. Future non-default gates should record the command, artifact size, representative lookup count, p50/p95 timings, and the device, simulator, or host used.
 
 ## Manual Device Checklist
 
@@ -48,6 +59,7 @@ The Expo rebuild is not validated as the daily app until this passes on a physic
 - Edit title and body.
 - Keyboard appears without covering the editor unexpectedly.
 - Suggestion bar stays reachable while typing.
+- Fast typing keeps cursor behavior stable and the suggestion bar responsive; record visible lag or dropped updates.
 - Insert suggestion at cursor.
 - Navigate away and back; title/body persist.
 - Search finds title and body text.
@@ -60,4 +72,4 @@ Record device, iOS version, command used, and any screenshots or screen recordin
 
 - Broad UI snapshots before the visual system exists.
 - Cloud/IAP/AI tests before those features are in scope.
-- Slow full-dictionary or performance benchmarks in the default test command.
+- Slow full-dictionary, external API, neural, or performance benchmarks in the default test command.

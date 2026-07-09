@@ -27,7 +27,7 @@ Goal: prove this root Expo app runs as the daily writing surface on a real devic
 - Record the manual checklist from `testing.md`.
 - File follow-ups for any runtime friction instead of widening the cleanup branch.
 
-## Phase 2 - Editor Hardening
+## Phase 2 - Editor Baseline And Suggestion Contract
 
 Goal: make the writing surface feel trustworthy before adding more intelligence.
 
@@ -36,25 +36,56 @@ Goal: make the writing surface feel trustworthy before adding more intelligence.
 - Confirm body persistence through navigation, app backgrounding, and relaunch.
 - Add missing bridge/editor tests where bugs appear.
 - Add a generated HTML freshness guard.
+- Define the typed native suggestion payload/provider contract without widening the WebView bridge for highlighting.
 
-## Phase 3 - Offline Rhyme Core
+## Phase 3 - Pure Rhyme Core
 
-Goal: bring back the craft value without dragging in the old Swift shape.
+Goal: create the deterministic offline TypeScript rhyme boundary without dragging in the old Swift shape.
 
-- Add a TypeScript CMU dictionary parser or import a prepared dictionary artifact.
-- Implement deterministic rhyme keys and ranking.
-- Replace placeholder suggestions with offline rhyme-backed suggestions.
+- Add `src/rhyme/` as a pure TypeScript module independent of React Native, WebView, SQLite, and Tiptap.
+- Implement fixture-sized CMU parsing, normalization, rhyme-tail keys, and exact candidate behavior.
 - Add focused tests and small fixtures.
+- Keep external APIs, lyric logging, raw full-dictionary runtime work, and hot-path SQL out of scope.
 
-## Phase 4 - Product Polish Slices
+## Phase 4 - CMU Artifact Pipeline
 
-Only after device proof and rhyme core are stable:
+Goal: prepare `data/cmudict.txt` for practical offline runtime use.
 
-- Theme tokens and readable highlight palettes.
-- Audio MVP.
+- Generate or import a deterministic CMU-backed runtime artifact.
+- Build lookup/index data needed by `src/rhyme/`.
+- Avoid raw dictionary parsing, full scans, and SQLite dictionary lookup on the typing path.
+- Keep full artifact smoke/performance checks out of the default fast test command.
+
+## Phase 5 - Native Suggestion Integration
+
+Goal: replace placeholder suggestions through the existing native provider seam.
+
+- Feed compact editor context into the offline rhyme provider.
+- Preserve suggestion insertion at the cursor.
+- Keep stable IDs, deterministic ordering, graceful fallbacks, and a small native suggestion list.
+- Do not add WebView highlight messages, phrase insertion, external APIs, or UI behavior beyond the suggestion source.
+
+## Phase 6 - Slant Ranking And Performance Guard
+
+Goal: improve suggestion quality without making typing feel heavy.
+
+- Add bounded deterministic slant/ranking improvements.
+- Keep expensive analysis off the hot typing path.
+- Record reviewer-visible performance evidence with non-default checks where needed.
+- Do not add neural ranking, teachable slant preferences, or phrase-rhyme visualization.
+
+## Phase 7 - Post-MVP Deferrals
+
+Only after the native offline suggestion MVP is stable:
+
+- WebView rhyme highlighting, phrase-rhyme visualization, and highlight palettes.
+- Theme polish outside the native suggestion MVP.
+- Local audio playback and loop points.
 - IAP scaffolding.
 - iCloud/sync investigation.
-- AI collaborator concepts, explicitly post-MVP.
+- AI collaborator concepts and neural ranking/reranking.
+- Teachable slant preferences and learned writer-specific rhyme families.
+- External rhyme APIs.
 
 ## Rule
 
