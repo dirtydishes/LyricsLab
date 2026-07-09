@@ -116,7 +116,7 @@ function parseArgs(args) {
     anchors: DEFAULT_ANCHORS,
     artifactPath: process.env.CMU_RHYME_ARTIFACT ?? null,
     maxResults: 12,
-    minHitLookups: 1,
+    minHitLookups: null,
     pretty: true,
     sampleSize: 5,
   };
@@ -181,6 +181,8 @@ function parseArgs(args) {
   if (options.anchors.length === 0) {
     throw new Error('--anchors must include at least one token');
   }
+
+  options.minHitLookups ??= options.anchors.length;
 
   return options;
 }
@@ -442,7 +444,7 @@ function usage() {
     'Options:',
     '  --anchors=time,night,love       Representative lookup anchors',
     '  --max-results=12                Max candidates per lookup',
-    '  --min-hit-lookups=1             Fail if fewer lookups return candidates',
+    '  --min-hit-lookups=COUNT         Fail if fewer lookups return candidates; defaults to all anchors',
     '  --sample-size=5                 Candidate samples to include per lookup',
     '  --compact                       Print single-line JSON',
     '',

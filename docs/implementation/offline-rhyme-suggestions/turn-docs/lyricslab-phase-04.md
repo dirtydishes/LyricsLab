@@ -84,23 +84,36 @@ Reviewer skill:
 
 `thermo-nuclear-code-quality-review`
 
-Pending.
+Status: repaired and approved.
+
+Finding repaired:
+
+- The full-dictionary smoke command reported representative anchor hit counts but only failed when fewer than one lookup returned candidates. That made the explicit artifact smoke too weak for catching broad index regressions. `scripts/smoke-cmu-rhyme-artifact.mjs` now defaults `--min-hit-lookups` to the number of requested anchors, while preserving the flag as an override for intentionally sparse custom probes.
+
+Review result:
+
+- No remaining structural blockers found after repair.
+- Raw `data/cmudict.txt` parsing remains build/check-time only in `scripts/build-cmu-artifact.mjs`; the runtime lookup path loads the generated artifact through `src/rhyme/artifact.ts` and `src/rhyme/defaultCmuIndex.ts`.
+- Default Jest remains fixture-sized and fast; full dictionary validation stays in `build:rhyme-artifact`, `check:rhyme-artifact`, and `smoke:rhyme-artifact`.
+- Phase 04 did not implement native suggestion UI integration, Phase 05 behavior, phrase rhymes, WebView highlighting, bridge widening, SQLite dictionary storage, hot-path raw text parsing, or non-inert slant ranking.
 
 ## CI And Gates
 
 CI owner: reviewer/verification agents
 
-Current CI state: `not-run`
+Current CI state: `ci-unavailable-with-evidence`
 
 Evidence:
 
-- `npm run build:rhyme-artifact`: passed; wrote `src/rhyme/generated/cmuRhymeArtifact.json` with 125,213 lexemes, 135,166 pronunciations, and 35,869 rhyme tails.
-- `npm test`: passed, 12 suites, 83 tests.
-- `npm run typecheck`: passed.
-- `npm run check:rhyme-artifact`: passed; generated CMU artifact is fresh.
-- `npm run smoke:rhyme-artifact -- --compact`: passed; artifact size 9,596,136 bytes, SHA-256 `075fd521ac9f2660f6bc970e1beecb89216fea70d86a768f7190045396a32249`, 125,213 lexemes, 135,166 pronunciations, 35,869 tail keys, 96 no-tail pronunciations, 10/10 representative lookup anchors hit, p50 0.052 ms, p95 0.422 ms.
-- `git diff --check`: passed.
-- `node --check scripts/build-cmu-artifact.mjs && node --check scripts/smoke-cmu-rhyme-artifact.mjs`: passed.
+- `npm run build:rhyme-artifact`: passed after repair; wrote `src/rhyme/generated/cmuRhymeArtifact.json` with 125,213 lexemes, 135,166 pronunciations, and 35,869 rhyme tails.
+- `npm test`: passed after repair, 12 suites, 83 tests, about 5 seconds.
+- `npm run typecheck`: passed after repair.
+- `npm run check:rhyme-artifact`: passed after repair; generated CMU artifact is fresh.
+- `npm run smoke:rhyme-artifact -- --compact`: passed after repair with the stricter default anchor-hit threshold; artifact size 9,596,136 bytes, SHA-256 `075fd521ac9f2660f6bc970e1beecb89216fea70d86a768f7190045396a32249`, 125,213 lexemes, 135,166 pronunciations, 35,869 tail keys, 96 no-tail pronunciations, 10/10 representative lookup anchors hit, load 152.747 ms, index hydration 430.186 ms, p50 0.052 ms, p95 0.398 ms.
+- `node --check scripts/build-cmu-artifact.mjs && node --check scripts/smoke-cmu-rhyme-artifact.mjs`: passed after repair.
+- `gh pr view 19 --repo dirtydishes/lyricslab --json number,url,state,isDraft,baseRefName,headRefName,headRefOid,mergeable,reviewDecision,statusCheckRollup,commits`: PR #19 open draft, base `lavender/expo-clean-rebuild`, head `lavender/offline-rhyme-phase-04`, head SHA `09d7d23c7324a7a92a0dce3805d1257385d44248` before reviewer commit, mergeable `MERGEABLE`, hosted `statusCheckRollup: []`.
+- `gh pr checks 19 --repo dirtydishes/lyricslab`: no checks reported on `lavender/offline-rhyme-phase-04`.
+- `git diff --check`: passed after repair and turn-doc update.
 
 ## PR And Commits
 
@@ -108,6 +121,8 @@ Evidence:
 - Branch: `lavender/offline-rhyme-phase-04`
 - Base: `lavender/expo-clean-rebuild`
 - Implementation commit: `112c0d3bf2404e322ec295d2be7ae0338d8149a5` (`add cmu rhyme artifact pipeline`)
+- Implementation evidence commit: `09d7d23c7324a7a92a0dce3805d1257385d44248` (`record phase four pr details`)
+- Review repair/evidence commit: this reviewer update in PR #19
 
 ## Beads Updates
 
@@ -117,7 +132,7 @@ The implementation worker did not close Beads issues; closeout remains the orche
 
 ## Follow-Ups Filed
 
-Pending.
+None.
 
 ## Context To Keep
 
@@ -130,4 +145,4 @@ Pending.
 
 ## Closeout
 
-Open.
+Review complete; no Beads issue was closed and PR merge remains the orchestrator's responsibility.
