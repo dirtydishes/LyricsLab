@@ -80,12 +80,18 @@ Commits:
 
 - `8730a48` - `lock offline rhyme mvp scope`
 - `60fed09` - `record phase one pr details`
+- `4f0bd95` - `record phase one review evidence`
+- `811338f` - `record phase one review callback`
+
+PR #16 merged into `lavender/expo-clean-rebuild` before orchestrator closeout.
 
 ## Beads Updates
 
-`lyricslab-8um.5` is `in_progress` and assigned to `delta`. `.beads/issues.jsonl` already reflected the in-progress claim before implementation edits began.
+`lyricslab-8um.5` was claimed by the orchestrator before implementation launch, then closed after PR #16 merged.
 
-The issue remains open for orchestrator/review closeout. This implementation thread does not close Beads issues.
+Close reason: Phase 01 merged via PR #16; review repaired and `ci-repaired-and-green`; gates passed: `npm test`, `npm run typecheck`, `git diff --check`; no findings remaining.
+
+After closeout, `bd ready --json` selected Phase 02 (`lyricslab-xoc`).
 
 ## Follow-Ups Filed
 
@@ -102,4 +108,4 @@ Follow-up context preserved for orchestrator/Phase 07: normalize `PRODUCT.md` an
 
 ## Closeout
 
-Open. Pending orchestrator closeout after thermo-nuclear review callback.
+Closed by the orchestrator after the combined closeout/next-phase selector recommended preserving the review-callback Beads export, merging PR #16, closing `lyricslab-8um.5`, and selecting Phase 02 (`lyricslab-xoc`) as the next ready phase.

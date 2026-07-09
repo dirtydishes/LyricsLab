@@ -16,7 +16,7 @@ Current Beads issue: none
 
 Current PR: none
 
-Last completed phase: 00 (`lyricslab-8um.3`)
+Last completed phase: 01 (`lyricslab-8um.5`)
 
 Blocked: no
 
@@ -41,7 +41,7 @@ Blocked: no
 | Phase | Beads Issue | Status | PR | Turn Doc |
 |---|---|---|---|---|
 | 00 | `lyricslab-8um.3` | closed | none | `turn-docs/lyricslab-phase-00.md` |
-| 01 | `lyricslab-8um.5` | open | none | `turn-docs/lyricslab-phase-01.md` |
+| 01 | `lyricslab-8um.5` | closed | `https://github.com/dirtydishes/lyricslab/pull/16` | `turn-docs/lyricslab-phase-01.md` |
 | 02 | `lyricslab-xoc` | open | none | `turn-docs/lyricslab-phase-02.md` |
 | 03 | `lyricslab-8um.1` | open | none | `turn-docs/lyricslab-phase-03.md` |
 | 04 | `lyricslab-8um.4` | open | none | `turn-docs/lyricslab-phase-04.md` |
@@ -51,4 +51,4 @@ Blocked: no
 
 ## Last Coordinator Update
 
-Phase 00 closed after attached local implementation verification and thermo-nuclear review. No PR was required for the bootstrap verification phase. `bd ready --json` now selects Phase 01 (`lyricslab-8um.5`) as the next expected phase.
+Phase 01 closed after PR #16 merged into `lavender/expo-clean-rebuild`. Review repaired turn-doc evidence and reported `ci-repaired-and-green`; `npm test`, `npm run typecheck`, and `git diff --check` passed. `bd ready --json` now selects Phase 02 (`lyricslab-xoc`) as the next expected phase.
