@@ -26,6 +26,16 @@ npm run build:editor-html
 
 After repair, re-run `npm run check:editor-html` and any phase-specific editor gates.
 
+Run these Phase 04 artifact gates when the CMU runtime artifact pipeline changes:
+
+```bash
+npm run build:rhyme-artifact
+npm run check:rhyme-artifact
+npm run smoke:rhyme-artifact
+```
+
+`npm run build:rhyme-artifact` should deterministically regenerate the bundled runtime artifact from `data/cmudict.txt`. `npm run check:rhyme-artifact` should fail when the checked-in artifact is stale. `npm run smoke:rhyme-artifact` is a non-default full-dictionary smoke that should load the generated artifact through the public rhyme artifact loader, probe representative exact-rhyme anchors, report artifact size and dictionary/index counts, and record representative lookup timings without putting the full dictionary on the default typing/test path.
+
 Use this as a config sanity check when Expo dependencies or `app.json` change:
 
 ```bash
