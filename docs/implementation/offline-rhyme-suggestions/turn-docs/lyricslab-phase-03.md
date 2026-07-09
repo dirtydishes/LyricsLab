@@ -106,7 +106,7 @@ Review result:
 
 CI owner: reviewer/verification agents
 
-Current CI state: `local-gates-pass-review-repair`
+Current CI state: `ci-unavailable-with-evidence`
 
 Evidence:
 
@@ -114,6 +114,8 @@ Evidence:
 - `npm run typecheck`: passed
 - `git diff --check`: passed
 - forbidden dependency/logging scan for `src/rhyme`: no matches for React, React Native, WebView, SQLite, Tiptap/editor imports, network calls, or `console.*`
+- `gh pr view 18 --repo dirtydishes/lyricslab --json number,url,state,isDraft,baseRefName,headRefName,headRefOid,mergeable,reviewDecision,statusCheckRollup`: PR #18 open, draft, base `lavender/expo-clean-rebuild`, head `lavender/offline-rhyme-phase-03`, mergeable `MERGEABLE`, hosted `statusCheckRollup: []`
+- `gh pr checks 18 --repo dirtydishes/lyricslab`: no checks reported on `lavender/offline-rhyme-phase-03`
 
 ## PR And Commits
 
@@ -121,7 +123,7 @@ Evidence:
 - Branch: `lavender/offline-rhyme-phase-03`
 - Base: `lavender/expo-clean-rebuild`
 - Commit subject: `add pure rhyme core fixtures`
-- Review repair/evidence commit subject: `simplify pure rhyme core review surface`
+- Review repair commit: `e8be8082b14ce3b643ed36fdd1d36c37fc452024` (`simplify pure rhyme core review surface`)
 
 ## Beads Updates
 
