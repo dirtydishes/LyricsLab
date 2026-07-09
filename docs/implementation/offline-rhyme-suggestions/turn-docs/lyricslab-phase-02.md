@@ -69,15 +69,17 @@ Evidence:
 - `npm run build:editor-html`: passed and regenerated `src/editor/generated/editorHtml.ts` with 2 inlined assets.
 - `npm run check:editor-html`: passed after regeneration; generated editor HTML is fresh.
 - `git diff --check`: passed.
+- GitHub PR state after creation: `mergeStateStatus: CLEAN`, `mergeable: MERGEABLE`, hosted status check rollup empty.
 
 ## PR And Commits
 
-Pending final commit and PR creation.
+Draft implementation PR opened for review.
 
 - Branch: `lavender/offline-rhyme-phase-02`
 - Target base: `lavender/expo-clean-rebuild`
-- PR: pending
-- Commits: pending
+- PR: `https://github.com/dirtydishes/lyricslab/pull/17`
+- Commits:
+  - `1da764f690e1d31496e39f4e291a88d5a4377629` - `harden editor suggestion baseline`
 
 ## Beads Updates
 
