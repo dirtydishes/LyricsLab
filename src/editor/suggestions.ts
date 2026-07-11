@@ -70,7 +70,6 @@ const FOLLOW_UP_WORDS: Record<string, readonly string[]> = {
 
 const MAX_SUGGESTIONS = 12;
 const MIN_ACTIVE_ANCHOR_LENGTH = 3;
-const RHYME_CANDIDATE_LOOKAHEAD_MULTIPLIER = 2;
 
 export const staticSuggestionProvider: SuggestionProvider = {
   getSuggestions(context) {
@@ -109,7 +108,6 @@ export function createRhymeSuggestionProvider(
         const candidates = findExactRhymeCandidates(index, {
           anchor,
           excludedWords,
-          maxResults: maxSuggestions * RHYME_CANDIDATE_LOOKAHEAD_MULTIPLIER,
         })
           .filter((candidate) => !isActiveWordCandidate(candidate, activeWord))
           .slice(0, maxSuggestions);

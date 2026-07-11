@@ -78,21 +78,37 @@ Reviewer skill:
 
 `thermo-nuclear-code-quality-review`
 
-Pending. No separate review doc should be created.
+Result: `repaired`; no findings remain. No separate review doc was created.
+
+The strict review confirmed:
+
+- `src/editor/suggestions.ts` remains the artifact-free canonical owner for anchor selection, fallback, exclusions, and `WordSuggestion` mapping.
+- `src/editor/bundledSuggestionProvider.ts` remains a five-line production adapter over `getBundledCmuRhymeIndex` and `createRhymeSuggestionProvider`.
+- `SuggestionBar`, bridge payloads, editor-web commands, and generated editor HTML are unchanged from the base branch; insertion still calls `insertSuggestion(suggestion.word)`.
+- Guard paths for a non-empty selection, a non-positive limit, or no useful anchor return before materializing the bundled index or invoking the candidate finder.
+- Default Jest coverage remains fixture-sized and does not import the generated CMU artifact.
+
+Repairs made during review:
+
+1. Removed the arbitrary two-times candidate lookahead. The provider now receives the complete deterministic exact-rhyme result, filters active-word prefixes, and only then applies the suggestion limit, so saturated prefix matches cannot hide valid later candidates or force a false fallback.
+2. Added focused regression coverage for saturated active-prefix filtering and for the normalized current-line, previous-token, and active-word exclusion contract passed by the rhyme provider.
 
 ## CI And Gates
 
 CI owner: reviewer/verification agents
 
-Current CI state: `local-gates-passed`
+Current CI state: `ci-unavailable-with-evidence`
 
 Evidence:
 
-- `npm test -- --runTestsByPath src/editor/__tests__/suggestions.test.ts`: passed, 1 suite, 20 tests.
-- `npm test`: passed, 12 suites, 93 tests.
+- `npm test -- --runTestsByPath src/editor/__tests__/suggestions.test.ts`: passed after repair, 1 suite, 21 tests.
+- `npm test`: passed after repair, 12 suites, 94 tests.
 - `npm run typecheck`: passed.
+- `npm run editor:test`: passed, 2 files, 15 tests.
+- `npm run smoke:rhyme-artifact`: passed; generated artifact freshness and 10 representative full-index lookups were verified outside default Jest.
 - `git diff --check`: passed.
-- Hosted CI/PR checks: PR #20 opened as draft; hosted check state not yet reviewed by the implementation worker.
+- Hosted CI is unavailable: PR `statusCheckRollup` is empty and `gh pr checks 20` reports no checks on the branch.
+- Local merge evidence: `git merge-tree --write-tree --messages origin/lavender/expo-clean-rebuild HEAD` exited zero without conflict messages.
 
 ## PR And Commits
 
@@ -100,10 +116,12 @@ Evidence:
 - Branch: `lavender/offline-rhyme-phase-05`
 - Base: `lavender/expo-clean-rebuild`
 - Implementation commit: `3fb798254473a7eee4494fbe7b17122e10266dc8` (`wire native rhyme suggestions`)
+- PR-detail commit: `a95a0301a0a248517c5063ec694d1e287b67003b` (`record phase five pr details`)
+- Reviewer-observed PR state: open draft, `CLEAN`, `MERGEABLE`, correct base/head, with no hosted checks.
 
 ## Beads Updates
 
-Live Beads was inspected and `lyricslab-gg4` remains `IN_PROGRESS`. This worker did not close Beads; `.beads/issues.jsonl` contains the existing phase claim/export state.
+Live Beads was inspected and `lyricslab-gg4` remains `IN_PROGRESS`. This reviewer did not close Beads; the orchestrator's implementation-callback note in `.beads/issues.jsonl` is preserved in the review commit.
 
 ## Follow-Ups Filed
 
@@ -121,4 +139,4 @@ None.
 
 ## Closeout
 
-Open pending implementation commit, PR, review, and orchestrator closeout.
+Phase 05 review is repaired and resolved. PR #20 remains an open draft for orchestrator closeout; `lyricslab-gg4` remains open as required.

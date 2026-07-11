@@ -54,7 +54,8 @@ function createRhymeProviderProbe({
   const index = createEmptyRhymeIndex();
   const getRhymeIndex = jest.fn(() => index);
   const findExactRhymeCandidates = jest.fn(
-    (_index: RhymeIndex, _query: ExactRhymeQuery) => candidates,
+    (_index: RhymeIndex, query: ExactRhymeQuery) =>
+      candidates.slice(0, query.maxResults ?? candidates.length),
   );
   const provider = createRhymeSuggestionProvider(getRhymeIndex, {
     fallbackProvider: staticSuggestionProvider,
@@ -211,7 +212,9 @@ describe('suggestion provider', () => {
     expect(
       provider.getSuggestions(
         createContext({
-          previousToken: 'night',
+          currentLineText: 'Writing NIGHT, Dr!',
+          previousToken: 'NIGHT,',
+          wordBeforeCursor: 'Dr!',
         }),
       ),
     ).toEqual([{ id: 'rhyme:exact:flight', word: 'flight' }]);
@@ -221,8 +224,39 @@ describe('suggestion provider', () => {
       index,
       expect.objectContaining({
         anchor: 'night',
-        maxResults: 4,
+        excludedWords: ['writing', 'night', 'dr'],
       }),
+    );
+  });
+
+  it('filters active-word prefixes before applying the suggestion limit', () => {
+    const { findExactRhymeCandidates, provider } = createRhymeProviderProbe({
+      candidates: [
+        createExactCandidate('brace'),
+        createExactCandidate('braid'),
+        createExactCandidate('brand'),
+        createExactCandidate('brave'),
+        createExactCandidate('flight'),
+        createExactCandidate('sight'),
+      ],
+      maxSuggestions: 2,
+    });
+
+    expect(
+      provider.getSuggestions(
+        createContext({
+          currentLineText: 'night br',
+          previousToken: 'night',
+          wordBeforeCursor: 'br',
+        }),
+      ),
+    ).toEqual([
+      { id: 'rhyme:exact:flight', word: 'flight' },
+      { id: 'rhyme:exact:sight', word: 'sight' },
+    ]);
+    expect(findExactRhymeCandidates).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.not.objectContaining({ maxResults: expect.anything() }),
     );
   });
 
