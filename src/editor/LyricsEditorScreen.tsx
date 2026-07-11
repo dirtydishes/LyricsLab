@@ -20,7 +20,8 @@ import {
   type AsyncTaskQueue,
 } from './bodyPersistence';
 import type { EditorBodySnapshot, SuggestionContext } from './bridge';
-import { staticSuggestionProvider, type WordSuggestion } from './suggestions';
+import { bundledSuggestionProvider } from './bundledSuggestionProvider';
+import type { WordSuggestion } from './suggestions';
 import type { SongRepository } from '../songs/songRepository';
 import type { Song, SongId } from '../songs/types';
 
@@ -297,7 +298,7 @@ export function LyricsEditorScreen({
       return [];
     }
 
-    return staticSuggestionProvider.getSuggestions(selectionContext);
+    return bundledSuggestionProvider.getSuggestions(selectionContext);
   }, [isBodyEditorFocused, selectionContext]);
 
   const handleSuggestionSelected = useCallback(
