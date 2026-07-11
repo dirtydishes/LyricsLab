@@ -92,11 +92,14 @@ Evidence:
 - `npm test`: passed, 12 suites, 93 tests.
 - `npm run typecheck`: passed.
 - `git diff --check`: passed.
-- Hosted CI/PR checks: pending PR.
+- Hosted CI/PR checks: PR #20 opened as draft; hosted check state not yet reviewed by the implementation worker.
 
 ## PR And Commits
 
-Pending. Implementation commit and PR are not recorded yet.
+- PR: `https://github.com/dirtydishes/lyricslab/pull/20`
+- Branch: `lavender/offline-rhyme-phase-05`
+- Base: `lavender/expo-clean-rebuild`
+- Implementation commit: `3fb798254473a7eee4494fbe7b17122e10266dc8` (`wire native rhyme suggestions`)
 
 ## Beads Updates
 
