@@ -16,7 +16,7 @@ Current Beads issue: none
 
 Current PR: none
 
-Last completed phase: 04 (`lyricslab-8um.4`)
+Last completed phase: 05 (`lyricslab-gg4`)
 
 Blocked: no
 
@@ -45,10 +45,10 @@ Blocked: no
 | 02 | `lyricslab-xoc` | closed | `https://github.com/dirtydishes/lyricslab/pull/17` | `turn-docs/lyricslab-phase-02.md` |
 | 03 | `lyricslab-8um.1` | closed | `https://github.com/dirtydishes/lyricslab/pull/18` | `turn-docs/lyricslab-phase-03.md` |
 | 04 | `lyricslab-8um.4` | closed | `https://github.com/dirtydishes/lyricslab/pull/19` | `turn-docs/lyricslab-phase-04.md` |
-| 05 | `lyricslab-gg4` | open | none | `turn-docs/lyricslab-phase-05.md` |
+| 05 | `lyricslab-gg4` | closed | `https://github.com/dirtydishes/lyricslab/pull/20` | `turn-docs/lyricslab-phase-05.md` |
 | 06 | `lyricslab-8um.2` | open | none | `turn-docs/lyricslab-phase-06.md` |
 | 07 | `lyricslab-bhs` | open | none | `turn-docs/lyricslab-phase-07.md` |
 
 ## Last Coordinator Update
 
-Phase 04 closed after PR #19 merged into `lavender/expo-clean-rebuild` at merge commit `0f717d9856b984f500af6f4c7d1e321a6498d2cb`. Thermo-nuclear review repaired the artifact smoke gate and reported `ci-unavailable-with-evidence`; `npm run build:rhyme-artifact`, `npm test`, `npm run typecheck`, `npm run check:rhyme-artifact`, `npm run smoke:rhyme-artifact -- --compact`, `git diff --check`, and script syntax checks passed. `bd ready --json` now selects Phase 05 (`lyricslab-gg4`) as the next expected phase.
+Phase 05 closed after PR #20 merged into `lavender/expo-clean-rebuild` at merge commit `8443b14581ba8fe0d93479f2b5189c40a4481499`. Thermo-nuclear review repaired candidate filtering and reported `ci-unavailable-with-evidence`; `npm test`, focused suggestion tests, `npm run typecheck`, `npm run editor:test`, `npm run smoke:rhyme-artifact`, and `git diff --check` passed with no findings remaining. `bd ready --json` now selects Phase 06 (`lyricslab-8um.2`) as the next expected phase, pending the required selector report.

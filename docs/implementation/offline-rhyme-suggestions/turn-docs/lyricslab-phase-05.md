@@ -139,4 +139,11 @@ None.
 
 ## Closeout
 
-Phase 05 review is repaired and resolved. PR #20 remains an open draft for orchestrator closeout; `lyricslab-gg4` remains open as required.
+Closed.
+
+- PR #20 was marked ready and merged into `lavender/expo-clean-rebuild` at merge commit `8443b14581ba8fe0d93479f2b5189c40a4481499`.
+- Final phase head: `f13d22249abfd87bb89acfd7149616e84642acf2`, including the orchestrator's review-callback Beads export.
+- Final reviewed head: `33d71837b0eda1850571e781e866f3d9c469a721`.
+- The closeout-selector reported `ready`, found no closeout risks, and authorized closure and continuation.
+- Beads issue `lyricslab-gg4` was closed with the merged PR, repaired thermo-nuclear review, `ci-unavailable-with-evidence`, passing local gates, and no findings remaining recorded in the close reason.
+- The next phase is not selected in this closeout. A separate selector runs only after this closeout mirror is committed and pushed.
