@@ -114,15 +114,6 @@ export function isArpabetVowelPhone(
   return CMU_VOWEL_PHONES.has(normalizePhoneToken(phone).phone);
 }
 
-export function isStressedVowel(phone: ParsedPhoneToken | string): boolean {
-  const token = normalizePhoneToken(phone);
-
-  return (
-    (token.stress === 1 || token.stress === 2) &&
-    isArpabetVowelPhone(token)
-  );
-}
-
 export function getArpabetSyllableNuclei(
   pronunciation: ArpabetPronunciationInput,
 ): readonly ArpabetSyllableNucleus[] {

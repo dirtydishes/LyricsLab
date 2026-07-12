@@ -1,22 +1,5 @@
 import { normalizeLyricToken } from './normalize';
-
-const CMU_VOWELS = new Set([
-  'AA',
-  'AE',
-  'AH',
-  'AO',
-  'AW',
-  'AY',
-  'EH',
-  'ER',
-  'EY',
-  'IH',
-  'IY',
-  'OW',
-  'OY',
-  'UH',
-  'UW',
-]);
+import { isArpabetVowelPhone } from './rhymeTail';
 
 const CMU_CONSONANTS = new Set([
   'B',
@@ -80,6 +63,14 @@ export function parseCmuLine(line: string): CmuPronunciationEntry | null {
   }
 
   const { alternate, displayWord } = parseCmuHeadword(headword);
+
+  if (
+    /[()]/u.test(displayWord) ||
+    (alternate === null ? /[()]/u.test(headword) : alternate < 1)
+  ) {
+    return null;
+  }
+
   const normalizedWord = normalizeCmuWord(displayWord);
 
   if (
@@ -107,7 +98,7 @@ function isValidCmuPhoneme(phoneme: string) {
   const [, phone, stress] = match;
 
   return phone !== undefined &&
-    (CMU_VOWELS.has(phone)
+    (isArpabetVowelPhone(phone)
       ? stress !== undefined
       : CMU_CONSONANTS.has(phone) && stress === undefined);
 }

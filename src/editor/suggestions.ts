@@ -1,6 +1,6 @@
 import type { SuggestionContext } from './bridge';
 import { normalizeRhymeToken } from '../rhyme/normalize';
-import type { RhymeEngine, RhymeSuggestion } from '../rhyme/public';
+import type { RhymeEngine, RhymeSuggestion } from '../rhyme/RhymeEngine';
 
 export type WordSuggestion = {
   id: string;

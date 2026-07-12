@@ -91,7 +91,11 @@ type Pairing = {
 export function createRhymeEngine(
   lexemes: readonly RhymeLexemeInput[],
 ): RhymeEngine {
-  return createDiagnosticRhymeEngine(lexemes);
+  const diagnosticEngine = createDiagnosticRhymeEngine(lexemes);
+
+  return {
+    suggest: diagnosticEngine.suggest,
+  };
 }
 
 export function createDiagnosticRhymeEngine(
@@ -113,8 +117,12 @@ export function createDiagnosticRhymeEngine(
       return [];
     }
 
-    const excluded = buildExcludedSet(query.excludedWords);
-    const repeatedLemmas = buildRepeatedLemmaSet(
+    const excludedWords = buildNormalizedSet(query.excludedWords);
+    const excludedLemmas = buildLemmaSet(
+      query.excludedWords,
+      lexemesByWord,
+    );
+    const repeatedLemmas = buildLemmaSet(
       query.sourceTokens,
       lexemesByWord,
     );
@@ -124,8 +132,8 @@ export function createDiagnosticRhymeEngine(
       if (
         candidate.normalizedWord === anchor.normalizedWord ||
         candidate.lemma === anchor.lemma ||
-        excluded.has(candidate.normalizedWord) ||
-        excluded.has(candidate.lemma)
+        excludedWords.has(candidate.normalizedWord) ||
+        excludedLemmas.has(candidate.lemma)
       ) {
         continue;
       }
@@ -148,9 +156,13 @@ export function createDiagnosticRhymeEngine(
       }
     }
 
-    return [...candidatesByLemma.values()]
-      .sort(compareSuggestions)
-      .slice(0, maxResults);
+    const suggestions = [...candidatesByLemma.values()].sort(
+      compareSuggestions,
+    );
+
+    return maxResults === undefined
+      ? suggestions
+      : suggestions.slice(0, maxResults);
   }
 
   return {
@@ -165,12 +177,7 @@ function indexLexemes(
   inputs: readonly RhymeLexemeInput[],
 ): readonly IndexedLexeme[] {
   const lexemes = new Map<string, IndexedLexeme>();
-  const sortedInputs = [...inputs].sort((left, right) =>
-    compareStrings(
-      `${normalizeRhymeToken(left.normalizedWord ?? left.word)}:${normalizeRhymeToken(left.lemma ?? left.word)}:${left.word}`,
-      `${normalizeRhymeToken(right.normalizedWord ?? right.word)}:${normalizeRhymeToken(right.lemma ?? right.word)}:${right.word}`,
-    ),
-  );
+  const sortedInputs = [...inputs].sort(compareLexemeInputs);
 
   for (const input of sortedInputs) {
     const normalizedWord = normalizeRhymeToken(
@@ -188,7 +195,9 @@ function indexLexemes(
     }
 
     const existing = lexemes.get(normalizedWord);
-    const lemma = normalizeRhymeToken(input.lemma ?? normalizedWord);
+    const lemma =
+      normalizeRhymeToken(input.lemma ?? normalizedWord) || normalizedWord;
+    const surfaceWord = input.word.trim() || normalizedWord;
     const combinedPronunciations = uniqueAnalyzedPronunciations([
       ...(existing?.pronunciations ?? []),
       ...pronunciations,
@@ -199,15 +208,32 @@ function indexLexemes(
         existing?.commonness ?? 0,
         clamp01(input.commonness ?? 0),
       ),
-      lemma: existing?.lemma ?? lemma ?? normalizedWord,
+      lemma: existing?.lemma ?? lemma,
       normalizedWord,
       pronunciations: combinedPronunciations,
-      word: chooseSurfaceWord(existing?.word, input.word),
+      word: chooseSurfaceWord(existing?.word, surfaceWord),
     });
   }
 
   return [...lexemes.values()].sort((left, right) =>
     compareStrings(left.normalizedWord, right.normalizedWord),
+  );
+}
+
+function compareLexemeInputs(
+  left: RhymeLexemeInput,
+  right: RhymeLexemeInput,
+) {
+  return (
+    compareStrings(
+      normalizeRhymeToken(left.normalizedWord ?? left.word),
+      normalizeRhymeToken(right.normalizedWord ?? right.word),
+    ) ||
+    compareStrings(
+      normalizeRhymeToken(left.lemma ?? left.word),
+      normalizeRhymeToken(right.lemma ?? right.word),
+    ) ||
+    compareStrings(left.word, right.word)
   );
 }
 
@@ -351,7 +377,7 @@ function createSuggestion(
     candidateSyllables: pairing.candidate.syllables,
     candidateTailStartsAt: pairing.candidate.tailStartsAt,
     familyKey,
-    id: `rhyme:${pairing.kind}:${candidate.normalizedWord}:${familyKey}`,
+    id: `rhyme:${pairing.kind}:${candidate.normalizedWord}`,
     kind: pairing.kind,
     label: createLabel(pairing.kind, pairing.matchedSyllables, word),
     lemma: candidate.lemma,
@@ -413,13 +439,13 @@ function compareSuggestions(
   );
 }
 
-function buildExcludedSet(words: readonly string[] | undefined) {
+function buildNormalizedSet(words: readonly string[] | undefined) {
   return new Set(
     (words ?? []).map(normalizeRhymeToken).filter((word) => word.length > 0),
   );
 }
 
-function buildRepeatedLemmaSet(
+function buildLemmaSet(
   words: readonly string[] | undefined,
   lexemesByWord: ReadonlyMap<string, IndexedLexeme>,
 ) {
@@ -461,14 +487,19 @@ function chooseSurfaceWord(existing: string | undefined, candidate: string) {
 function applyAnchorCasing(word: string, anchor: string) {
   const letters = anchor.replace(/[^\p{L}]/gu, '');
 
-  if (letters.length > 1 && letters === letters.toLocaleUpperCase()) {
-    return word.toLocaleUpperCase();
+  if (letters.length > 1 && letters === letters.toUpperCase()) {
+    return word.toUpperCase();
   }
 
   const firstLetter = letters.at(0);
+  const remainingLetters = letters.slice(1);
 
-  if (firstLetter && firstLetter === firstLetter.toLocaleUpperCase()) {
-    return `${word.charAt(0).toLocaleUpperCase()}${word.slice(1)}`;
+  if (
+    firstLetter &&
+    firstLetter === firstLetter.toUpperCase() &&
+    remainingLetters === remainingLetters.toLowerCase()
+  ) {
+    return `${word.charAt(0).toUpperCase()}${word.slice(1)}`;
   }
 
   return word;
@@ -476,7 +507,7 @@ function applyAnchorCasing(word: string, anchor: string) {
 
 function normalizeMaxResults(maxResults: number | undefined) {
   if (maxResults === undefined) {
-    return 12;
+    return undefined;
   }
 
   if (!Number.isFinite(maxResults)) {
@@ -495,7 +526,7 @@ function compareStrings(left: string, right: string) {
 }
 
 function clamp01(value: number) {
-  return Math.max(0, Math.min(1, value));
+  return Number.isFinite(value) ? Math.max(0, Math.min(1, value)) : 0;
 }
 
 function roundScore(value: number) {

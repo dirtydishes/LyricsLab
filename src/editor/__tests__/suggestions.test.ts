@@ -16,7 +16,7 @@ import type {
   RhymeEngine,
   RhymeEngineQuery,
   RhymeSuggestion,
-} from '../../rhyme/public';
+} from '../../rhyme/RhymeEngine';
 
 const RHYME_SUGGESTION_CMU_FIXTURE = `
 ;;; intentionally tiny fixture for injected suggestion-provider tests

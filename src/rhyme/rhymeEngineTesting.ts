@@ -1,7 +1,6 @@
 import { parseCmuDictionary } from './cmuParser';
 import {
   createDiagnosticRhymeEngine,
-  createRhymeEngine,
   type DiagnosticRhymeEngine,
   type RhymeLexemeInput,
 } from './createRhymeEngine';
@@ -12,18 +11,6 @@ export type RhymeEngineLexemeMetadata = {
   readonly commonness?: number;
   readonly lemma?: string;
 };
-
-export function createFixtureRhymeEngine(
-  lexemes: readonly RhymeLexemeInput[],
-) {
-  return createRhymeEngine(lexemes);
-}
-
-export function createDiagnosticFixtureRhymeEngine(
-  lexemes: readonly RhymeLexemeInput[],
-) {
-  return createDiagnosticRhymeEngine(lexemes);
-}
 
 export function createFixtureRhymeEngineFromCmu(
   source: string,
@@ -41,7 +28,7 @@ export function createFixtureRhymeEngineFromCmu(
       lemma: lexemeMetadata?.lemma ?? existing?.lemma,
       normalizedWord: entry.normalizedWord,
       pronunciations: [...(existing?.pronunciations ?? []), pronunciation],
-      word: existing?.word ?? entry.displayWord.toLocaleLowerCase(),
+      word: existing?.word ?? entry.normalizedWord,
     });
   }
 

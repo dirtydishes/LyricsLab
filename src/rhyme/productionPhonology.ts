@@ -31,6 +31,16 @@ export type SlantScore = {
   readonly vowel: number;
 };
 
+type TailSegment = {
+  readonly consonants: readonly ParsedPhoneToken[];
+  readonly vowel: ParsedPhoneToken;
+};
+
+type MutableTailSegment = {
+  consonants: ParsedPhoneToken[];
+  vowel: ParsedPhoneToken;
+};
+
 const VOWEL_FAMILIES: readonly ReadonlySet<string>[] = [
   new Set(['IY', 'IH']),
   new Set(['EY', 'EH', 'AE']),
@@ -99,35 +109,76 @@ export function scoreFullTailSlant(
   anchor: PronunciationAnalysis,
   candidate: PronunciationAnalysis,
 ): SlantScore {
-  const anchorVowels = anchor.tail.filter(isArpabetVowelPhone);
-  const candidateVowels = candidate.tail.filter(isArpabetVowelPhone);
-  const anchorConsonants = anchor.tail.filter(
-    (phone) => !isArpabetVowelPhone(phone),
-  );
-  const candidateConsonants = candidate.tail.filter(
-    (phone) => !isArpabetVowelPhone(phone),
-  );
-  const vowel = compareAlignedSequences(
-    anchorVowels,
-    candidateVowels,
-    compareVowels,
-  );
-  const coda = compareAlignedSequences(
-    anchorConsonants,
-    candidateConsonants,
-    compareConsonants,
-  );
-  const stress = compareAlignedSequences(
-    anchorVowels,
-    candidateVowels,
-    (left, right) => compareStress(left.stress, right.stress),
+  const aligned = alignTailSegments(
+    createTailSegments(anchor.tail),
+    createTailSegments(candidate.tail),
   );
 
   return {
-    coda: roundScore(coda),
-    phonetic: roundScore(vowel * 0.55 + coda * 0.3 + stress * 0.15),
-    stress: roundScore(stress),
-    vowel: roundScore(vowel),
+    coda: roundScore(aligned.coda),
+    phonetic: clampScore(
+      aligned.vowel * 0.55 + aligned.coda * 0.3 + aligned.stress * 0.15,
+    ),
+    stress: roundScore(aligned.stress),
+    vowel: roundScore(aligned.vowel),
+  };
+}
+
+function createTailSegments(
+  tail: readonly ParsedPhoneToken[],
+): readonly TailSegment[] {
+  const segments: MutableTailSegment[] = [];
+
+  for (const phone of tail) {
+    if (isArpabetVowelPhone(phone)) {
+      segments.push({ consonants: [], vowel: phone });
+      continue;
+    }
+
+    segments.at(-1)?.consonants.push(phone);
+  }
+
+  return segments;
+}
+
+function alignTailSegments(
+  anchor: readonly TailSegment[],
+  candidate: readonly TailSegment[],
+) {
+  const length = Math.max(anchor.length, candidate.length);
+
+  if (length === 0) {
+    return { coda: 0, stress: 0, vowel: 0 };
+  }
+
+  let coda = 0;
+  let stress = 0;
+  let vowel = 0;
+
+  for (let index = 0; index < length; index += 1) {
+    const anchorSegment = anchor[index];
+    const candidateSegment = candidate[index];
+
+    if (!anchorSegment || !candidateSegment) {
+      continue;
+    }
+
+    vowel += compareVowels(anchorSegment.vowel, candidateSegment.vowel);
+    stress += compareStress(
+      anchorSegment.vowel.stress,
+      candidateSegment.vowel.stress,
+    );
+    coda += compareAlignedSequences(
+      anchorSegment.consonants,
+      candidateSegment.consonants,
+      compareConsonants,
+    );
+  }
+
+  return {
+    coda: coda / length,
+    stress: stress / length,
+    vowel: vowel / length,
   };
 }
 
@@ -218,18 +269,29 @@ function compareAlignedSequences<T>(
     return 1;
   }
 
-  let score = 0;
+  let previous = new Array<number>(right.length + 1).fill(0);
 
-  for (let index = 0; index < length; index += 1) {
-    const leftItem = left[index];
-    const rightItem = right[index];
+  for (const leftItem of left) {
+    const current = new Array<number>(right.length + 1).fill(0);
 
-    if (leftItem !== undefined && rightItem !== undefined) {
-      score += compare(leftItem, rightItem);
+    for (let rightIndex = 1; rightIndex <= right.length; rightIndex += 1) {
+      const rightItem = right[rightIndex - 1];
+
+      if (rightItem === undefined) {
+        continue;
+      }
+
+      current[rightIndex] = Math.max(
+        previous[rightIndex] ?? 0,
+        current[rightIndex - 1] ?? 0,
+        (previous[rightIndex - 1] ?? 0) + compare(leftItem, rightItem),
+      );
     }
+
+    previous = current;
   }
 
-  return score / length;
+  return (previous[right.length] ?? 0) / length;
 }
 
 function compareVowels(left: ParsedPhoneToken, right: ParsedPhoneToken) {
@@ -283,5 +345,9 @@ function compareStress(
 }
 
 function roundScore(score: number) {
-  return Math.round(Math.max(0, Math.min(1, score)) * 1000) / 1000;
+  return Math.round(clampScore(score) * 1_000_000) / 1_000_000;
+}
+
+function clampScore(score: number) {
+  return Math.max(0, Math.min(1, score));
 }

@@ -2,12 +2,12 @@
 
 import {
   BALANCED_SLANT_THRESHOLD,
+  createDiagnosticRhymeEngine,
+  createRhymeEngine,
   RHYME_RANKING_WEIGHTS,
   type RhymeLexemeInput,
 } from '../createRhymeEngine';
 import {
-  createDiagnosticFixtureRhymeEngine,
-  createFixtureRhymeEngine,
   createFixtureRhymeEngineFromCmu,
 } from '../rhymeEngineTesting';
 
@@ -30,7 +30,7 @@ const CORE_FIXTURE: readonly RhymeLexemeInput[] = [
 
 describe('production rhyme engine', () => {
   it('applies the accepted weights and rejects balanced slants below 0.86', () => {
-    const engine = createDiagnosticFixtureRhymeEngine(CORE_FIXTURE);
+    const engine = createDiagnosticRhymeEngine(CORE_FIXTURE);
     const suggestions = engine.diagnose({ anchor: 'cat' });
     const exact = suggestionFor(suggestions, 'rat');
     const acceptedSlant = suggestionFor(suggestions, 'cap');
@@ -58,7 +58,7 @@ describe('production rhyme engine', () => {
   });
 
   it('keeps SUBTLEX commonness to its tie-break-sized contribution', () => {
-    const suggestions = createDiagnosticFixtureRhymeEngine(CORE_FIXTURE).diagnose({
+    const suggestions = createDiagnosticRhymeEngine(CORE_FIXTURE).diagnose({
       anchor: 'cat',
     });
 
@@ -96,9 +96,57 @@ TIN T IH1 N
     );
   });
 
+  it('rejects tails that only match after consonants cross syllable boundaries', () => {
+    const engine = createDiagnosticRhymeEngine([
+      lexeme('meter', ['M', 'IY1', 'T', 'ER0']),
+      lexeme('misordered', ['M', 'IY1', 'ER0', 'T']),
+    ]);
+
+    expect(engine.diagnose({ anchor: 'meter' })).toEqual([]);
+  });
+
+  it('aligns consonant clusters within a syllable instead of comparing offsets', () => {
+    const engine = createDiagnosticRhymeEngine([
+      lexeme('clustered', ['K', 'AE1', 'S', 'T', 'R']),
+      lexeme('shorter', ['SH', 'AE1', 'T', 'R']),
+    ]);
+    const suggestion = suggestionFor(
+      engine.diagnose({ anchor: 'clustered' }),
+      'shorter',
+    );
+
+    expect(suggestion.scoreDiagnostics.slant).toEqual({
+      coda: 0.666667,
+      phonetic: 0.9,
+      stress: 1,
+      vowel: 1,
+    });
+  });
+
+  it('rejects raw scores below 0.86 instead of rounding them into acceptance', () => {
+    const engine = createDiagnosticRhymeEngine([
+      lexeme('threshold', [
+        'AE1', 'T',
+        'AE0', 'T',
+        'AE0', 'T',
+        'AE0', 'T',
+        'AE0', 'T',
+      ]),
+      lexeme('rounded', [
+        'AE2', 'T',
+        'AE0', 'T',
+        'AE0', 'P',
+        'EH0', 'B',
+        'EH0',
+      ]),
+    ]);
+
+    expect(engine.diagnose({ anchor: 'threshold' })).toEqual([]);
+  });
+
   it('reports deterministic syllable spans and multisyllabic tails', () => {
     const suggestion = suggestionFor(
-      createDiagnosticFixtureRhymeEngine(CORE_FIXTURE).diagnose({
+      createDiagnosticRhymeEngine(CORE_FIXTURE).diagnose({
         anchor: 'happy',
       }),
       'sappy',
@@ -114,7 +162,7 @@ TIN T IH1 N
   });
 
   it('groups inflections by lemma while preserving distinct rhyme families', () => {
-    const engine = createDiagnosticFixtureRhymeEngine(CORE_FIXTURE);
+    const engine = createDiagnosticRhymeEngine(CORE_FIXTURE);
     const lemmaSuggestions = engine.diagnose({ anchor: 'fun' });
     const familySuggestions = engine.diagnose({ anchor: 'cat' });
 
@@ -128,7 +176,7 @@ TIN T IH1 N
   });
 
   it('honors exclusions and applies repetition only from current-song tokens', () => {
-    const engine = createDiagnosticFixtureRhymeEngine(CORE_FIXTURE);
+    const engine = createDiagnosticRhymeEngine(CORE_FIXTURE);
     const repeated = engine.diagnose({
       anchor: 'cat',
       excludedWords: ['cap'],
@@ -146,19 +194,94 @@ TIN T IH1 N
     );
   });
 
+  it('excludes an entire lemma when any indexed inflection is excluded', () => {
+    const suggestions = createDiagnosticRhymeEngine(CORE_FIXTURE).diagnose({
+      anchor: 'fun',
+      excludedWords: ['running'],
+    });
+
+    expect(suggestions.map(({ lemma }) => lemma)).not.toContain('run');
+  });
+
+  it('keeps diagnostics out of the production engine runtime surface', () => {
+    expect(Object.keys(createRhymeEngine(CORE_FIXTURE))).toEqual([
+      'suggest',
+    ]);
+  });
+
+  it('leaves omitted result limits uncapped for caller-side filtering', () => {
+    const fixture = [
+      lexeme('anchor', ['AE1', 'T']),
+      ...Array.from({ length: 13 }, (_, index) =>
+        lexeme(`candidate${index}`, ['AE1', 'T']),
+      ),
+    ];
+    const engine = createRhymeEngine(fixture);
+
+    expect(engine.suggest({ anchor: 'anchor' })).toHaveLength(13);
+    expect(engine.suggest({ anchor: 'anchor', maxResults: 3 })).toHaveLength(3);
+  });
+
+  it('normalizes invalid lemma and commonness metadata to safe defaults', () => {
+    const engine = createDiagnosticRhymeEngine([
+      lexeme('cat', ['K', 'AE1', 'T']),
+      lexeme('bat', ['B', 'AE1', 'T'], {
+        commonness: Number.NaN,
+        lemma: '!!!',
+      }),
+      lexeme('rat', ['R', 'AE1', 'T'], { lemma: '???' }),
+    ]);
+    const suggestions = engine.diagnose({ anchor: 'cat' });
+
+    expect(suggestions.map(({ normalizedWord }) => normalizedWord)).toEqual([
+      'bat',
+      'rat',
+    ]);
+    expect(suggestions.map(({ lemma }) => lemma)).toEqual(['bat', 'rat']);
+    expect(suggestions.map(({ score }) => score)).toEqual([0.8, 0.8]);
+  });
+
   it('keeps stable IDs, casing, and ordering across repeated and reordered input', () => {
-    const forward = createFixtureRhymeEngine(CORE_FIXTURE);
-    const reverse = createFixtureRhymeEngine([...CORE_FIXTURE].reverse());
+    const forward = createRhymeEngine(CORE_FIXTURE);
+    const reverse = createRhymeEngine([...CORE_FIXTURE].reverse());
     const query = { anchor: 'CAT' } as const;
 
     expect(forward.suggest(query)).toEqual(forward.suggest(query));
     expect(reverse.suggest(query)).toEqual(forward.suggest(query));
     expect(forward.suggest(query)[0]).toEqual(
       expect.objectContaining({
-        id: expect.stringMatching(/^rhyme:(exact|slant):[a-z]+:/u),
+        id: 'rhyme:exact:rat',
         word: expect.stringMatching(/^[A-Z]+$/u),
       }),
     );
+    expect(forward.suggest({ anchor: 'Cat' })[0]?.word).toBe('Rat');
+    expect(forward.suggest({ anchor: 'CaT' })[0]?.word).toBe('rat');
+  });
+
+  it('keeps pairing and IDs stable when pronunciation order is reversed', () => {
+    const lexemes: readonly RhymeLexemeInput[] = [
+      {
+        pronunciations: [
+          { phones: ['K', 'AE1', 'T'] },
+          { phones: ['K', 'EH1', 'T'] },
+        ],
+        word: 'cat',
+      },
+      {
+        pronunciations: [
+          { phones: ['B', 'EH1', 'T'] },
+          { phones: ['B', 'AE1', 'T'] },
+        ],
+        word: 'bet',
+      },
+    ];
+    const reversedPronunciations = lexemes.map((entry) => ({
+      ...entry,
+      pronunciations: [...entry.pronunciations].reverse(),
+    }));
+
+    expect(createRhymeEngine(reversedPronunciations).suggest({ anchor: 'cat' }))
+      .toEqual(createRhymeEngine(lexemes).suggest({ anchor: 'cat' }));
   });
 });
 
