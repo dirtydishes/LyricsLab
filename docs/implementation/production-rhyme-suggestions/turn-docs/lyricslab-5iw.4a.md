@@ -45,6 +45,35 @@ Produce the complete licensed, pinned, reproducible production artifact from the
 }
 ```
 
+### Clean-room reconciliation brief (2026-07-12)
+
+```json
+{
+  "phase_issue_id": "lyricslab-5iw.4a",
+  "risk": "high",
+  "strategy": "direct",
+  "implementation_owner": "sole reconciliation owner on lavender/production-rhyme-phase-04a-sol-reconcile",
+  "review_independence": "the authoritative Sol tip already includes independent validation, mobile-runtime remediation, and final thermonuclear review repairs; reconciliation reruns the complete accepted gate matrix",
+  "delegation_plan": [],
+  "model_and_effort_rationale": "Direct ownership preserves the user's sole-mutation constraint while reconciling two divergent Phase 04A implementations path by path.",
+  "required_evidence": [
+    "intentional ancestry and old-vs-clean path inventory",
+    "transitive activation audit proving no superseded PR #27 behavior survives",
+    "authoritative clean-room source, compiler, artifact, runtime, test, notice, manifest, and seal paths",
+    "preserved unrelated Phase 01-04 work, canonical Beads JSONL state, and Phase 05 selection metadata",
+    "full source, seal, compiler, production, runtime, mobile-memory, editor, Expo, and legacy gates",
+    "final artifact, manifest, immutable-gold, memory, and warm-host performance evidence"
+  ],
+  "user_constraints": [
+    "do not begin Phase 05 feature implementation",
+    "do not mutate Beads through bd",
+    "do not push or create/update hosted PRs",
+    "commit reconciliation locally with lowercase human messages",
+    "send exactly one final implementation callback to orchestrator 019f5428-f2ea-74c2-abfb-e37349c96391"
+  ]
+}
+```
+
 ## Adaptations
 
 - Created by the user-approved 2026-07-12 sequence amendment after Phase 03 proved that final artifact assembly could not precede Phase 04 source curation.
