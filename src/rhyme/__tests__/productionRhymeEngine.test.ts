@@ -4,10 +4,16 @@ import {
   BALANCED_SLANT_THRESHOLD,
   createDiagnosticRhymeEngine,
   createRhymeEngine,
-  createRhymeEngineAsync,
   RHYME_RANKING_WEIGHTS,
   type RhymeLexemeInput,
 } from '../createRhymeEngine';
+import {
+  analyzePronunciation,
+  createCompatibleSlantBucketKeys,
+  createSlantBucketKey,
+  scoreFamilyKeySlantUpperBound,
+  scoreFullTailSlant,
+} from '../productionPhonology';
 import {
   createFixtureRhymeEngineFromCmu,
 } from '../rhymeEngineTesting';
@@ -30,22 +36,6 @@ const CORE_FIXTURE: readonly RhymeLexemeInput[] = [
 ];
 
 describe('production rhyme engine', () => {
-  it('cancels bounded asynchronous index construction at a host yield', async () => {
-    let cancelled = false;
-    const yieldToHost = jest.fn(async () => {
-      cancelled = true;
-    });
-
-    await expect(
-      createRhymeEngineAsync(CORE_FIXTURE, {
-        recordsPerChunk: 1,
-        shouldCancel: () => cancelled,
-        yieldToHost,
-      }),
-    ).rejects.toThrow('cancelled');
-    expect(yieldToHost).toHaveBeenCalledTimes(1);
-  });
-
   it('analyzes a blocked anchor without emitting it as a candidate', () => {
     const engine = createRhymeEngine([
       {
@@ -153,6 +143,36 @@ TIN T IH1 N
       stress: 1,
       vowel: 1,
     });
+  });
+
+  it('keeps every accepted tail in a compatible compiled slant bucket', () => {
+    const pronunciations = [
+      ['AE1', 'S', 'T', 'R'],
+      ['AE1', 'T', 'R'],
+      ['AE1', 'T'],
+      ['EH1', 'T'],
+      ['AE1', 'T', 'AE0', 'T', 'AE0', 'T', 'AE0', 'T'],
+      ['AE1', 'T', 'AE0', 'T', 'AE0', 'T', 'IH0', 'T'],
+      ['AE1', 'T', ...Array.from({ length: 6 }, () => ['AE0', 'T']).flat()],
+      ['AE1', 'T', ...Array.from({ length: 7 }, () => ['AE0', 'T']).flat()],
+    ].map((phones) => analyzePronunciation(phones)).filter((value) => value !== null);
+
+    for (const anchor of pronunciations) {
+      for (const candidate of pronunciations) {
+        const score = scoreFullTailSlant(anchor, candidate).phonetic;
+        if (score < BALANCED_SLANT_THRESHOLD) continue;
+
+        expect(
+          createCompatibleSlantBucketKeys(
+            anchor.familyKey,
+            BALANCED_SLANT_THRESHOLD,
+          ),
+        ).toContain(createSlantBucketKey(candidate.familyKey));
+        expect(
+          scoreFamilyKeySlantUpperBound(anchor.familyKey, candidate.familyKey),
+        ).toBeGreaterThanOrEqual(score);
+      }
+    }
   });
 
   it('rejects raw scores below 0.86 instead of rounding them into acceptance', () => {

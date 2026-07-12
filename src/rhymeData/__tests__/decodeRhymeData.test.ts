@@ -66,6 +66,32 @@ describe('rhyme data decoder', () => {
     expect(decoded.engine.suggest({ anchor: 'bet' })).toEqual(first);
   });
 
+  it('keeps the indexed candidate set complete for accepted consonant-cluster slants', async () => {
+    const decoded = await decodeRhymeData(artifact, { sha256 });
+
+    expect(decoded.engine.suggest({ anchor: 'clustered' })).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          kind: 'slant',
+          normalizedWord: 'shorter',
+        }),
+      ]),
+    );
+  });
+
+  it('keeps long-tail slants whose accepted score crosses vowel families', async () => {
+    const decoded = await decodeRhymeData(artifact, { sha256 });
+
+    expect(decoded.engine.suggest({ anchor: 'longanchor' })).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          kind: 'slant',
+          normalizedWord: 'longcandidate',
+        }),
+      ]),
+    );
+  });
+
   it('allows a future provider policy to admit prefixed proper nouns but never safety-blocked forms', async () => {
     let activePrefix = 'proper';
     const decoded = await decodeRhymeData(artifact, {

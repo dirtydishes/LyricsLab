@@ -67,5 +67,33 @@
     "rank": 9,
     "flags": ["rap", "safety-blocked"],
     "pronunciations": [["B", "L", "AA1", "K", "T", "AE1", "T"]]
+  },
+  {
+    "word": "clustered",
+    "lemma": "clustered",
+    "commonness": 0.3,
+    "rank": 10,
+    "pronunciations": [["K", "AE1", "S", "T", "R"]]
+  },
+  {
+    "word": "shorter",
+    "lemma": "shorter",
+    "commonness": 0.4,
+    "rank": 11,
+    "pronunciations": [["SH", "AE1", "T", "R"]]
+  },
+  {
+    "word": "longanchor",
+    "lemma": "longanchor",
+    "commonness": 0.2,
+    "rank": 12,
+    "pronunciations": [["AE1", "T", "AE0", "T", "AE0", "T", "AE0", "T"]]
+  },
+  {
+    "word": "longcandidate",
+    "lemma": "longcandidate",
+    "commonness": 0.3,
+    "rank": 13,
+    "pronunciations": [["AE1", "T", "AE0", "T", "AE0", "T", "IH0", "T"]]
   }
 ]

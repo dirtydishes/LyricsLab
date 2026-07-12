@@ -275,3 +275,32 @@ CI owner: clean-room remediation task for local evidence. Terminal state: `ci-un
 ### Remediation closeout
 
 The four independent-review blockers are repaired and Phase 04A is **pr-ready locally**. Production remains dormant and the fixture remains explicit; no Phase 05 UI/provider activation or bridge widening occurred. Final device/release proof remains Phase 06. No Beads, hosted CI, PR, push, or merge state was mutated.
+
+## Fresh Independent Runtime Review Orchestration Brief
+
+```json
+{
+  "phase_issue_id": "lyricslab-5iw.4a",
+  "risk": "high",
+  "strategy": "direct",
+  "implementation_owner": "fresh independent reviewer in the clean detached Codex worktree at exact HEAD 4878319b76eb571c6550ec8a13f3443a85b73faf",
+  "review_independence": "repository-evidence-only review of the clean-room implementation and runtime remediation; excluded PR 27 and old Phase 04A/Phase 05 branches remain uninspected",
+  "delegation_plan": [],
+  "model_and_effort_rationale": "Direct sole-owner execution preserves the requested mutation boundary. Full thermonuclear scrutiny is required for compact binary semantics, lazy indexed decoding, mobile resource bounds, policy safety, source integrity, and lifecycle cancellation.",
+  "required_evidence": [
+    "complete commit and source review from Phase 04 closeout 0d1d188f through 4878319b",
+    "independent binary v2 and Phase 02 scoring/parity audit",
+    "forced-GC startup, retained heap/RSS, warm latency, worst-case, cache-growth, cancellation, concurrency, and repeated-read evidence",
+    "fresh-checkout seal setup/check/tamper evidence with immutable gold hash and 128/128 evaluation",
+    "source, compiler, regeneration, runtime, editor, legacy, Expo packaging, and diff gates",
+    "test-first repairs for every safe in-scope finding and honest hosted-CI state"
+  ],
+  "user_constraints": [
+    "update only this existing turn doc outside safe in-scope code/test repairs",
+    "no Beads mutation",
+    "no PR 27 or old Phase 04A/Phase 05 implementation branch inspection",
+    "no push, PR, or merge",
+    "exactly one final callback to orchestrator 019f5428-f2ea-74c2-abfb-e37349c96391"
+  ]
+}
+```

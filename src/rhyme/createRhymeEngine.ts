@@ -71,12 +71,6 @@ export type DiagnosticRhymeEngine = RhymeEngine & {
   diagnose(query: RhymeEngineQuery): readonly RhymeSuggestionDiagnostics[];
 };
 
-export type CreateRhymeEngineAsyncOptions = {
-  readonly recordsPerChunk?: number;
-  readonly shouldCancel?: () => boolean;
-  readonly yieldToHost?: () => Promise<void>;
-};
-
 export type IndexedRhymeCandidateSource = {
   readonly cacheable?: boolean;
   readonly candidatesFor: (normalizedAnchor: string) => readonly RhymeLexemeInput[];
@@ -110,21 +104,6 @@ export function createRhymeEngine(
   return {
     suggest: diagnosticEngine.suggest,
   };
-}
-
-export async function createRhymeEngineAsync(
-  lexemes: readonly RhymeLexemeInput[],
-  options: CreateRhymeEngineAsyncOptions,
-): Promise<RhymeEngine> {
-  const indexedLexemes = await indexLexemesAsync(lexemes, options);
-  const lexemesByWord = new Map<string, IndexedLexeme>();
-  for (let index = 0; index < indexedLexemes.length; index += 1) {
-    const lexeme = indexedLexemes[index];
-    if (lexeme) lexemesByWord.set(lexeme.normalizedWord, lexeme);
-    await maybeCooperate(index + 1, options);
-  }
-  const diagnosticEngine = createDiagnosticEngine(indexedLexemes, lexemesByWord);
-  return { suggest: diagnosticEngine.suggest };
 }
 
 export function createRhymeEngineFromCandidateIndex(
@@ -266,25 +245,6 @@ function indexLexemes(
   );
 }
 
-async function indexLexemesAsync(
-  inputs: readonly RhymeLexemeInput[],
-  options: CreateRhymeEngineAsyncOptions,
-) {
-  const lexemes = new Map<string, IndexedLexeme>();
-  const sortedInputs = await cooperativeSort(inputs, compareLexemeInputs, options);
-  for (let index = 0; index < sortedInputs.length; index += 1) {
-    const input = sortedInputs[index];
-    if (input) indexLexeme(lexemes, input);
-    await maybeCooperate(index + 1, options);
-  }
-  const values = [...lexemes.values()];
-  return cooperativeSort(
-    values,
-    (left, right) => compareStrings(left.normalizedWord, right.normalizedWord),
-    options,
-  );
-}
-
 function indexLexeme(
   lexemes: Map<string, IndexedLexeme>,
   input: RhymeLexemeInput,
@@ -315,86 +275,6 @@ function indexLexeme(
       input.suggestionEligible !== false,
     word: chooseSurfaceWord(existing?.word, surfaceWord),
   });
-}
-
-async function cooperativeSort<T>(
-  values: readonly T[],
-  compare: (left: T, right: T) => number,
-  options: CreateRhymeEngineAsyncOptions,
-): Promise<T[]> {
-  const chunkSize = normalizeAsyncChunkSize(options.recordsPerChunk);
-  let chunks: T[][] = [];
-  for (let start = 0; start < values.length; start += chunkSize) {
-    chunks.push(values.slice(start, start + chunkSize).sort(compare));
-    await cooperate(options);
-  }
-  if (chunks.length === 0) return [];
-  while (chunks.length > 1) {
-    const merged: T[][] = [];
-    for (let index = 0; index < chunks.length; index += 2) {
-      const left = chunks[index] ?? [];
-      const right = chunks[index + 1];
-      if (!right) {
-        merged.push(left);
-      } else {
-        merged.push(await mergeSorted(left, right, compare, options));
-      }
-    }
-    chunks = merged;
-  }
-  return chunks[0] ?? [];
-}
-
-async function mergeSorted<T>(
-  left: readonly T[],
-  right: readonly T[],
-  compare: (left: T, right: T) => number,
-  options: CreateRhymeEngineAsyncOptions,
-) {
-  const output: T[] = [];
-  let leftIndex = 0;
-  let rightIndex = 0;
-  while (leftIndex < left.length || rightIndex < right.length) {
-    const leftValue = left[leftIndex];
-    const rightValue = right[rightIndex];
-    if (rightValue === undefined || (leftValue !== undefined && compare(leftValue, rightValue) <= 0)) {
-      output.push(leftValue as T);
-      leftIndex += 1;
-    } else {
-      output.push(rightValue);
-      rightIndex += 1;
-    }
-    await maybeCooperate(output.length, options);
-  }
-  return output;
-}
-
-async function maybeCooperate(
-  index: number,
-  options: CreateRhymeEngineAsyncOptions,
-) {
-  throwIfAsyncCancelled(options);
-  if (index % normalizeAsyncChunkSize(options.recordsPerChunk) === 0) {
-    await cooperate(options);
-  }
-}
-
-async function cooperate(options: CreateRhymeEngineAsyncOptions) {
-  throwIfAsyncCancelled(options);
-  if (options.yieldToHost) await options.yieldToHost();
-  throwIfAsyncCancelled(options);
-}
-
-function throwIfAsyncCancelled(options: CreateRhymeEngineAsyncOptions) {
-  if (options.shouldCancel?.()) throw new Error('Rhyme engine construction was cancelled');
-}
-
-function normalizeAsyncChunkSize(value: number | undefined) {
-  if (value === undefined) return 256;
-  if (!Number.isInteger(value) || value <= 0 || value > 4096) {
-    throw new Error('Invalid rhyme engine construction chunk size');
-  }
-  return value;
 }
 
 function compareLexemeInputs(

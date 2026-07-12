@@ -1,6 +1,9 @@
 import { createHash } from 'node:crypto';
 import { chmod, readFile, stat } from 'node:fs/promises';
 
+const IMMUTABLE_GOLD_SHA256 =
+  '40aac8d4704a9ca44bf1d2d19f5843714b83c08c59818b81b123baa7e010d4d7';
+
 export async function setupGoldSeal(options) {
   const verified = await verifyContent(options);
   await chmod(options.goldPath, 0o444);
@@ -31,9 +34,10 @@ async function verifyContent({ goldPath, manifestPath }) {
   if (
     manifest.schema_version !== 1 ||
     manifest.sealed_mode !== '0444' ||
+    manifest.gold_sha256 !== IMMUTABLE_GOLD_SHA256 ||
     manifest.gold_sha256 !== sha256
   ) {
-    throw new Error(`Sealed gold hash mismatch: ${sha256}`);
+    throw new Error(`Sealed immutable gold hash mismatch: ${sha256}`);
   }
   return { sha256 };
 }

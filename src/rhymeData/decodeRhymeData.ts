@@ -1,9 +1,15 @@
 import {
+  BALANCED_SLANT_THRESHOLD,
   createRhymeEngineFromCandidateIndex,
   type RhymeLexemeInput,
 } from '../rhyme/createRhymeEngine';
 import type { RhymeEngine } from '../rhyme/RhymeEngine';
-import { analyzePronunciation, createSlantBucketKey } from '../rhyme/productionPhonology';
+import {
+  analyzePronunciation,
+  createCompatibleSlantBucketKeys,
+  createSlantBucketKey,
+  scoreFamilyKeySlantUpperBound,
+} from '../rhyme/productionPhonology';
 import { normalizeRhymeToken } from '../rhyme/normalize';
 import {
   RHYME_DATA_DIRECTORY_ENTRY_BYTES,
@@ -244,8 +250,22 @@ export async function decodeRhymeData(
         const pronunciation = pronunciations[pronunciationId];
         collectIndexWordIds(view, exactIndex, pronunciation.exactKeyId, candidateWordIds);
         const familyKey = strings[pronunciation.familyKeyId];
-        const slantKeyId = binarySearchString(strings, createSlantBucketKey(familyKey));
-        if (slantKeyId >= 0) collectIndexWordIds(view, slantIndex, slantKeyId, candidateWordIds);
+        for (const slantKey of createCompatibleSlantBucketKeys(
+          familyKey,
+          BALANCED_SLANT_THRESHOLD,
+        )) {
+          const slantKeyId = binarySearchString(strings, slantKey);
+          if (slantKeyId < 0) continue;
+          collectCompatibleSlantWordIds(
+            view,
+            slantIndex,
+            slantKeyId,
+            familyKey,
+            pronunciations,
+            strings,
+            candidateWordIds,
+          );
+        }
       }
       candidateWordIds.delete(anchorWordId);
       return [...candidateWordIds].sort((left, right) => left - right).map(toLexeme);
@@ -308,6 +328,45 @@ function collectIndexWordIds(
   keyId: number,
   output: Set<number>,
 ) {
+  const low = lowerBoundIndexKey(view, section, keyId);
+  for (let index = low; index < section.count; index += 1) {
+    const offset = section.offset + index * section.width;
+    if (view.getUint32(offset, true) !== keyId) break;
+    output.add(view.getUint32(offset + 4, true));
+  }
+}
+
+function collectCompatibleSlantWordIds(
+  view: DataView,
+  section: RhymeDataSectionDescriptor,
+  keyId: number,
+  anchorFamilyKey: string,
+  pronunciations: readonly PronunciationRecord[],
+  strings: readonly string[],
+  output: Set<number>,
+) {
+  let low = lowerBoundIndexKey(view, section, keyId);
+  for (; low < section.count; low += 1) {
+    const offset = section.offset + low * section.width;
+    if (view.getUint32(offset, true) !== keyId) break;
+    const pronunciation = pronunciations[view.getUint32(offset + 8, true)];
+    if (
+      pronunciation &&
+      scoreFamilyKeySlantUpperBound(
+        anchorFamilyKey,
+        strings[pronunciation.familyKeyId],
+      ) >= BALANCED_SLANT_THRESHOLD
+    ) {
+      output.add(view.getUint32(offset + 4, true));
+    }
+  }
+}
+
+function lowerBoundIndexKey(
+  view: DataView,
+  section: RhymeDataSectionDescriptor,
+  keyId: number,
+) {
   let low = 0;
   let high = section.count;
   while (low < high) {
@@ -316,11 +375,7 @@ function collectIndexWordIds(
     if (view.getUint32(offset, true) < keyId) low = middle + 1;
     else high = middle;
   }
-  for (let index = low; index < section.count; index += 1) {
-    const offset = section.offset + index * section.width;
-    if (view.getUint32(offset, true) !== keyId) break;
-    output.add(view.getUint32(offset + 4, true));
-  }
+  return low;
 }
 
 function validateHeader(bytes: Uint8Array, view: DataView) {

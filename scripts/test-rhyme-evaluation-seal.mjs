@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { chmod, copyFile, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -22,6 +23,15 @@ try {
   await chmod(goldPath, 0o664);
   await writeFile(goldPath, Buffer.concat([await readFile(goldPath), Buffer.from(' ')]));
   await assert.rejects(setupGoldSeal({ goldPath, manifestPath }), /hash mismatch/u);
+
+  const changedHash = createHash('sha256').update(await readFile(goldPath)).digest('hex');
+  const changedManifest = JSON.parse(await readFile(manifestPath, 'utf8'));
+  changedManifest.gold_sha256 = changedHash;
+  await writeFile(manifestPath, JSON.stringify(changedManifest));
+  await assert.rejects(
+    setupGoldSeal({ goldPath, manifestPath }),
+    /immutable gold hash/u,
+  );
   console.log('rhyme evaluation seal clean-checkout and tamper controls passed');
 } finally {
   await rm(root, { force: true, recursive: true });

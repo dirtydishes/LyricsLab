@@ -52,10 +52,15 @@ export function createRhymeKeys(phones) {
 }
 
 export function createSlantBucketKey(familyKey) {
-  return familyKey.replace(/v:([A-Z]+)/gu, (_match, phone) => {
-    const familyId = VOWEL_FAMILY_IDS.get(phone);
-    return familyId === undefined ? `v:${phone}` : `vf:${familyId}`;
-  });
+  const vowels = familyKey
+    .split('|')
+    .filter((segment) => segment.startsWith('v:'))
+    .map((segment) => {
+      const phone = segment.slice(2);
+      const familyId = VOWEL_FAMILY_IDS.get(phone);
+      return familyId === undefined ? segment : `vf:${familyId}`;
+    });
+  return vowels.length <= 3 ? vowels.join('|') : `vc:${vowels.length}`;
 }
 
 export function isValidArpabetPhone(phone) {

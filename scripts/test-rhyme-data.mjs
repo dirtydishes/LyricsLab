@@ -5,7 +5,11 @@ import os from 'node:os';
 import path from 'node:path';
 
 import { buildRhymeData } from './build-rhyme-data.mjs';
-import { createRhymeKeys, isValidArpabetPhone } from './rhyme-data/phonology.mjs';
+import {
+  createRhymeKeys,
+  createSlantBucketKey,
+  isValidArpabetPhone,
+} from './rhyme-data/phonology.mjs';
 
 const root = path.resolve(import.meta.dirname, '..');
 const fixtureDirectory = path.join(root, 'data/rhyme-fixture');
@@ -147,6 +151,14 @@ function verifyCompilerPhonology() {
   assert.equal(isValidArpabetPhone('AE3'), false);
   assert.equal(isValidArpabetPhone('ae1'), false);
   assert.equal(isValidArpabetPhone('ZZ'), false);
+  assert.equal(
+    createSlantBucketKey('v:AE|c:fricative|c:stop|c:liquid'),
+    createSlantBucketKey('v:AE|c:stop|c:liquid'),
+  );
+  assert.equal(
+    createSlantBucketKey('v:AE|c:stop|v:AE|c:stop|v:AE|c:stop|v:AE|c:stop'),
+    'vc:4',
+  );
 }
 
 async function assertBuildRejects(manifestPath, pattern) {
