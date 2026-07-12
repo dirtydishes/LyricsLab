@@ -83,7 +83,7 @@ Pending. The review thread should own final review, hosted CI/mergeability evide
 
 CI owner: reviewer/verification agents
 
-Current CI state: `local-gates-passed; hosted-ci-pending-pr-probe`
+Current CI state: `ci-unavailable-with-evidence; pr-clean-mergeable; local-gates-passed`
 
 Local gate evidence:
 
@@ -98,7 +98,14 @@ Local gate evidence:
 - `npm run perf:rhyme-ranking -- --compact`: passed; mixed p50 0.353 ms, p95 1.706 ms, max 12.626 ms; slant p50 3.204 ms, p95 8.057 ms, max 19.985 ms; 600/600 hit lookups for both suites.
 - `cd packages/editor-web && node scripts/build-offline-rhyme-storyboard.mjs --check`: passed, storyboard is fresh.
 - `node --check packages/editor-web/scripts/build-offline-rhyme-storyboard.mjs`: passed.
-- `git diff --check`: pending final run after this turn-doc update.
+- `git diff --check`: passed after the closeout evidence update and again after this PR-detail update before final push.
+
+Hosted CI and mergeability evidence:
+
+- PR: `https://github.com/dirtydishes/lyricslab/pull/22`
+- `gh pr view 22 --json ...`: `state` `OPEN`, `isDraft` `false`, `baseRefName` `lavender/expo-clean-rebuild`, `headRefName` `lavender/offline-rhyme-phase-07`, `headRefOid` `4827dfeee9c5fbad3f70dd39cec09bd248b7c22b`, `mergeable` `MERGEABLE`, `mergeStateStatus` `CLEAN`, `statusCheckRollup` `[]`.
+- `gh pr checks 22 --repo dirtydishes/lyricslab`: no checks reported on the `lavender/offline-rhyme-phase-07` branch.
+- `git merge-tree --write-tree origin/lavender/expo-clean-rebuild HEAD`: passed, tree `035d0315c1a19495ea8800e723e1abe2c4eb4e33`.
 
 ## Device Evidence
 
@@ -148,7 +155,24 @@ Browser visual checks:
 
 ## PR And Commits
 
-Pending until this evidence commit is pushed and the implementation PR is opened with explicit head `lavender/offline-rhyme-phase-07` and base `lavender/expo-clean-rebuild`.
+PR:
+
+`https://github.com/dirtydishes/lyricslab/pull/22`
+
+PR details:
+
+- title: `phase 07: device evidence and closeout`
+- state: `OPEN`
+- draft: `false`
+- base: `lavender/expo-clean-rebuild`
+- head: `lavender/offline-rhyme-phase-07`
+- mergeability at PR-detail update: `MERGEABLE`, `CLEAN`
+- hosted checks: unavailable with evidence; GitHub reports an empty status check rollup and `gh pr checks` reports no checks.
+
+Commits:
+
+- `4827dfe record offline rhyme phase seven closeout evidence`
+- PR-detail turn-doc update: this follow-up commit records PR #22 and hosted-check evidence.
 
 ## Beads Updates
 
@@ -183,4 +207,4 @@ These should be created or explicitly mapped by the orchestrator before review/c
 
 ## Closeout
 
-Open pending final `git diff --check`, commit, push, PR creation, hosted-check probe, and one implementation callback.
+Implementation PR ready. Final Beads closure remains orchestrator-owned after review. One implementation callback remains pending after the PR-detail commit is pushed.
