@@ -48,7 +48,7 @@ None.
 
 ## Beads Updates And Follow-Ups
 
-Issue depends on `lyricslab-5iw.4`.
+Issue depends on `lyricslab-5iw.4a`.
 
 ## Plan Amendments
 

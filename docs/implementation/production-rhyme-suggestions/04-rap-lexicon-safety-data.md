@@ -8,7 +8,7 @@ Status is tracked in Beads. This document preserves accepted intent and is decis
 
 ## Outcome
 
-Deliver a reviewed contemporary US hip-hop lexicon and explicit safety/proper-noun policies that improve anchor coverage without emitting unsafe unsolicited candidates.
+Deliver reviewed, human-readable project-owned rap, safety, and proper-noun source manifests that improve anchor coverage without emitting unsafe unsolicited candidates. Phase 04A later combines them with authorized external sources.
 
 ## Why This Phase Exists
 
@@ -24,7 +24,7 @@ Allowed:
 
 Out of scope:
 
-- G2P, fuzzy spelling, personalized vocabulary, phrase-rhyme generation, or external runtime lookup.
+- External-corpus licensing, final production binary assembly, G2P, fuzzy spelling, personalized vocabulary, phrase-rhyme generation, or external runtime lookup.
 
 ## Constraints
 
@@ -52,7 +52,7 @@ Schema validation, count and completeness checks, provenance review, independent
 
 ## Quality Gates
 
-`npm test`; `npm run typecheck`; `npm run build:rhyme-data`; `npm run check:rhyme-data`.
+`npm test`; `npm run typecheck`; `npm run check:rhyme-sources`.
 
 ## Replanning Triggers
 
@@ -60,7 +60,7 @@ Provenance is insufficient, the independent OOV score remains below 90%, the rev
 
 ## Implementation Hypotheses
 
-Keep authored source data human-reviewable and compile it through Phase 03's deterministic pipeline; separate gold evaluation cases from training/curation decisions.
+Keep authored source data human-reviewable and compatible with Phase 03's manifest/format contract; separate gold evaluation cases from training/curation decisions. Do not claim the complete production artifact until Phase 04A.
 
 ## Follow-Up Policy
 
