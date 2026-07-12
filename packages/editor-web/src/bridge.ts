@@ -61,7 +61,7 @@ export type InsertSuggestionCommand = {
 };
 
 export type SetThemeCommand = {
-  theme?: 'light' | 'dark' | string;
+  theme?: 'light' | 'dark';
 };
 
 export type LyricsEditorCommands = {

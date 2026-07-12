@@ -11,6 +11,8 @@ export type InsertSuggestionCommand = {
   word: string;
 };
 
+export type EditorTheme = 'dark' | 'light';
+
 export type SuggestionContext = {
   currentLineText: string;
   previousToken: string;
@@ -96,6 +98,17 @@ export function createLoadSongJavaScript(snapshot: EditorBodySnapshot) {
 
 export function createInsertSuggestionJavaScript(word: string) {
   return createEditorCommandJavaScript('insertSuggestion', { word });
+}
+
+export function createSetThemeJavaScript(theme: EditorTheme) {
+  return createEditorCommandJavaScript('setTheme', { theme });
+}
+
+export function createEditorThemeBootstrapJavaScript(theme: EditorTheme) {
+  return `
+    document.documentElement.dataset.theme = ${JSON.stringify(theme)};
+    true;
+  `;
 }
 
 export function createFocusEditorJavaScript() {
