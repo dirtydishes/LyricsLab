@@ -40,6 +40,39 @@ Produce the complete licensed, pinned, reproducible production artifact from the
 }
 ```
 
+## Independent Review Orchestration Brief
+
+```json
+{
+  "phase_issue_id": "lyricslab-5iw.4a",
+  "risk": "high",
+  "strategy": "direct",
+  "implementation_owner": "completed clean-room implementation on lavender/production-rhyme-phase-04a-sol-redo",
+  "review_independence": "fresh zero-history reviewer task on lavender/production-rhyme-phase-04a-sol-review at b0202dfbcf80b29f4b2cf6cafd7cdc7e56e8c925; no PR 27, prior Phase 04A branch/history, Phase 05, or prior-run memory consulted",
+  "delegation_plan": [],
+  "model_and_effort_rationale": "Single-owner direct review preserves the clean-room boundary and exact mutable-checkout ownership. Full thermonuclear scrutiny is proportionate to external-source provenance, hostile archive parsing, binary integrity, production-scale asynchronous loading, cancellation, and publication risks.",
+  "required_evidence": [
+    "exact preflight for worktree, repository root, symbolic branch, clean status, and starting HEAD",
+    "independent authoritative verification of CMU and SUBTLEX pins, licenses, notices, provenance, and reproducible acquisition",
+    "test-first adversarial review of parsing, normalization, deterministic merging, phonology parity, binary encoding, corruption controls, and archive/path defenses",
+    "bounded yielding decode and runtime lifecycle evidence covering atomic publication, cancellation, retry, listeners, proxy identity, and cleanup",
+    "fixture separation, dormant pre-Phase05 packaging, Expo SDK 56 asset/config evidence, sealed evaluator integrity, and architecture-quality review",
+    "npm ci, full Jest, typecheck, production acquisition/build/check/compiler/adversarial gates, two byte-identical regenerations, Phase 04 source/evaluator gates, runtime/platform/editor gates, and git diff --check",
+    "local repair commits, exact changed files, remaining findings, blockers, and honest hosted-CI state"
+  ],
+  "ci_owner": "independent reviewer for all local evidence; hosted CI unavailable because push and PR operations are forbidden",
+  "user_constraints": [
+    "work only in the assigned worktree and branch at the exact clean starting HEAD",
+    "block without repair on preflight mismatch",
+    "do not inspect PR 27, the old Phase 04A branch, Phase 05, or old Phase 04A implementation history",
+    "repair every safe in-scope finding test-first",
+    "update only this existing Phase 04A turn doc and do not mutate Beads",
+    "commit locally with lowercase human messages; do not push or open or merge PRs",
+    "return exactly one compact review callback to orchestrator task 019f5428-f2ea-74c2-abfb-e37349c96391"
+  ]
+}
+```
+
 ## Adaptations
 
 - Created by the user-approved 2026-07-12 sequence amendment after Phase 03 proved that final artifact assembly could not precede Phase 04 source curation.
@@ -95,36 +128,50 @@ Strict clean-room self-review completed against the full redo diff without inspe
 - Rechecked archive traversal/types/links/checksums/duplicates/end markers, exact internal file set/hashes, JSON/package identity, numeric bounds, CMU ASCII/ARPAbet/stress/alternate handling, normalization collisions, safe rank/count arithmetic, compiler bounds, binary validation, cancellation races, stale publication, listener isolation, handle cleanup, and transitive non-activation. No remaining in-scope finding is known.
 - Fresh independent review remains orchestrator-owned after this implementation callback.
 
+### Fresh Independent Thermonuclear Review
+
+Review task started from clean symbolic branch `lavender/production-rhyme-phase-04a-sol-review` at exact HEAD `b0202dfbcf80b29f4b2cf6cafd7cdc7e56e8c925`. Mandatory preflight proved the assigned worktree/repository root, symbolic branch, clean status, and HEAD before file inspection. The reviewer did not inspect PR #27, any prior Phase 04A branch/history, Phase 05, or prior-run memory.
+
+Outcome: **blocked**. The implementation is not safe to activate or advance into Phase 05.
+
+- Blocker: the decoder validates the compiled exact/slant indexes and then discards them, expands all 125,558 words and 134,760 pronunciations into the Phase 02 analysis model, and linearly scans the full corpus for every query. An explicit forced-GC production probe retained approximately 1,371,608,208 bytes of V8 heap and 1,632,612,352 bytes RSS after decode; decode took 7,633 ms and one `cat` query took 734 ms on the review host. This is not a bounded mobile runtime and directly triggers the phase replanning condition that production loading exceeds the accepted mobile model. The legacy indexed artifact on the same host remained dramatically smaller/faster operationally, with current mixed lookup p50/p95 0.365/1.770 ms and slant-only p50/p95 3.286/8.607 ms.
+- High finding: binary `proper-noun` and `rap` flags are validated but discarded by `decodeRhymeData`; only `safety-blocked` reaches engine eligibility. Consequently the dormant production engine has no retained signal through which the accepted explicit-prefix proper-name policy can be applied without widening/reworking the engine boundary in Phase 05. This must be resolved as part of the blocked indexed-runtime redesign, not papered over in the provider.
+- CI reproducibility finding: a fresh Git worktree materialized the sealed gold file as mode `0664`; Git cannot preserve a read-only `0444` worktree mode. The unchanged accepted SHA-256 was verified before a local `chmod 0444`, after which both evaluator modes passed 128/128 and preserved the exact hash. A clean-checkout gate needs an explicit sealing/setup mechanism or a seal contract that does not claim Git can carry non-executable write-bit state.
+- Safe repairs committed in `6d7cf51dc0a946af9b7725eef4f4dfb2bf5e9dd3` (`harden production rhyme validation`): canonical CMU/SUBTLEX metadata is now exact rather than shallowly shaped; SUBTLEX internal-file pins are schema-checked; rank tables must be a unique contiguous permutation in compiler and decoder; and adversarial coverage now includes absolute/Windows/backslash traversal, hardlinks, symlinks, directories, PAX/special entries, link targets on regular entries, truncated/end-marker/trailing-data attacks, unsafe/fractional/out-of-order numeric records, and additional ARPAbet/stress failures.
+- Thermonuclear structure review found no changed code file crossing 1,000 lines and no reason to split the approximately 500-line production-source verifier solely by size. The thin production Expo factory earns its boundary by isolating static asset packaging. The dominant structural regression is instead the discarded-index/full-expansion runtime architecture; rearranging its current helpers would not delete that complexity.
+
 ## CI And Gates
 
-Owner: clean-room implementation task `019f579a-c4d5-7030-80ee-235cdb924dab` for local/CI evidence; orchestrator for later hosted publication and independent review
+Owner: fresh independent reviewer for local evidence; orchestrator retains hosted publication and replanning authority
 
-State: `ci-unavailable-with-evidence`
+State: `ci-blocked-with-cause`
 
 Evidence:
 
-- `npm test`: 24/24 suites, 190/190 tests passed.
+- `npm ci` and `npm ci --prefix packages/editor-web`: passed from both lockfiles. Root audit reported 10 moderate transitive findings and the existing Expo worklets peer warning; editor audit reported zero vulnerabilities. No dependency mutation was made.
+- `npm test`: 24/24 suites, 191/191 tests passed after review repairs.
 - `npm run typecheck`: passed with no diagnostics.
-- `npm run check:rhyme-production-sources` and `npm run test:rhyme-production-sources`: exact cache/repo/tar pins plus adversarial controls passed.
+- `npm run check:rhyme-production-sources` and `npm run test:rhyme-production-sources`: exact live-authoritative/cache/repo/tar pins plus expanded adversarial controls passed. Live `refs/heads/master` remained `74790861f652b15e4ac49015a90074ad62a27690`; all three raw CMU file hashes and npm registry version/integrity/shasum/file-count metadata matched the committed pins. Ghent and the primary DOI source corroborated the corpus/citation while providing no ISC statement on the Ghent page.
 - `npm run check:rhyme-sources` and `npm run test:rhyme-sources`: 618/618 reviewed entries and all source/policy/non-activation controls passed. Two consecutive authoring runs reproduced the five accepted Phase 04 hashes exactly.
-- `npm run test:rhyme-evaluation` and `npm run evaluate:rhyme-sources`: unchanged mode-`0444` gold SHA-256 `40aac8d4704a9ca44bf1d2d19f5843714b83c08c59818b81b123baa7e010d4d7`; 128/128; policy and tamper controls passed.
+- `npm run test:rhyme-evaluation` initially failed because the fresh checkout produced mode `0664`. After hash-first verification and local mode restoration, `npm run test:rhyme-evaluation` and `npm run evaluate:rhyme-sources` passed with unchanged mode-`0444` gold SHA-256 `40aac8d4704a9ca44bf1d2d19f5843714b83c08c59818b81b123baa7e010d4d7`; 128/128; policy and tamper controls passed.
 - Fixture controls: `npm run build:rhyme-data`, `npm run check:rhyme-data`, and `npm run test:rhyme-data-compiler` passed; artifact remains 1,768 bytes / SHA-256 `5ee1917cd55635a9a486fe43d635ef402ae30ef7611f578f628360fd6c9985ca`.
-- Production controls: `npm run check:rhyme-data:production` and `npm run test:rhyme-production-data` passed, including two clean byte-identical regenerations, committed byte comparison, embedded manifest hash, scale floors, temporary cleanup, and size/mtime preservation.
-- `npm run test:rhyme-production-runtime`: non-default production-scale decode/load/query test passed through the public one-method engine seam.
-- Runtime/decoder/platform/safety/cancellation tests are included in the 190-test default suite; targeted reruns passed.
+- Production controls: `npm run build:rhyme-data:production`, `npm run check:rhyme-data:production`, and `npm run test:rhyme-production-data` passed. Two additional explicit temporary regenerations and the committed artifact were byte-identical at SHA-256 `f938c952d60059b7339e2777c62237d3b7fc330eb15c28c97e77c281fe821dbc`.
+- `npm run test:rhyme-production-runtime` passes its current functional assertion, but the independent timing/forced-GC probe above proves that test is too weak to establish mobile viability. A passing functional test does not clear the runtime blocker.
+- Runtime/decoder/platform/safety/cancellation tests are included in the 191-test default suite; focused repaired decoder tests passed 20/20.
 - `npm run editor:test`: 3/3 files and 25/25 tests passed. `npm run build:editor-html` and `npm run check:editor-html` passed with fresh deterministic generated HTML.
 - `npm run build:rhyme-artifact`, `npm run check:rhyme-artifact`, and `npm run smoke:rhyme-artifact` passed after the isolated harness repair. Legacy artifact SHA-256 remains `075fd521ac9f2660f6bc970e1beecb89216fea70d86a768f7190045396a32249`.
-- `npm run perf:rhyme-ranking -- --compact` passed after the same harness repair; host-only legacy-index mixed lookup p50/p95 were 0.301/1.585 ms and slant-only p50/p95 were 3.305/8.353 ms. Phase 06 still owns release/device benchmarks.
-- `npm ls expo-asset expo-file-system --package-lock-only --all`: direct SDK-compatible `expo-asset@56.0.17` and `expo-file-system@56.0.8` verified.
+- `npm run perf:rhyme-ranking -- --compact` passed after the same harness repair; current host-only legacy-index mixed lookup p50/p95 were 0.365/1.770 ms and slant-only p50/p95 were 3.286/8.607 ms. Phase 06 still owns release/device benchmarks, but the new production engine is already far outside this indexed baseline.
+- `npm ls expo-asset expo-file-system expo-crypto --package-lock-only --all`: direct SDK-compatible `expo-asset@56.0.17`, `expo-file-system@56.0.8`, and `expo-crypto@56.0.4` verified.
 - `npx expo config --type public`: passed and resolved SDK `56.0.0`. `npx expo config --type introspect` contains `./assets/rhyme/production.rhymebin`; Metro/platform boundary tests passed.
 - `git diff --check`: passed after implementation; rerun after final evidence update and before commit.
-- Hosted automation cannot run for this local-only branch: the user forbids push/PR operations, no PR was created or inspected, and the repository contains no tracked `.github` workflow files. No claim of hosted green CI is made.
+- Hosted automation cannot run for this local-only branch: the user forbids push/PR operations, no PR was created or inspected, and the repository contains no tracked `.github` workflow files. Independently, local CI is blocked by the retained-memory/full-scan design and clean-checkout seal-mode defect. No claim of hosted green CI is made.
 
 ## PR And Commits
 
 No push, PR creation/update, merge, or inspection was performed.
 
 - Implementation commit: `9e38d437fc3b424d7d09792188821d4f5112c929` (`build production rhyme artifact from pinned sources`).
+- Independent review repair commit: `6d7cf51dc0a946af9b7725eef4f4dfb2bf5e9dd3` (`harden production rhyme validation`).
 - This turn-doc evidence update is committed separately; its exact hash is returned in the one final callback.
 
 ## Beads Updates And Follow-Ups
@@ -132,19 +179,19 @@ No push, PR creation/update, merge, or inspection was performed.
 Issue depends on `lyricslab-5iw.4`; `lyricslab-5iw.5` depends on this issue.
 
 - No Beads mutation, claim, export, or close was performed, per the user constraint. The orchestrator retains canonical state authority.
-- No follow-up issue is required for in-scope work. Phase 05 already owns factory activation, proper-noun prefix gating in the provider, Settings/provider state, and editor suggestion behavior.
+- No Beads follow-up was created because mutation is forbidden. The orchestrator must keep Phase 04A open/blocked and replan the indexed runtime, retained flag/policy boundary, and reproducible evaluator seal before Phase 05 activation.
 
 ## Plan Amendments
 
-This phase is the approved amendment; it does not silently replace any production source.
+This phase is the approved amendment; it does not silently replace any production source. Independent review fired the existing replanning trigger for production loading that exceeds the accepted mobile model.
 
 ## Context To Keep
 
 - Keep `data/rhyme-production/provenance.json`, `NOTICE.md`, the exact source tar/dictionary bytes, production manifest hash, artifact hash, and dormant factory in lockstep. Run acquisition check, source adversarial test, production check, and two-clean-build control after any source change.
 - The fixture remains the default `build:rhyme-data`/`check:rhyme-data` path and must stay dormant. Production has explicit suffixed commands.
-- Phase 05 must activate only `createProductionRhymeEngineRuntime`, retain the stable proxy, apply explicit-prefix proper-noun eligibility before display, and preserve safety-blocked anchor-only behavior. It must not parse raw sources or widen the bridge.
-- The sealed gold file remains mode `0444` and SHA-256 `40aac8d4704a9ca44bf1d2d19f5843714b83c08c59818b81b123baa7e010d4d7`; do not rewrite or tune against it.
+- Do not begin Phase 05 activation from this runtime. Redesign production decode/query around the compiled indexes or an equivalently compact candidate-retrieval model; establish a realistic retained-memory ceiling and query guard; preserve alternate-pronunciation/Phase 02 scoring parity; and retain proper-noun/safety policy signals behind the stable proxy.
+- The sealed gold bytes remain SHA-256 `40aac8d4704a9ca44bf1d2d19f5843714b83c08c59818b81b123baa7e010d4d7`; do not rewrite or tune against them. A fresh Git checkout will not reproduce `0444` without an explicit local sealing step.
 
 ## Closeout
 
-Clean-room Phase 04A implementation is locally complete and pr-ready pending orchestrator-owned independent review/publication. Exact source pins/notices, complete production artifact, deterministic controls, production-scale cancellable loading, dormant Expo packaging, sealed evaluation, full local gates, and honest CI evidence are recorded above. No Phase 05 behavior was activated and no Beads or hosted state was mutated.
+Fresh clean-room independent review is **blocked**. Exact sources/notices, deterministic artifact bytes, cancellation/publication behavior, dormant Expo packaging, repaired provenance/rank controls, and most local gates are sound, but the production runtime retains approximately 1.37 GB heap, scans the entire corpus per query, discards proper-noun policy signal, and cannot reproduce the evaluator's read-only mode from a clean Git checkout. Phase 04A is not pr-ready and Phase 05 must not activate it. No Beads, PR, push, merge, or hosted state was mutated.
