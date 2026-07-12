@@ -20,8 +20,8 @@ import {
   type AsyncTaskQueue,
 } from './bodyPersistence';
 import type { EditorBodySnapshot, SuggestionContext } from './bridge';
-import { bundledSuggestionProvider } from './bundledSuggestionProvider';
 import type { WordSuggestion } from './suggestions';
+import { useProductionRhyme } from '../platform/ProductionRhymeProvider';
 import type { SongRepository } from '../songs/songRepository';
 import type { Song, SongId } from '../songs/types';
 import { useAppTheme } from '../settings/SettingsProvider';
@@ -42,6 +42,7 @@ export function LyricsEditorScreen({
   songId,
 }: LyricsEditorScreenProps) {
   const { resolvedTheme, tokens } = useAppTheme();
+  const { getSuggestionView, retry } = useProductionRhyme();
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSavingBody, setIsSavingBody] = useState(false);
@@ -295,13 +296,17 @@ export function LyricsEditorScreen({
     [clearBodyEditorBlurTimeout],
   );
 
-  const suggestions = useMemo(() => {
+  const suggestionView = useMemo(() => {
     if (!isBodyEditorFocused) {
-      return [];
+      return {
+        canRetry: false,
+        kind: 'hidden' as const,
+        suggestions: [],
+      };
     }
 
-    return bundledSuggestionProvider.getSuggestions(selectionContext);
-  }, [isBodyEditorFocused, selectionContext]);
+    return getSuggestionView(selectionContext, song?.bodyText ?? '');
+  }, [getSuggestionView, isBodyEditorFocused, selectionContext, song?.bodyText]);
 
   const handleSuggestionSelected = useCallback(
     (suggestion: WordSuggestion) => {
@@ -392,7 +397,10 @@ export function LyricsEditorScreen({
               {isBodyEditorFocused ? (
                 <SuggestionBar
                   onSelectSuggestion={handleSuggestionSelected}
-                  suggestions={suggestions}
+                  onRetry={() => {
+                    void retry();
+                  }}
+                  view={suggestionView}
                 />
               ) : null}
             </>

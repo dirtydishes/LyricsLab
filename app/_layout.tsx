@@ -3,13 +3,16 @@ import { StatusBar } from 'expo-status-bar';
 
 import { SettingsProvider, useAppTheme } from '../src/settings/SettingsProvider';
 import { SongRepositoryProvider } from '../src/songs/SongRepositoryProvider';
+import { ProductionRhymeProvider } from '../src/platform/ProductionRhymeProvider';
 
 export default function RootLayout() {
   return (
     <SettingsProvider>
-      <SongRepositoryProvider>
-        <ThemedApp />
-      </SongRepositoryProvider>
+      <ProductionRhymeProvider>
+        <SongRepositoryProvider>
+          <ThemedApp />
+        </SongRepositoryProvider>
+      </ProductionRhymeProvider>
     </SettingsProvider>
   );
 }

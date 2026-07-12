@@ -2,7 +2,11 @@ import { Asset } from 'expo-asset';
 import { CryptoDigestAlgorithm, digest } from 'expo-crypto';
 import { File, FileMode } from 'expo-file-system';
 
-import { decodeRhymeData } from '../rhymeData/decodeRhymeData';
+import {
+  decodeRhymeData,
+  type DecodedRhymeData,
+  type RhymeWordPolicy,
+} from '../rhymeData/decodeRhymeData';
 import {
   createRhymeEngineRuntime,
   type RhymeArtifactSource,
@@ -14,11 +18,20 @@ export type ExpoRhymeEngineRuntimeOptions = {
   readonly artifactModuleId: number;
   readonly expectedManifestSha256: string;
   readonly initialVersion: string;
+  readonly isProperNounEligible?: (
+    normalizedWord: string,
+    policy: RhymeWordPolicy,
+  ) => boolean;
+  readonly isSuggestionEligible?: (
+    decoded: DecodedRhymeData,
+    normalizedWord: string,
+    activePrefix: string,
+  ) => boolean;
 };
 
 /**
- * Dormant Phase 03 construction boundary. Phase 04A supplies the production
- * artifact and Phase 05 owns activation in the editor/settings providers.
+ * Platform construction boundary shared by the fixture tests and the single
+ * Phase 05 app-level production provider.
  */
 export function createExpoRhymeEngineRuntime(
   options: ExpoRhymeEngineRuntimeOptions,
@@ -27,6 +40,7 @@ export function createExpoRhymeEngineRuntime(
     decode(bytes, shouldCancel) {
       return decodeRhymeData(bytes, {
         expectedManifestSha256: options.expectedManifestSha256,
+        isProperNounEligible: options.isProperNounEligible,
         recordsPerChunk: 256,
         sha256: async (value) => {
           const contiguous = Uint8Array.from(value);
@@ -39,6 +53,7 @@ export function createExpoRhymeEngineRuntime(
       });
     },
     initialVersion: options.initialVersion,
+    isSuggestionEligible: options.isSuggestionEligible,
     scheduleAfterFirstFrame: createNativeAfterFirstFrameScheduler(),
     source: createExpoBundledArtifactSource(options.artifactModuleId),
     yieldToHost,

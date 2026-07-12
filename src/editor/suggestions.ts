@@ -5,6 +5,7 @@ import type { RhymeEngine, RhymeSuggestion } from '../rhyme/RhymeEngine';
 export type WordSuggestion = {
   id: string;
   label?: string;
+  role?: 'near' | 'perfect' | 'prompt';
   word: string;
 };
 

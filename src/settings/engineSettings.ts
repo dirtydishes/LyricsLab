@@ -7,6 +7,7 @@ export type RhymeEngineSettingsSnapshot = {
   diagnostics: 'not-enabled' | 'available';
   errorMessage?: string;
   state: RhymeEngineState;
+  usingLastKnownGood: boolean;
   version: string;
 };
 
@@ -22,6 +23,7 @@ export function getBundledEngineSettingsSnapshot(): RhymeEngineSettingsSnapshot 
   return {
     diagnostics: 'not-enabled',
     state: 'ready',
+    usingLastKnownGood: false,
     version: `artifact-v${RHYME_INDEX_ARTIFACT_VERSION}`,
   };
 }
@@ -36,6 +38,7 @@ export function toEngineSettingsSnapshot(
         ? `${snapshot.errorMessage ?? 'Reload failed.'} The last loaded engine remains available.`
         : snapshot.errorMessage,
     state: snapshot.state,
+    usingLastKnownGood: snapshot.usingLastKnownGood,
     version: snapshot.version,
   };
 }
@@ -54,6 +57,16 @@ export function buildEngineSettingsViewModel(
         versionLabel: snapshot.version,
       };
     case 'loading':
+      if (snapshot.usingLastKnownGood) {
+        return {
+          canRetry: false,
+          diagnosticsLabel: diagnosticsLabel(snapshot.diagnostics),
+          statusDetail:
+            'The current offline engine remains available while it refreshes.',
+          statusLabel: 'Refreshing',
+          versionLabel: snapshot.version,
+        };
+      }
       return {
         canRetry: false,
         diagnosticsLabel: diagnosticsLabel(snapshot.diagnostics),

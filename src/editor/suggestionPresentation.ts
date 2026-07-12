@@ -1,4 +1,5 @@
 import type { WordSuggestion } from './suggestions';
+import type { ProductionSuggestionViewKind } from './productionSuggestions';
 
 export type SuggestionPresentation = {
   label: string;
@@ -19,8 +20,14 @@ export function getSuggestionPresentation(
   if (syllableMatch) {
     return {
       label: `${syllableMatch[1]}-syllable`,
-      role: label.toLocaleLowerCase().includes('near') ? 'near' : 'perfect',
+      role:
+        suggestion.role ??
+        (label.toLocaleLowerCase().includes('near') ? 'near' : 'perfect'),
     };
+  }
+
+  if (suggestion.role) {
+    return { label: roleLabel(suggestion.role), role: suggestion.role };
   }
 
   if (/\bperfect\b/i.test(label)) {
@@ -32,4 +39,31 @@ export function getSuggestionPresentation(
   }
 
   return { label: 'Prompt', role: 'prompt' };
+}
+
+export function getSuggestionAccessibilityLabel(
+  presentation: SuggestionPresentation,
+  word: string,
+) {
+  return presentation.label.endsWith('-syllable')
+    ? `${roleLabel(presentation.role)} rhyme, ${presentation.label} match, ${word}`
+    : `${presentation.label} rhyme, ${word}`;
+}
+
+export function getSuggestionStateLabel(kind: ProductionSuggestionViewKind) {
+  switch (kind) {
+    case 'error':
+    case 'unavailable':
+      return 'Unavailable';
+    case 'loading':
+      return 'Loading';
+    case 'hidden':
+    case 'prompt':
+    case 'results':
+      return 'Prompt';
+  }
+}
+
+function roleLabel(role: SuggestionPresentation['role']) {
+  return `${role.charAt(0).toLocaleUpperCase()}${role.slice(1)}`;
 }

@@ -1,12 +1,16 @@
 import { useRouter } from 'expo-router';
 
 import { SettingsScreen } from '../src/settings/SettingsScreen';
+import { useProductionRhyme } from '../src/platform/ProductionRhymeProvider';
+import { toEngineSettingsSnapshot } from '../src/settings/engineSettings';
 
 export default function SettingsRoute() {
   const router = useRouter();
+  const { retry, snapshot } = useProductionRhyme();
 
   return (
     <SettingsScreen
+      engineSnapshot={toEngineSettingsSnapshot(snapshot)}
       onBack={() => {
         if (router.canGoBack()) {
           router.back();
@@ -14,6 +18,9 @@ export default function SettingsRoute() {
         }
 
         router.replace('/');
+      }}
+      onRetryEngine={() => {
+        void retry();
       }}
     />
   );

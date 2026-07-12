@@ -25,6 +25,7 @@ export type RhymeEngineRuntime = {
   readonly engine: RhymeEngine;
   cancel(): void;
   getSnapshot(): RhymeEngineRuntimeSnapshot;
+  isSuggestionEligible(normalizedWord: string, activePrefix: string): boolean;
   retry(): Promise<void>;
   start(): void;
   subscribe(listener: () => void): () => void;
@@ -36,6 +37,11 @@ export type CreateRhymeEngineRuntimeOptions = {
     shouldCancel: () => boolean,
   ) => Promise<DecodedRhymeData>;
   readonly initialVersion: string;
+  readonly isSuggestionEligible?: (
+    decoded: DecodedRhymeData,
+    normalizedWord: string,
+    activePrefix: string,
+  ) => boolean;
   readonly readChunkBytes?: number;
   readonly scheduleAfterFirstFrame: (task: () => void) => () => void;
   readonly source: RhymeArtifactSource;
@@ -45,6 +51,7 @@ export type CreateRhymeEngineRuntimeOptions = {
 export function createRhymeEngineRuntime(
   options: CreateRhymeEngineRuntimeOptions,
 ): RhymeEngineRuntime {
+  let activeDecoded: DecodedRhymeData | null = null;
   let activeEngine: RhymeEngine | null = null;
   let attempt = 0;
   let cancelScheduledStart: (() => void) | null = null;
@@ -77,6 +84,7 @@ export function createRhymeEngineRuntime(
       const decoded = await options.decode(bytes, () => !isCurrent());
 
       if (currentAttempt !== attempt) return;
+      activeDecoded = decoded;
       activeEngine = decoded.engine;
       publish({
         state: 'ready',
@@ -119,6 +127,14 @@ export function createRhymeEngineRuntime(
       started = false;
     },
     getSnapshot: () => snapshot,
+    isSuggestionEligible(normalizedWord, activePrefix) {
+      if (!activeDecoded) return false;
+      return options.isSuggestionEligible?.(
+        activeDecoded,
+        normalizedWord,
+        activePrefix,
+      ) ?? true;
+    },
     retry() {
       started = true;
       cancelSchedule();
