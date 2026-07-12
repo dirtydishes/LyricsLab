@@ -14,13 +14,13 @@ Current phase: 06 - Diagnostics, benchmarks, and writer review
 
 Current Beads issue: `lyricslab-5iw.6`
 
-Current PR: none; Phase 06 branch preparation starts from reviewed Phase 05 merge `a8dc81f7`
+Current PR: [#30](https://github.com/dirtydishes/lyricslab/pull/30), open at repaired review head `0dc2743d`
 
-Current execution strategy: fresh Sol/high implementation task for all automatable diagnostics/benchmark/review tooling, then fresh Sol/high review; physical-iPhone and writer sign-off remain explicit manual gates
+Current execution strategy: automated implementation and fresh Sol/high review are complete; await signed 60-case writer review and physical-iPhone Release evidence, then revalidate and merge
 
 Last completed phase: 05 - Native integration and suggestion UI
 
-Blocked: no
+Blocked: yes - mandatory human writer sign-off and physical-iPhone evidence are unavailable
 
 ## Decisions
 
@@ -44,8 +44,8 @@ The earlier `lyricslab-8um` offline-rhyme MVP epic is closed and preserved. This
 | 04 | `lyricslab-5iw.4` | closed | merged PR #26 | `turn-docs/lyricslab-5iw.4.md` |
 | 04A | `lyricslab-5iw.4a` | closed after approved clean-room review | replacement merged PR #28; old PR #27 superseded | `turn-docs/lyricslab-5iw.4a.md` |
 | 05 | `lyricslab-5iw.5` | closed | merged PR #29 | `turn-docs/lyricslab-5iw.5.md` |
-| 06 | `lyricslab-5iw.6` | in progress | none | `turn-docs/lyricslab-5iw.6.md` |
+| 06 | `lyricslab-5iw.6` | blocked on manual acceptance | open PR #30 | `turn-docs/lyricslab-5iw.6.md` |
 
 ## Last Coordinator Update
 
-Phase 05 merged in PR #29 at `a8dc81f7` after fresh Sol implementation and thermonuclear repair. Phase 06 is selected and owns diagnostics, deterministic benchmark/report tooling, the 60-case writer-review packet, and final physical-iPhone evidence; unavailable manual evidence must remain a truthful blocker.
+Phase 06 implementation and thermonuclear repairs are published to PR #30 at `0dc2743d`; all 212 tests and automatable gates pass. Completion is blocked only on a human-signed 60-case writer review and the physical-iPhone Release diagnostics/checklist evidence. The PR remains open and the phase/epic remain unclosed.
