@@ -20,7 +20,7 @@ Current execution strategy: visible implementation task followed by independent 
 
 Last completed phase: 02 - Pure phonological engine
 
-Blocked: no
+Blocked: yes — Phase 03 required-source provenance and phase ordering require user decision
 
 ## Decisions
 
@@ -39,11 +39,11 @@ The earlier `lyricslab-8um` offline-rhyme MVP epic is closed and preserved. This
 |---|---|---|---|---|
 | 01 | `lyricslab-5iw.1` | closed | merged PR #23 | `turn-docs/lyricslab-5iw.1.md` |
 | 02 | `lyricslab-5iw.2` | closed | merged PR #24 | `turn-docs/lyricslab-5iw.2.md` |
-| 03 | `lyricslab-5iw.3` | in progress | none | `turn-docs/lyricslab-5iw.3.md` |
+| 03 | `lyricslab-5iw.3` | blocked | none | `turn-docs/lyricslab-5iw.3.md` |
 | 04 | `lyricslab-5iw.4` | open | none | `turn-docs/lyricslab-5iw.4.md` |
 | 05 | `lyricslab-5iw.5` | open | none | `turn-docs/lyricslab-5iw.5.md` |
 | 06 | `lyricslab-5iw.6` | open | none | `turn-docs/lyricslab-5iw.6.md` |
 
 ## Last Coordinator Update
 
-Phase 03 is selected and claimed. Symbolic branch `lavender/production-rhyme-phase-03` begins at canonical base `7edb3ca8`; its orchestration brief binds the concrete callback target and treats source redistribution/provenance as a hard gate.
+Phase 03 stopped at its mandatory source/provenance gate. Beads records `blocked`: SUBTLEX-US redistribution permission/pin is unestablished, the CMU corpus lacks an exact upstream pin/NOTICE, and Phase 04-owned rap/safety/proper-noun inputs do not yet exist. User must either supply the authorized pinned inputs or approve the documented phase-order amendment.
