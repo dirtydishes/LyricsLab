@@ -38,6 +38,9 @@ describe('rhyme engine runtime', () => {
     await flushPromises();
     expect(runtime.getSnapshot()).toEqual({ state: 'ready', usingLastKnownGood: false, version: 'fixture-1' });
     expect(runtime.engine.suggest({ anchor: 'cat' })[0]?.word).toBe('hat');
+    runtime.engine.suggest({ anchor: 'cat' });
+    runtime.engine.suggest({ anchor: 'cat' });
+    expect(reader.read).toHaveBeenCalledTimes(3);
     expect(reader.close).toHaveBeenCalledTimes(1);
   });
 

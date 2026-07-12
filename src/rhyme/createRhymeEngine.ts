@@ -77,6 +77,12 @@ export type CreateRhymeEngineAsyncOptions = {
   readonly yieldToHost?: () => Promise<void>;
 };
 
+export type IndexedRhymeCandidateSource = {
+  readonly cacheable?: boolean;
+  readonly candidatesFor: (normalizedAnchor: string) => readonly RhymeLexemeInput[];
+  readonly find: (normalizedWord: string) => RhymeLexemeInput | undefined;
+};
+
 type IndexedPronunciation = PronunciationAnalysis;
 
 type IndexedLexeme = {
@@ -119,6 +125,47 @@ export async function createRhymeEngineAsync(
   }
   const diagnosticEngine = createDiagnosticEngine(indexedLexemes, lexemesByWord);
   return { suggest: diagnosticEngine.suggest };
+}
+
+export function createRhymeEngineFromCandidateIndex(
+  source: IndexedRhymeCandidateSource,
+): RhymeEngine {
+  let cachedQueryKey = '';
+  let cachedEngine: RhymeEngine | null = null;
+
+  return {
+    suggest(query) {
+      const normalizedAnchor = normalizeRhymeToken(query.anchor);
+      if (!normalizedAnchor || !source.find(normalizedAnchor)) return [];
+      const queryKey = [
+        normalizedAnchor,
+        ...[...(query.excludedWords ?? []), ...(query.sourceTokens ?? [])]
+          .map(normalizeRhymeToken)
+          .filter(Boolean)
+          .sort(compareStrings),
+      ].join('\0');
+
+      if (source.cacheable === false || cachedQueryKey !== queryKey || cachedEngine === null) {
+        const inputs = new Map<string, RhymeLexemeInput>();
+        const anchor = source.find(normalizedAnchor);
+        if (!anchor) return [];
+        inputs.set(normalizedAnchor, anchor);
+        for (const candidate of source.candidatesFor(normalizedAnchor)) {
+          const normalized = normalizeRhymeToken(candidate.normalizedWord ?? candidate.word);
+          if (normalized) inputs.set(normalized, candidate);
+        }
+        for (const word of [...(query.excludedWords ?? []), ...(query.sourceTokens ?? [])]) {
+          const normalized = normalizeRhymeToken(word);
+          const lexeme = normalized ? source.find(normalized) : undefined;
+          if (lexeme) inputs.set(normalized, lexeme);
+        }
+        cachedQueryKey = queryKey;
+        cachedEngine = createRhymeEngine([...inputs.values()]);
+      }
+
+      return cachedEngine.suggest(query);
+    },
+  };
 }
 
 export function createDiagnosticRhymeEngine(

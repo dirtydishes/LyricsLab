@@ -1,5 +1,5 @@
 export const MAGIC = Buffer.from('LLRHYME\0', 'ascii');
-export const FORMAT_VERSION = 1;
+export const FORMAT_VERSION = 2;
 export const HEADER_BYTES = 96;
 export const DIRECTORY_ENTRY_BYTES = 24;
 export const MAX_PHONES_PER_PRONUNCIATION = 64;

@@ -75,6 +75,36 @@ Produce the complete licensed, pinned, reproducible production artifact from the
 
 ## Adaptations
 
+### Clean-room runtime remediation orchestration brief
+
+```json
+{
+  "phase_issue_id": "lyricslab-5iw.4a",
+  "risk": "high",
+  "strategy": "direct",
+  "implementation_owner": "clean-room remediation task 019f57db-d871-72f2-bb85-062b87d42c3d on lavender/production-rhyme-phase-04a-sol-runtime",
+  "review_independence": "fresh Sol findings at 2851640e are the independent review input; the remediation owner performs focused self-review and the orchestrator retains final independent-review authority",
+  "delegation_plan": [],
+  "model_and_effort_rationale": "gpt-5.6-sol high reasoning in fast mode was explicitly requested; direct sole ownership preserves the clean-room branch and makes the indexed runtime, policy, seal, and measurement slices locally testable without cross-owner mutation",
+  "required_evidence": [
+    "unchanged public RhymeEngine behavior with compiled exact/slant indexes used for bounded candidate retrieval",
+    "production retained-memory, startup/decode, warm-query latency, and bounded-I/O probes that reject the reviewed eager architecture",
+    "retained safety, proper-noun, and rap signals with deterministic positive and negative policy tests",
+    "clean-checkout-compatible deterministic gold seal/setup/check contract preserving exact bytes and 128/128",
+    "two byte-identical production regenerations plus all requested source, runtime, editor, Expo, legacy, and diff gates",
+    "local lowercase commit and honest hosted-CI state"
+  ],
+  "ci_owner": "this remediation task for local gates; hosted CI is unavailable because push and PR mutation are forbidden",
+  "user_constraints": [
+    "do not inspect PR 27 or the old 5.5 Phase 04A branch",
+    "keep production dormant and fixture explicit; do not activate Phase 05",
+    "update only this existing turn doc and do not mutate Beads",
+    "do not push, open or update a PR, or merge",
+    "send exactly one new final callback to orchestrator 019f5428-f2ea-74c2-abfb-e37349c96391"
+  ]
+}
+```
+
 - Created by the user-approved 2026-07-12 sequence amendment after Phase 03 proved that final artifact assembly could not precede Phase 04 source curation.
 - The worktree opened detached but clean at the explicitly accepted Phase 04 closeout commit. Because the requested branch already existed at that exact commit, the implementation owner attached only `lavender/production-rhyme-phase-04a-sol-redo` and re-proved unchanged HEAD before inspection.
 - Direct execution with no delegates preserved the clean-room information barrier and sole mutable-checkout ownership. No prior Phase 04A/05 branch, PR 27, later commit, diff, or implementation file was inspected.
@@ -192,6 +222,56 @@ This phase is the approved amendment; it does not silently replace any productio
 - Do not begin Phase 05 activation from this runtime. Redesign production decode/query around the compiled indexes or an equivalently compact candidate-retrieval model; establish a realistic retained-memory ceiling and query guard; preserve alternate-pronunciation/Phase 02 scoring parity; and retain proper-noun/safety policy signals behind the stable proxy.
 - The sealed gold bytes remain SHA-256 `40aac8d4704a9ca44bf1d2d19f5843714b83c08c59818b81b123baa7e010d4d7`; do not rewrite or tune against them. A fresh Git checkout will not reproduce `0444` without an explicit local sealing step.
 
-## Closeout
+## Independent Review Closeout (Superseded)
 
 Fresh clean-room independent review is **blocked**. Exact sources/notices, deterministic artifact bytes, cancellation/publication behavior, dormant Expo packaging, repaired provenance/rank controls, and most local gates are sound, but the production runtime retains approximately 1.37 GB heap, scans the entire corpus per query, discards proper-noun policy signal, and cannot reproduce the evaluator's read-only mode from a clean Git checkout. Phase 04A is not pr-ready and Phase 05 must not activate it. No Beads, PR, push, merge, or hosted state was mutated.
+
+## Clean-room Runtime Remediation
+
+Remediation task `019f57db-d871-72f2-bb85-062b87d42c3d` resumed only after the prepared worktree was symbolically attached to `lavender/production-rhyme-phase-04a-sol-runtime`. The mandatory rerun proved the exact repository/worktree, clean status, tracking branch, and starting HEAD `2851640e329cbc6ac2036d8a7c5bcb9e2df46d50` before inspection. No PR #27 or old Phase 04A branch was inspected, and no delegate, Beads mutation, push, PR, or merge was used.
+
+### Indexed runtime and policy repair
+
+- `decodeRhymeData` retains the validated compact string/word/pronunciation tables and the artifact bytes, but no longer expands 125,558 words and 134,760 pronunciations into the Phase 02 analysis graph. Anchor lookup is a binary search over the canonical word table; exact and slant candidates are range-lookups over the compiled indexes. Only the anchor, referenced exclusions/source tokens, and the bounded candidate bucket are lazily decoded into Phase 02 inputs.
+- The deep internal candidate-index module reuses the unchanged Phase 02 scoring, alternate-pronunciation pairing, stable IDs/family keys, exclusions, lemma grouping, repetition penalties, commonness weights, and deterministic tie-breaks. It caches one default-policy working set only; a future dynamic proper-noun policy deliberately rebuilds the bounded set so prefix changes cannot reuse stale eligibility. The external editor-facing interface remains exactly `RhymeEngine.suggest`.
+- Slant index keys now use coarse accepted vowel-family buckets while pronunciation records retain the original exact family keys. This is a semantic binary change, so the format was honestly bumped from v1 to v2. The decoder rejects legacy v1 rather than interpreting it ambiguously.
+- Word flags remain compact and queryable through the decoded engine/provider policy seam. Safety-blocked forms are analyzable anchors and cannot be enabled as candidates. Proper nouns are suppressed by default; an internal lazy `isProperNounEligible` callback allows Phase 05 to supply explicit-prefix eligibility without widening the editor bridge or activating production now. Rap metadata is retained alongside both policy bits.
+- Runtime lifecycle behavior remains unchanged and covered: after-first-frame scheduling, bounded 64 KiB reads/yields, cancellation at generation boundaries, atomic last-good publication, stable proxy identity, retry, listener isolation, and reader cleanup. A loaded runtime performs no further artifact reads for repeated queries.
+
+### Mobile host guardrails
+
+The reproducible production runtime command now launches Jest under `node --expose-gc` and enforces conservative host-only ceilings: retained heap below 256 MiB, retained RSS below 384 MiB, startup below 5,000 ms, warm p50 below 50 ms, and warm p95 below 100 ms. These guards fail the independently measured 1.37 GB / 1.63 GB / 7,633 ms / 734 ms eager architecture. Final release-device evidence remains Phase 06.
+
+Final host measurement on this remediation branch:
+
+- Retained heap delta: `43,000,232` bytes.
+- Retained RSS delta: `31,928,320` bytes.
+- Decode/startup: `4,192.805 ms`.
+- Warm query p50: `10.483 ms`.
+- Warm query p95: `36.227 ms`.
+
+### Reproducible seal and artifact change
+
+- `npm run seal:rhyme-evaluation` is an explicit hash-first clean-checkout setup step that establishes local mode `0444`; `npm run check:rhyme-evaluation-seal` verifies content and mode without mutation. The adversarial test starts from a writable copy, proves check rejection, proves deterministic setup/check success, and proves tampered bytes cannot be sealed.
+- Gold bytes remain exact at SHA-256 `40aac8d4704a9ca44bf1d2d19f5843714b83c08c59818b81b123baa7e010d4d7`. Both evaluator modes remain 128/128 and preserve before/after identity.
+- Fixture v2 artifact: 2,252 bytes / SHA-256 `d801df20ca474657d9d3d4b96fbb5e0f7714ca1640db60d2699032c72cc55418`. The explicit fixture adds near-rhyme and policy tracer bullets only; it remains the default non-production build.
+- Production v2 artifact: 20,804,672 bytes / SHA-256 `abf3ac561c41937a01642d3cb46e6391905d9c894c514329265c9a09902094d9`; payload SHA-256 `d7e8bb6b38415709c07ea31ca823336c10b1a0db424d8ddb4c86e36b5285463d`. Two clean temporary regenerations and the committed artifact were byte-identical. The production manifest hash and all source pins remain unchanged.
+
+### Remediation gates
+
+CI owner: clean-room remediation task for local evidence. Terminal state: `ci-unavailable-with-evidence` for hosted CI because push/PR operations are forbidden and no tracked GitHub workflow exists; every requested local gate is green.
+
+- Dependency installation: root `npm ci` passed with the existing Expo worklets peer warning and 10 moderate transitive audit findings; editor `npm ci --prefix packages/editor-web` passed with zero vulnerabilities.
+- Core: `npm test` passed 24/24 suites and 194/194 tests; `npm run typecheck` passed.
+- Production sources: acquisition check and adversarial source tests passed with exact canonical CMU/SUBTLEX metadata, internal pins, traversal/link/special/truncation/numeric/ARPAbet controls, and contiguous ranks preserved.
+- Phase 04: source check/test passed for 618/618 entries; seal setup/check/adversarial tests passed; evaluator self-test and evaluation passed 128/128 with unchanged gold hash.
+- Fixture/compiler: build/check/compiler controls passed at the v2 fixture hash above.
+- Production: build/check/data controls, decoder/runtime/platform/policy/cancellation tests, forced-GC runtime probe, and two clean regeneration comparisons passed at the v2 production hash above.
+- Editor: 3/3 files and 25/25 tests passed; editor HTML build and freshness check passed.
+- Legacy: build/check/smoke passed at unchanged SHA-256 `075fd521ac9f2660f6bc970e1beecb89216fea70d86a768f7190045396a32249`; compact host perf passed with mixed p50/p95 `0.370/1.972 ms` and slant p50/p95 `3.558/8.776 ms`.
+- Expo/package: public config passed at SDK 56; introspected config contains the dormant `production.rhymebin`; direct `expo-asset@56.0.17`, `expo-file-system@56.0.8`, and `expo-crypto@56.0.4` were verified.
+- `git diff --check` is rerun after this evidence update and before the local remediation commit.
+
+### Remediation closeout
+
+The four independent-review blockers are repaired and Phase 04A is **pr-ready locally**. Production remains dormant and the fixture remains explicit; no Phase 05 UI/provider activation or bridge widening occurred. Final device/release proof remains Phase 06. No Beads, hosted CI, PR, push, or merge state was mutated.

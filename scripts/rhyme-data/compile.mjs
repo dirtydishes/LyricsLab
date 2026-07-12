@@ -11,7 +11,7 @@ import {
   align4,
   compareCodeUnits,
 } from './format.mjs';
-import { createRhymeKeys, normalizeRhymeWord } from './phonology.mjs';
+import { createRhymeKeys, createSlantBucketKey, normalizeRhymeWord } from './phonology.mjs';
 
 const MAX_ARTIFACT_BYTES = 64 * 1024 * 1024;
 const MAX_UINT32 = 0xffff_ffff;
@@ -112,9 +112,12 @@ function buildModel(manifest, inputLexemes, inputSources) {
       const { exactKey, familyKey } = createRhymeKeys(phoneSequence);
       strings.add(exactKey);
       strings.add(familyKey);
+      const slantKey = createSlantBucketKey(familyKey);
+      strings.add(slantKey);
       pronunciations.push({
         exactKey,
         familyKey,
+        slantKey,
         ordinal,
         phones: phoneSequence,
         wordId,
@@ -200,7 +203,7 @@ function buildSections(model) {
   const phoneIdRecords = uint32Buffer(flattenedPhoneIds);
 
   const exactIndex = buildIndex(model, 'exactKey');
-  const slantIndex = buildIndex(model, 'familyKey');
+  const slantIndex = buildIndex(model, 'slantKey');
   const flagRecords = uint32Buffer(
     model.lexemes.map((lexeme) => encodeFlags(lexeme.flags ?? [])),
   );

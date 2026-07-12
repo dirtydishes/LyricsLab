@@ -44,5 +44,28 @@
       ["T", "AH0", "D", "EY1"],
       ["T", "UW0", "D", "EY1"]
     ]
+  },
+  {
+    "word": "bet",
+    "lemma": "bet",
+    "commonness": 0.78,
+    "rank": 7,
+    "pronunciations": [["B", "EH1", "T"]]
+  },
+  {
+    "word": "properat",
+    "lemma": "properat",
+    "commonness": 0.2,
+    "rank": 8,
+    "flags": ["proper-noun", "rap"],
+    "pronunciations": [["P", "R", "AA1", "P", "ER0", "AE1", "T"]]
+  },
+  {
+    "word": "blockedat",
+    "lemma": "blockedat",
+    "commonness": 0.1,
+    "rank": 9,
+    "flags": ["rap", "safety-blocked"],
+    "pronunciations": [["B", "L", "AA1", "K", "T", "AE1", "T"]]
   }
 ]

@@ -49,6 +49,13 @@ const VOWEL_FAMILIES: readonly ReadonlySet<string>[] = [
   new Set(['AH', 'ER']),
 ];
 
+export function createSlantBucketKey(familyKey: string) {
+  return familyKey.replace(/v:([A-Z]+)/gu, (_match, phone: string) => {
+    const familyIndex = VOWEL_FAMILIES.findIndex((family) => family.has(phone));
+    return familyIndex < 0 ? `v:${phone}` : `vf:${familyIndex}`;
+  });
+}
+
 type ConsonantFeature = {
   readonly manner: string;
   readonly place: string;

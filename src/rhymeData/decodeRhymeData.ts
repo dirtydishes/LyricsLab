@@ -1,6 +1,9 @@
-import { createRhymeEngineAsync, type RhymeLexemeInput } from '../rhyme/createRhymeEngine';
+import {
+  createRhymeEngineFromCandidateIndex,
+  type RhymeLexemeInput,
+} from '../rhyme/createRhymeEngine';
 import type { RhymeEngine } from '../rhyme/RhymeEngine';
-import { analyzePronunciation } from '../rhyme/productionPhonology';
+import { analyzePronunciation, createSlantBucketKey } from '../rhyme/productionPhonology';
 import { normalizeRhymeToken } from '../rhyme/normalize';
 import {
   RHYME_DATA_DIRECTORY_ENTRY_BYTES,
@@ -23,6 +26,10 @@ export type RhymeDataDigest = (
 
 export type DecodeRhymeDataOptions = {
   readonly expectedManifestSha256?: string;
+  readonly isProperNounEligible?: (
+    normalizedWord: string,
+    policy: RhymeWordPolicy,
+  ) => boolean;
   readonly recordsPerChunk?: number;
   readonly sha256: RhymeDataDigest;
   readonly shouldCancel?: () => boolean;
@@ -32,8 +39,17 @@ export type DecodeRhymeDataOptions = {
 export type DecodedRhymeData = {
   readonly artifactId: string;
   readonly engine: RhymeEngine;
+  readonly policy?: {
+    readonly get: (normalizedWord: string) => RhymeWordPolicy | undefined;
+  };
   readonly sourceManifestSha256: string;
   readonly version: string;
+};
+
+export type RhymeWordPolicy = {
+  readonly properNoun: boolean;
+  readonly rap: boolean;
+  readonly safetyBlocked: boolean;
 };
 
 type WordRecord = {
@@ -170,6 +186,7 @@ export async function decodeRhymeData(
     view,
     getSection(RhymeDataSection.exactIndex),
     pronunciations,
+    strings,
     'exact',
     options,
   );
@@ -177,6 +194,7 @@ export async function decodeRhymeData(
     view,
     getSection(RhymeDataSection.slantIndex),
     pronunciations,
+    strings,
     'slant',
     options,
   );
@@ -187,43 +205,122 @@ export async function decodeRhymeData(
     options,
   );
 
-  const lexemes: RhymeLexemeInput[] = [];
-  for (let index = 0; index < words.length; index += 1) {
-    const word = words[index];
-    lexemes.push({
+  const exactIndex = getSection(RhymeDataSection.exactIndex);
+  const slantIndex = getSection(RhymeDataSection.slantIndex);
+  const findWordId = (value: string) => binarySearchWord(words, normalizeRhymeToken(value));
+  const toLexeme = (wordId: number): RhymeLexemeInput => {
+    const word = words[wordId];
+    if (!word) throw new Error('Indexed rhyme word is out of bounds');
+    const policy = decodeWordPolicy(word.flags);
+    return {
       commonness: word.commonness,
       lemma: word.lemma,
       normalizedWord: word.normalizedWord,
       pronunciations: pronunciations
-        .slice(
-          word.pronunciationStart,
-          word.pronunciationStart + word.pronunciationCount,
-        )
+        .slice(word.pronunciationStart, word.pronunciationStart + word.pronunciationCount)
         .map((pronunciation) => ({
           phones: phoneIds
-            .slice(
-              pronunciation.phoneStart,
-              pronunciation.phoneStart + pronunciation.phoneCount,
-            )
+            .slice(pronunciation.phoneStart, pronunciation.phoneStart + pronunciation.phoneCount)
             .map((phoneId) => phoneNames[phoneId]),
         })),
       suggestionEligible:
-        (word.flags & RhymeDataWordFlag.safetyBlocked) === 0,
+        !policy.safetyBlocked &&
+        (!policy.properNoun || options.isProperNounEligible?.(word.normalizedWord, policy) === true),
       word: word.word,
-    });
-    await maybeYield(index + 1, options);
-  }
+    };
+  };
+  const engine = createRhymeEngineFromCandidateIndex({
+    cacheable: options.isProperNounEligible === undefined,
+    candidatesFor(normalizedAnchor) {
+      const anchorWordId = findWordId(normalizedAnchor);
+      if (anchorWordId < 0) return [];
+      const anchor = words[anchorWordId];
+      const candidateWordIds = new Set<number>();
+      for (
+        let pronunciationId = anchor.pronunciationStart;
+        pronunciationId < anchor.pronunciationStart + anchor.pronunciationCount;
+        pronunciationId += 1
+      ) {
+        const pronunciation = pronunciations[pronunciationId];
+        collectIndexWordIds(view, exactIndex, pronunciation.exactKeyId, candidateWordIds);
+        const familyKey = strings[pronunciation.familyKeyId];
+        const slantKeyId = binarySearchString(strings, createSlantBucketKey(familyKey));
+        if (slantKeyId >= 0) collectIndexWordIds(view, slantIndex, slantKeyId, candidateWordIds);
+      }
+      candidateWordIds.delete(anchorWordId);
+      return [...candidateWordIds].sort((left, right) => left - right).map(toLexeme);
+    },
+    find(normalizedWord) {
+      const wordId = findWordId(normalizedWord);
+      return wordId < 0 ? undefined : toLexeme(wordId);
+    },
+  });
 
   return {
     artifactId,
-    engine: await createRhymeEngineAsync(lexemes, {
-      recordsPerChunk: options.recordsPerChunk,
-      shouldCancel: options.shouldCancel,
-      yieldToHost: options.yieldToHost,
-    }),
+    engine,
+    policy: {
+      get(normalizedWord) {
+        const wordId = findWordId(normalizedWord);
+        if (wordId < 0) return undefined;
+        return decodeWordPolicy(words[wordId].flags);
+      },
+    },
     sourceManifestSha256: bytesToHex(bytes.subarray(24, 56)),
     version,
   };
+}
+
+function decodeWordPolicy(flags: number): RhymeWordPolicy {
+  return {
+    properNoun: (flags & RhymeDataWordFlag.properNoun) !== 0,
+    rap: (flags & RhymeDataWordFlag.rap) !== 0,
+    safetyBlocked: (flags & RhymeDataWordFlag.safetyBlocked) !== 0,
+  };
+}
+
+function binarySearchWord(words: readonly WordRecord[], normalizedWord: string) {
+  let low = 0;
+  let high = words.length;
+  while (low < high) {
+    const middle = (low + high) >>> 1;
+    const value = words[middle]?.normalizedWord ?? '';
+    if (value < normalizedWord) low = middle + 1;
+    else high = middle;
+  }
+  return words[low]?.normalizedWord === normalizedWord ? low : -1;
+}
+
+function binarySearchString(strings: readonly string[], value: string) {
+  let low = 0;
+  let high = strings.length;
+  while (low < high) {
+    const middle = (low + high) >>> 1;
+    if ((strings[middle] ?? '') < value) low = middle + 1;
+    else high = middle;
+  }
+  return strings[low] === value ? low : -1;
+}
+
+function collectIndexWordIds(
+  view: DataView,
+  section: RhymeDataSectionDescriptor,
+  keyId: number,
+  output: Set<number>,
+) {
+  let low = 0;
+  let high = section.count;
+  while (low < high) {
+    const middle = (low + high) >>> 1;
+    const offset = section.offset + middle * section.width;
+    if (view.getUint32(offset, true) < keyId) low = middle + 1;
+    else high = middle;
+  }
+  for (let index = low; index < section.count; index += 1) {
+    const offset = section.offset + index * section.width;
+    if (view.getUint32(offset, true) !== keyId) break;
+    output.add(view.getUint32(offset + 4, true));
+  }
 }
 
 function validateHeader(bytes: Uint8Array, view: DataView) {
@@ -563,6 +660,7 @@ async function validateIndex(
   view: DataView,
   section: RhymeDataSectionDescriptor,
   pronunciations: readonly PronunciationRecord[],
+  strings: readonly string[],
   kind: 'exact' | 'slant',
   options: DecodeRhymeDataOptions,
 ) {
@@ -576,7 +674,9 @@ async function validateIndex(
     const pronunciationId = view.getUint32(offset + 8, true);
     const pronunciation = pronunciations[pronunciationId];
     if (!pronunciation || pronunciation.wordId !== wordId) throw new Error(`${kind} index reference is invalid`);
-    const expectedKey = kind === 'exact' ? pronunciation.exactKeyId : pronunciation.familyKeyId;
+    const expectedKey = kind === 'exact'
+      ? pronunciation.exactKeyId
+      : binarySearchString(strings, createSlantBucketKey(strings[pronunciation.familyKeyId]));
     if (keyId !== expectedKey) throw new Error(`${kind} index key does not match pronunciation`);
     if (seen.has(pronunciationId)) throw new Error(`${kind} index contains a duplicate pronunciation`);
     const tuple = [keyId, wordId, pronunciationId] as const;
