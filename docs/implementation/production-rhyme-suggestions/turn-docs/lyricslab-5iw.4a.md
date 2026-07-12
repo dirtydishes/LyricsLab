@@ -217,3 +217,5 @@ The designated source is `words/subtlex-word-frequencies` `2.0.0`, which publish
 ## Closeout
 
 Strict review repaired the production source contract and non-activation tests, reran the full local gate matrix, verified sealed gold integrity, confirmed PR #27 hosted automation is unavailable with evidence, and stopped at a proven read-only Git metadata publication blocker. The mutable checkout contains complete local repairs and turn-doc evidence; commit/push/PR update and Beads closeout remain orchestrator-owned.
+
+Orchestrator closeout completed the handoff: repair commit `6ab10767` was pushed, PR #27 was rechecked as mergeable at that head and merged as `a7fe76623ca9c2a263b694443910978c35567d9b`, and Beads issue `lyricslab-5iw.4a` was closed with the recorded local and hosted evidence. Hosted CI remains `ci-unavailable-with-evidence` because the merged head had zero status contexts, zero workflow runs, and the repository contains no checked-in GitHub workflow directory.

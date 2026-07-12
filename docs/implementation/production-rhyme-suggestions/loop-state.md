@@ -10,15 +10,15 @@ Stream: `production-rhyme-suggestions`
 
 Execution policy: `orchestrator-callback`
 
-Current phase: 04A - Production artifact assembly
+Current phase: 05 - Native integration and suggestion UI
 
-Current Beads issue: `lyricslab-5iw.4a`
+Current Beads issue: `lyricslab-5iw.5`
 
-Current PR: none; Phase 04A branch `lavender/production-rhyme-phase-04a` prepared from canonical base `0d1d188f`
+Current PR: none; Phase 05 branch preparation follows canonical base `a7fe7662`
 
 Current execution strategy: visible implementation task followed by independent review task
 
-Last completed phase: 04 - Rap lexicon and safety data
+Last completed phase: 04A - Production artifact assembly
 
 Blocked: no
 
@@ -42,10 +42,10 @@ The earlier `lyricslab-8um` offline-rhyme MVP epic is closed and preserved. This
 | 02 | `lyricslab-5iw.2` | closed | merged PR #24 | `turn-docs/lyricslab-5iw.2.md` |
 | 03 | `lyricslab-5iw.3` | closed | merged PR #25 | `turn-docs/lyricslab-5iw.3.md` |
 | 04 | `lyricslab-5iw.4` | closed | merged PR #26 | `turn-docs/lyricslab-5iw.4.md` |
-| 04A | `lyricslab-5iw.4a` | in progress | none | `turn-docs/lyricslab-5iw.4a.md` |
-| 05 | `lyricslab-5iw.5` | open | none | `turn-docs/lyricslab-5iw.5.md` |
+| 04A | `lyricslab-5iw.4a` | closed | merged PR #27 | `turn-docs/lyricslab-5iw.4a.md` |
+| 05 | `lyricslab-5iw.5` | in progress | none | `turn-docs/lyricslab-5iw.5.md` |
 | 06 | `lyricslab-5iw.6` | open | none | `turn-docs/lyricslab-5iw.6.md` |
 
 ## Last Coordinator Update
 
-Phase 04A is selected and claimed on `lavender/production-rhyme-phase-04a` from canonical base `0d1d188f`. It owns exact external-source pins/notices, complete production artifact assembly, and production-scale loader evidence while Phase 05 remains responsible for activation.
+Phase 04A merged in PR #27 after full strict review and is closed in Beads. Phase 05 is selected and claimed from canonical base `a7fe7662`; it owns production-provider activation and the accepted accessible suggestion UI behavior.
