@@ -18,6 +18,7 @@ import { WebView, type WebViewMessageEvent } from 'react-native-webview';
 
 import {
   createEditorWebViewSource,
+  createEditorThemeBootstrapJavaScript,
   createFocusEditorJavaScript,
   createInsertSuggestionJavaScript,
   createLoadSongJavaScript,
@@ -181,6 +182,9 @@ export const EditorWebView = forwardRef<EditorWebViewHandle, EditorWebViewProps>
           allowsInlineMediaPlayback
           domStorageEnabled
           javaScriptEnabled
+          injectedJavaScriptBeforeContentLoaded={createEditorThemeBootstrapJavaScript(
+            theme,
+          )}
           keyboardDisplayRequiresUserAction={false}
           onMessage={handleMessage}
           originWhitelist={['http://*', 'https://*']}

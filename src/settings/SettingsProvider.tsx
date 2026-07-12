@@ -77,15 +77,8 @@ export function SettingsProvider({
 
   const setPreference = useCallback(
     async (nextPreference: ThemePreference) => {
+      await repository.setThemePreference(nextPreference);
       setPreferenceState(nextPreference);
-
-      try {
-        await repository.setThemePreference(nextPreference);
-      } catch (error) {
-        const storedPreference = await repository.getThemePreference();
-        setPreferenceState(storedPreference);
-        throw error;
-      }
     },
     [repository],
   );

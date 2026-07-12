@@ -7,7 +7,6 @@ export type ResolvedTheme = Exclude<ThemePreference, 'system'>;
 
 export type ThemeTokens = {
   accent: string;
-  accentText: string;
   background: string;
   border: string;
   danger: string;
@@ -25,7 +24,6 @@ export type ThemeTokens = {
     prompt: SuggestionRoleTokens;
   };
   surface: string;
-  surfaceMuted: string;
   text: string;
   textSecondary: string;
 };
@@ -38,7 +36,6 @@ export type SuggestionRoleTokens = {
 
 export const lightTheme: ThemeTokens = {
   accent: '#a10f4a',
-  accentText: '#ffffff',
   background: '#f7f7f5',
   border: '#cfd5dd',
   danger: '#a82419',
@@ -68,14 +65,12 @@ export const lightTheme: ThemeTokens = {
     },
   },
   surface: '#ffffff',
-  surfaceMuted: '#f0f1f3',
   text: '#161a22',
   textSecondary: '#596477',
 };
 
 export const darkTheme: ThemeTokens = {
   accent: '#ff8aae',
-  accentText: '#29101a',
   background: '#181820',
   border: '#555563',
   danger: '#ff9b91',
@@ -105,7 +100,6 @@ export const darkTheme: ThemeTokens = {
     },
   },
   surface: '#23232d',
-  surfaceMuted: '#2d2d38',
   text: '#f5f1ea',
   textSecondary: '#c2bec5',
 };

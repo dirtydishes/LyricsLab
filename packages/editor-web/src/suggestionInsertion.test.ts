@@ -28,6 +28,17 @@ describe('createSuggestionInsertion', () => {
     ).toEqual({ consumeAfter: 3, consumeBefore: 2, text: 'flow ' });
   });
 
+  it('normalizes pasted non-breaking horizontal whitespace', () => {
+    expect(
+      createSuggestionInsertion({
+        selectionEmpty: true,
+        textAfterSelection: '\u00a0next',
+        textBeforeCursor: 'fl',
+        word: 'flow',
+      }),
+    ).toEqual({ consumeAfter: 1, consumeBefore: 2, text: 'flow ' });
+  });
+
   it('replaces a non-empty selection without treating it as an active prefix', () => {
     expect(
       createSuggestionInsertion({

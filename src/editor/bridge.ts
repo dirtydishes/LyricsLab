@@ -104,6 +104,13 @@ export function createSetThemeJavaScript(theme: EditorTheme) {
   return createEditorCommandJavaScript('setTheme', { theme });
 }
 
+export function createEditorThemeBootstrapJavaScript(theme: EditorTheme) {
+  return `
+    document.documentElement.dataset.theme = ${JSON.stringify(theme)};
+    true;
+  `;
+}
+
 export function createFocusEditorJavaScript() {
   return createEditorCommandJavaScript('focusEditor', undefined);
 }

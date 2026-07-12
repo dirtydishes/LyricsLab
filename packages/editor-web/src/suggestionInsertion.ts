@@ -30,7 +30,8 @@ export function createSuggestionInsertion({
   const activePrefix = selectionEmpty
     ? textBeforeCursor.match(ACTIVE_PREFIX_PATTERN)?.[0] ?? ''
     : selectedText;
-  const followingWhitespace = textAfterSelection.match(/^[\t ]+/u)?.[0] ?? '';
+  const followingWhitespace =
+    textAfterSelection.match(/^[^\S\r\n]+/u)?.[0] ?? '';
 
   return {
     consumeAfter: followingWhitespace.length,

@@ -4,6 +4,7 @@ import {
   BRIDGE_MESSAGE_VERSION,
   LOCAL_EDITOR_WEBVIEW_BASE_URL,
   createEditorWebViewSource,
+  createEditorThemeBootstrapJavaScript,
   createFocusEditorJavaScript,
   createInsertSuggestionJavaScript,
   createLoadSongJavaScript,
@@ -271,6 +272,21 @@ describe('editor native bridge', () => {
     });
 
     expect(calls).toEqual([{ theme: 'dark' }]);
+  });
+
+  it('sets the initial theme before the editor command surface is ready', () => {
+    const documentObject = {
+      documentElement: {
+        dataset: {} as Record<string, string>,
+      },
+    };
+
+    Function(
+      'document',
+      createEditorThemeBootstrapJavaScript('dark'),
+    )(documentObject);
+
+    expect(documentObject.documentElement.dataset.theme).toBe('dark');
   });
 
   it('creates executable focusEditor JavaScript with an undefined payload', () => {

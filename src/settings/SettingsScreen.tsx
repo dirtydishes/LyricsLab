@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import {
   Pressable,
   SafeAreaView,
@@ -39,13 +39,12 @@ export function SettingsScreen({
   const { isLoading, preference, resolvedTheme, setPreference, tokens } =
     useAppTheme();
   const [error, setError] = useState<string | null>(null);
-  const engine = useMemo(
-    () => buildEngineSettingsViewModel(engineSnapshot),
-    [engineSnapshot],
-  );
+  const [isSavingTheme, setIsSavingTheme] = useState(false);
+  const engine = buildEngineSettingsViewModel(engineSnapshot);
 
   async function selectTheme(nextPreference: ThemePreference) {
     setError(null);
+    setIsSavingTheme(true);
 
     try {
       await setPreference(nextPreference);
@@ -55,6 +54,8 @@ export function SettingsScreen({
           ? saveError.message
           : 'Could not save the theme setting.',
       );
+    } finally {
+      setIsSavingTheme(false);
     }
   }
 
@@ -102,7 +103,7 @@ export function SettingsScreen({
                 <Pressable
                   accessibilityRole="radio"
                   accessibilityState={{ selected }}
-                  disabled={isLoading}
+                  disabled={isLoading || isSavingTheme}
                   key={themePreference}
                   onPress={() => {
                     void selectTheme(themePreference);
@@ -208,7 +209,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     justifyContent: 'center',
-    minHeight: 42,
+    minHeight: 44,
     minWidth: 72,
     paddingHorizontal: 12,
   },
@@ -269,7 +270,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     justifyContent: 'center',
-    minHeight: 40,
+    minHeight: 44,
     minWidth: 74,
     paddingHorizontal: 12,
   },
@@ -303,7 +304,7 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     flex: 1,
     justifyContent: 'center',
-    minHeight: 42,
+    minHeight: 44,
     paddingHorizontal: 8,
   },
   themeChoiceText: {

@@ -418,7 +418,7 @@ const styles = StyleSheet.create({
   deleteButton: {
     borderRadius: 8,
     borderWidth: 1,
-    minHeight: 38,
+    minHeight: 44,
     minWidth: 72,
     justifyContent: 'center',
     paddingHorizontal: 10,
