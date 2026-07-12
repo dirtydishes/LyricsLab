@@ -14,7 +14,7 @@ Current phase: 04A - Production artifact assembly
 
 Current Beads issue: `lyricslab-5iw.4a`
 
-Current PR: none; Phase 04 PR #26 merged
+Current PR: none; Phase 04A branch `lavender/production-rhyme-phase-04a` prepared from canonical base `0d1d188f`
 
 Current execution strategy: visible implementation task followed by independent review task
 
@@ -42,10 +42,10 @@ The earlier `lyricslab-8um` offline-rhyme MVP epic is closed and preserved. This
 | 02 | `lyricslab-5iw.2` | closed | merged PR #24 | `turn-docs/lyricslab-5iw.2.md` |
 | 03 | `lyricslab-5iw.3` | closed | merged PR #25 | `turn-docs/lyricslab-5iw.3.md` |
 | 04 | `lyricslab-5iw.4` | closed | merged PR #26 | `turn-docs/lyricslab-5iw.4.md` |
-| 04A | `lyricslab-5iw.4a` | open | none | `turn-docs/lyricslab-5iw.4a.md` |
+| 04A | `lyricslab-5iw.4a` | in progress | none | `turn-docs/lyricslab-5iw.4a.md` |
 | 05 | `lyricslab-5iw.5` | open | none | `turn-docs/lyricslab-5iw.5.md` |
 | 06 | `lyricslab-5iw.6` | open | none | `turn-docs/lyricslab-5iw.6.md` |
 
 ## Last Coordinator Update
 
-Phase 04 merged through PR #26 as merge commit `b3bce410` after sealed independent evaluation, disclosed remediation from 29/128 to hardened deterministic 128/128, and full thermonuclear review. Beads issue `lyricslab-5iw.4` is closed; Phase 04A is the sole ready phase.
+Phase 04A is selected and claimed on `lavender/production-rhyme-phase-04a` from canonical base `0d1d188f`. It owns exact external-source pins/notices, complete production artifact assembly, and production-scale loader evidence while Phase 05 remains responsible for activation.

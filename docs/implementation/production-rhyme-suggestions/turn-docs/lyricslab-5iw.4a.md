@@ -10,11 +10,46 @@ Produce the complete licensed, pinned, reproducible production artifact from the
 
 ## Orchestration Brief
 
-Not started. Record the pinned `subtlex-word-frequencies` package integrity/ISC notice/upstream caveat, exact CMU pin, artifact/loader ownership, CI owner, and concrete callback binding after selection.
+```json
+{
+  "phase_issue_id": "lyricslab-5iw.4a",
+  "risk": "high",
+  "strategy": "threads",
+  "implementation_owner": "visible delegated production-artifact task on lavender/production-rhyme-phase-04a",
+  "review_independence": "fresh visible reviewer task using thermo-nuclear-code-quality-review after implementation",
+  "delegation_plan": [
+    "establish exact package/source pins, notices, citations, hashes, and the upstream SUBTLEX caveat before compiling production bytes",
+    "assemble and verify the complete artifact from CMU, SUBTLEX package counts, and reviewed Phase 04 sources through the Phase 03 framework",
+    "independently challenge licensing evidence, reproducibility, production-scale bounds, loader atomicity, data-policy mapping, and CI evidence"
+  ],
+  "model_and_effort_rationale": "Use standard task speed and xhigh reasoning because source provenance, deterministic large-scale compilation, cross-source precedence, and bounded mobile loading are release-critical and tightly coupled; fast mode remains disabled.",
+  "required_evidence": [
+    "symbolic branch and worktree preflight",
+    "exact CMU revision/hash/license/acknowledgement",
+    "subtlex-word-frequencies 2.0.0 tarball integrity/hash, ISC notice, Brysbaert and New citation, and Ghent upstream caveat",
+    "complete production manifest/NOTICE/source hashes and reviewed Phase 04 source mapping",
+    "two byte-identical clean production regenerations and temporary-output freshness",
+    "production artifact size/hash/version and all corruption/version/bounds controls",
+    "bounded post-first-frame loading, atomic publication, last-good retention, retry, and production-scale measurements",
+    "no raw parsing, SQLite, network, or large JSON on the typing path; no provider activation",
+    "npm test, typecheck, source gates, build/check rhyme data, Expo config, strict review, and terminal CI state"
+  ],
+  "user_constraints": [
+    "run task remains orchestrator-only",
+    "standard delegated-task speed; no fast mode",
+    "exactly one final callback per delegated task to 019f5428-f2ea-74c2-abfb-e37349c96391",
+    "one active implementation PR and one owner per mutable checkout",
+    "retain the designated package ISC notice and citation without claiming the Ghent page itself grants ISC",
+    "do not activate the provider/settings runtime or widen into Phase 05"
+  ]
+}
+```
 
 ## Adaptations
 
 - Created by the user-approved 2026-07-12 sequence amendment after Phase 03 proved that final artifact assembly could not precede Phase 04 source curation.
+- Canonical base is `lavender/expo-clean-rebuild` at `0d1d188f`, containing closed Phases 01-04 and the reviewed source/evaluation corpus.
+- Prepared symbolic branch `lavender/production-rhyme-phase-04a` directly from that base.
 
 ## Discoveries And Decisions
 
@@ -34,7 +69,7 @@ Pending independent review.
 
 ## CI And Gates
 
-Owner: `unassigned`
+Owner: delegated Phase 04A implementation task, then independent strict review task
 
 State: `unresolved`
 
@@ -60,4 +95,4 @@ The designated source is `words/subtlex-word-frequencies` `2.0.0`, which publish
 
 ## Closeout
 
-Not started.
+Selected and claimed in Beads; implementation delegation pending.
