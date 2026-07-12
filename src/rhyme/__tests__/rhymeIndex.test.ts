@@ -4,7 +4,9 @@ import {
   buildRhymeIndex,
   extractExactRhymeTail,
   findExactRhymeCandidates,
+  findRhymeCandidates,
   normalizeRhymeToken,
+  type RhymeCandidate,
 } from '../rhymeIndex';
 
 describe('rhyme index', () => {
@@ -75,6 +77,77 @@ describe('rhyme index', () => {
         word: 'rhyme',
       },
     ]);
+  });
+
+  it('finds mixed exact and slant candidates with stable ranking metadata', () => {
+    const index = buildRhymeIndex([
+      {
+        pronunciations: [{ phones: ['T', 'AY1', 'M'] }],
+        word: 'time',
+      },
+      {
+        pronunciations: [{ phones: ['R', 'AY1', 'M'] }],
+        word: 'rhyme',
+      },
+      {
+        pronunciations: [{ phones: ['K', 'L', 'AY1', 'M'] }],
+        word: 'climb',
+      },
+      {
+        pronunciations: [{ phones: ['L', 'AY1', 'N'] }],
+        word: 'line',
+      },
+      {
+        pronunciations: [{ phones: ['M', 'AY1', 'N', 'D'] }],
+        word: 'mind',
+      },
+      {
+        pronunciations: [{ phones: ['F', 'R', 'EY1', 'M'] }],
+        word: 'frame',
+      },
+    ]);
+
+    const candidates = findRhymeCandidates(index, {
+      anchor: 'TIME!',
+      maxResults: 5,
+      minSlantSimilarity: 0,
+    });
+    const line = requiredCandidate(candidates, 'line');
+
+    expect(
+      candidates.map((candidate) => `${candidate.kind}:${candidate.word}`),
+    ).toEqual([
+      'exact:climb',
+      'exact:rhyme',
+      'slant:line',
+      'slant:mind',
+      'slant:frame',
+    ]);
+    expect(candidates[0]).toEqual(
+      expect.objectContaining({
+        kind: 'exact',
+        matchedSyllables: 1,
+        repetitionPenalty: 0,
+        slantSimilarity: null,
+        stressCompatibility: 1,
+      }),
+    );
+    expect(line).toEqual(
+      expect.objectContaining({
+        id: 'rhyme:slant:line',
+        kind: 'slant',
+        matchedSyllables: 1,
+        normalizedWord: 'line',
+        repetitionPenalty: 0,
+        rhymeTailKey: 'AY1 N',
+        stressCompatibility: 1,
+        word: 'line',
+      }),
+    );
+    expect(line.slantSimilarity).toEqual(expect.any(Number));
+    expect(line.slantSimilarity).toBeGreaterThan(0);
+    expect(line.slantSimilarity).toBeLessThan(1);
+    expect(candidates[0].score).toBeGreaterThan(line.score);
   });
 
   it('dedupes exact candidates by normalized target word across alternate pronunciations', () => {
@@ -176,3 +249,16 @@ describe('rhyme index', () => {
     expect(index.lexemesByToken.get('light')?.pronunciations).toHaveLength(2);
   });
 });
+
+function requiredCandidate(
+  candidates: readonly RhymeCandidate[],
+  normalizedWord: string,
+): RhymeCandidate {
+  const candidate = candidates.find(
+    (entry) => entry.normalizedWord === normalizedWord,
+  );
+
+  expect(candidate).toBeDefined();
+
+  return candidate as RhymeCandidate;
+}

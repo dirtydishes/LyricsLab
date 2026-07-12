@@ -1,6 +1,7 @@
 /// <reference types="jest" />
 
 import type { SuggestionContext } from '../bridge';
+import type { WordSuggestion } from '../suggestions';
 import {
   createRhymeSuggestionProvider,
   getWordSuggestions,
@@ -46,16 +47,26 @@ function createContext(
 
 function createRhymeProviderProbe({
   candidates = [createExactCandidate('flight')],
+  candidatesByAnchor,
   maxSuggestions,
 }: {
   candidates?: readonly ExactRhymeCandidate[];
+  candidatesByAnchor?: Readonly<
+    Record<string, readonly ExactRhymeCandidate[]>
+  >;
   maxSuggestions?: number;
 } = {}) {
   const index = createEmptyRhymeIndex();
   const getRhymeIndex = jest.fn(() => index);
   const findExactRhymeCandidates = jest.fn(
-    (_index: RhymeIndex, query: ExactRhymeQuery) =>
-      candidates.slice(0, query.maxResults ?? candidates.length),
+    (_index: RhymeIndex, query: ExactRhymeQuery) => {
+      const queryCandidates = candidatesByAnchor?.[query.anchor] ?? candidates;
+
+      return queryCandidates.slice(
+        0,
+        query.maxResults ?? queryCandidates.length,
+      );
+    },
   );
   const provider = createRhymeSuggestionProvider(getRhymeIndex, {
     fallbackProvider: staticSuggestionProvider,
@@ -89,6 +100,29 @@ function createExactCandidate(word: string): ExactRhymeCandidate {
     slantSimilarity: null,
     word,
   };
+}
+
+function expectProviderSuggestions(
+  suggestions: readonly WordSuggestion[],
+  expectedSuggestions: readonly Pick<WordSuggestion, 'id' | 'word'>[],
+) {
+  expect(
+    suggestions.map((suggestion) => ({
+      id: suggestion.id,
+      word: suggestion.word,
+    })),
+  ).toEqual(expectedSuggestions);
+
+  for (const suggestion of suggestions) {
+    expect(suggestion.id).toEqual(expect.any(String));
+    expect(suggestion.word).toEqual(expect.any(String));
+    expect(suggestion.word.length).toBeGreaterThan(0);
+
+    if (suggestion.label !== undefined) {
+      expect(suggestion.label).toEqual(expect.any(String));
+      expect(suggestion.label).toContain(suggestion.word);
+    }
+  }
 }
 
 describe('suggestion provider', () => {
@@ -209,15 +243,17 @@ describe('suggestion provider', () => {
         maxSuggestions: 2,
       });
 
-    expect(
-      provider.getSuggestions(
-        createContext({
-          currentLineText: 'Writing NIGHT, Dr!',
-          previousToken: 'NIGHT,',
-          wordBeforeCursor: 'Dr!',
-        }),
-      ),
-    ).toEqual([{ id: 'rhyme:exact:flight', word: 'flight' }]);
+    const suggestions = provider.getSuggestions(
+      createContext({
+        currentLineText: 'Writing NIGHT, Dr!',
+        previousToken: 'NIGHT,',
+        wordBeforeCursor: 'Dr!',
+      }),
+    );
+
+    expectProviderSuggestions(suggestions, [
+      { id: 'rhyme:exact:flight', word: 'flight' },
+    ]);
     expect(getRhymeIndex).toHaveBeenCalledTimes(1);
     expect(findExactRhymeCandidates).toHaveBeenCalledTimes(1);
     expect(findExactRhymeCandidates).toHaveBeenCalledWith(
@@ -229,7 +265,29 @@ describe('suggestion provider', () => {
     );
   });
 
-  it('filters active-word prefixes before applying the suggestion limit', () => {
+  it('maps injected rhyme candidates to provider-shaped insertable suggestions', () => {
+    const { provider } = createRhymeProviderProbe({
+      candidates: [
+        createExactCandidate('flight'),
+        createExactCandidate('sight'),
+      ],
+      maxSuggestions: 2,
+    });
+
+    const suggestions = provider.getSuggestions(
+      createContext({
+        currentLineText: 'writing through night ',
+        previousToken: 'night',
+      }),
+    );
+
+    expectProviderSuggestions(suggestions, [
+      { id: 'rhyme:exact:flight', word: 'flight' },
+      { id: 'rhyme:exact:sight', word: 'sight' },
+    ]);
+  });
+
+  it('filters mixed active-word prefix candidates before applying the suggestion limit', () => {
     const { findExactRhymeCandidates, provider } = createRhymeProviderProbe({
       candidates: [
         createExactCandidate('brace'),
@@ -242,15 +300,15 @@ describe('suggestion provider', () => {
       maxSuggestions: 2,
     });
 
-    expect(
-      provider.getSuggestions(
-        createContext({
-          currentLineText: 'night br',
-          previousToken: 'night',
-          wordBeforeCursor: 'br',
-        }),
-      ),
-    ).toEqual([
+    const suggestions = provider.getSuggestions(
+      createContext({
+        currentLineText: 'night br',
+        previousToken: 'night',
+        wordBeforeCursor: 'br',
+      }),
+    );
+
+    expectProviderSuggestions(suggestions, [
       { id: 'rhyme:exact:flight', word: 'flight' },
       { id: 'rhyme:exact:sight', word: 'sight' },
     ]);
@@ -261,50 +319,46 @@ describe('suggestion provider', () => {
   });
 
   it('prefers previous completed token candidates over active-word candidates', () => {
-    const index = createEmptyRhymeIndex();
-    const getRhymeIndex = jest.fn(() => index);
-    const findExactRhymeCandidates = jest.fn(
-      (_index: RhymeIndex, query: ExactRhymeQuery) =>
-        query.anchor === 'city'
-          ? [createExactCandidate('pity')]
-          : [createExactCandidate('bite')],
-    );
-    const provider = createRhymeSuggestionProvider(getRhymeIndex, {
-      findExactRhymeCandidates,
+    const { findExactRhymeCandidates, provider } = createRhymeProviderProbe({
+      candidatesByAnchor: {
+        city: [createExactCandidate('pity')],
+        light: [createExactCandidate('bite')],
+      },
     });
 
-    expect(
-      provider.getSuggestions(
-        createContext({
-          previousToken: 'city',
-          wordBeforeCursor: 'light',
-        }),
-      ),
-    ).toEqual([{ id: 'rhyme:exact:pity', word: 'pity' }]);
+    const suggestions = provider.getSuggestions(
+      createContext({
+        previousToken: 'city',
+        wordBeforeCursor: 'light',
+      }),
+    );
+
+    expectProviderSuggestions(suggestions, [
+      { id: 'rhyme:exact:pity', word: 'pity' },
+    ]);
     expect(
       findExactRhymeCandidates.mock.calls.map(([, query]) => query.anchor),
     ).toEqual(['city']);
   });
 
   it('falls back to the active-word anchor when the previous token has no candidates', () => {
-    const index = createEmptyRhymeIndex();
-    const getRhymeIndex = jest.fn(() => index);
-    const findExactRhymeCandidates = jest.fn(
-      (_index: RhymeIndex, query: ExactRhymeQuery) =>
-        query.anchor === 'flow' ? [createExactCandidate('glow')] : [],
-    );
-    const provider = createRhymeSuggestionProvider(getRhymeIndex, {
-      findExactRhymeCandidates,
+    const { findExactRhymeCandidates, provider } = createRhymeProviderProbe({
+      candidatesByAnchor: {
+        flow: [createExactCandidate('glow')],
+        of: [],
+      },
     });
 
-    expect(
-      provider.getSuggestions(
-        createContext({
-          previousToken: 'of',
-          wordBeforeCursor: 'flow',
-        }),
-      ),
-    ).toEqual([{ id: 'rhyme:exact:glow', word: 'glow' }]);
+    const suggestions = provider.getSuggestions(
+      createContext({
+        previousToken: 'of',
+        wordBeforeCursor: 'flow',
+      }),
+    );
+
+    expectProviderSuggestions(suggestions, [
+      { id: 'rhyme:exact:glow', word: 'glow' },
+    ]);
     expect(
       findExactRhymeCandidates.mock.calls.map(([, query]) => query.anchor),
     ).toEqual(['of', 'flow']);
@@ -412,36 +466,40 @@ describe('suggestion provider', () => {
   });
 
   it('orders rhyme-backed suggestions deterministically with stable ids', () => {
-    expect(
-      rhymeSuggestionProvider.getSuggestions(
-        createContext({
-          previousToken: 'light',
-        }),
-      ),
-    ).toEqual([
+    const suggestions = rhymeSuggestionProvider.getSuggestions(
+      createContext({
+        previousToken: 'light',
+      }),
+    );
+
+    expectProviderSuggestions(suggestions, [
       { id: 'rhyme:exact:bite', word: 'bite' },
       { id: 'rhyme:exact:bright', word: 'bright' },
       { id: 'rhyme:exact:fight', word: 'fight' },
       { id: 'rhyme:exact:night', word: 'night' },
       { id: 'rhyme:exact:sight', word: 'sight' },
       { id: 'rhyme:exact:white', word: 'white' },
+      { id: 'rhyme:slant:city', word: 'city' },
+      { id: 'rhyme:slant:pity', word: 'pity' },
     ]);
   });
 
   it('normalizes rhyme anchors while excluding active-word prefixes', () => {
-    expect(
-      rhymeSuggestionProvider.getSuggestions(
-        createContext({
-          previousToken: 'LIGHT,',
-          wordBeforeCursor: 'br',
-        }),
-      ),
-    ).toEqual([
+    const suggestions = rhymeSuggestionProvider.getSuggestions(
+      createContext({
+        previousToken: 'LIGHT,',
+        wordBeforeCursor: 'br',
+      }),
+    );
+
+    expectProviderSuggestions(suggestions, [
       { id: 'rhyme:exact:bite', word: 'bite' },
       { id: 'rhyme:exact:fight', word: 'fight' },
       { id: 'rhyme:exact:night', word: 'night' },
       { id: 'rhyme:exact:sight', word: 'sight' },
       { id: 'rhyme:exact:white', word: 'white' },
+      { id: 'rhyme:slant:city', word: 'city' },
+      { id: 'rhyme:slant:pity', word: 'pity' },
     ]);
   });
 });

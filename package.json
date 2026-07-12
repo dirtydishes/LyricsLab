@@ -34,6 +34,7 @@
     "build:rhyme-artifact": "node scripts/build-cmu-artifact.mjs",
     "check:rhyme-artifact": "node scripts/build-cmu-artifact.mjs --check",
     "smoke:rhyme-artifact": "npm run check:rhyme-artifact && node scripts/smoke-cmu-rhyme-artifact.mjs",
+    "perf:rhyme-ranking": "node scripts/perf-rhyme-ranking.mjs",
     "editor:build": "npm --prefix packages/editor-web run build",
     "editor:test": "npm --prefix packages/editor-web test",
     "typecheck": "tsc --noEmit",
