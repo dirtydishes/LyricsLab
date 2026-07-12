@@ -245,6 +245,10 @@ Evidence:
 - Git metadata is read-only in this delegated worktree. Exact publication probe: `git add <evaluation files> package.json <turn doc>` failed with `fatal: Unable to create '/home/delta/dev/lyricslab/.git/worktrees/lyricslab4/index.lock': Read-only file system`. No evaluation commit or push was created. The orchestrator must stage these exact files, commit with a lowercase human message, push `lavender/production-rhyme-phase-04`, and update existing PR #26; it must not open a second PR.
 - The post-seal remediation publication probe failed at the same read-only index lock after targeting the nine exact changed files. No remediation commit or push was created. The orchestrator must stage `data/rhyme-sources/{evidence.json,lexicon.json,manifest.json,proper-noun-policy.json}`, this turn doc, `evaluation/rhyme-sources/oov-evaluation-result-v1.json`, and the three changed source scripts; commit with a lowercase human message; push `lavender/production-rhyme-phase-04`; and update existing PR #26 without opening another PR.
 - Final review confirmed the prepared worktree Git directory `/home/delta/dev/lyricslab/.git/worktrees/lyricslab4` is read-only. The reviewer intentionally did not stage, commit, push, or mutate PR #26. The orchestrator must publish all 18 review-time changed/untracked paths reported by `git status --short`, preserving the existing PR and explicit base/head.
+- Sealed-evaluation baseline commit: `5b2ec5a2` (`record sealed phase four evaluation`).
+- Disclosed remediation commit: `5d474edf` (`repair phase four sealed evaluation coverage`).
+- Strict-review repair commit: `fea59a82` (`repair phase four review findings`), committed and pushed by the orchestrator after the reviewer returned the repaired working tree.
+- Hosted reinspection at exact head `fea59a82` reports PR #26 `MERGEABLE` and `CLEAN`; the status API returns zero contexts, the workflow query returns no runs, and CI remains `ci-unavailable-with-evidence`.
 
 ## Beads Updates And Follow-Ups
 
@@ -270,4 +274,4 @@ Normal app startup remains unchanged. No source manifest, fixture, safety source
 
 ## Closeout
 
-Final independent review is locally approved after repair: the immutable evaluation passes `128/128`, policy and adversarial controls pass, deterministic sources and all required local gates are green, and no Phase 04A/05/runtime scope was activated. Hosted automation is absent, so CI is honestly `ci-unavailable-with-evidence`. Phase 04 and Beads remain open only for orchestrator publication and canonical closeout.
+Final independent review is locally approved after repair: the immutable evaluation passes `128/128`, policy and adversarial controls pass, deterministic sources and all required local gates are green, and no Phase 04A/05/runtime scope was activated. The repaired head is pushed and cleanly mergeable; hosted automation is absent, so CI is honestly `ci-unavailable-with-evidence`. Merge and canonical Beads closeout remain orchestrator-owned.
