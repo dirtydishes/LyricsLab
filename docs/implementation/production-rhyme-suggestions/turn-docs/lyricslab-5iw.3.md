@@ -309,9 +309,9 @@ No substantive in-scope finding remains. The 697-line decoder remains one cohesi
 ### PR, CI, and publication state
 
 - Review target remains [PR #25](https://github.com/dirtydishes/lyricslab/pull/25), explicit base `lavender/expo-clean-rebuild`, head `lavender/production-rhyme-phase-03`.
-- `ci-unavailable-with-evidence`: repeated `gh pr view 25 ...` and `gh pr checks 25 ...` calls failed with `error connecting to api.github.com`; the repository contains no `.github` workflow files to inspect locally. Hosted mergeability/check state therefore cannot be truthfully claimed.
-- Local and remote branch tips remain `86368b3c5ae90d26965e3b196df1e561d3e1ce26` before review repairs. Git metadata at `/home/delta/dev/lyricslab/.git/worktrees/lyricslab4` is read-only, so the reviewer cannot stage, commit, or push.
-- The orchestrator must commit the completed review working tree with a lowercase human message, push `lavender/production-rhyme-phase-03`, then re-inspect PR #25 mergeability/checks. CI remains `ci-unavailable-with-evidence` until that hosted inspection is possible.
+- Review repair commit `f0ba132b` (`repair phase three review findings`) was committed and pushed by the orchestrator after the reviewer returned the repaired working tree.
+- Hosted reinspection at exact head `f0ba132b` reports PR #25 `MERGEABLE` and `CLEAN` with explicit base/head `lavender/expo-clean-rebuild` / `lavender/production-rhyme-phase-03`.
+- CI remains `ci-unavailable-with-evidence`: the repository has no `.github` workflow files, the commit-status API returns zero contexts, and the workflow-run query returns no runs.
 
 ### Scope and follow-up disposition
 
