@@ -64,6 +64,31 @@ describe('Phase 03 runtime boundary', () => {
       }
     }
   });
+
+  it('packages the production artifact only through the dormant Phase 04A adapter', () => {
+    const adapter = readFileSync(
+      path.join(process.cwd(), 'src/platform/createProductionRhymeEngineRuntime.ts'),
+      'utf8',
+    );
+    expect(adapter).toContain("from '../../assets/rhyme/production.rhymebin'");
+    expect(adapter).toContain('createExpoRhymeEngineRuntime');
+    const appConfig = JSON.parse(
+      readFileSync(path.join(process.cwd(), 'app.json'), 'utf8'),
+    );
+    expect(appConfig.expo.plugins).toContainEqual([
+      'expo-asset',
+      { assets: ['./assets/rhyme/production.rhymebin'] },
+    ]);
+
+    for (const root of ['app', 'src/editor', 'src/settings']) {
+      for (const file of listTypeScriptFiles(path.join(process.cwd(), root))) {
+        const source = readFileSync(file, 'utf8');
+        expect(source).not.toMatch(
+          /(?:createProductionRhymeEngineRuntime|production\.rhymebin|productionArtifact)/u,
+        );
+      }
+    }
+  });
 });
 
 function listTypeScriptFiles(root: string): string[] {

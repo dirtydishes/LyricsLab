@@ -31,7 +31,10 @@ export type RhymeEngineRuntime = {
 };
 
 export type CreateRhymeEngineRuntimeOptions = {
-  readonly decode: (bytes: Uint8Array) => Promise<DecodedRhymeData>;
+  readonly decode: (
+    bytes: Uint8Array,
+    shouldCancel: () => boolean,
+  ) => Promise<DecodedRhymeData>;
   readonly initialVersion: string;
   readonly readChunkBytes?: number;
   readonly scheduleAfterFirstFrame: (task: () => void) => () => void;
@@ -71,7 +74,7 @@ export function createRhymeEngineRuntime(
       const isCurrent = () => currentAttempt === attempt;
       const bytes = await readArtifact(options, isCurrent);
       if (!isCurrent()) return;
-      const decoded = await options.decode(bytes);
+      const decoded = await options.decode(bytes, () => !isCurrent());
 
       if (currentAttempt !== attempt) return;
       activeEngine = decoded.engine;

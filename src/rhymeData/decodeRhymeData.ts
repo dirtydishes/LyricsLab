@@ -1,4 +1,4 @@
-import { createRhymeEngine, type RhymeLexemeInput } from '../rhyme/createRhymeEngine';
+import { createRhymeEngineAsync, type RhymeLexemeInput } from '../rhyme/createRhymeEngine';
 import type { RhymeEngine } from '../rhyme/RhymeEngine';
 import { analyzePronunciation } from '../rhyme/productionPhonology';
 import { normalizeRhymeToken } from '../rhyme/normalize';
@@ -25,6 +25,7 @@ export type DecodeRhymeDataOptions = {
   readonly expectedManifestSha256?: string;
   readonly recordsPerChunk?: number;
   readonly sha256: RhymeDataDigest;
+  readonly shouldCancel?: () => boolean;
   readonly yieldToHost?: () => Promise<void>;
 };
 
@@ -58,6 +59,7 @@ export async function decodeRhymeData(
   bytes: Uint8Array,
   options: DecodeRhymeDataOptions,
 ): Promise<DecodedRhymeData> {
+  throwIfCancelled(options);
   const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
   validateHeader(bytes, view);
   const descriptors = readDirectory(view);
@@ -188,10 +190,6 @@ export async function decodeRhymeData(
   const lexemes: RhymeLexemeInput[] = [];
   for (let index = 0; index < words.length; index += 1) {
     const word = words[index];
-    if ((word.flags & RhymeDataWordFlag.safetyBlocked) !== 0) {
-      await maybeYield(index + 1, options);
-      continue;
-    }
     lexemes.push({
       commonness: word.commonness,
       lemma: word.lemma,
@@ -209,6 +207,8 @@ export async function decodeRhymeData(
             )
             .map((phoneId) => phoneNames[phoneId]),
         })),
+      suggestionEligible:
+        (word.flags & RhymeDataWordFlag.safetyBlocked) === 0,
       word: word.word,
     });
     await maybeYield(index + 1, options);
@@ -216,7 +216,11 @@ export async function decodeRhymeData(
 
   return {
     artifactId,
-    engine: createRhymeEngine(lexemes),
+    engine: await createRhymeEngineAsync(lexemes, {
+      recordsPerChunk: options.recordsPerChunk,
+      shouldCancel: options.shouldCancel,
+      yieldToHost: options.yieldToHost,
+    }),
     sourceManifestSha256: bytesToHex(bytes.subarray(24, 56)),
     version,
   };
@@ -622,8 +626,16 @@ function readStringReference(view: DataView, offset: number, strings: readonly s
 }
 
 async function maybeYield(index: number, options: DecodeRhymeDataOptions) {
+  throwIfCancelled(options);
   const chunkSize = normalizeChunkSize(options.recordsPerChunk);
   if (options.yieldToHost && index % chunkSize === 0) await options.yieldToHost();
+  throwIfCancelled(options);
+}
+
+function throwIfCancelled(options: DecodeRhymeDataOptions) {
+  if (options.shouldCancel?.()) {
+    throw new Error('Rhyme data decode was cancelled');
+  }
 }
 
 function normalizeChunkSize(value: number | undefined) {

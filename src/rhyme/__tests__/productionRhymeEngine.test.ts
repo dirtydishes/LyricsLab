@@ -4,6 +4,7 @@ import {
   BALANCED_SLANT_THRESHOLD,
   createDiagnosticRhymeEngine,
   createRhymeEngine,
+  createRhymeEngineAsync,
   RHYME_RANKING_WEIGHTS,
   type RhymeLexemeInput,
 } from '../createRhymeEngine';
@@ -29,6 +30,37 @@ const CORE_FIXTURE: readonly RhymeLexemeInput[] = [
 ];
 
 describe('production rhyme engine', () => {
+  it('cancels bounded asynchronous index construction at a host yield', async () => {
+    let cancelled = false;
+    const yieldToHost = jest.fn(async () => {
+      cancelled = true;
+    });
+
+    await expect(
+      createRhymeEngineAsync(CORE_FIXTURE, {
+        recordsPerChunk: 1,
+        shouldCancel: () => cancelled,
+        yieldToHost,
+      }),
+    ).rejects.toThrow('cancelled');
+    expect(yieldToHost).toHaveBeenCalledTimes(1);
+  });
+
+  it('analyzes a blocked anchor without emitting it as a candidate', () => {
+    const engine = createRhymeEngine([
+      {
+        ...lexeme('blocked', ['B', 'L', 'AA1', 'K', 'T']),
+        suggestionEligible: false,
+      },
+      lexeme('clocked', ['K', 'L', 'AA1', 'K', 'T']),
+    ]);
+
+    expect(engine.suggest({ anchor: 'blocked' })).toEqual([
+      expect.objectContaining({ normalizedWord: 'clocked' }),
+    ]);
+    expect(engine.suggest({ anchor: 'clocked' })).toEqual([]);
+  });
+
   it('applies the accepted weights and rejects balanced slants below 0.86', () => {
     const engine = createDiagnosticRhymeEngine(CORE_FIXTURE);
     const suggestions = engine.diagnose({ anchor: 'cat' });

@@ -122,6 +122,28 @@ describe('rhyme engine runtime', () => {
     expect(runtime.engine.suggest({ anchor: 'cat' })).toEqual([]);
   });
 
+  it('exposes generation cancellation to in-progress decoding', async () => {
+    let shouldCancel: (() => boolean) | undefined;
+    const decoding = deferred<DecodedRhymeData>();
+    const runtime = createRhymeEngineRuntime({
+      decode: (_bytes, isCancelled) => {
+        shouldCancel = isCancelled;
+        return decoding.promise;
+      },
+      initialVersion: 'pending',
+      scheduleAfterFirstFrame: () => () => undefined,
+      source: { open: async () => createReader(Uint8Array.of(1)) },
+    });
+
+    const attempt = runtime.retry();
+    await flushPromises();
+    expect(shouldCancel?.()).toBe(false);
+    runtime.cancel();
+    expect(shouldCancel?.()).toBe(true);
+    decoding.resolve(decodedData('stale', engineWithLabel('hat')));
+    await attempt;
+  });
+
   it('isolates subscriber failures from state publication', async () => {
     const runtime = createRhymeEngineRuntime({
       decode: async () => decodedData('ready', engineWithLabel('hat')),

@@ -68,6 +68,23 @@ describe('rhyme data decoder', () => {
     expect(yields.mock.calls.length).toBeGreaterThanOrEqual(minimumYields);
   });
 
+  it('stops decoding at the next yield when its generation is cancelled', async () => {
+    let cancelled = false;
+    const yields = jest.fn(async () => {
+      cancelled = true;
+    });
+
+    await expect(
+      decodeRhymeData(artifact, {
+        recordsPerChunk: 1,
+        sha256,
+        shouldCancel: () => cancelled,
+        yieldToHost: yields,
+      }),
+    ).rejects.toThrow('cancelled');
+    expect(yields).toHaveBeenCalledTimes(1);
+  });
+
   it.each([
     ['truncation', (bytes: Uint8Array) => bytes.subarray(0, bytes.length - 1), 'total size'],
     ['format version', (bytes: Uint8Array) => mutate(bytes, (view) => view.setUint16(8, 99, true)), 'format version'],
