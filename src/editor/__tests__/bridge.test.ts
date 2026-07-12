@@ -7,6 +7,7 @@ import {
   createFocusEditorJavaScript,
   createInsertSuggestionJavaScript,
   createLoadSongJavaScript,
+  createSetThemeJavaScript,
   editorWebUrlFromExpoHost,
   normalizeEditorWebUrl,
   parseEditorBridgeMessage,
@@ -254,6 +255,22 @@ describe('editor native bridge', () => {
     });
 
     expect(calls).toEqual([{ word: 'midnight' }]);
+  });
+
+  it('propagates theme through the existing narrow editor command surface', () => {
+    const calls: unknown[] = [];
+    const script = createSetThemeJavaScript('dark');
+
+    Function('window', script)({
+      LyricsLabEditor: {
+        setTheme(command: unknown) {
+          calls.push(command);
+          return true;
+        },
+      },
+    });
+
+    expect(calls).toEqual([{ theme: 'dark' }]);
   });
 
   it('creates executable focusEditor JavaScript with an undefined payload', () => {

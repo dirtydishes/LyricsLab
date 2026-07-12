@@ -1,6 +1,7 @@
 import {
   forwardRef,
   useCallback,
+  useEffect,
   useImperativeHandle,
   useMemo,
   useRef,
@@ -20,12 +21,15 @@ import {
   createFocusEditorJavaScript,
   createInsertSuggestionJavaScript,
   createLoadSongJavaScript,
+  createSetThemeJavaScript,
   parseEditorBridgeMessage,
   type EditorBodySnapshot,
   type EditorErrorMessage,
+  type EditorTheme,
   type SuggestionContext,
 } from './bridge';
 import { editorHtml } from './generated/editorHtml';
+import { getThemeTokens } from '../theme/theme';
 
 declare const process:
   | {
@@ -48,6 +52,7 @@ type EditorWebViewProps = EditorBodySnapshot & {
   onEditorFocused?: (context: SuggestionContext) => void;
   onSelectionChanged?: (context: SuggestionContext) => void;
   style?: StyleProp<ViewStyle>;
+  theme: EditorTheme;
 };
 
 export const EditorWebView = forwardRef<EditorWebViewHandle, EditorWebViewProps>(
@@ -62,9 +67,11 @@ export const EditorWebView = forwardRef<EditorWebViewHandle, EditorWebViewProps>
       onEditorFocused,
       onSelectionChanged,
       style,
+      theme,
     },
     ref,
   ) {
+    const tokens = getThemeTokens(theme);
     const webViewRef = useRef<WebView>(null);
     const latestBodySnapshotRef = useRef<EditorBodySnapshot>({
       bodyJson,
@@ -88,6 +95,14 @@ export const EditorWebView = forwardRef<EditorWebViewHandle, EditorWebViewProps>
         createLoadSongJavaScript(latestBodySnapshotRef.current),
       );
     }, []);
+
+    const sendCurrentTheme = useCallback(() => {
+      webViewRef.current?.injectJavaScript(createSetThemeJavaScript(theme));
+    }, [theme]);
+
+    useEffect(() => {
+      sendCurrentTheme();
+    }, [sendCurrentTheme]);
 
     useImperativeHandle(
       ref,
@@ -116,6 +131,7 @@ export const EditorWebView = forwardRef<EditorWebViewHandle, EditorWebViewProps>
         switch (result.message.type) {
           case 'editorReady':
             sendCurrentBody();
+            sendCurrentTheme();
             break;
           case 'contentChanged':
             onContentChanged({
@@ -146,11 +162,21 @@ export const EditorWebView = forwardRef<EditorWebViewHandle, EditorWebViewProps>
         onEditorFocused,
         onSelectionChanged,
         sendCurrentBody,
+        sendCurrentTheme,
       ],
     );
 
     return (
-      <View style={[styles.container, style]}>
+      <View
+        style={[
+          styles.container,
+          {
+            backgroundColor: tokens.editorBackground,
+            borderColor: tokens.border,
+          },
+          style,
+        ]}
+      >
         <WebView
           allowsInlineMediaPlayback
           domStorageEnabled
@@ -160,12 +186,26 @@ export const EditorWebView = forwardRef<EditorWebViewHandle, EditorWebViewProps>
           originWhitelist={['http://*', 'https://*']}
           ref={webViewRef}
           renderError={() => (
-            <View style={styles.centerState}>
-              <Text style={styles.errorText}>Editor failed to load</Text>
+            <View
+              style={[
+                styles.centerState,
+                {
+                  backgroundColor: tokens.editorBackground,
+                },
+              ]}
+            >
+              <Text style={[styles.errorText, { color: tokens.danger }]}>
+                Editor failed to load
+              </Text>
             </View>
           )}
           source={editorSource}
-          style={styles.webView}
+          style={[
+            styles.webView,
+            {
+              backgroundColor: tokens.editorBackground,
+            },
+          ]}
         />
       </View>
     );
@@ -189,25 +229,20 @@ function getConfiguredEditorUrl() {
 const styles = StyleSheet.create({
   centerState: {
     alignItems: 'center',
-    backgroundColor: '#ffffff',
     flex: 1,
     justifyContent: 'center',
   },
   container: {
-    backgroundColor: '#ffffff',
-    borderColor: '#d6dae1',
     borderRadius: 8,
     borderWidth: 1,
     flex: 1,
     overflow: 'hidden',
   },
   errorText: {
-    color: '#b42318',
     fontSize: 14,
     fontWeight: '700',
   },
   webView: {
-    backgroundColor: '#ffffff',
     flex: 1,
   },
 });

@@ -11,6 +11,7 @@ import {
   type SetThemeCommand,
 } from './bridge';
 import { extractSuggestionContext } from './suggestionContext';
+import { createSuggestionInsertion } from './suggestionInsertion';
 
 export type LyricsEditorHandle = {
   commands: LyricsEditorCommands;
@@ -113,13 +114,48 @@ export function createLyricsEditor({
 
     insertSuggestion(command: InsertSuggestionCommand) {
       return safelyRunCommand(() => {
-        const word = normalizeSuggestion(command);
+        return editor
+          .chain()
+          .focus()
+          .command(({ state, tr }) => {
+            const { empty, from, to, $from, $to } = state.selection;
+            const sameTextBlock = $from.parent === $to.parent;
+            const textBeforeCursor = $from.parent.textBetween(
+              0,
+              $from.parentOffset,
+              undefined,
+              '\n',
+            );
+            const textAfterSelection = sameTextBlock
+              ? $to.parent.textBetween(
+                  $to.parentOffset,
+                  $to.parent.content.size,
+                  undefined,
+                  '\n',
+                )
+              : '';
+            const insertion = createSuggestionInsertion({
+              selectedText: empty
+                ? ''
+                : state.doc.textBetween(from, to, '\n', '\n'),
+              selectionEmpty: empty,
+              textAfterSelection,
+              textBeforeCursor,
+              word: command.word,
+            });
 
-        if (!word) {
-          return false;
-        }
+            if (!insertion) {
+              return false;
+            }
 
-        return editor.chain().focus().insertContent(`${word} `).run();
+            tr.insertText(
+              insertion.text,
+              from - insertion.consumeBefore,
+              to + insertion.consumeAfter,
+            );
+            return true;
+          })
+          .run();
       }, targetWindow);
     },
 
@@ -141,9 +177,9 @@ export function createLyricsEditor({
 
     setTheme(command: SetThemeCommand = {}) {
       return safelyRunCommand(() => {
-        const theme = command.theme?.trim();
+        const theme = command.theme;
 
-        if (theme) {
+        if (theme === 'dark' || theme === 'light') {
           targetWindow.document.documentElement.dataset.theme = theme;
         } else {
           delete targetWindow.document.documentElement.dataset.theme;
@@ -205,10 +241,6 @@ function getLoadSongContent(command: LoadSongCommand): JSONContent {
 
 function isJsonContent(value: unknown): value is JSONContent {
   return Boolean(value && typeof value === 'object' && !Array.isArray(value));
-}
-
-function normalizeSuggestion(command: InsertSuggestionCommand) {
-  return command.word.trim();
 }
 
 function getEditorSnapshot(editor: Editor) {

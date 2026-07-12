@@ -24,6 +24,7 @@ import { bundledSuggestionProvider } from './bundledSuggestionProvider';
 import type { WordSuggestion } from './suggestions';
 import type { SongRepository } from '../songs/songRepository';
 import type { Song, SongId } from '../songs/types';
+import { useAppTheme } from '../settings/SettingsProvider';
 
 const TITLE_SAVE_DEBOUNCE_MS = 450;
 const BODY_SAVE_DEBOUNCE_MS = 550;
@@ -40,6 +41,7 @@ export function LyricsEditorScreen({
   repository,
   songId,
 }: LyricsEditorScreenProps) {
+  const { resolvedTheme, tokens } = useAppTheme();
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSavingBody, setIsSavingBody] = useState(false);
@@ -319,7 +321,9 @@ export function LyricsEditorScreen({
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView
+      style={[styles.safeArea, { backgroundColor: tokens.background }]}
+    >
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.keyboardArea}
@@ -333,19 +337,22 @@ export function LyricsEditorScreen({
               }}
               style={({ pressed }) => [
                 styles.backButton,
+                { borderColor: tokens.border },
                 pressed && styles.pressed,
               ]}
             >
-              <Text style={styles.backButtonText}>Back</Text>
+              <Text style={[styles.backButtonText, { color: tokens.text }]}>
+                Back
+              </Text>
             </Pressable>
-            <Text style={styles.saveState}>
+            <Text style={[styles.saveState, { color: tokens.textSecondary }]}>
               {isSavingTitle || isSavingBody ? 'Saving' : 'Saved'}
             </Text>
           </View>
 
           {isLoading ? (
             <View style={styles.centerState}>
-              <ActivityIndicator color="#d94670" />
+              <ActivityIndicator color={tokens.accent} />
             </View>
           ) : song ? (
             <>
@@ -356,13 +363,17 @@ export function LyricsEditorScreen({
                 }}
                 onChangeText={setTitle}
                 placeholder="Untitled Song"
-                placeholderTextColor="#798394"
+                placeholderTextColor={tokens.placeholder}
                 returnKeyType="done"
-                style={styles.titleInput}
+                style={[styles.titleInput, { color: tokens.text }]}
                 value={title}
               />
 
-              {error ? <Text style={styles.errorText}>{error}</Text> : null}
+              {error ? (
+                <Text style={[styles.errorText, { color: tokens.danger }]}>
+                  {error}
+                </Text>
+              ) : null}
 
               <EditorWebView
                 bodyJson={song.bodyJson}
@@ -375,6 +386,7 @@ export function LyricsEditorScreen({
                 onEditorFocused={handleEditorFocused}
                 onSelectionChanged={handleSelectionChanged}
                 ref={editorWebViewRef}
+                theme={resolvedTheme}
               />
 
               {isBodyEditorFocused ? (
@@ -386,7 +398,9 @@ export function LyricsEditorScreen({
             </>
           ) : (
             <View style={styles.centerState}>
-              <Text style={styles.errorText}>{error ?? 'Song not found'}</Text>
+              <Text style={[styles.errorText, { color: tokens.danger }]}>
+                {error ?? 'Song not found'}
+              </Text>
             </View>
           )}
         </View>
@@ -401,7 +415,6 @@ function toErrorMessage(error: unknown) {
 
 const styles = StyleSheet.create({
   safeArea: {
-    backgroundColor: '#f7f7f5',
     flex: 1,
   },
   keyboardArea: {
@@ -420,7 +433,6 @@ const styles = StyleSheet.create({
   },
   backButton: {
     alignItems: 'center',
-    borderColor: '#cfd5dd',
     borderRadius: 8,
     borderWidth: 1,
     minHeight: 40,
@@ -429,12 +441,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   backButtonText: {
-    color: '#253041',
     fontSize: 15,
     fontWeight: '800',
   },
   saveState: {
-    color: '#697487',
     fontSize: 13,
     fontWeight: '700',
   },
@@ -442,7 +452,6 @@ const styles = StyleSheet.create({
     opacity: 0.72,
   },
   titleInput: {
-    color: '#161a22',
     fontSize: 28,
     fontWeight: '800',
     letterSpacing: 0,
@@ -452,7 +461,6 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   errorText: {
-    color: '#b42318',
     fontSize: 14,
     fontWeight: '700',
     marginBottom: 12,

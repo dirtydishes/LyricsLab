@@ -7,6 +7,9 @@ import {
 } from 'react-native';
 
 import type { WordSuggestion } from './suggestions';
+import { getSuggestionPresentation } from './suggestionPresentation';
+import { useAppTheme } from '../settings/SettingsProvider';
+import type { SuggestionRoleTokens } from '../theme/theme';
 
 type SuggestionBarProps = {
   onSelectSuggestion: (suggestion: WordSuggestion) => void;
@@ -17,12 +20,19 @@ export function SuggestionBar({
   onSelectSuggestion,
   suggestions,
 }: SuggestionBarProps) {
+  const { tokens } = useAppTheme();
+
   if (suggestions.length === 0) {
     return null;
   }
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        { backgroundColor: tokens.surface, borderColor: tokens.border },
+      ]}
+    >
       <ScrollView
         horizontal
         keyboardShouldPersistTaps="always"
@@ -30,32 +40,53 @@ export function SuggestionBar({
         style={styles.scrollView}
         contentContainerStyle={styles.content}
       >
-        {suggestions.map((suggestion) => (
-          <Pressable
-            accessibilityRole="button"
-            key={suggestion.id}
-            onPress={() => {
-              onSelectSuggestion(suggestion);
-            }}
-            style={({ pressed }) => [
-              styles.suggestionButton,
-              pressed && styles.suggestionButtonPressed,
-            ]}
-          >
-            <Text numberOfLines={1} style={styles.suggestionText}>
-              {suggestion.label ?? suggestion.word}
-            </Text>
-          </Pressable>
-        ))}
+        {suggestions.map((suggestion) => {
+          const presentation = getSuggestionPresentation(suggestion);
+          const roleTokens = tokens.suggestion[presentation.role];
+
+          return (
+            <Pressable
+              accessibilityLabel={`${presentation.label}: ${suggestion.word}`}
+              accessibilityRole="button"
+              key={suggestion.id}
+              onPress={() => {
+                onSelectSuggestion(suggestion);
+              }}
+              style={({ pressed }) => [
+                styles.suggestionButton,
+                roleStyle(roleTokens),
+                pressed && { backgroundColor: tokens.pressed },
+              ]}
+            >
+              <Text
+                numberOfLines={1}
+                style={[styles.suggestionLabel, { color: roleTokens.text }]}
+              >
+                {presentation.label}
+              </Text>
+              <Text
+                numberOfLines={1}
+                style={[styles.suggestionText, { color: roleTokens.text }]}
+              >
+                {suggestion.word}
+              </Text>
+            </Pressable>
+          );
+        })}
       </ScrollView>
     </View>
   );
 }
 
+function roleStyle(roleTokens: SuggestionRoleTokens) {
+  return {
+    backgroundColor: roleTokens.background,
+    borderColor: roleTokens.border,
+  };
+}
+
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#ffffff',
-    borderColor: '#d6dae1',
     borderRadius: 8,
     borderWidth: 1,
     marginTop: 10,
@@ -72,20 +103,20 @@ const styles = StyleSheet.create({
   },
   suggestionButton: {
     alignItems: 'center',
-    backgroundColor: '#f7f7f5',
-    borderColor: '#cfd5dd',
     borderRadius: 8,
     borderWidth: 1,
-    height: 36,
     justifyContent: 'center',
+    minHeight: 44,
     minWidth: 72,
+    paddingVertical: 5,
     paddingHorizontal: 14,
   },
-  suggestionButtonPressed: {
-    backgroundColor: '#edeff3',
+  suggestionLabel: {
+    fontSize: 10,
+    fontWeight: '700',
+    lineHeight: 12,
   },
   suggestionText: {
-    color: '#253041',
     fontSize: 15,
     fontWeight: '800',
     letterSpacing: 0,

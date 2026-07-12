@@ -20,6 +20,9 @@ export default function SongsRoute() {
       onOpenSong={(songId) => {
         router.push({ params: { id: songId }, pathname: '/song/[id]' });
       }}
+      onOpenSettings={() => {
+        router.push('/settings');
+      }}
       refreshKey={refreshKey}
       repository={repository}
     />
