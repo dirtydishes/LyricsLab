@@ -19,6 +19,7 @@ import {
 
 const CMUDICT_COMMIT = '74790861f652b15e4ac49015a90074ad62a27690';
 const CMUDICT_COMMIT_DATE = '2025-10-24T13:40:26-04:00';
+const CMUDICT_REPOSITORY = 'https://github.com/cmusphinx/cmudict';
 const CMUDICT_SHA256 = '81917843c7f44ce2b094ac63873c2c7a4cf802040792c455ba3ca406891c3d22';
 const CMUDICT_LICENSE_SHA256 = 'bd4ce8e44170a5f9f481310ca85c51de3c4f851a65e679b40e603b143bd3542a';
 const CMUDICT_README_SHA256 = '00c34e7564f1f6a68de02e12c123d801471da92bc3091f7d89b605f238bf8554';
@@ -28,6 +29,8 @@ const SUBTLEX_INTEGRITY = 'sha512-N/8uDDV4zD+PZNOCKvhBfOfSQo2CAKb/icKRsWQpRBNw9n
 const SUBTLEX_SHASUM = '4db4b01acf768d27162edbc3fe0930da19a5ca9a';
 const SUBTLEX_SHA256 = '442a0e90c3f783c008c4721f035be7a003531185233584ea27c80af6c3d0654e';
 const SUBTLEX_SHA512_HEX = '37ff2e0c3578cc3f8f64d3822af8417ce7d2428d8200a6ff89c291b16429441370f678743edf8fb7f7d0211684a5a6b05483d29724de91ff731d7ff3422d3e62';
+const SUBTLEX_CITATION = 'Brysbaert, M., & New, B. (2009). Moving beyond Kucera and Francis: A critical evaluation of current word frequency norms and the introduction of a new and improved word frequency measure for American English. Behavior Research Methods, 41(4), 977-990.';
+const SUBTLEX_GHENT_CAVEAT = 'The packaged npm distribution declares ISC under Zeke Sikelianos, while the Ghent SUBTLEXus download page itself does not state ISC; preserve that upstream relicensing/provenance caveat.';
 const SUBTLEX_PACKAGE_FILES = Object.freeze([
   'package/index.json',
   'package/license',
@@ -48,6 +51,53 @@ const EXPECTED_SOURCE_IDS = Object.freeze({
   projectManifest: 'phase04.rhyme-sources',
   subtlexPackage: 'subtlex.package',
 });
+const EXPECTED_PRODUCTION_SOURCES = Object.freeze([
+  {
+    id: EXPECTED_SOURCE_IDS.cmuDictionary,
+    kind: 'cmudict-dictionary',
+    license: 'CMUdict license; see data/rhyme-production/cmudict-LICENSE.txt',
+    ownership: 'third-party',
+    path: 'data/cmudict.txt',
+    sha256: CMUDICT_SHA256,
+    version: `cmusphinx/cmudict@${CMUDICT_COMMIT}`,
+  },
+  {
+    id: EXPECTED_SOURCE_IDS.cmuLicense,
+    kind: 'cmudict-license',
+    license: 'CMUdict license',
+    ownership: 'third-party',
+    path: 'data/rhyme-production/cmudict-LICENSE.txt',
+    sha256: CMUDICT_LICENSE_SHA256,
+    version: `cmusphinx/cmudict@${CMUDICT_COMMIT}`,
+  },
+  {
+    id: EXPECTED_SOURCE_IDS.cmuReadme,
+    kind: 'cmudict-acknowledgement',
+    license: 'CMUdict acknowledgement text',
+    ownership: 'third-party',
+    path: 'data/rhyme-production/cmudict-README.txt',
+    sha256: CMUDICT_README_SHA256,
+    version: `cmusphinx/cmudict@${CMUDICT_COMMIT}`,
+  },
+  {
+    id: EXPECTED_SOURCE_IDS.projectManifest,
+    kind: 'phase04-source-manifest',
+    license: 'LyricsLab project-owned source data; all rights reserved pending release-policy decision',
+    ownership: 'project-authored',
+    path: 'data/rhyme-sources/manifest.json',
+    sha256: 'd8e2acb3b352a2589da8f71dd9ab082bc50c495698ab4359ad21d6c095fc9b29',
+    version: '2026.07.12',
+  },
+  {
+    id: EXPECTED_SOURCE_IDS.subtlexPackage,
+    kind: 'subtlex-word-frequency-package',
+    license: 'ISC package notice from subtlex-word-frequencies@2.0.0; see data/rhyme-production/NOTICE.md for Ghent provenance caveat',
+    ownership: 'third-party',
+    path: 'data/rhyme-production/subtlex-word-frequencies-2.0.0.tgz',
+    sha256: SUBTLEX_SHA256,
+    version: SUBTLEX_IDENTITY,
+  },
+]);
 
 export async function loadProductionRhymeData({
   manifest,
@@ -56,6 +106,7 @@ export async function loadProductionRhymeData({
   sources,
 }) {
   validateProductionPins(manifest);
+  validateProductionSourceRecords(sources);
 
   const sourceById = new Map(sources.map((source) => [source.id, source]));
   const cmuSource = requireSource(sourceById, EXPECTED_SOURCE_IDS.cmuDictionary);
@@ -125,7 +176,7 @@ function validateProductionPins(manifest) {
   assertEqual(pins.cmudict.dictionarySha256, CMUDICT_SHA256, 'CMUdict dictionary hash');
   assertEqual(pins.cmudict.licenseSha256, CMUDICT_LICENSE_SHA256, 'CMUdict license hash');
   assertEqual(pins.cmudict.readmeSha256, CMUDICT_README_SHA256, 'CMUdict README hash');
-  assertNonEmptyString(pins.cmudict.repository, 'CMUdict repository');
+  assertEqual(pins.cmudict.repository, CMUDICT_REPOSITORY, 'CMUdict repository');
 
   exactKeys(
     pins.subtlex,
@@ -157,8 +208,8 @@ function validateProductionPins(manifest) {
   assertEqual(pins.subtlex.packageJsonSha256, SUBTLEX_FILE_HASHES['package/package.json'], 'SUBTLEX package.json hash');
   assertEqual(pins.subtlex.readmeSha256, SUBTLEX_FILE_HASHES['package/readme.md'], 'SUBTLEX README hash');
   assertEqual(JSON.stringify(pins.subtlex.packageFiles), JSON.stringify(SUBTLEX_PACKAGE_FILES), 'SUBTLEX package file list');
-  assertNonEmptyString(pins.subtlex.subtlexCitation, 'SUBTLEX citation');
-  assertNonEmptyString(pins.subtlex.ghentLicenseCaveat, 'SUBTLEX Ghent caveat');
+  assertEqual(pins.subtlex.subtlexCitation, SUBTLEX_CITATION, 'SUBTLEX citation');
+  assertEqual(pins.subtlex.ghentLicenseCaveat, SUBTLEX_GHENT_CAVEAT, 'SUBTLEX Ghent caveat');
 
   exactKeys(
     pins.phase04Sources,
@@ -167,6 +218,31 @@ function validateProductionPins(manifest) {
   );
   assertEqual(pins.phase04Sources.manifestPath, 'data/rhyme-sources/manifest.json', 'Phase 04 manifest path');
   assertEqual(pins.phase04Sources.reviewedEntryCount, 618, 'Phase 04 reviewed source count');
+}
+
+function validateProductionSourceRecords(sources) {
+  const expectedIds = EXPECTED_PRODUCTION_SOURCES.map((source) => source.id).sort();
+  const actualIds = sources.map((source) => source.id).sort();
+  assertEqual(JSON.stringify(actualIds), JSON.stringify(expectedIds), 'Production manifest sources');
+
+  const expectedById = new Map(
+    EXPECTED_PRODUCTION_SOURCES.map((source) => [source.id, source]),
+  );
+
+  for (const source of sources) {
+    const expected = expectedById.get(source.id);
+    if (!expected) {
+      throw new Error(`Production manifest includes unexpected source ${source.id}`);
+    }
+
+    for (const field of ['kind', 'license', 'ownership', 'path', 'sha256', 'version']) {
+      assertEqual(
+        source[field],
+        expected[field],
+        `Production manifest source ${source.id} ${field}`,
+      );
+    }
+  }
 }
 
 function parseSubtlexPackage(bytes) {
@@ -462,12 +538,13 @@ function parseTarGz(bytes) {
     if (content.length !== size) {
       throw new Error(`Truncated tar entry: ${fullName}`);
     }
-    if (typeflag === '0' || typeflag === '\0') {
-      if (entries.has(fullName)) {
-        throw new Error(`Duplicate tar entry: ${fullName}`);
-      }
-      entries.set(fullName, Buffer.from(content));
+    if (typeflag !== '0' && typeflag !== '\0') {
+      throw new Error(`Unsupported tar entry type for ${fullName}`);
     }
+    if (entries.has(fullName)) {
+      throw new Error(`Duplicate tar entry: ${fullName}`);
+    }
+    entries.set(fullName, Buffer.from(content));
     offset += Math.ceil(size / 512) * 512;
   }
 

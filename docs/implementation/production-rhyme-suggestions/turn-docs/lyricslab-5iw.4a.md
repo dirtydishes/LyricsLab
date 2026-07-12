@@ -131,13 +131,29 @@ Production artifact evidence:
 
 ## Review
 
-Pending independent review.
+Fresh independent strict review task `019f5726-e7e6-77c3-ab16-d28926c83904` applied both the dirtyloops review/CI contract and `/home/delta/.agents/skills/thermo-nuclear-code-quality-review/SKILL.md` at full depth against PR #27, local head `2923ea38`, the Phase 03/04/04A contracts, the production source pins, the Phase 04 reviewed corpus, the sealed evaluator, and the changed runtime/compiler code. The review found no remaining product-scope blocker after the repairs below.
+
+### Independent strict review repairs
+
+- Production manifest source containment was too permissive: an extra source record or relabeled source metadata could be accepted as long as the underlying bytes hashed. `scripts/rhyme-data/production-sources.mjs` now requires the exact five Phase 04A production source records, including IDs, kinds, paths, licenses, ownership, versions, and hashes.
+- The CMU repository and SUBTLEX citation/caveat pins were previously accepted as merely non-empty strings. They are now exact validation constants, so a weakened CMUSphinx repository identity, missing Brysbaert & New citation, or softened Ghent provenance caveat fails the production build.
+- The npm tar reader now rejects non-regular tar entries instead of ignoring links or special entries. The committed `subtlex-word-frequencies-2.0.0.tgz` still contains exactly four regular files: `package/index.json`, `package/license`, `package/package.json`, and `package/readme.md`.
+- Compiler adversarial tests now cover wrong CMU repository, weakened SUBTLEX citation, unexpected production source records, and source metadata relabeling.
+- The non-activation test now walks value-import graphs from `app`, `src/editor`, and `src/settings`, ignoring type-only imports. It proves those entry points do not transitively reach the dormant Expo/production runtime, decoder, runtime module, fixture artifact, or production artifact. The dormant `src/platform/createProductionRhymeEngineRuntime.ts` remains the only production-artifact address point and is not activated by app/editor/settings.
+
+Review confirmations:
+
+- CMUdict pin, bytes, license, and acknowledgement hashes match the manifest and NOTICE claims.
+- SUBTLEX package SHA-256, SHA-512/SRI, SHA-1 shasum, internal file hashes, 74,286-entry index shape, ISC package notice, Brysbaert & New citation, and Ghent caveat are validated by code and local evidence.
+- Production artifact remains deterministic at `19,405,408` bytes, SHA-256 `204a1471633da57ef447006b8d45128358b993deb085b4243c7067b7b61ab12d`, below the 64 MiB loader cap.
+- Sealed Phase 04 gold remains byte-identical and mode `0444` at SHA-256 `40aac8d4704a9ca44bf1d2d19f5843714b83c08c59818b81b123baa7e010d4d7`; the unchanged evaluator remains `128/128` with policy controls passing.
+- No app/editor/settings provider activation, highlighting, phrase rhymes, G2P, personalization, AI, audio, sync, IAP, Android, TestFlight, or lyric logging was introduced.
 
 ## CI And Gates
 
 Owner: delegated Phase 04A implementation task, then independent strict review task
 
-State: `ci-unavailable-with-evidence`; all local gates pass after the orchestrator supplied dependency/network access. Hosted checks remain unavailable until publication.
+State: `ci-unavailable-with-evidence`; all local gates pass after strict-review repairs. GitHub reports PR #27 open, non-draft, mergeable, with zero status contexts and zero PR-triggered workflow runs at remote head `2923ea38`; the repository has no local `.github` workflow directory.
 
 Evidence:
 
@@ -159,18 +175,36 @@ Evidence:
 - Orchestrator `npx expo config --type public` passed for LyricsLab / `lyricslab-mobile`, SDK `56.0.0`, with `expo-sqlite` and `expo-router` configured.
 - Orchestrator repeated two clean production builds; both were byte-identical at `19,405,408` bytes and SHA-256 `204a1471633da57ef447006b8d45128358b993deb085b4243c7067b7b61ab12d`.
 - Orchestrator reran production and fixture freshness, reviewed-source checks, source adversarial controls, sealed evaluation, evaluation self-tests, and `git diff --check`; all passed.
-- Hosted PR/CI evidence remains pending publication. The delegated sandbox could not reach `api.github.com`; the orchestrator owns the post-push reinspection.
+- Independent review `npm run test:rhyme-data-compiler` passed after the new production-source drift tests.
+- Independent review targeted runtime/platform tests passed: `npx jest src/rhymeData/__tests__/runtimeBoundary.test.ts src/rhymeData/__tests__/productionRhymeData.test.ts src/platform/__tests__/createProductionRhymeEngineRuntime.test.ts --runInBand` reported 3 suites and 7 tests passing.
+- Independent review `npm run check:rhyme-data` passed with production artifact SHA-256 `204a1471633da57ef447006b8d45128358b993deb085b4243c7067b7b61ab12d`.
+- Independent review `npm run check:rhyme-data:fixture` passed with fixture artifact SHA-256 `5ee1917cd55635a9a486fe43d635ef402ae30ef7611f578f628360fd6c9985ca`.
+- Independent review produced two temporary clean production artifacts; `cmp` proved byte identity and both SHA-256 values were `204a1471633da57ef447006b8d45128358b993deb085b4243c7067b7b61ab12d`.
+- Independent review `npm run check:rhyme-sources` passed with 618 reviewed entries, 22 aliases, 596 direct entries, 5 safety-blocked entries, and 32 proper-noun entries.
+- Independent review `npm run test:rhyme-sources` passed.
+- Independent review `npm run evaluate:rhyme-sources` and `npm run test:rhyme-evaluation` passed with `128/128` coverage, policy controls passing, and gold hash/mode unchanged after every run.
+- Independent review repeated `npm run evaluate:rhyme-sources` twice; both runs produced deterministic result SHA-256 `52b127f379b53751495c8306839730de8d26cb65e1b5370c45f16c9a957e3763`, while gold remained SHA-256 `40aac8d4704a9ca44bf1d2d19f5843714b83c08c59818b81b123baa7e010d4d7`, mode `0444`.
+- Independent review `npm test` passed: 26 suites, 189 tests.
+- Independent review `npm run typecheck` passed.
+- Independent review `npm run editor:test` passed: 3 files, 25 tests.
+- Independent review `npm run build:editor-html` passed; generated editor HTML remained unchanged.
+- Independent review `npx expo config --type public` passed for LyricsLab / `lyricslab-mobile`, SDK `56.0.0`, with `expo-sqlite` and `expo-router` configured.
+- Independent review `git diff --check` passed.
+- GitHub connector evidence for PR #27: base `lavender/expo-clean-rebuild`, head `lavender/production-rhyme-phase-04a`, remote head `2923ea3827177cacaaba00ff7ef76c6aaf07620b`, mergeable `true`, zero statuses, and zero PR-triggered workflow runs.
 
 ## PR And Commits
 
-Implementation is ready for the orchestrator to commit and push on `lavender/production-rhyme-phase-04a`, then open exactly one PR with explicit base `lavender/expo-clean-rebuild` and explicit head `lavender/production-rhyme-phase-04a`.
+- PR [#27](https://github.com/dirtydishes/lyricslab/pull/27) is open, non-draft, and mergeable with explicit base `lavender/expo-clean-rebuild` and head `lavender/production-rhyme-phase-04a`.
+- Remote PR head during review: `2923ea3827177cacaaba00ff7ef76c6aaf07620b`; base SHA `0d1d188f8d28c06555165036ebdaf3b9bf922d4d`.
+- Strict-review repairs are complete locally but not committed or pushed because Git metadata is read-only in this prepared checkout. Publication probe: `git add scripts/rhyme-data/production-sources.mjs scripts/test-rhyme-data.mjs src/rhymeData/__tests__/runtimeBoundary.test.ts docs/implementation/production-rhyme-suggestions/turn-docs/lyricslab-5iw.4a.md` failed with `fatal: Unable to create '/home/delta/dev/lyricslab/.git/worktrees/lyricslab4/index.lock': Read-only file system`.
+- Orchestrator publication handoff: stage exactly the four local repair paths above, commit with a lowercase human message, push `lavender/production-rhyme-phase-04a`, update existing PR #27, and reinspect hosted checks. Do not open another PR.
 
 ## Beads Updates And Follow-Ups
 
 Issue depends on `lyricslab-5iw.4`; `lyricslab-5iw.5` depends on this issue.
 
 - Beads CLI mutation/inspection beyond `bd prime` is unavailable in this sandbox because the embedded Dolt lock path is read-only. The orchestrator retains canonical Beads authority.
-- Follow-up: orchestrator publishes the completed implementation, records hosted PR/check evidence, and launches the independent strict reviewer before merge/closeout.
+- Follow-up: orchestrator publishes the strict-review repair commit, records hosted PR/check evidence after the push, and owns Beads closeout. This reviewer did not mutate or close Beads.
 
 ## Plan Amendments
 
@@ -178,8 +212,8 @@ This phase is the approved amendment; it does not silently replace any productio
 
 ## Context To Keep
 
-The designated source is `words/subtlex-word-frequencies` `2.0.0`, which publishes the 74,286 SUBTLEX-US counts under ISC © Zeke Sikelianos. Retain that ISC notice and Brysbaert & New citation, pin the exact package integrity, and document that the Ghent original download page does not itself state ISC. Source acquisition and all local dependency-backed gates are resolved; only normal publication and independent review remain.
+The designated source is `words/subtlex-word-frequencies` `2.0.0`, which publishes the 74,286 SUBTLEX-US counts under ISC © Zeke Sikelianos. Retain that ISC notice and Brysbaert & New citation, pin the exact package integrity, and document that the Ghent original download page does not itself state ISC. Source acquisition, local dependency-backed gates, and independent strict review repairs are resolved; only orchestrator publication and hosted-check reinspection remain.
 
 ## Closeout
 
-Resumed implementation produced the production artifact, manifests, notices, source validation, deterministic compiler checks, dormant production runtime factory, and complete local source/evaluation/editor/runtime evidence. The orchestrator cleared the delegated sandbox's dependency blocker and confirmed all remaining local gates; implementation is PR-ready pending publication and independent strict review.
+Strict review repaired the production source contract and non-activation tests, reran the full local gate matrix, verified sealed gold integrity, confirmed PR #27 hosted automation is unavailable with evidence, and stopped at a proven read-only Git metadata publication blocker. The mutable checkout contains complete local repairs and turn-doc evidence; commit/push/PR update and Beads closeout remain orchestrator-owned.

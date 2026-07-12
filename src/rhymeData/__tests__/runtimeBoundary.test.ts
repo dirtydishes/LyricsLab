@@ -54,14 +54,41 @@ describe('Phase 03 runtime boundary', () => {
     }
   });
 
-  it('does not activate fixture or production runtimes from normal app or editor source', () => {
-    const roots = ['app', 'src/editor'].map((root) => path.join(process.cwd(), root));
-    for (const root of roots) {
+  it('does not transitively activate fixture or production runtimes from app, editor, or settings value imports', () => {
+    const entryRoots = ['app', 'src/editor', 'src/settings']
+      .map((root) => path.join(process.cwd(), root));
+    const forbiddenRuntimeTargets = [
+      path.join(process.cwd(), 'src/platform/createExpoRhymeEngineRuntime.ts'),
+      path.join(process.cwd(), 'src/platform/createProductionRhymeEngineRuntime.ts'),
+      path.join(process.cwd(), 'src/rhymeData/decodeRhymeData.ts'),
+      path.join(process.cwd(), 'src/rhymeData/rhymeEngineRuntime.ts'),
+    ];
+    const forbiddenAssetSpecifiers = [
+      'fixture.rhymebin',
+      'production.rhymebin',
+    ];
+
+    for (const root of entryRoots) {
       for (const file of listTypeScriptFiles(root)) {
-        const source = readFileSync(file, 'utf8');
-        expect(source).not.toMatch(
-          /(?:rhymeData|createExpoRhymeEngineRuntime|createProductionRhymeEngineRuntime|fixture\.rhymebin|production\.rhymebin)/u,
-        );
+        const visited = collectValueImportGraph(file);
+        for (const target of forbiddenRuntimeTargets) {
+          expect({
+            entry: path.relative(process.cwd(), file),
+            target: path.relative(process.cwd(), target),
+            reachesTarget: visited.has(target),
+          }).toEqual({
+            entry: path.relative(process.cwd(), file),
+            target: path.relative(process.cwd(), target),
+            reachesTarget: false,
+          });
+        }
+        for (const source of [...visited, file].map((candidate) => readFileSync(candidate, 'utf8'))) {
+          for (const specifier of extractValueModuleSpecifiers(source)) {
+            expect(
+              forbiddenAssetSpecifiers.some((asset) => specifier.includes(asset)),
+            ).toBe(false);
+          }
+        }
       }
     }
   });
@@ -84,4 +111,50 @@ function listTypeScriptFiles(root: string): string[] {
 function extractModuleSpecifiers(source: string) {
   return [...source.matchAll(/(?:from\s+|import\s*\(|require\s*\()\s*['"]([^'"]+)['"]/gu)]
     .map(([, specifier]) => specifier);
+}
+
+function collectValueImportGraph(entry: string): ReadonlySet<string> {
+  const visited = new Set<string>();
+  const pending = [entry];
+
+  while (pending.length > 0) {
+    const file = pending.pop()!;
+    const source = readFileSync(file, 'utf8');
+    for (const specifier of extractValueModuleSpecifiers(source)) {
+      const resolved = resolveRelativeTypeScriptImport(file, specifier);
+      if (resolved && !visited.has(resolved)) {
+        visited.add(resolved);
+        pending.push(resolved);
+      }
+    }
+  }
+
+  return visited;
+}
+
+function extractValueModuleSpecifiers(source: string) {
+  return [
+    ...[...source.matchAll(/import\s+(?!type\b)(?:[^'"]*?\s+from\s+)?['"]([^'"]+)['"]/gu)]
+      .map(([, specifier]) => specifier),
+    ...[...source.matchAll(/(?:import\s*\(|require\s*\()\s*['"]([^'"]+)['"]/gu)]
+      .map(([, specifier]) => specifier),
+  ];
+}
+
+function resolveRelativeTypeScriptImport(importer: string, specifier: string): string | null {
+  if (!specifier.startsWith('.')) return null;
+  const base = path.resolve(path.dirname(importer), specifier);
+  for (const candidate of [
+    `${base}.ts`,
+    `${base}.tsx`,
+    path.join(base, 'index.ts'),
+    path.join(base, 'index.tsx'),
+  ]) {
+    try {
+      if (statSync(candidate).isFile()) return candidate;
+    } catch {
+      // Try the next TypeScript resolution candidate.
+    }
+  }
+  return null;
 }

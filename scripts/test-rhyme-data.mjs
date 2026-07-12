@@ -189,6 +189,64 @@ async function verifyProductionManifestFailures() {
     }),
   );
   await assertBuildRejects(manifestPath, /escapes its directory/u);
+
+  await writeFile(
+    manifestPath,
+    JSON.stringify({
+      ...originalManifest,
+      externalPins: {
+        ...originalManifest.externalPins,
+        cmudict: {
+          ...originalManifest.externalPins.cmudict,
+          repository: 'https://example.invalid/cmudict',
+        },
+      },
+    }),
+  );
+  await assertBuildRejects(manifestPath, /CMUdict repository/u);
+
+  await writeFile(
+    manifestPath,
+    JSON.stringify({
+      ...originalManifest,
+      externalPins: {
+        ...originalManifest.externalPins,
+        subtlex: {
+          ...originalManifest.externalPins.subtlex,
+          subtlexCitation: 'citation withheld',
+        },
+      },
+    }),
+  );
+  await assertBuildRejects(manifestPath, /SUBTLEX citation/u);
+
+  await writeFile(
+    manifestPath,
+    JSON.stringify({
+      ...originalManifest,
+      sources: [
+        ...originalManifest.sources,
+        {
+          ...originalManifest.sources[0],
+          id: 'unexpected.source',
+        },
+      ],
+    }),
+  );
+  await assertBuildRejects(manifestPath, /Production manifest sources/u);
+
+  await writeFile(
+    manifestPath,
+    JSON.stringify({
+      ...originalManifest,
+      sources: originalManifest.sources.map((source) =>
+        source.id === 'cmudict.dict'
+          ? { ...source, kind: 'wrong-kind' }
+          : source,
+      ),
+    }),
+  );
+  await assertBuildRejects(manifestPath, /Production manifest source cmudict\.dict kind/u);
 }
 
 function verifyCompilerPhonology() {
