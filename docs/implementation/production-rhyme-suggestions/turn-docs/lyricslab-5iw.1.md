@@ -121,7 +121,9 @@ Evidence:
 
 ## Beads Updates And Follow-Ups
 
-Issue created as the only initially ready child of `lyricslab-5iw`.
+- Closed `lyricslab-5iw.1` after PR #23 merged, strict independent review completed, all findings were repaired, all local gates passed, and CI resolved to `ci-unavailable-with-evidence`.
+- Exported canonical Beads state to `.beads/issues.jsonl`.
+- `lyricslab-5iw.2` is the only ready child.
 
 ## Plan Amendments
 
@@ -133,4 +135,4 @@ Creation checkout is not an implicitly accepted implementation base; verify prer
 
 ## Closeout
 
-Independent review completed with all in-scope findings repaired and no remaining code findings. The orchestrator committed and pushed the repairs, then re-read PR #23 at remote head `ee89f0f1`: explicit base/head are correct, mergeability is `MERGEABLE`, merge state is `CLEAN`, and hosted checks remain unavailable with evidence. Canonical Beads closeout follows after merge.
+Independent review completed with all in-scope findings repaired and no remaining code findings. The orchestrator committed and pushed the repairs, verified the final PR head mergeable and clean, then merged PR #23 as merge commit `953cc466`. Canonical Beads issue `lyricslab-5iw.1` is closed and Phase 02 is ready.
