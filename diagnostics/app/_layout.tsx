@@ -2,12 +2,13 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 
 import { ProductionRhymeProvider } from '../../src/platform/ProductionRhymeProvider';
+import { diagnosticsRuntime } from '../../src/diagnostics/diagnosticsRuntime';
 import { SettingsProvider, useAppTheme } from '../../src/settings/SettingsProvider';
 
 export default function DiagnosticsLayout() {
   return (
     <SettingsProvider>
-      <ProductionRhymeProvider>
+      <ProductionRhymeProvider createRuntime={diagnosticsRuntime.createRuntime}>
         <DiagnosticsStack />
       </ProductionRhymeProvider>
     </SettingsProvider>

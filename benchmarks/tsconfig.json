@@ -9,5 +9,5 @@
     "target": "es2022",
     "types": ["node"]
   },
-  "include": ["runNodeBenchmark.ts"]
+  "include": ["runNodeBenchmark.ts", "runWriterRegressions.ts"]
 }

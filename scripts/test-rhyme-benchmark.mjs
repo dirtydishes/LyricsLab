@@ -10,7 +10,12 @@ for (const report of [first, second]) {
   assert.equal(report.seed, 600613);
   assert.equal(report.cases.length, 20);
   assert.equal(report.samples.length, 60);
-  assert.equal(report.warmupsDiscarded, 5);
+  assert.equal(report.warmupRoundsDiscarded, 1);
+  assert.equal(report.warmupsDiscarded, 20);
+  assert.equal(report.measurement.kind, 'host-approximation');
+  assert.equal(report.measurement.qualifiesAsPhysicalDeviceEvidence, false);
+  assert.equal(report.caseLatency.length, 20);
+  assert.ok(report.caseLatency.every((entry) => entry.samples === 3 && entry.p50Ms <= entry.p95Ms && entry.p95Ms <= entry.maxMs));
   assert.equal(typeof report.coldLoad.durationMs, 'number');
   assert.ok(report.latency.p50Ms <= report.latency.p95Ms);
   assert.ok(report.latency.p95Ms <= report.latency.maxMs);
@@ -19,6 +24,7 @@ for (const report of [first, second]) {
   assert.match(report.hashes.artifactSha256, /^[a-f0-9]{64}$/u);
   assert.match(report.hashes.corpusSha256, /^[a-f0-9]{64}$/u);
   assert.match(report.hashes.stableReportSha256, /^[a-f0-9]{64}$/u);
+  assert.match(report.hashes.sourceSha256, /^[a-f0-9]{64}$/u);
   const serialized = JSON.stringify(report).toLowerCase();
   for (const forbidden of ['bodytext', 'suggestions', 'returnedwords', 'lyrictext', '/home/']) {
     assert.doesNotMatch(serialized, new RegExp(forbidden, 'u'));
@@ -30,12 +36,19 @@ for (const report of [first, second]) {
 assert.equal(first.hashes.corpusSha256, second.hashes.corpusSha256);
 assert.equal(first.hashes.stableReportSha256, second.hashes.stableReportSha256);
 assert.deepEqual(first.cases, second.cases);
+assert.deepEqual(first.measurement, second.measurement);
 
 const bad = spawnSync(process.execPath, ['scripts/benchmark-rhyme.mjs', '--samples', '0'], {
   cwd: process.cwd(), encoding: 'utf8',
 });
 assert.notEqual(bad.status, 0);
 assert.match(bad.stderr, /samples must be an integer/u);
+
+const badWarmups = spawnSync(process.execPath, ['scripts/benchmark-rhyme.mjs', '--warmups', '0'], {
+  cwd: process.cwd(), encoding: 'utf8',
+});
+assert.notEqual(badWarmups.status, 0);
+assert.match(badWarmups.stderr, /warmups must be an integer/u);
 
 process.stdout.write('rhyme benchmark repeated-run, schema, hash, privacy, and adversarial tests passed\n');
 

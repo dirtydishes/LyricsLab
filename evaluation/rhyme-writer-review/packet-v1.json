@@ -3,7 +3,7 @@
   "version": "writer-packet-2026.07.12",
   "seed": 600613,
   "immutable": true,
-  "instructions": "Use the diagnostics build to copy production-ranked synthetic results into resultReview, then append decisions to the separate log. Do not edit this packet.",
+  "instructions": "Review only the production-rendered results for each synthetic prompt in the diagnostics build. Append uniquely attributed decisions to the separate log. Never copy returned words or edit this packet.",
   "cases": [
     {
       "id": "writer-01",
@@ -11,448 +11,232 @@
       "prompt": {
         "synthetic": true,
         "seedOffset": 0,
-        "anchor": "cat",
-        "prefix": "h",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "cat",
+        "prefix": ""
       }
     },
     {
       "id": "writer-02",
-      "category": "near",
+      "category": "exact",
       "prompt": {
         "synthetic": true,
         "seedOffset": 1,
-        "anchor": "light",
-        "prefix": "br",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "light",
+        "prefix": ""
       }
     },
     {
       "id": "writer-03",
-      "category": "slant",
+      "category": "exact",
       "prompt": {
         "synthetic": true,
         "seedOffset": 2,
-        "anchor": "bet",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "dream",
+        "prefix": ""
       }
     },
     {
       "id": "writer-04",
-      "category": "rap-oov",
+      "category": "exact",
       "prompt": {
         "synthetic": true,
         "seedOffset": 3,
-        "anchor": "flow",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "beat",
+        "prefix": ""
       }
     },
     {
       "id": "writer-05",
-      "category": "safety",
+      "category": "near",
       "prompt": {
         "synthetic": true,
         "seedOffset": 4,
-        "anchor": "drip",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "bet",
+        "prefix": ""
       }
     },
     {
       "id": "writer-06",
-      "category": "proper-prefix",
+      "category": "near",
       "prompt": {
         "synthetic": true,
         "seedOffset": 5,
-        "anchor": "bell",
-        "prefix": "at",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "flow",
+        "prefix": ""
       }
     },
     {
       "id": "writer-07",
-      "category": "repetition",
+      "category": "near",
       "prompt": {
         "synthetic": true,
         "seedOffset": 6,
-        "anchor": "night",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "gold",
+        "prefix": ""
       }
     },
     {
       "id": "writer-08",
-      "category": "casing",
+      "category": "near",
       "prompt": {
         "synthetic": true,
         "seedOffset": 7,
-        "anchor": "time",
-        "prefix": "FL",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "voice",
+        "prefix": ""
       }
     },
     {
       "id": "writer-09",
-      "category": "prefix",
+      "category": "slant",
       "prompt": {
         "synthetic": true,
         "seedOffset": 8,
-        "anchor": "mind",
-        "prefix": "k",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "move",
+        "prefix": ""
       }
     },
     {
       "id": "writer-10",
-      "category": "selection",
+      "category": "slant",
       "prompt": {
         "synthetic": true,
         "seedOffset": 9,
-        "anchor": "fire",
-        "prefix": "",
-        "selectionEmpty": false,
+        "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "truth",
+        "prefix": ""
       }
     },
     {
       "id": "writer-11",
-      "category": "loading-error-retry",
+      "category": "slant",
       "prompt": {
         "synthetic": true,
         "seedOffset": 10,
-        "anchor": "dream",
-        "prefix": "",
         "selectionEmpty": true,
-        "state": "error",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "state": "ready",
+        "theme": "system",
+        "anchor": "room",
+        "prefix": ""
       }
     },
     {
       "id": "writer-12",
-      "category": "theme-accessibility",
+      "category": "slant",
       "prompt": {
         "synthetic": true,
         "seedOffset": 11,
-        "anchor": "beat",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "dark"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "fire",
+        "prefix": ""
       }
     },
     {
       "id": "writer-13",
-      "category": "recognized",
+      "category": "rap-oov",
       "prompt": {
         "synthetic": true,
         "seedOffset": 12,
-        "anchor": "gold",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "drip",
+        "prefix": ""
       }
     },
     {
       "id": "writer-14",
-      "category": "unrecognized",
+      "category": "rap-oov",
       "prompt": {
         "synthetic": true,
         "seedOffset": 13,
-        "anchor": "voice",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "finna",
+        "prefix": ""
       }
     },
     {
       "id": "writer-15",
-      "category": "exact",
+      "category": "rap-oov",
       "prompt": {
         "synthetic": true,
         "seedOffset": 14,
-        "anchor": "city",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "cap",
+        "prefix": ""
       }
     },
     {
       "id": "writer-16",
-      "category": "near",
+      "category": "rap-oov",
       "prompt": {
         "synthetic": true,
         "seedOffset": 15,
-        "anchor": "move",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "lit",
+        "prefix": ""
       }
     },
     {
       "id": "writer-17",
-      "category": "slant",
+      "category": "safety",
       "prompt": {
         "synthetic": true,
         "seedOffset": 16,
-        "anchor": "alive",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "think",
+        "prefix": ""
       }
     },
     {
       "id": "writer-18",
-      "category": "rap-oov",
+      "category": "safety",
       "prompt": {
         "synthetic": true,
         "seedOffset": 17,
-        "anchor": "truth",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "clean",
+        "prefix": ""
       }
     },
     {
@@ -461,473 +245,245 @@
       "prompt": {
         "synthetic": true,
         "seedOffset": 18,
-        "anchor": "room",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "calm",
+        "prefix": ""
       }
     },
     {
       "id": "writer-20",
-      "category": "proper-prefix",
+      "category": "safety",
       "prompt": {
         "synthetic": true,
         "seedOffset": 19,
-        "anchor": "think",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "bright",
+        "prefix": ""
       }
     },
     {
       "id": "writer-21",
-      "category": "repetition",
+      "category": "proper-prefix",
       "prompt": {
         "synthetic": true,
         "seedOffset": 20,
-        "anchor": "cat",
-        "prefix": "h",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "bell",
+        "prefix": "at"
       }
     },
     {
       "id": "writer-22",
-      "category": "casing",
+      "category": "proper-prefix",
       "prompt": {
         "synthetic": true,
         "seedOffset": 21,
-        "anchor": "light",
-        "prefix": "br",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "york",
+        "prefix": "new"
       }
     },
     {
       "id": "writer-23",
-      "category": "prefix",
+      "category": "proper-prefix",
       "prompt": {
         "synthetic": true,
         "seedOffset": 22,
-        "anchor": "bet",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "francisco",
+        "prefix": "san"
       }
     },
     {
       "id": "writer-24",
-      "category": "selection",
+      "category": "proper-prefix",
       "prompt": {
         "synthetic": true,
         "seedOffset": 23,
-        "anchor": "flow",
-        "prefix": "",
-        "selectionEmpty": false,
+        "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "angeles",
+        "prefix": "los"
       }
     },
     {
       "id": "writer-25",
-      "category": "loading-error-retry",
+      "category": "repetition",
       "prompt": {
         "synthetic": true,
         "seedOffset": 24,
-        "anchor": "drip",
-        "prefix": "",
         "selectionEmpty": true,
-        "state": "loading",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "state": "ready",
+        "theme": "system",
+        "anchor": "night",
+        "prefix": ""
       }
     },
     {
       "id": "writer-26",
-      "category": "theme-accessibility",
+      "category": "repetition",
       "prompt": {
         "synthetic": true,
         "seedOffset": 25,
-        "anchor": "bell",
-        "prefix": "at",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "light"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "time",
+        "prefix": ""
       }
     },
     {
       "id": "writer-27",
-      "category": "recognized",
+      "category": "repetition",
       "prompt": {
         "synthetic": true,
         "seedOffset": 26,
-        "anchor": "night",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "mind",
+        "prefix": ""
       }
     },
     {
       "id": "writer-28",
-      "category": "unrecognized",
+      "category": "repetition",
       "prompt": {
         "synthetic": true,
         "seedOffset": 27,
-        "anchor": "time",
-        "prefix": "FL",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "flow",
+        "prefix": ""
       }
     },
     {
       "id": "writer-29",
-      "category": "exact",
+      "category": "casing",
       "prompt": {
         "synthetic": true,
         "seedOffset": 28,
-        "anchor": "mind",
-        "prefix": "k",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "time",
+        "prefix": "FL"
       }
     },
     {
       "id": "writer-30",
-      "category": "near",
+      "category": "casing",
       "prompt": {
         "synthetic": true,
         "seedOffset": 29,
-        "anchor": "fire",
-        "prefix": "",
-        "selectionEmpty": false,
+        "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "night",
+        "prefix": "BR"
       }
     },
     {
       "id": "writer-31",
-      "category": "slant",
+      "category": "casing",
       "prompt": {
         "synthetic": true,
         "seedOffset": 30,
-        "anchor": "dream",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "dream",
+        "prefix": "SE"
       }
     },
     {
       "id": "writer-32",
-      "category": "rap-oov",
+      "category": "casing",
       "prompt": {
         "synthetic": true,
         "seedOffset": 31,
-        "anchor": "beat",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "city",
+        "prefix": "PR"
       }
     },
     {
       "id": "writer-33",
-      "category": "safety",
+      "category": "prefix",
       "prompt": {
         "synthetic": true,
         "seedOffset": 32,
-        "anchor": "gold",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "mind",
+        "prefix": "k"
       }
     },
     {
       "id": "writer-34",
-      "category": "proper-prefix",
+      "category": "prefix",
       "prompt": {
         "synthetic": true,
         "seedOffset": 33,
-        "anchor": "voice",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "light",
+        "prefix": "br"
       }
     },
     {
       "id": "writer-35",
-      "category": "repetition",
+      "category": "prefix",
       "prompt": {
         "synthetic": true,
         "seedOffset": 34,
-        "anchor": "city",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "cat",
+        "prefix": "h"
       }
     },
     {
       "id": "writer-36",
-      "category": "casing",
+      "category": "prefix",
       "prompt": {
         "synthetic": true,
         "seedOffset": 35,
-        "anchor": "move",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "time",
+        "prefix": "fl"
       }
     },
     {
       "id": "writer-37",
-      "category": "prefix",
+      "category": "selection",
       "prompt": {
         "synthetic": true,
         "seedOffset": 36,
-        "anchor": "alive",
-        "prefix": "",
-        "selectionEmpty": true,
+        "selectionEmpty": false,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "fire",
+        "prefix": ""
       }
     },
     {
@@ -936,448 +492,232 @@
       "prompt": {
         "synthetic": true,
         "seedOffset": 37,
-        "anchor": "truth",
-        "prefix": "",
         "selectionEmpty": false,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "truth",
+        "prefix": ""
       }
     },
     {
       "id": "writer-39",
-      "category": "loading-error-retry",
+      "category": "selection",
       "prompt": {
         "synthetic": true,
         "seedOffset": 38,
+        "selectionEmpty": false,
+        "state": "ready",
+        "theme": "system",
         "anchor": "room",
-        "prefix": "",
-        "selectionEmpty": true,
-        "state": "retry",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "prefix": ""
       }
     },
     {
       "id": "writer-40",
-      "category": "theme-accessibility",
+      "category": "selection",
       "prompt": {
         "synthetic": true,
         "seedOffset": 39,
-        "anchor": "think",
-        "prefix": "",
-        "selectionEmpty": true,
+        "selectionEmpty": false,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "dream",
+        "prefix": ""
       }
     },
     {
       "id": "writer-41",
-      "category": "recognized",
+      "category": "loading-error-retry",
       "prompt": {
         "synthetic": true,
         "seedOffset": 40,
-        "anchor": "cat",
-        "prefix": "h",
         "selectionEmpty": true,
-        "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "state": "loading",
+        "theme": "system",
+        "anchor": "dream",
+        "prefix": ""
       }
     },
     {
       "id": "writer-42",
-      "category": "unrecognized",
+      "category": "loading-error-retry",
       "prompt": {
         "synthetic": true,
         "seedOffset": 41,
-        "anchor": "light",
-        "prefix": "br",
         "selectionEmpty": true,
-        "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "state": "error",
+        "theme": "system",
+        "anchor": "beat",
+        "prefix": ""
       }
     },
     {
       "id": "writer-43",
-      "category": "exact",
+      "category": "loading-error-retry",
       "prompt": {
         "synthetic": true,
         "seedOffset": 42,
-        "anchor": "bet",
-        "prefix": "",
         "selectionEmpty": true,
-        "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "state": "retry",
+        "theme": "system",
+        "anchor": "light",
+        "prefix": ""
       }
     },
     {
       "id": "writer-44",
-      "category": "near",
+      "category": "loading-error-retry",
       "prompt": {
         "synthetic": true,
         "seedOffset": 43,
-        "anchor": "flow",
-        "prefix": "",
         "selectionEmpty": true,
-        "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "state": "error",
+        "theme": "system",
+        "anchor": "flow",
+        "prefix": ""
       }
     },
     {
       "id": "writer-45",
-      "category": "slant",
+      "category": "theme-accessibility",
       "prompt": {
         "synthetic": true,
         "seedOffset": 44,
-        "anchor": "drip",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "beat",
+        "prefix": ""
       }
     },
     {
       "id": "writer-46",
-      "category": "rap-oov",
+      "category": "theme-accessibility",
       "prompt": {
         "synthetic": true,
         "seedOffset": 45,
-        "anchor": "bell",
-        "prefix": "at",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "light",
+        "anchor": "bell",
+        "prefix": "at"
       }
     },
     {
       "id": "writer-47",
-      "category": "safety",
+      "category": "theme-accessibility",
       "prompt": {
         "synthetic": true,
         "seedOffset": 46,
-        "anchor": "night",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "dark",
+        "anchor": "voice",
+        "prefix": ""
       }
     },
     {
       "id": "writer-48",
-      "category": "proper-prefix",
+      "category": "theme-accessibility",
       "prompt": {
         "synthetic": true,
         "seedOffset": 47,
-        "anchor": "time",
-        "prefix": "FL",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "think",
+        "prefix": ""
       }
     },
     {
       "id": "writer-49",
-      "category": "repetition",
+      "category": "recognized",
       "prompt": {
         "synthetic": true,
         "seedOffset": 48,
-        "anchor": "mind",
-        "prefix": "k",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "cat",
+        "prefix": ""
       }
     },
     {
       "id": "writer-50",
-      "category": "casing",
+      "category": "recognized",
       "prompt": {
         "synthetic": true,
         "seedOffset": 49,
-        "anchor": "fire",
-        "prefix": "",
-        "selectionEmpty": false,
+        "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "drip",
+        "prefix": ""
       }
     },
     {
       "id": "writer-51",
-      "category": "prefix",
+      "category": "recognized",
       "prompt": {
         "synthetic": true,
         "seedOffset": 50,
-        "anchor": "dream",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "alive",
+        "prefix": ""
       }
     },
     {
       "id": "writer-52",
-      "category": "selection",
+      "category": "recognized",
       "prompt": {
         "synthetic": true,
         "seedOffset": 51,
-        "anchor": "beat",
-        "prefix": "",
-        "selectionEmpty": false,
+        "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "bell",
+        "prefix": ""
       }
     },
     {
       "id": "writer-53",
-      "category": "loading-error-retry",
+      "category": "unrecognized",
       "prompt": {
         "synthetic": true,
         "seedOffset": 52,
-        "anchor": "gold",
-        "prefix": "",
         "selectionEmpty": true,
-        "state": "error",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "state": "ready",
+        "theme": "system",
+        "anchor": "zzqv",
+        "prefix": ""
       }
     },
     {
       "id": "writer-54",
-      "category": "theme-accessibility",
+      "category": "unrecognized",
       "prompt": {
         "synthetic": true,
         "seedOffset": 53,
-        "anchor": "voice",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "dark"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "qzxk",
+        "prefix": ""
       }
     },
     {
       "id": "writer-55",
-      "category": "recognized",
+      "category": "unrecognized",
       "prompt": {
         "synthetic": true,
         "seedOffset": 54,
-        "anchor": "city",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "vvqj",
+        "prefix": ""
       }
     },
     {
@@ -1386,23 +726,11 @@
       "prompt": {
         "synthetic": true,
         "seedOffset": 55,
-        "anchor": "move",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "xqzz",
+        "prefix": ""
       }
     },
     {
@@ -1411,23 +739,11 @@
       "prompt": {
         "synthetic": true,
         "seedOffset": 56,
-        "anchor": "alive",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "city",
+        "prefix": ""
       }
     },
     {
@@ -1436,23 +752,11 @@
       "prompt": {
         "synthetic": true,
         "seedOffset": 57,
-        "anchor": "truth",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "alive",
+        "prefix": ""
       }
     },
     {
@@ -1461,23 +765,11 @@
       "prompt": {
         "synthetic": true,
         "seedOffset": 58,
-        "anchor": "room",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "mind",
+        "prefix": ""
       }
     },
     {
@@ -1486,29 +778,17 @@
       "prompt": {
         "synthetic": true,
         "seedOffset": 59,
-        "anchor": "think",
-        "prefix": "",
         "selectionEmpty": true,
         "state": "ready",
-        "theme": "system"
-      },
-      "resultReview": {
-        "rankedCandidates": [],
-        "technicalClassification": null,
-        "rationale": null
-      },
-      "writerDecision": {
-        "decision": null,
-        "rationale": null,
-        "correction": null,
-        "reviewedBy": null,
-        "reviewedAt": null
+        "theme": "system",
+        "anchor": "vibe",
+        "prefix": ""
       }
     }
   ],
   "seal": {
     "algorithm": "sha256",
-    "packetContentSha256": "16983908bb8a8f9b0cb3ee3270837c7ac65d3aab427cf1330f261f52b9446ba8",
+    "packetContentSha256": "525cd7157c3a6a64a3f56e8a6be9a1c6b6ae235dbe0c69968e3b8aa4de8b98a7",
     "corpusSha256": "a562926907eaad9a29be467196ff926100ce3947f6a06037f7786e481d8498c4"
   }
 }

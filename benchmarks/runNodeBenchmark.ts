@@ -28,7 +28,7 @@ const corpusBytes = readFileSync(path.join(root, 'benchmarks/rhyme-benchmark-cor
 const corpus = JSON.parse(corpusBytes.toString('utf8')) as {
   cases: CorpusCase[]; schemaVersion: string; seed: number; version: string;
 };
-if (corpus.schemaVersion !== 'lyricslab.rhyme-benchmark-corpus/v1' || corpus.cases.length !== 20) {
+if (corpus.schemaVersion !== 'lyricslab.rhyme-benchmark-corpus/v1' || corpus.cases.length !== 20 || new Set(corpus.cases.map(({ id }) => id)).size !== 20) {
   throw new Error('Benchmark corpus schema or case count is invalid');
 }
 const artifact = readFileSync(path.join(root, 'assets/rhyme/production.rhymebin'));
@@ -50,8 +50,10 @@ const session = createProductionSuggestionSession({
   },
 });
 const runtime = { state: 'ready' as const, usingLastKnownGood: false as const, version: decoded.version };
-for (let index = 0; index < options.warmups; index += 1) {
-  await measure(corpus.cases[index % corpus.cases.length]!, session, runtime);
+for (let roundIndex = 0; roundIndex < options.warmupRounds; roundIndex += 1) {
+  for (const benchmarkCase of corpus.cases) {
+    await measure(benchmarkCase, session, runtime);
+  }
 }
 const samples: { caseId: string; durationMs: number }[] = [];
 for (let repeat = 0; repeat < options.samplesPerCase; repeat += 1) {
@@ -61,41 +63,53 @@ for (let repeat = 0; repeat < options.samplesPerCase; repeat += 1) {
 }
 const durations = samples.map(({ durationMs }) => durationMs).sort((a, b) => a - b);
 const latency = {
-  interval: 'selection-context-received-to-first-host-commit-frame',
   maxMs: round(durations.at(-1) ?? 0),
   p50Ms: round(percentile(durations, 0.5)),
   p95Ms: round(percentile(durations, 0.95)),
 };
 const thresholds = { p50MsExclusive: 50, p95MsExclusive: 100 };
+const artifactSha256 = sha256(artifact);
+const corpusSha256 = sha256(corpusBytes);
+const sourceSha256 = sourceHash();
+const measurement = {
+  interval: 'selection-context-received-through-setImmediate-host-boundary',
+  kind: 'host-approximation',
+  qualifiesAsPhysicalDeviceEvidence: false,
+};
 const stable = {
   schemaVersion: 'lyricslab.rhyme-benchmark/v1',
   toolVersion: '1.0.0', appVersion: '1.0.0', artifactVersion: decoded.version,
-  corpusVersion: corpus.version, corpusSha256: sha256(corpusBytes), seed: corpus.seed,
-  cases: corpus.cases.map(({ category, id }) => ({ category, id })), thresholds,
+  artifactSha256, corpusVersion: corpus.version, corpusSha256, manifestSha256: PRODUCTION_RHYME_MANIFEST_SHA256,
+  sourceSha256, seed: corpus.seed, cases: corpus.cases.map(({ category, id }) => ({ category, id })),
+  measurement, sampleRounds: options.samplesPerCase, thresholds, warmupRounds: options.warmupRounds,
 };
 const report = {
   schemaVersion: stable.schemaVersion,
   tool: { name: 'benchmark:rhyme', version: stable.toolVersion },
   app: { name: 'LyricsLab', version: stable.appVersion },
-  build: { gitCommit: gitCommit(), profile: 'node-quick', sourceSha256: sourceHash() },
+  build: { gitCommit: gitCommit(), profile: 'node-quick', sourceSha256 },
   device: { architecture: os.arch(), class: 'host', cpuModel: os.cpus()[0]?.model ?? 'unknown' },
   runtime: { engine: 'production-binary-v2', node: process.version, platform: process.platform },
   artifact: { format: 'binary-v2', version: decoded.version },
   corpus: { schemaVersion: corpus.schemaVersion, version: corpus.version },
   hashes: {
-    artifactSha256: sha256(artifact), corpusSha256: stable.corpusSha256,
+    artifactSha256, corpusSha256,
     manifestSha256: PRODUCTION_RHYME_MANIFEST_SHA256,
+    sourceSha256,
     stableReportSha256: sha256(Buffer.from(canonicalJson(stable))),
   },
   seed: corpus.seed,
   cases: stable.cases,
-  warmupsDiscarded: options.warmups,
+  measurement,
+  warmupRoundsDiscarded: options.warmupRounds,
+  warmupsDiscarded: options.warmupRounds * corpus.cases.length,
   samples,
+  caseLatency: corpus.cases.map(({ id }) => summarizeCase(id, samples)),
   coldLoad: { durationMs: round(coldLoadMs), includedInLatency: false },
   latency,
   thresholds,
   pass: latency.p50Ms < thresholds.p50MsExclusive && latency.p95Ms < thresholds.p95MsExclusive,
-  environment: { locale: 'en-US', timer: 'performance.now', frameApproximation: 'setImmediate host commit boundary' },
+  environment: { locale: 'en-US', timezone: 'not-used', timer: 'performance.now', schedulingBoundary: 'setImmediate' },
 };
 process.stdout.write(`${JSON.stringify(report, null, options.compact ? 0 : 2)}\n`);
 if (!report.pass) process.exitCode = 1;
@@ -119,22 +133,22 @@ async function measure(
 
 function parseOptions(args: string[]) {
   let samplesPerCase = 3;
-  let warmups = 5;
+  let warmupRounds = 1;
   let compact = false;
   for (let index = 0; index < args.length; index += 1) {
     const arg = args[index];
     if (arg === '--compact') compact = true;
     else if (arg === '--samples') samplesPerCase = Number(args[++index]);
-    else if (arg === '--warmups') warmups = Number(args[++index]);
+    else if (arg === '--warmups') warmupRounds = Number(args[++index]);
     else throw new Error(`Unknown benchmark option: ${arg}`);
   }
   if (!Number.isInteger(samplesPerCase) || samplesPerCase < 1 || samplesPerCase > 20) {
     throw new Error('samples must be an integer from 1 through 20');
   }
-  if (!Number.isInteger(warmups) || warmups < 1 || warmups > 100) {
-    throw new Error('warmups must be an integer from 1 through 100');
+  if (!Number.isInteger(warmupRounds) || warmupRounds < 1 || warmupRounds > 10) {
+    throw new Error('warmups must be an integer from 1 through 10');
   }
-  return { compact, samplesPerCase, warmups };
+  return { compact, samplesPerCase, warmupRounds };
 }
 
 function percentile(values: number[], value: number) {
@@ -144,19 +158,26 @@ function round(value: number) { return Number(value.toFixed(3)); }
 function sha256(value: Uint8Array) { return createHash('sha256').update(value).digest('hex'); }
 function canonicalJson(value: unknown): string {
   if (Array.isArray(value)) return `[${value.map(canonicalJson).join(',')}]`;
-  if (value && typeof value === 'object') return `{${Object.entries(value).sort(([a], [b]) => a.localeCompare(b)).map(([key, entry]) => `${JSON.stringify(key)}:${canonicalJson(entry)}`).join(',')}}`;
+  if (value && typeof value === 'object') return `{${Object.entries(value).sort(([a], [b]) => codeUnitCompare(a, b)).map(([key, entry]) => `${JSON.stringify(key)}:${canonicalJson(entry)}`).join(',')}}`;
   return JSON.stringify(value);
 }
 function gitCommit() {
   return execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
 }
 function sourceHash() {
-  const files = [
-    'benchmarks/runNodeBenchmark.ts', 'benchmarks/rhyme-benchmark-corpus-v1.json',
-    'src/editor/productionSuggestions.ts', 'src/rhymeData/decodeRhymeData.ts',
-    'src/rhyme/createRhymeEngine.ts', 'src/rhyme/productionPhonology.ts',
-  ];
+  const prefixes = ['benchmarks/', 'src/editor/productionSuggestions.ts', 'src/rhyme/', 'src/rhymeData/', 'src/rhymeSources/'];
+  const files = execFileSync('git', ['ls-files', '--cached', '--others', '--exclude-standard'], { cwd: root, encoding: 'utf8' })
+    .split('\n')
+    .filter((file) => file && prefixes.some((prefix) => file === prefix || file.startsWith(prefix)))
+    .sort(codeUnitCompare);
   const hash = createHash('sha256');
   for (const file of files) hash.update(file).update('\0').update(readFileSync(path.join(root, file)));
   return hash.digest('hex');
 }
+
+function summarizeCase(caseId: string, samples: readonly { caseId: string; durationMs: number }[]) {
+  const durations = samples.filter((sample) => sample.caseId === caseId).map(({ durationMs }) => durationMs).sort((a, b) => a - b);
+  return { caseId, samples: durations.length, p50Ms: round(percentile(durations, 0.5)), p95Ms: round(percentile(durations, 0.95)), maxMs: round(durations.at(-1) ?? 0) };
+}
+
+function codeUnitCompare(left: string, right: string) { return left < right ? -1 : left > right ? 1 : 0; }

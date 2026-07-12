@@ -37,6 +37,7 @@ try {
     'utf8',
   );
   assert.match(productionConstants, new RegExp(sha256(manifestBytes), 'u'));
+  assert.match(productionConstants, new RegExp(sha256(committedBytes), 'u'));
   assert.match(
     productionConstants,
     /cmudict-74790861-subtlex-2\.0\.0-phase04-2026\.07\.12/u,
