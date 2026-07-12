@@ -18,6 +18,7 @@ describe('engine Settings visibility', () => {
       diagnostics: 'not-enabled',
       errorMessage: 'Hash mismatch. The last loaded engine remains available.',
       state: 'error',
+      usingLastKnownGood: true,
       version: 'fixture-1',
     });
   });
@@ -27,6 +28,7 @@ describe('engine Settings visibility', () => {
       buildEngineSettingsViewModel({
         diagnostics: 'not-enabled',
         state: 'ready',
+        usingLastKnownGood: false,
         version: 'artifact-v1',
       }),
     ).toEqual({
@@ -38,12 +40,30 @@ describe('engine Settings visibility', () => {
     });
   });
 
+  it('reports a last-good engine truthfully while a retry is loading', () => {
+    expect(
+      buildEngineSettingsViewModel(
+        toEngineSettingsSnapshot({
+          state: 'loading',
+          usingLastKnownGood: true,
+          version: 'artifact-v2',
+        }),
+      ),
+    ).toMatchObject({
+      canRetry: false,
+      statusDetail: 'The current offline engine remains available while it refreshes.',
+      statusLabel: 'Refreshing',
+      versionLabel: 'artifact-v2',
+    });
+  });
+
   it('makes retry available after a load failure without exposing lyrics', () => {
     expect(
       buildEngineSettingsViewModel({
         diagnostics: 'available',
         errorMessage: 'Artifact checksum mismatch',
         state: 'error',
+        usingLastKnownGood: false,
         version: 'artifact-v2',
       }),
     ).toMatchObject({

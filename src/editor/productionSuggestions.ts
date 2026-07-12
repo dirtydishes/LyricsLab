@@ -6,6 +6,7 @@ import type { RhymeEngine, RhymeSuggestion } from '../rhyme/RhymeEngine';
 const MAX_VISIBLE_SUGGESTIONS = 8;
 const CANDIDATE_WINDOW = 32;
 const MAX_REPETITION_TOKENS = 4096;
+const MAX_REPETITION_TEXT_LENGTH = 256 * 1024;
 
 export type ProductionSuggestionViewKind =
   | 'error'
@@ -50,7 +51,8 @@ export function createProductionSuggestionSession({
   isSuggestionEligible = () => true,
 }: CreateProductionSuggestionSessionOptions): ProductionSuggestionSession {
   let cachedCandidates: readonly RhymeSuggestion[] = [];
-  let cachedQueryKey = '';
+  let cachedContextKey = '';
+  let cachedRepetitionKey = '';
 
   return {
     getView(context, bodyText, runtime) {
@@ -72,24 +74,33 @@ export function createProductionSuggestionSession({
       }
 
       const activePrefix = normalizeRhymeToken(context?.wordBeforeCursor ?? '');
-      const sourceTokens = getStableSourceTokens(bodyText, activePrefix);
       const excludedWords = getCompletedLineTokens(context, activePrefix);
-      const queryKey = [
+      const contextKey = [
         runtime.version,
         anchor,
-        ...sourceTokens,
-        '|',
         ...excludedWords,
       ].join('\0');
 
-      if (cachedQueryKey !== queryKey) {
-        cachedCandidates = engine.suggest({
-          anchor,
-          excludedWords,
-          maxResults: CANDIDATE_WINDOW,
-          sourceTokens,
-        });
-        cachedQueryKey = queryKey;
+      // A partial-word edit leaves the completed line context unchanged, so
+      // it can reuse the anchor query without rescanning bodyText. With no
+      // active prefix, refresh the bounded repetition snapshot so completed
+      // edits elsewhere in the song remain current.
+      if (cachedContextKey !== contextKey || !activePrefix) {
+        const sourceTokens = getStableSourceTokens(bodyText, activePrefix);
+        const repetitionKey = sourceTokens.join('\0');
+        if (
+          cachedContextKey !== contextKey ||
+          cachedRepetitionKey !== repetitionKey
+        ) {
+          cachedCandidates = engine.suggest({
+            anchor,
+            excludedWords,
+            maxResults: CANDIDATE_WINDOW,
+            sourceTokens,
+          });
+          cachedContextKey = contextKey;
+          cachedRepetitionKey = repetitionKey;
+        }
       }
 
       const eligible = cachedCandidates.filter((candidate) =>
@@ -128,9 +139,13 @@ function view(
 }
 
 function getStableSourceTokens(bodyText: string, activePrefix: string) {
-  const tokens = tokenize(bodyText);
-  if (activePrefix && !/\s$/u.test(bodyText)) {
-    tokens.pop();
+  const tokens = tokenize(
+    bodyText.slice(0, MAX_REPETITION_TEXT_LENGTH),
+    MAX_REPETITION_TOKENS + 1,
+  );
+  if (activePrefix) {
+    const activeTokenIndex = tokens.lastIndexOf(activePrefix);
+    if (activeTokenIndex >= 0) tokens.splice(activeTokenIndex, 1);
   }
   return [...new Set(tokens)].slice(0, MAX_REPETITION_TOKENS);
 }
@@ -146,11 +161,12 @@ function getCompletedLineTokens(
   return tokens;
 }
 
-function tokenize(value: string) {
+function tokenize(value: string, maxTokens = Number.POSITIVE_INFINITY) {
   return value
     .split(/\s+/u)
     .map(normalizeRhymeToken)
-    .filter(Boolean);
+    .filter(Boolean)
+    .slice(0, maxTokens);
 }
 
 function toWordSuggestion(
@@ -160,6 +176,7 @@ function toWordSuggestion(
   return {
     id: candidate.id,
     label: candidate.label,
+    role: candidate.kind === 'exact' ? 'perfect' : 'near',
     word: applyPrefixCasing(candidate.word, activePrefix),
   };
 }

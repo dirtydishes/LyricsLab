@@ -6,11 +6,11 @@ import { toEngineSettingsSnapshot } from '../src/settings/engineSettings';
 
 export default function SettingsRoute() {
   const router = useRouter();
-  const { retry, runtime } = useProductionRhyme();
+  const { retry, snapshot } = useProductionRhyme();
 
   return (
     <SettingsScreen
-      engineSnapshot={toEngineSettingsSnapshot(runtime.getSnapshot())}
+      engineSnapshot={toEngineSettingsSnapshot(snapshot)}
       onBack={() => {
         if (router.canGoBack()) {
           router.back();

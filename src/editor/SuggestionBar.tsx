@@ -10,7 +10,11 @@ import {
 } from 'react-native';
 
 import type { WordSuggestion } from './suggestions';
-import { getSuggestionPresentation } from './suggestionPresentation';
+import {
+  getSuggestionAccessibilityLabel,
+  getSuggestionPresentation,
+  getSuggestionStateLabel,
+} from './suggestionPresentation';
 import {
   getSuggestionTransitionDuration,
   type ProductionSuggestionView,
@@ -63,11 +67,13 @@ export function SuggestionBar({
       return;
     }
     opacity.setValue(0);
-    Animated.timing(opacity, {
+    const animation = Animated.timing(opacity, {
       duration,
       toValue: 1,
       useNativeDriver: true,
-    }).start();
+    });
+    animation.start();
+    return () => animation.stop();
   }, [opacity, reduceMotion, view.kind]);
 
   if (view.kind === 'hidden') return null;
@@ -100,9 +106,11 @@ export function SuggestionBar({
             return (
               <Pressable
                 accessibilityHint={`Replaces the current prefix with ${suggestion.word}`}
-                accessibilityLabel={`${presentation.label} rhyme, ${suggestion.word}`}
+                accessibilityLabel={getSuggestionAccessibilityLabel(
+                  presentation,
+                  suggestion.word,
+                )}
                 accessibilityRole="button"
-                accessibilityState={{ selected: focused }}
                 focusable
                 key={suggestion.id}
                 onBlur={() => setFocusedId(null)}
@@ -117,7 +125,6 @@ export function SuggestionBar({
               >
                 <Text
                   allowFontScaling
-                  maxFontSizeMultiplier={1.6}
                   numberOfLines={1}
                   style={[styles.suggestionLabel, { color: roleTokens.text }]}
                 >
@@ -125,7 +132,6 @@ export function SuggestionBar({
                 </Text>
                 <Text
                   allowFontScaling
-                  maxFontSizeMultiplier={1.6}
                   numberOfLines={1}
                   style={[styles.suggestionText, { color: roleTokens.text }]}
                 >
@@ -147,17 +153,15 @@ export function SuggestionBar({
           >
             <Text
               allowFontScaling
-              maxFontSizeMultiplier={1.6}
               style={[
                 styles.stateLabel,
                 { color: tokens.suggestion.prompt.text },
               ]}
             >
-              {view.kind === 'loading' ? 'Loading' : 'Prompt'}
+              {getSuggestionStateLabel(view.kind)}
             </Text>
             <Text
               allowFontScaling
-              maxFontSizeMultiplier={1.6}
               style={[
                 styles.stateMessage,
                 { color: tokens.suggestion.prompt.text },

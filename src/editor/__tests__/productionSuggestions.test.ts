@@ -68,6 +68,24 @@ describe('production suggestion session', () => {
     }));
   });
 
+  it('does not rescan or rerank the song when a partial word changes before later text', () => {
+    const suggest = jest.fn(() => [candidate('bright')]);
+    const session = createSession({ suggest });
+
+    session.getView(
+      context(),
+      'opening line\nhold the night br\nclosing line',
+      ready,
+    );
+    session.getView(
+      context({ currentLineText: 'hold the night bri', wordBeforeCursor: 'bri' }),
+      'opening line\nhold the night bri\nclosing line',
+      ready,
+    );
+
+    expect(suggest).toHaveBeenCalledTimes(1);
+  });
+
   it('refreshes repetition context without retaining or exposing lyric text', () => {
     const suggest = jest.fn((query: RhymeEngineQuery) =>
       query.sourceTokens?.includes('flight')
@@ -153,6 +171,14 @@ describe('production suggestion session', () => {
       .suggestions).toEqual([
         expect.objectContaining({ id: 'rhyme:exact:bright', word: 'BRIGHT' }),
       ]);
+  });
+
+  it('preserves the semantic role for multisyllabic slants', () => {
+    const near = { ...candidate('forever', 'slant'), matchedSyllables: 2 };
+    const session = createSession({ suggest: () => [near] });
+
+    expect(session.getView(context({ wordBeforeCursor: '' }), 'night ', ready)
+      .suggestions[0]).toMatchObject({ label: near.label, role: 'near' });
   });
 });
 

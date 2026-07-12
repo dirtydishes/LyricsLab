@@ -203,14 +203,15 @@ async function assertNoRuntimeActivation(modulePath, visited) {
       );
     }
     if (!specifier.startsWith('.')) continue;
-    const dependency = await resolveTypeScriptDependency(absolutePath, specifier);
+    const dependency = await resolveRuntimeDependency(absolutePath, specifier);
     if (dependency) {
       const rhymeSourceModule = dependency.includes(
         `${path.sep}src${path.sep}rhymeSources${path.sep}`,
       );
-      const reviewedPolicyBoundary = dependency.endsWith(
+      const reviewedPolicyBoundary = [
         `${path.sep}src${path.sep}rhymeSources${path.sep}suggestionEligibility.ts`,
-      );
+        `${path.sep}src${path.sep}rhymeSources${path.sep}suggestionEligibilityCore.cjs`,
+      ].some((suffix) => dependency.endsWith(suffix));
       assert.equal(
         rhymeSourceModule && !reviewedPolicyBoundary,
         false,
@@ -221,11 +222,13 @@ async function assertNoRuntimeActivation(modulePath, visited) {
   }
 }
 
-async function resolveTypeScriptDependency(importer, specifier) {
+async function resolveRuntimeDependency(importer, specifier) {
   const base = path.resolve(path.dirname(importer), specifier);
   for (const candidate of [
+    ...(path.extname(specifier) ? [base] : []),
     `${base}.ts`,
     `${base}.tsx`,
+    `${base}.cjs`,
     path.join(base, 'index.ts'),
     path.join(base, 'index.tsx'),
   ]) {

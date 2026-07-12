@@ -3,7 +3,11 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
-import { getSuggestionPresentation } from '../suggestionPresentation';
+import {
+  getSuggestionAccessibilityLabel,
+  getSuggestionPresentation,
+  getSuggestionStateLabel,
+} from '../suggestionPresentation';
 
 describe('suggestion presentation', () => {
   it.each([
@@ -28,14 +32,31 @@ describe('suggestion presentation', () => {
     expect(getSuggestionPresentation(suggestion)).toEqual(expected);
   });
 
+  it('uses explicit semantic roles and accurate spoken and state labels', () => {
+    const presentation = getSuggestionPresentation({
+      id: 'near',
+      label: '2-syllable forever',
+      role: 'near',
+      word: 'forever',
+    });
+
+    expect(presentation).toEqual({ label: '2-syllable', role: 'near' });
+    expect(getSuggestionAccessibilityLabel(presentation, 'forever'))
+      .toBe('Near rhyme, 2-syllable match, forever');
+    expect(getSuggestionStateLabel('error')).toBe('Unavailable');
+    expect(getSuggestionStateLabel('unavailable')).toBe('Unavailable');
+    expect(getSuggestionStateLabel('loading')).toBe('Loading');
+    expect(getSuggestionStateLabel('prompt')).toBe('Prompt');
+  });
+
   it('keeps the native pills accessible across type, focus, press, motion, and target states', () => {
     const source = readFileSync(
       path.join(process.cwd(), 'src/editor/SuggestionBar.tsx'),
       'utf8',
     );
     expect(source).toContain('allowFontScaling');
-    expect(source).toContain('maxFontSizeMultiplier={1.6}');
-    expect(source).toContain('accessibilityLabel={`${presentation.label} rhyme, ${suggestion.word}`}');
+    expect(source).not.toContain('maxFontSizeMultiplier');
+    expect(source).toContain('getSuggestionAccessibilityLabel(presentation, suggestion.word)');
     expect(source).toContain('accessibilityHint={`Replaces the current prefix with ${suggestion.word}`}');
     expect(source).toContain('accessibilityRole="button"');
     expect(source).toContain('minHeight: 44');
@@ -43,5 +64,6 @@ describe('suggestion presentation', () => {
     expect(source).toContain('pressed && { backgroundColor: tokens.pressed }');
     expect(source).toContain("'reduceMotionChanged'");
     expect(source).toContain('getSuggestionTransitionDuration');
+    expect(source).not.toContain('accessibilityState={{ selected: focused }}');
   });
 });

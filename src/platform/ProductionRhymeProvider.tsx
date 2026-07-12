@@ -13,7 +13,10 @@ import {
   createProductionSuggestionSession,
   type ProductionSuggestionView,
 } from '../editor/productionSuggestions';
-import type { RhymeEngineRuntime } from '../rhymeData/rhymeEngineRuntime';
+import type {
+  RhymeEngineRuntime,
+  RhymeEngineRuntimeSnapshot,
+} from '../rhymeData/rhymeEngineRuntime';
 import { createProductionRhymeEngineRuntime } from './createProductionRhymeEngineRuntime';
 
 type ProductionRhymeContextValue = {
@@ -22,7 +25,7 @@ type ProductionRhymeContextValue = {
     bodyText: string,
   ): ProductionSuggestionView;
   retry(): Promise<void>;
-  runtime: RhymeEngineRuntime;
+  snapshot: RhymeEngineRuntimeSnapshot;
 };
 
 type ProductionRhymeProviderProps = PropsWithChildren<{
@@ -65,9 +68,9 @@ export function ProductionRhymeProvider({
     () => ({
       getSuggestionView,
       retry: runtime.retry,
-      runtime,
+      snapshot,
     }),
-    [getSuggestionView, runtime],
+    [getSuggestionView, runtime.retry, snapshot],
   );
 
   return (

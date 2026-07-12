@@ -90,6 +90,14 @@ describe('Phase 03 runtime boundary', () => {
     );
     expect(appLayout).toContain('ProductionRhymeProvider');
     expect(appProvider).toContain('createProductionRhymeEngineRuntime');
+    expect(appProvider).toContain('snapshot: RhymeEngineRuntimeSnapshot');
+    expect(appProvider).not.toContain('runtime: RhymeEngineRuntime;');
+
+    const settingsRoute = readFileSync(
+      path.join(process.cwd(), 'app/settings.tsx'),
+      'utf8',
+    );
+    expect(settingsRoute).not.toContain('runtime.getSnapshot()');
 
     for (const root of ['src/editor', 'src/settings']) {
       for (const file of listTypeScriptFiles(path.join(process.cwd(), root))) {
