@@ -1,0 +1,1514 @@
+{
+  "schemaVersion": "lyricslab.rhyme-writer-packet/v1",
+  "version": "writer-packet-2026.07.12",
+  "seed": 600613,
+  "immutable": true,
+  "instructions": "Use the diagnostics build to copy production-ranked synthetic results into resultReview, then append decisions to the separate log. Do not edit this packet.",
+  "cases": [
+    {
+      "id": "writer-01",
+      "category": "exact",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 0,
+        "anchor": "cat",
+        "prefix": "h",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-02",
+      "category": "near",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 1,
+        "anchor": "light",
+        "prefix": "br",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-03",
+      "category": "slant",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 2,
+        "anchor": "bet",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-04",
+      "category": "rap-oov",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 3,
+        "anchor": "flow",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-05",
+      "category": "safety",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 4,
+        "anchor": "drip",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-06",
+      "category": "proper-prefix",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 5,
+        "anchor": "bell",
+        "prefix": "at",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-07",
+      "category": "repetition",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 6,
+        "anchor": "night",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-08",
+      "category": "casing",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 7,
+        "anchor": "time",
+        "prefix": "FL",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-09",
+      "category": "prefix",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 8,
+        "anchor": "mind",
+        "prefix": "k",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-10",
+      "category": "selection",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 9,
+        "anchor": "fire",
+        "prefix": "",
+        "selectionEmpty": false,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-11",
+      "category": "loading-error-retry",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 10,
+        "anchor": "dream",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "error",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-12",
+      "category": "theme-accessibility",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 11,
+        "anchor": "beat",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "dark"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-13",
+      "category": "recognized",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 12,
+        "anchor": "gold",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-14",
+      "category": "unrecognized",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 13,
+        "anchor": "voice",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-15",
+      "category": "exact",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 14,
+        "anchor": "city",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-16",
+      "category": "near",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 15,
+        "anchor": "move",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-17",
+      "category": "slant",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 16,
+        "anchor": "alive",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-18",
+      "category": "rap-oov",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 17,
+        "anchor": "truth",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-19",
+      "category": "safety",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 18,
+        "anchor": "room",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-20",
+      "category": "proper-prefix",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 19,
+        "anchor": "think",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-21",
+      "category": "repetition",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 20,
+        "anchor": "cat",
+        "prefix": "h",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-22",
+      "category": "casing",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 21,
+        "anchor": "light",
+        "prefix": "br",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-23",
+      "category": "prefix",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 22,
+        "anchor": "bet",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-24",
+      "category": "selection",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 23,
+        "anchor": "flow",
+        "prefix": "",
+        "selectionEmpty": false,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-25",
+      "category": "loading-error-retry",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 24,
+        "anchor": "drip",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "loading",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-26",
+      "category": "theme-accessibility",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 25,
+        "anchor": "bell",
+        "prefix": "at",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "light"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-27",
+      "category": "recognized",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 26,
+        "anchor": "night",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-28",
+      "category": "unrecognized",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 27,
+        "anchor": "time",
+        "prefix": "FL",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-29",
+      "category": "exact",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 28,
+        "anchor": "mind",
+        "prefix": "k",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-30",
+      "category": "near",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 29,
+        "anchor": "fire",
+        "prefix": "",
+        "selectionEmpty": false,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-31",
+      "category": "slant",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 30,
+        "anchor": "dream",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-32",
+      "category": "rap-oov",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 31,
+        "anchor": "beat",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-33",
+      "category": "safety",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 32,
+        "anchor": "gold",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-34",
+      "category": "proper-prefix",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 33,
+        "anchor": "voice",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-35",
+      "category": "repetition",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 34,
+        "anchor": "city",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-36",
+      "category": "casing",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 35,
+        "anchor": "move",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-37",
+      "category": "prefix",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 36,
+        "anchor": "alive",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-38",
+      "category": "selection",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 37,
+        "anchor": "truth",
+        "prefix": "",
+        "selectionEmpty": false,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-39",
+      "category": "loading-error-retry",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 38,
+        "anchor": "room",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "retry",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-40",
+      "category": "theme-accessibility",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 39,
+        "anchor": "think",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-41",
+      "category": "recognized",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 40,
+        "anchor": "cat",
+        "prefix": "h",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-42",
+      "category": "unrecognized",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 41,
+        "anchor": "light",
+        "prefix": "br",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-43",
+      "category": "exact",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 42,
+        "anchor": "bet",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-44",
+      "category": "near",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 43,
+        "anchor": "flow",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-45",
+      "category": "slant",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 44,
+        "anchor": "drip",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-46",
+      "category": "rap-oov",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 45,
+        "anchor": "bell",
+        "prefix": "at",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-47",
+      "category": "safety",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 46,
+        "anchor": "night",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-48",
+      "category": "proper-prefix",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 47,
+        "anchor": "time",
+        "prefix": "FL",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-49",
+      "category": "repetition",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 48,
+        "anchor": "mind",
+        "prefix": "k",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-50",
+      "category": "casing",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 49,
+        "anchor": "fire",
+        "prefix": "",
+        "selectionEmpty": false,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-51",
+      "category": "prefix",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 50,
+        "anchor": "dream",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-52",
+      "category": "selection",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 51,
+        "anchor": "beat",
+        "prefix": "",
+        "selectionEmpty": false,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-53",
+      "category": "loading-error-retry",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 52,
+        "anchor": "gold",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "error",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-54",
+      "category": "theme-accessibility",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 53,
+        "anchor": "voice",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "dark"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-55",
+      "category": "recognized",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 54,
+        "anchor": "city",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-56",
+      "category": "unrecognized",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 55,
+        "anchor": "move",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-57",
+      "category": "exact",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 56,
+        "anchor": "alive",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-58",
+      "category": "near",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 57,
+        "anchor": "truth",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-59",
+      "category": "slant",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 58,
+        "anchor": "room",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    },
+    {
+      "id": "writer-60",
+      "category": "rap-oov",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 59,
+        "anchor": "think",
+        "prefix": "",
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system"
+      },
+      "resultReview": {
+        "rankedCandidates": [],
+        "technicalClassification": null,
+        "rationale": null
+      },
+      "writerDecision": {
+        "decision": null,
+        "rationale": null,
+        "correction": null,
+        "reviewedBy": null,
+        "reviewedAt": null
+      }
+    }
+  ],
+  "seal": {
+    "algorithm": "sha256",
+    "packetContentSha256": "16983908bb8a8f9b0cb3ee3270837c7ac65d3aab427cf1330f261f52b9446ba8",
+    "corpusSha256": "a562926907eaad9a29be467196ff926100ce3947f6a06037f7786e481d8498c4"
+  }
+}

@@ -23,12 +23,16 @@ import { useAppTheme } from '../settings/SettingsProvider';
 import type { SuggestionRoleTokens } from '../theme/theme';
 
 type SuggestionBarProps = {
+  measurementReceivedAt?: number;
+  onFirstCommittedFrame?: (durationMs: number) => void;
   onRetry: () => void;
   onSelectSuggestion: (suggestion: WordSuggestion) => void;
   view: ProductionSuggestionView;
 };
 
 export function SuggestionBar({
+  measurementReceivedAt,
+  onFirstCommittedFrame,
   onRetry,
   onSelectSuggestion,
   view,
@@ -38,6 +42,14 @@ export function SuggestionBar({
   const [reduceMotion, setReduceMotion] = useState(false);
   const opacity = useRef(new Animated.Value(1)).current;
   const previousKind = useRef(view.kind);
+
+  useEffect(() => {
+    if (measurementReceivedAt === undefined || !onFirstCommittedFrame) return;
+    const frame = requestAnimationFrame(() => {
+      onFirstCommittedFrame(performance.now() - measurementReceivedAt);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [measurementReceivedAt, onFirstCommittedFrame, view]);
 
   useEffect(() => {
     let mounted = true;

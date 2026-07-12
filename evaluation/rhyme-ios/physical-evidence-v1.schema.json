@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "lyricslab.rhyme-ios-evidence/v1",
+  "type": "object",
+  "required": ["schemaVersion", "device", "build", "airplaneMode", "benchmark", "writerReview", "cases", "attestation"],
+  "properties": {
+    "schemaVersion": { "const": "lyricslab.rhyme-ios-evidence/v1" },
+    "device": { "type": "object", "required": ["udid", "name", "model", "osVersion", "physical"], "properties": { "physical": { "const": true } } },
+    "build": { "type": "object", "required": ["configuration", "appVersion", "bundleIdentifier", "gitCommit", "artifactSha256", "manifestSha256", "builtAt"], "properties": { "configuration": { "const": "Release" } } },
+    "airplaneMode": { "type": "object", "required": ["enabled", "attestedBy", "timestamp", "evidenceSha256"], "properties": { "enabled": { "const": true } } },
+    "benchmark": { "type": "object", "required": ["reportSha256", "p50Ms", "p95Ms", "pass"] },
+    "writerReview": { "type": "object", "required": ["packetSha256", "decisionLogSha256", "accepted", "signedBy", "signedAt"] },
+    "cases": { "type": "array", "minItems": 22 },
+    "attestation": { "type": "object", "required": ["signedBy", "signedAt", "statement"] }
+  },
+  "additionalProperties": false
+}

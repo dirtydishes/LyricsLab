@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "lyricslab.rhyme-benchmark-corpus/v1",
+  "version": "rhyme-benchmark-corpus-2026.07.12",
+  "seed": 600613,
+  "cases": [
+    { "id": "quick-01", "category": "exact", "anchor": "cat", "prefix": "h", "line": "signal cat h", "selectionEmpty": true },
+    { "id": "quick-02", "category": "exact", "anchor": "light", "prefix": "br", "line": "signal light br", "selectionEmpty": true },
+    { "id": "quick-03", "category": "near", "anchor": "bet", "prefix": "", "line": "signal bet ", "selectionEmpty": true },
+    { "id": "quick-04", "category": "near", "anchor": "flow", "prefix": "", "line": "signal flow ", "selectionEmpty": true },
+    { "id": "quick-05", "category": "rap-oov", "anchor": "drip", "prefix": "", "line": "signal drip ", "selectionEmpty": true },
+    { "id": "quick-06", "category": "proper-prefix", "anchor": "bell", "prefix": "at", "line": "signal bell at", "selectionEmpty": true },
+    { "id": "quick-07", "category": "repetition", "anchor": "night", "prefix": "", "line": "bright signal night ", "selectionEmpty": true },
+    { "id": "quick-08", "category": "casing", "anchor": "time", "prefix": "FL", "line": "signal time FL", "selectionEmpty": true },
+    { "id": "quick-09", "category": "prefix", "anchor": "mind", "prefix": "k", "line": "signal mind k", "selectionEmpty": true },
+    { "id": "quick-10", "category": "selection", "anchor": "fire", "prefix": "", "line": "signal fire ", "selectionEmpty": false },
+    { "id": "quick-11", "category": "exact", "anchor": "dream", "prefix": "", "line": "signal dream ", "selectionEmpty": true },
+    { "id": "quick-12", "category": "exact", "anchor": "beat", "prefix": "", "line": "signal beat ", "selectionEmpty": true },
+    { "id": "quick-13", "category": "near", "anchor": "gold", "prefix": "", "line": "signal gold ", "selectionEmpty": true },
+    { "id": "quick-14", "category": "near", "anchor": "voice", "prefix": "", "line": "signal voice ", "selectionEmpty": true },
+    { "id": "quick-15", "category": "exact", "anchor": "city", "prefix": "", "line": "signal city ", "selectionEmpty": true },
+    { "id": "quick-16", "category": "exact", "anchor": "move", "prefix": "", "line": "signal move ", "selectionEmpty": true },
+    { "id": "quick-17", "category": "near", "anchor": "alive", "prefix": "", "line": "signal alive ", "selectionEmpty": true },
+    { "id": "quick-18", "category": "exact", "anchor": "truth", "prefix": "", "line": "signal truth ", "selectionEmpty": true },
+    { "id": "quick-19", "category": "exact", "anchor": "room", "prefix": "", "line": "signal room ", "selectionEmpty": true },
+    { "id": "quick-20", "category": "safety", "anchor": "think", "prefix": "", "line": "signal think ", "selectionEmpty": true }
+  ]
+}

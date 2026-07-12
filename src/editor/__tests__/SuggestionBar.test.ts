@@ -56,7 +56,9 @@ describe('suggestion presentation', () => {
     );
     expect(source).toContain('allowFontScaling');
     expect(source).not.toContain('maxFontSizeMultiplier');
-    expect(source).toContain('getSuggestionAccessibilityLabel(presentation, suggestion.word)');
+    expect(source).toMatch(
+      /getSuggestionAccessibilityLabel\(\s*presentation,\s*suggestion\.word,?\s*\)/u,
+    );
     expect(source).toContain('accessibilityHint={`Replaces the current prefix with ${suggestion.word}`}');
     expect(source).toContain('accessibilityRole="button"');
     expect(source).toContain('minHeight: 44');
