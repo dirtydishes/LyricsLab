@@ -48,11 +48,32 @@ Integrate the production engine behind the existing native provider and ship com
 
 ## Review
 
-Pending the orchestrator-owned fresh independent thermonuclear review. Implementation self-verification found no remaining in-scope failure; no claim of independent approval is made here.
+### Independent Review Brief
+
+- Risk: high. The review covers app-root production activation, asynchronous runtime ownership, latency-sensitive suggestion policy, safety/proper-noun enforcement, accessibility, and binary-v2 production non-regression.
+- Strategy: direct fresh clean-room review with `thermo-nuclear-code-quality-review`; the reviewer is the sole mutation owner and will repair every safe in-scope finding test-first.
+- Independence: the reviewer began from a clean detached checkout at the exact published PR head `820b02acc4dcd011dbb97e623e799dfc34586672` and did not participate in implementation.
+- CI owner: the reviewer owns complete local reruns plus PR mergeability, hosted status, and workflow evidence; the terminal state must be one of the dirtyloops CI states.
+- Required evidence: full PR diff and transitive seam inspection; focused provider/UI/accessibility/runtime tests; complete root/editor/data/source/evaluator/runtime/performance/Expo gates; `git diff --check`; and exact base/head/mergeability/status evidence for PR #29.
+- Constraints: update only this existing turn doc outside safe in-scope code/tests, do not mutate Beads, do not push or change PR state, and send exactly one final callback to orchestrator `019f5428-f2ea-74c2-abfb-e37349c96391`.
+
+### Independent Review Outcome
+
+Outcome: **repaired and locally approved**. The reviewer challenged the implementation independently, repaired every safe in-scope finding test-first, and found no remaining Phase 05 blocker in the repaired local tree.
+
+- Repaired anchor/prefix cost separation. Partial-word changes now reuse the completed-anchor query without rescanning `bodyText` or reranking, including when later document text follows the cursor. Completed edits with no active prefix still refresh a bounded 4,096-token / 256 KiB repetition snapshot. Call-count tests prove one engine invocation across successive partial prefixes.
+- Repaired semantic-role loss for multisyllabic slants by carrying the engine's exact/slant role through the native-only `WordSuggestion` model. The discreet visible label remains `2-syllable`, while color and VoiceOver now truthfully identify a near rhyme. No bridge envelope changed.
+- Repaired accessibility and motion details: removed the 1.6 Dynamic Type cap, removed the false `selected` state that conflated focus with selection, added accurate multisyllabic spoken labels and `Unavailable` state labels, retained 44-point targets/focus/pressed states, and stops the 180 ms prompt-to-result animation on cleanup.
+- Repaired Settings truthfulness during a last-good refresh. It now reports `Refreshing` and explicitly says the current offline engine remains available. The app provider exposes only the subscribed immutable snapshot, retry, and suggestion session; Settings no longer receives the runtime/engine capability or reads external-store state during render.
+- Hardened the transitive Phase 04 activation guard so it traverses the reviewed `suggestionEligibilityCore.cjs` implementation instead of stopping at its TypeScript wrapper. All other source/data/script/manifest activation remains forbidden.
+- Rechecked singleton ownership, post-frame start, cleanup, bounded reads, stable proxy, atomic engine/policy publication, overlapping-retry generation cancellation, subscriber isolation, proper-name explicit-prefix policy, non-overridable safety blocking, deterministic capped ranking, prefix fallback, casing, selection hiding, exact insertion behavior, contrast, long-content horizontal layout, reduced motion, privacy, and absent out-of-scope features.
+- Thermonuclear structure review found no file crossing 1,000 lines, no unsafe assertion/cast growth, no duplicate runtime/provider singleton, and no justified code-judo rewrite beyond the repaired ownership/cache/presentation seams. No new highlighting, phrase rhyme, scheme, G2P, personalization, AI, audio, sync, IAP, Android, TestFlight, lyric logging, diagnostics route, or persisted analysis behavior exists.
+
+Local repair commit: `a73f0a58177a013e6dda6bcaf7a3aa0dbe443838` (`repair production rhyme integration review findings`). The evidence-only commit is the commit containing this final turn-doc record.
 
 ## CI And Gates
 
-Owner: Phase 05 implementation task for local gates; orchestrator/reviewer owns independent review and publication evidence.
+Owner: fresh independent Phase 05 reviewer for complete local gates and hosted publication evidence.
 
 State: `ci-unavailable-with-evidence`
 
@@ -71,9 +92,24 @@ Evidence:
 - Expo public config passed at SDK 56; introspected config contains `production.rhymebin`; direct `expo-asset@56.0.17`, `expo-file-system@56.0.8`, and `expo-crypto@56.0.4` were verified.
 - `git diff --check` passed. Final reruns are recorded before the implementation commit.
 
+Fresh independent reviewer evidence after repairs:
+
+- Dependency installs: root `npm ci` passed with the existing Expo worklets peer warning and 10 moderate transitive audit findings; editor lockfile `npm ci` passed with zero vulnerabilities.
+- Focused provider/UI/accessibility/settings/runtime/decoder/policy/boundary verification passed 7 suites and 64 tests. Full root verification passed 25/25 suites and 211/211 tests; `npm run typecheck` passed.
+- Editor verification passed 3/3 files and 25/25 tests; editor build, generated HTML build, and freshness check passed.
+- Fixture build/check/compiler passed at 3,092 bytes / `04145680c60ff41981c4af545680c32067ee03e1b0ab4a51930d3ff8711688af`. Production build/check/data controls passed at 19,413,208 bytes / `9edd36f22608a86ac34f375bcf05b72a0c30e10a64a980df94d469e139862b58`.
+- Production source acquisition/check/adversarial controls passed at CMU `74790861f652b15e4ac49015a90074ad62a27690`, 74,286 SUBTLEX entries, and 618/618 reviewed Phase 04 entries.
+- Seal setup/check/tamper controls, evaluator self-test, and normal evaluation passed 128/128. Gold stayed byte-identical at `40aac8d4704a9ca44bf1d2d19f5843714b83c08c59818b81b123baa7e010d4d7` and local mode `0444` after setup.
+- Forced-GC production runtime passed: retained heap `41,329,240`, retained RSS `31,125,504`, startup `3,953.838` ms, warm p50/p95 `23.927/62.838` ms, cold p50/p95/max `36.815/153.381/209.780` ms, and query-cache heap/RSS growth `114,056/12,623,872` bytes.
+- Legacy build/check/smoke passed at unchanged `075fd521ac9f2660f6bc970e1beecb89216fea70d86a768f7190045396a32249`. Compact perf completed with mixed p50/p95 `0.331/1.651` ms and slant p50/p95 `3.685/10.463` ms. A trailing evidence-only `sha256sum` initially named a nonexistent path; rerunning it against the canonical JSON confirmed the unchanged hash and no product gate failed.
+- Expo public/introspected config passed at SDK 56 and contains `production.rhymebin`; direct packages remain `expo-asset@56.0.17`, `expo-file-system@56.0.8`, and `expo-crypto@56.0.4`. `git diff --check` passed.
+- Hosted CI is unavailable with evidence: the repo has no `.github` directory, `gh pr checks 29` reports no checks, branch workflow runs are `[]`, and workflow listing is empty. PR #29 remains open and remotely unchanged at explicit base `lavender/expo-clean-rebuild` / `26d9998384fbbbd32651bcc1989e931323dd84d1` and head `lavender/production-rhyme-phase-05-sol` / `820b02acc4dcd011dbb97e623e799dfc34586672`; GitHub reports `MERGEABLE` / `CLEAN`. The local review repair is intentionally not pushed.
+
 ## PR And Commits
 
 Implementation commit: `578f3f5831d70e0d721478beedab855379a5ee9f` (`activate production rhyme suggestions`). The accepted detached checkout remains atop the exact Phase 05 base; the orchestrator can publish/cherry-pick the reported commits onto `lavender/production-rhyme-phase-05-sol`. No push, PR, merge, or hosted state was mutated.
+
+Independent review repair commit: `a73f0a58177a013e6dda6bcaf7a3aa0dbe443838`. PR #29 does not contain this local repair because push/PR mutation was explicitly forbidden.
 
 ## Beads Updates And Follow-Ups
 
@@ -91,4 +127,4 @@ Keep policy in the canonical native provider seam; do not introduce bridge messa
 
 ## Closeout
 
-Implementation complete locally, subject to the orchestrator-owned independent thermonuclear review and publication/merge closeout. Phase 06 retains physical-device release proof; this phase makes no device-readiness claim.
+Independent thermonuclear review is repaired and locally approved with no remaining Phase 05 finding. CI is terminally `ci-unavailable-with-evidence`; publication, merge, and Beads closeout remain orchestrator-owned. Phase 06 retains physical-device release proof, so this phase makes no device-readiness claim.
