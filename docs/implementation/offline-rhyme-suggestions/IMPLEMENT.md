@@ -81,7 +81,7 @@ Install `@pierre/diffs` in the target repo if missing. Every diff must use `@pie
 | `lyricslab-8um.1` | 03: Pure rhyme core with fixtures | `03-pure-rhyme-core-fixtures.md` | `lyricslab-xoc` | closed |
 | `lyricslab-8um.4` | 04: CMU artifact pipeline | `04-cmu-artifact-pipeline.md` | `lyricslab-8um.1` | closed |
 | `lyricslab-gg4` | 05: Native suggestion integration | `05-native-suggestion-integration.md` | `lyricslab-8um.4` | closed |
-| `lyricslab-8um.2` | 06: Slant ranking and performance guard | `06-slant-ranking-performance-guard.md` | `lyricslab-gg4` | open |
+| `lyricslab-8um.2` | 06: Slant ranking and performance guard | `06-slant-ranking-performance-guard.md` | `lyricslab-gg4` | closed |
 | `lyricslab-bhs` | 07: Device evidence and closeout | `07-device-evidence-closeout.md` | `lyricslab-8um.2` | open |
 
 ## Quality Gates
