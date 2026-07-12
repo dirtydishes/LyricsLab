@@ -1,11 +1,6 @@
 import type { SuggestionContext } from './bridge';
-import {
-  findRhymeCandidates as findDefaultRhymeCandidates,
-  normalizeRhymeToken,
-  type ExactRhymeQuery,
-  type RhymeQuery,
-  type RhymeIndex,
-} from '../rhyme';
+import { normalizeRhymeToken } from '../rhyme/normalize';
+import type { RhymeEngine, RhymeSuggestion } from '../rhyme/public';
 
 export type WordSuggestion = {
   id: string;
@@ -19,24 +14,10 @@ export type SuggestionProvider = {
 
 export type RhymeSuggestionProviderOptions = {
   fallbackProvider?: SuggestionProvider;
-  findRhymeCandidates?: RhymeCandidateFinder;
-  findExactRhymeCandidates?: RhymeCandidateFinder;
   maxSuggestions?: number;
 };
 
-export type RhymeIndexSource = RhymeIndex | (() => RhymeIndex);
-
-export type RhymeSuggestionCandidate = {
-  readonly id: string;
-  readonly label?: string;
-  readonly normalizedWord?: string;
-  readonly word: string;
-};
-
-export type RhymeCandidateFinder = (
-  index: RhymeIndex,
-  query: RhymeQuery,
-) => readonly RhymeSuggestionCandidate[];
+export type RhymeEngineSource = RhymeEngine | (() => RhymeEngine);
 
 const DEFAULT_WORDS = [
   'again',
@@ -86,17 +67,13 @@ export const staticSuggestionProvider: SuggestionProvider = {
 };
 
 export function createRhymeSuggestionProvider(
-  indexSource: RhymeIndexSource,
+  engineSource: RhymeEngineSource,
   options: RhymeSuggestionProviderOptions = {},
 ): SuggestionProvider {
   const maxSuggestions = normalizeMaxSuggestions(
     options.maxSuggestions ?? MAX_SUGGESTIONS,
   );
   const fallbackProvider = options.fallbackProvider ?? staticSuggestionProvider;
-  const findRhymeCandidates =
-    options.findRhymeCandidates ??
-    options.findExactRhymeCandidates ??
-    findDefaultRhymeCandidates;
 
   return {
     getSuggestions(context) {
@@ -110,14 +87,13 @@ export function createRhymeSuggestionProvider(
         return getFallbackSuggestions(fallbackProvider, context, maxSuggestions);
       }
 
-      const index = resolveRhymeIndex(indexSource);
+      const engine = resolveRhymeEngine(engineSource);
       const activeWord = normalizeToken(context?.wordBeforeCursor ?? '');
       const excludedWords = getExcludedTokens(context);
 
       for (const anchor of anchors) {
-        const candidates = findRhymeCandidates(index, {
+        const candidates = engine.suggest({
           anchor,
-          candidateKinds: ['exact', 'slant'],
           excludedWords,
         })
           .filter((candidate) => !isActiveWordCandidate(candidate, activeWord))
@@ -228,8 +204,8 @@ function uniqueNormalizedTokens(tokens: readonly string[]) {
   return unique;
 }
 
-function resolveRhymeIndex(indexSource: RhymeIndexSource) {
-  return typeof indexSource === 'function' ? indexSource() : indexSource;
+function resolveRhymeEngine(engineSource: RhymeEngineSource) {
+  return typeof engineSource === 'function' ? engineSource() : engineSource;
 }
 
 function getFallbackSuggestions(
@@ -240,7 +216,7 @@ function getFallbackSuggestions(
   return fallbackProvider.getSuggestions(context).slice(0, maxSuggestions);
 }
 
-function createRhymeSuggestion(candidate: RhymeSuggestionCandidate) {
+function createRhymeSuggestion(candidate: RhymeSuggestion) {
   const suggestion: WordSuggestion = {
     id: candidate.id,
     word: candidate.word,
@@ -256,7 +232,7 @@ function createRhymeSuggestion(candidate: RhymeSuggestionCandidate) {
 }
 
 function isActiveWordCandidate(
-  candidate: RhymeSuggestionCandidate,
+  candidate: RhymeSuggestion,
   activeWord: string,
 ) {
   return Boolean(
@@ -264,11 +240,11 @@ function isActiveWordCandidate(
   );
 }
 
-function getCandidateNormalizedWord(candidate: RhymeSuggestionCandidate) {
-  return normalizeToken(candidate.normalizedWord ?? candidate.word);
+function getCandidateNormalizedWord(candidate: RhymeSuggestion) {
+  return normalizeToken(candidate.normalizedWord);
 }
 
-function getWordInclusiveLabel(candidate: RhymeSuggestionCandidate) {
+function getWordInclusiveLabel(candidate: RhymeSuggestion) {
   const label = candidate.label?.trim();
 
   if (!label) {

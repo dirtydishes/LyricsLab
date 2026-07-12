@@ -1,5 +1,50 @@
 import { normalizeLyricToken } from './normalize';
 
+const CMU_VOWELS = new Set([
+  'AA',
+  'AE',
+  'AH',
+  'AO',
+  'AW',
+  'AY',
+  'EH',
+  'ER',
+  'EY',
+  'IH',
+  'IY',
+  'OW',
+  'OY',
+  'UH',
+  'UW',
+]);
+
+const CMU_CONSONANTS = new Set([
+  'B',
+  'CH',
+  'D',
+  'DH',
+  'F',
+  'G',
+  'HH',
+  'JH',
+  'K',
+  'L',
+  'M',
+  'N',
+  'NG',
+  'P',
+  'R',
+  'S',
+  'SH',
+  'T',
+  'TH',
+  'V',
+  'W',
+  'Y',
+  'Z',
+  'ZH',
+]);
+
 export type CmuPronunciationEntry = {
   alternate: number | null;
   displayWord: string;
@@ -35,13 +80,36 @@ export function parseCmuLine(line: string): CmuPronunciationEntry | null {
   }
 
   const { alternate, displayWord } = parseCmuHeadword(headword);
+  const normalizedWord = normalizeCmuWord(displayWord);
+
+  if (
+    !normalizedWord ||
+    phonemes.some((phoneme) => !isValidCmuPhoneme(phoneme))
+  ) {
+    return null;
+  }
 
   return {
     alternate,
     displayWord,
-    normalizedWord: normalizeCmuWord(displayWord),
+    normalizedWord,
     phonemes,
   };
+}
+
+function isValidCmuPhoneme(phoneme: string) {
+  const match = phoneme.match(/^([A-Z]+)([012])?$/u);
+
+  if (!match) {
+    return false;
+  }
+
+  const [, phone, stress] = match;
+
+  return phone !== undefined &&
+    (CMU_VOWELS.has(phone)
+      ? stress !== undefined
+      : CMU_CONSONANTS.has(phone) && stress === undefined);
 }
 
 export function normalizeCmuWord(word: string) {

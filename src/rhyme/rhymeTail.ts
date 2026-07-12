@@ -84,26 +84,20 @@ export function extractRhymeTailFromPhonemes(
 export function extractRhymeTail(
   pronunciation: ParsedPronunciation,
 ): RhymeTail | null {
-  for (let index = pronunciation.length - 1; index >= 0; index -= 1) {
-    const phone = pronunciation[index];
+  const startsAt = findPreferredTailStart(pronunciation);
 
-    if (!phone) {
-      continue;
-    }
-
-    if (isStressedVowel(phone)) {
-      const phones = pronunciation.slice(index);
-
-      return {
-        phones,
-        phonemes: phones.map(formatPhoneToken),
-        key: phones.map(formatPhoneToken).join(' '),
-        startsAt: index,
-      };
-    }
+  if (startsAt === null) {
+    return null;
   }
 
-  return null;
+  const phones = pronunciation.slice(startsAt);
+
+  return {
+    phones,
+    phonemes: phones.map(formatPhoneToken),
+    key: phones.map(formatPhoneToken).join(' '),
+    startsAt,
+  };
 }
 
 export function formatPhoneToken(phone: ParsedPhoneToken): string {
@@ -197,6 +191,32 @@ function normalizePronunciationInput(
   }
 
   return pronunciation as ParsedPronunciation;
+}
+
+function findPreferredTailStart(pronunciation: ParsedPronunciation) {
+  for (const preferredStress of [1, 2] as const) {
+    for (let index = pronunciation.length - 1; index >= 0; index -= 1) {
+      const phone = pronunciation[index];
+
+      if (
+        phone &&
+        phone.stress === preferredStress &&
+        isArpabetVowelPhone(phone)
+      ) {
+        return index;
+      }
+    }
+  }
+
+  for (let index = pronunciation.length - 1; index >= 0; index -= 1) {
+    const phone = pronunciation[index];
+
+    if (phone && isArpabetVowelPhone(phone)) {
+      return index;
+    }
+  }
+
+  return null;
 }
 
 function normalizePhoneToken(phone: ParsedPhoneToken | string): ParsedPhoneToken {

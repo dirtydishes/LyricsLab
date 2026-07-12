@@ -14,16 +14,16 @@ describe('rhyme index', () => {
     expect(normalizeRhymeToken("  'Late-Night!' ")).toBe('late-night');
   });
 
-  it('extracts exact tails from the last stressed vowel', () => {
+  it('extracts exact tails with unstressed-vowel fallback', () => {
     expect(extractExactRhymeTail(['B', 'IH0', 'G', 'IH1', 'N'])).toEqual([
       'IH1',
       'N',
     ]);
-    expect(extractExactRhymeTail(['DH', 'AH0'])).toBeNull();
-    expect(extractExactRhymeTail(['B1', 'AH0'])).toBeNull();
+    expect(extractExactRhymeTail(['DH', 'AH0'])).toEqual(['AH0']);
+    expect(extractExactRhymeTail(['B1', 'N'])).toBeNull();
   });
 
-  it('builds a normalized in-memory tail index and skips no-tail pronunciations', () => {
+  it('builds a normalized in-memory tail index with fallback tails', () => {
     const index = buildRhymeIndex([
       {
         pronunciations: [{ phones: ['T', 'AY1', 'M'] }],
@@ -38,7 +38,7 @@ describe('rhyme index', () => {
     expect(index.lexemesByToken.get('time')?.word).toBe('Time');
     expect(index.lexemesByToken.get('the')?.pronunciations).toHaveLength(1);
     expect(index.tailIndex.get('AY1 M')).toHaveLength(1);
-    expect([...index.tailIndex.keys()]).not.toContain('AH0');
+    expect(index.tailIndex.get('AH0')).toHaveLength(1);
   });
 
   it('finds exact candidates by normalized anchor and filters source and excluded tokens', () => {

@@ -10,10 +10,13 @@ import {
 import {
   createRhymeIndex,
   parseCmuDictionary,
-  type ExactRhymeCandidate,
-  type ExactRhymeQuery,
-  type RhymeIndex,
 } from '../../rhyme';
+import { createLegacyRhymeEngineAdapter } from '../../rhyme/legacyRhymeEngineAdapter';
+import type {
+  RhymeEngine,
+  RhymeEngineQuery,
+  RhymeSuggestion,
+} from '../../rhyme/public';
 
 const RHYME_SUGGESTION_CMU_FIXTURE = `
 ;;; intentionally tiny fixture for injected suggestion-provider tests
@@ -30,7 +33,9 @@ PITY P IH1 T IY0
 `;
 
 const rhymeSuggestionProvider = createRhymeSuggestionProvider(
-  createRhymeIndex(parseCmuDictionary(RHYME_SUGGESTION_CMU_FIXTURE)),
+  createLegacyRhymeEngineAdapter(
+    createRhymeIndex(parseCmuDictionary(RHYME_SUGGESTION_CMU_FIXTURE)),
+  ),
 );
 
 function createContext(
@@ -50,54 +55,39 @@ function createRhymeProviderProbe({
   candidatesByAnchor,
   maxSuggestions,
 }: {
-  candidates?: readonly ExactRhymeCandidate[];
-  candidatesByAnchor?: Readonly<
-    Record<string, readonly ExactRhymeCandidate[]>
-  >;
+  candidates?: readonly RhymeSuggestion[];
+  candidatesByAnchor?: Readonly<Record<string, readonly RhymeSuggestion[]>>;
   maxSuggestions?: number;
 } = {}) {
-  const index = createEmptyRhymeIndex();
-  const getRhymeIndex = jest.fn(() => index);
-  const findExactRhymeCandidates = jest.fn(
-    (_index: RhymeIndex, query: ExactRhymeQuery) => {
-      const queryCandidates = candidatesByAnchor?.[query.anchor] ?? candidates;
+  const suggest = jest.fn((query: RhymeEngineQuery) => {
+    const queryCandidates = candidatesByAnchor?.[query.anchor] ?? candidates;
 
-      return queryCandidates.slice(
-        0,
-        query.maxResults ?? queryCandidates.length,
-      );
-    },
-  );
-  const provider = createRhymeSuggestionProvider(getRhymeIndex, {
+    return queryCandidates.slice(0, query.maxResults ?? queryCandidates.length);
+  });
+  const engine: RhymeEngine = { suggest };
+  const getRhymeEngine = jest.fn(() => engine);
+  const provider = createRhymeSuggestionProvider(getRhymeEngine, {
     fallbackProvider: staticSuggestionProvider,
-    findExactRhymeCandidates,
     maxSuggestions,
   });
 
   return {
-    findExactRhymeCandidates,
-    getRhymeIndex,
-    index,
+    engine,
+    getRhymeEngine,
     provider,
+    suggest,
   };
 }
 
-function createEmptyRhymeIndex(): RhymeIndex {
+function createExactCandidate(word: string): RhymeSuggestion {
   return {
-    lexemes: [],
-    lexemesByToken: new Map(),
-    tailIndex: new Map(),
-  };
-}
-
-function createExactCandidate(word: string): ExactRhymeCandidate {
-  return {
+    familyKey: 'AY1 T',
     id: `rhyme:exact:${word}`,
     kind: 'exact',
+    label: `Perfect ${word}`,
+    matchedSyllables: 1,
     normalizedWord: word,
-    rhymeTailKey: 'AY1 T',
     score: 1,
-    slantSimilarity: null,
     word,
   };
 }
@@ -158,21 +148,21 @@ describe('suggestion provider', () => {
     expect(getWordSuggestions(createContext(), -1)).toEqual([]);
   });
 
-  it('does not materialize the rhyme index or finder when the requested maximum is zero or lower', () => {
+  it('does not materialize the rhyme engine when the requested maximum is zero or lower', () => {
     for (const maxSuggestions of [0, -1]) {
-      const { findExactRhymeCandidates, getRhymeIndex, provider } =
+      const { getRhymeEngine, provider, suggest } =
         createRhymeProviderProbe({
           maxSuggestions,
         });
 
       expect(provider.getSuggestions(createContext())).toEqual([]);
-      expect(getRhymeIndex).not.toHaveBeenCalled();
-      expect(findExactRhymeCandidates).not.toHaveBeenCalled();
+      expect(getRhymeEngine).not.toHaveBeenCalled();
+      expect(suggest).not.toHaveBeenCalled();
     }
   });
 
-  it('does not materialize the rhyme index or finder when the editor selection is not empty', () => {
-    const { findExactRhymeCandidates, getRhymeIndex, provider } =
+  it('does not materialize the rhyme engine when the editor selection is not empty', () => {
+    const { getRhymeEngine, provider, suggest } =
       createRhymeProviderProbe();
 
     expect(
@@ -182,12 +172,12 @@ describe('suggestion provider', () => {
         }),
       ),
     ).toEqual([]);
-    expect(getRhymeIndex).not.toHaveBeenCalled();
-    expect(findExactRhymeCandidates).not.toHaveBeenCalled();
+    expect(getRhymeEngine).not.toHaveBeenCalled();
+    expect(suggest).not.toHaveBeenCalled();
   });
 
-  it('does not materialize the rhyme index or finder when no useful anchor exists', () => {
-    const { findExactRhymeCandidates, getRhymeIndex, provider } =
+  it('does not materialize the rhyme engine when no useful anchor exists', () => {
+    const { getRhymeEngine, provider, suggest } =
       createRhymeProviderProbe({
         maxSuggestions: 3,
       });
@@ -210,12 +200,12 @@ describe('suggestion provider', () => {
       { id: 'word:alive', word: 'alive' },
       { id: 'word:bars', word: 'bars' },
     ]);
-    expect(getRhymeIndex).not.toHaveBeenCalled();
-    expect(findExactRhymeCandidates).not.toHaveBeenCalled();
+    expect(getRhymeEngine).not.toHaveBeenCalled();
+    expect(suggest).not.toHaveBeenCalled();
   });
 
   it('returns deterministic fallback suggestions when no rhyme candidates exist', () => {
-    const { findExactRhymeCandidates, getRhymeIndex, provider } =
+    const { getRhymeEngine, provider, suggest } =
       createRhymeProviderProbe({
         candidates: [],
         maxSuggestions: 3,
@@ -233,12 +223,12 @@ describe('suggestion provider', () => {
       { id: 'word:alive', word: 'alive' },
       { id: 'word:bars', word: 'bars' },
     ]);
-    expect(getRhymeIndex).toHaveBeenCalledTimes(1);
-    expect(findExactRhymeCandidates).toHaveBeenCalledTimes(1);
+    expect(getRhymeEngine).toHaveBeenCalledTimes(1);
+    expect(suggest).toHaveBeenCalledTimes(1);
   });
 
-  it('materializes the rhyme index and finder only after a useful anchor exists', () => {
-    const { findExactRhymeCandidates, getRhymeIndex, index, provider } =
+  it('materializes and queries the rhyme engine only after a useful anchor exists', () => {
+    const { getRhymeEngine, provider, suggest } =
       createRhymeProviderProbe({
         maxSuggestions: 2,
       });
@@ -254,10 +244,9 @@ describe('suggestion provider', () => {
     expectProviderSuggestions(suggestions, [
       { id: 'rhyme:exact:flight', word: 'flight' },
     ]);
-    expect(getRhymeIndex).toHaveBeenCalledTimes(1);
-    expect(findExactRhymeCandidates).toHaveBeenCalledTimes(1);
-    expect(findExactRhymeCandidates).toHaveBeenCalledWith(
-      index,
+    expect(getRhymeEngine).toHaveBeenCalledTimes(1);
+    expect(suggest).toHaveBeenCalledTimes(1);
+    expect(suggest).toHaveBeenCalledWith(
       expect.objectContaining({
         anchor: 'night',
         excludedWords: ['writing', 'night', 'dr'],
@@ -288,7 +277,7 @@ describe('suggestion provider', () => {
   });
 
   it('filters mixed active-word prefix candidates before applying the suggestion limit', () => {
-    const { findExactRhymeCandidates, provider } = createRhymeProviderProbe({
+    const { provider, suggest } = createRhymeProviderProbe({
       candidates: [
         createExactCandidate('brace'),
         createExactCandidate('braid'),
@@ -312,14 +301,13 @@ describe('suggestion provider', () => {
       { id: 'rhyme:exact:flight', word: 'flight' },
       { id: 'rhyme:exact:sight', word: 'sight' },
     ]);
-    expect(findExactRhymeCandidates).toHaveBeenCalledWith(
-      expect.anything(),
+    expect(suggest).toHaveBeenCalledWith(
       expect.not.objectContaining({ maxResults: expect.anything() }),
     );
   });
 
   it('prefers previous completed token candidates over active-word candidates', () => {
-    const { findExactRhymeCandidates, provider } = createRhymeProviderProbe({
+    const { provider, suggest } = createRhymeProviderProbe({
       candidatesByAnchor: {
         city: [createExactCandidate('pity')],
         light: [createExactCandidate('bite')],
@@ -337,12 +325,12 @@ describe('suggestion provider', () => {
       { id: 'rhyme:exact:pity', word: 'pity' },
     ]);
     expect(
-      findExactRhymeCandidates.mock.calls.map(([, query]) => query.anchor),
+      suggest.mock.calls.map(([query]) => query.anchor),
     ).toEqual(['city']);
   });
 
   it('falls back to the active-word anchor when the previous token has no candidates', () => {
-    const { findExactRhymeCandidates, provider } = createRhymeProviderProbe({
+    const { provider, suggest } = createRhymeProviderProbe({
       candidatesByAnchor: {
         flow: [createExactCandidate('glow')],
         of: [],
@@ -360,7 +348,7 @@ describe('suggestion provider', () => {
       { id: 'rhyme:exact:glow', word: 'glow' },
     ]);
     expect(
-      findExactRhymeCandidates.mock.calls.map(([, query]) => query.anchor),
+      suggest.mock.calls.map(([query]) => query.anchor),
     ).toEqual(['of', 'flow']);
   });
 
