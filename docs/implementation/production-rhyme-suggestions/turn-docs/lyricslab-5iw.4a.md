@@ -76,6 +76,7 @@ Produce the complete licensed, pinned, reproducible production artifact from the
 ## Changed Behavior And Files
 
 - Production source/provenance data: `data/rhyme-production-manifest.json`, `data/rhyme-production/{cmudict.dict,CMUDICT-LICENSE.txt,CMUDICT-README.txt,subtlex-word-frequencies-2.0.0.tgz,provenance.json,NOTICE.md,README.md}`.
+- `.gitattributes` preserves the exact upstream CMUdict README bytes while disabling only its upstream blank-at-EOF whitespace warning.
 - Production artifact and packaging: `assets/rhyme/production.rhymebin`, `app.json`, `src/rhymeData/productionArtifact.ts`, `src/platform/createProductionRhymeEngineRuntime.ts`.
 - Acquisition/compiler controls: `scripts/acquire-production-rhyme-sources.mjs`, `scripts/rhyme-data/{manifest.mjs,productionSources.mjs}`, `scripts/test-production-rhyme-sources.mjs`, `scripts/test-production-rhyme-data.mjs`, and production scripts in `package.json`.
 - Runtime: `src/rhyme/createRhymeEngine.ts`, `src/rhymeData/{decodeRhymeData.ts,rhymeEngineRuntime.ts}`, and `src/platform/createExpoRhymeEngineRuntime.ts`.
@@ -121,7 +122,10 @@ Evidence:
 
 ## PR And Commits
 
-No push, PR creation/update, merge, or inspection was performed. Local implementation/evidence commit hashes are added at closeout and returned in the one final callback.
+No push, PR creation/update, merge, or inspection was performed.
+
+- Implementation commit: `9e38d437fc3b424d7d09792188821d4f5112c929` (`build production rhyme artifact from pinned sources`).
+- This turn-doc evidence update is committed separately; its exact hash is returned in the one final callback.
 
 ## Beads Updates And Follow-Ups
 
