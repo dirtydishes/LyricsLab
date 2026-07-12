@@ -71,6 +71,12 @@ export type DiagnosticRhymeEngine = RhymeEngine & {
   diagnose(query: RhymeEngineQuery): readonly RhymeSuggestionDiagnostics[];
 };
 
+export type IndexedRhymeCandidateSource = {
+  readonly cacheable?: boolean;
+  readonly candidatesFor: (normalizedAnchor: string) => readonly RhymeLexemeInput[];
+  readonly find: (normalizedWord: string) => RhymeLexemeInput | undefined;
+};
+
 type IndexedPronunciation = PronunciationAnalysis;
 
 type IndexedLexeme = {
@@ -100,6 +106,47 @@ export function createRhymeEngine(
   };
 }
 
+export function createRhymeEngineFromCandidateIndex(
+  source: IndexedRhymeCandidateSource,
+): RhymeEngine {
+  let cachedQueryKey = '';
+  let cachedEngine: RhymeEngine | null = null;
+
+  return {
+    suggest(query) {
+      const normalizedAnchor = normalizeRhymeToken(query.anchor);
+      if (!normalizedAnchor || !source.find(normalizedAnchor)) return [];
+      const queryKey = [
+        normalizedAnchor,
+        ...[...(query.excludedWords ?? []), ...(query.sourceTokens ?? [])]
+          .map(normalizeRhymeToken)
+          .filter(Boolean)
+          .sort(compareStrings),
+      ].join('\0');
+
+      if (source.cacheable === false || cachedQueryKey !== queryKey || cachedEngine === null) {
+        const inputs = new Map<string, RhymeLexemeInput>();
+        const anchor = source.find(normalizedAnchor);
+        if (!anchor) return [];
+        inputs.set(normalizedAnchor, anchor);
+        for (const candidate of source.candidatesFor(normalizedAnchor)) {
+          const normalized = normalizeRhymeToken(candidate.normalizedWord ?? candidate.word);
+          if (normalized) inputs.set(normalized, candidate);
+        }
+        for (const word of [...(query.excludedWords ?? []), ...(query.sourceTokens ?? [])]) {
+          const normalized = normalizeRhymeToken(word);
+          const lexeme = normalized ? source.find(normalized) : undefined;
+          if (lexeme) inputs.set(normalized, lexeme);
+        }
+        cachedQueryKey = queryKey;
+        cachedEngine = createRhymeEngine([...inputs.values()]);
+      }
+
+      return cachedEngine.suggest(query);
+    },
+  };
+}
+
 export function createDiagnosticRhymeEngine(
   lexemes: readonly RhymeLexemeInput[],
 ): DiagnosticRhymeEngine {
@@ -108,6 +155,13 @@ export function createDiagnosticRhymeEngine(
     indexedLexemes.map((lexeme) => [lexeme.normalizedWord, lexeme]),
   );
 
+  return createDiagnosticEngine(indexedLexemes, lexemesByWord);
+}
+
+function createDiagnosticEngine(
+  indexedLexemes: readonly IndexedLexeme[],
+  lexemesByWord: ReadonlyMap<string, IndexedLexeme>,
+): DiagnosticRhymeEngine {
   function diagnose(
     query: RhymeEngineQuery,
   ): readonly RhymeSuggestionDiagnostics[] {
@@ -132,11 +186,11 @@ export function createDiagnosticRhymeEngine(
 
     for (const candidate of indexedLexemes) {
       if (
+        !candidate.suggestionEligible ||
         candidate.normalizedWord === anchor.normalizedWord ||
         candidate.lemma === anchor.lemma ||
         excludedWords.has(candidate.normalizedWord) ||
-        excludedLemmas.has(candidate.lemma) ||
-        !candidate.suggestionEligible
+        excludedLemmas.has(candidate.lemma)
       ) {
         continue;
       }
@@ -183,47 +237,44 @@ function indexLexemes(
   const sortedInputs = [...inputs].sort(compareLexemeInputs);
 
   for (const input of sortedInputs) {
-    const normalizedWord = normalizeRhymeToken(
-      input.normalizedWord ?? input.word,
-    );
-
-    if (!normalizedWord) {
-      continue;
-    }
-
-    const pronunciations = uniquePronunciations(input.pronunciations);
-
-    if (pronunciations.length === 0) {
-      continue;
-    }
-
-    const existing = lexemes.get(normalizedWord);
-    const lemma =
-      normalizeRhymeToken(input.lemma ?? normalizedWord) || normalizedWord;
-    const surfaceWord = input.word.trim() || normalizedWord;
-    const combinedPronunciations = uniqueAnalyzedPronunciations([
-      ...(existing?.pronunciations ?? []),
-      ...pronunciations,
-    ]);
-
-    lexemes.set(normalizedWord, {
-      commonness: Math.max(
-        existing?.commonness ?? 0,
-        clamp01(input.commonness ?? 0),
-      ),
-      lemma: existing?.lemma ?? lemma,
-      normalizedWord,
-      pronunciations: combinedPronunciations,
-      suggestionEligible:
-        (existing?.suggestionEligible ?? true) &&
-        (input.suggestionEligible ?? true),
-      word: chooseSurfaceWord(existing?.word, surfaceWord),
-    });
+    indexLexeme(lexemes, input);
   }
 
   return [...lexemes.values()].sort((left, right) =>
     compareStrings(left.normalizedWord, right.normalizedWord),
   );
+}
+
+function indexLexeme(
+  lexemes: Map<string, IndexedLexeme>,
+  input: RhymeLexemeInput,
+) {
+  const normalizedWord = normalizeRhymeToken(
+    input.normalizedWord ?? input.word,
+  );
+  if (!normalizedWord) return;
+  const pronunciations = uniquePronunciations(input.pronunciations);
+  if (pronunciations.length === 0) return;
+  const existing = lexemes.get(normalizedWord);
+  const lemma = normalizeRhymeToken(input.lemma ?? normalizedWord) || normalizedWord;
+  const surfaceWord = input.word.trim() || normalizedWord;
+  const combinedPronunciations = uniqueAnalyzedPronunciations([
+    ...(existing?.pronunciations ?? []),
+    ...pronunciations,
+  ]);
+  lexemes.set(normalizedWord, {
+    commonness: Math.max(
+      existing?.commonness ?? 0,
+      clamp01(input.commonness ?? 0),
+    ),
+    lemma: existing?.lemma ?? lemma,
+    normalizedWord,
+    pronunciations: combinedPronunciations,
+    suggestionEligible:
+      (existing?.suggestionEligible ?? true) &&
+      input.suggestionEligible !== false,
+    word: chooseSurfaceWord(existing?.word, surfaceWord),
+  });
 }
 
 function compareLexemeInputs(

@@ -24,7 +24,7 @@ export function createExpoRhymeEngineRuntime(
   options: ExpoRhymeEngineRuntimeOptions,
 ): RhymeEngineRuntime {
   return createRhymeEngineRuntime({
-    decode(bytes) {
+    decode(bytes, shouldCancel) {
       return decodeRhymeData(bytes, {
         expectedManifestSha256: options.expectedManifestSha256,
         recordsPerChunk: 256,
@@ -34,6 +34,7 @@ export function createExpoRhymeEngineRuntime(
             await digest(CryptoDigestAlgorithm.SHA256, contiguous.buffer),
           );
         },
+        shouldCancel,
         yieldToHost,
       });
     },

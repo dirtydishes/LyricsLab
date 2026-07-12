@@ -11,6 +11,14 @@ const CONSONANT_MANNERS = Object.freeze({
   Y: 'glide', Z: 'fricative', ZH: 'fricative',
 });
 
+const VOWEL_FAMILY_IDS = new Map([
+  ['IY', 0], ['IH', 0],
+  ['EY', 1], ['EH', 1], ['AE', 1],
+  ['AA', 2], ['AO', 2],
+  ['OW', 3], ['UH', 3], ['UW', 3],
+  ['AH', 4], ['ER', 4],
+]);
+
 const CURLY_APOSTROPHE_PATTERN = /[\u2018\u2019\u201A\u201B\u02BC\uFF07]/gu;
 const TOKEN_EDGE_PATTERN = /^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu;
 
@@ -41,6 +49,18 @@ export function createRhymeKeys(phones) {
       })
       .join('|'),
   };
+}
+
+export function createSlantBucketKey(familyKey) {
+  const vowels = familyKey
+    .split('|')
+    .filter((segment) => segment.startsWith('v:'))
+    .map((segment) => {
+      const phone = segment.slice(2);
+      const familyId = VOWEL_FAMILY_IDS.get(phone);
+      return familyId === undefined ? segment : `vf:${familyId}`;
+    });
+  return vowels.length <= 3 ? vowels.join('|') : `vc:${vowels.length}`;
 }
 
 export function isValidArpabetPhone(phone) {

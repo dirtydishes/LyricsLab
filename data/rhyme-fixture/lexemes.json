@@ -44,5 +44,56 @@
       ["T", "AH0", "D", "EY1"],
       ["T", "UW0", "D", "EY1"]
     ]
+  },
+  {
+    "word": "bet",
+    "lemma": "bet",
+    "commonness": 0.78,
+    "rank": 7,
+    "pronunciations": [["B", "EH1", "T"]]
+  },
+  {
+    "word": "properat",
+    "lemma": "properat",
+    "commonness": 0.2,
+    "rank": 8,
+    "flags": ["proper-noun", "rap"],
+    "pronunciations": [["P", "R", "AA1", "P", "ER0", "AE1", "T"]]
+  },
+  {
+    "word": "blockedat",
+    "lemma": "blockedat",
+    "commonness": 0.1,
+    "rank": 9,
+    "flags": ["rap", "safety-blocked"],
+    "pronunciations": [["B", "L", "AA1", "K", "T", "AE1", "T"]]
+  },
+  {
+    "word": "clustered",
+    "lemma": "clustered",
+    "commonness": 0.3,
+    "rank": 10,
+    "pronunciations": [["K", "AE1", "S", "T", "R"]]
+  },
+  {
+    "word": "shorter",
+    "lemma": "shorter",
+    "commonness": 0.4,
+    "rank": 11,
+    "pronunciations": [["SH", "AE1", "T", "R"]]
+  },
+  {
+    "word": "longanchor",
+    "lemma": "longanchor",
+    "commonness": 0.2,
+    "rank": 12,
+    "pronunciations": [["AE1", "T", "AE0", "T", "AE0", "T", "AE0", "T"]]
+  },
+  {
+    "word": "longcandidate",
+    "lemma": "longcandidate",
+    "commonness": 0.3,
+    "rank": 13,
+    "pronunciations": [["AE1", "T", "AE0", "T", "AE0", "T", "IH0", "T"]]
   }
 ]

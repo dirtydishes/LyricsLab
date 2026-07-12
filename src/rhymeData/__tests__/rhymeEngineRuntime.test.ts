@@ -38,6 +38,9 @@ describe('rhyme engine runtime', () => {
     await flushPromises();
     expect(runtime.getSnapshot()).toEqual({ state: 'ready', usingLastKnownGood: false, version: 'fixture-1' });
     expect(runtime.engine.suggest({ anchor: 'cat' })[0]?.word).toBe('hat');
+    runtime.engine.suggest({ anchor: 'cat' });
+    runtime.engine.suggest({ anchor: 'cat' });
+    expect(reader.read).toHaveBeenCalledTimes(3);
     expect(reader.close).toHaveBeenCalledTimes(1);
   });
 
@@ -120,6 +123,28 @@ describe('rhyme engine runtime', () => {
     await attempt;
     expect(runtime.getSnapshot().version).toBe('pending');
     expect(runtime.engine.suggest({ anchor: 'cat' })).toEqual([]);
+  });
+
+  it('exposes generation cancellation to in-progress decoding', async () => {
+    let shouldCancel: (() => boolean) | undefined;
+    const decoding = deferred<DecodedRhymeData>();
+    const runtime = createRhymeEngineRuntime({
+      decode: (_bytes, isCancelled) => {
+        shouldCancel = isCancelled;
+        return decoding.promise;
+      },
+      initialVersion: 'pending',
+      scheduleAfterFirstFrame: () => () => undefined,
+      source: { open: async () => createReader(Uint8Array.of(1)) },
+    });
+
+    const attempt = runtime.retry();
+    await flushPromises();
+    expect(shouldCancel?.()).toBe(false);
+    runtime.cancel();
+    expect(shouldCancel?.()).toBe(true);
+    decoding.resolve(decodedData('stale', engineWithLabel('hat')));
+    await attempt;
   });
 
   it('isolates subscriber failures from state publication', async () => {

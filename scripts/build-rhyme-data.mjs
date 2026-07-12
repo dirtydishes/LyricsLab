@@ -8,15 +8,9 @@ import { compileRhymeData } from './rhyme-data/compile.mjs';
 import { loadRhymeDataManifest } from './rhyme-data/manifest.mjs';
 
 const projectRoot = path.resolve(import.meta.dirname, '..');
-const presets = {
-  fixture: {
-    manifest: path.join(projectRoot, 'data/rhyme-fixture/manifest.json'),
-    output: path.join(projectRoot, 'assets/rhyme/fixture.rhymebin'),
-  },
-  production: {
-    manifest: path.join(projectRoot, 'data/rhyme-production/manifest.json'),
-    output: path.join(projectRoot, 'assets/rhyme/production.rhymebin'),
-  },
+const defaults = {
+  manifest: path.join(projectRoot, 'data/rhyme-fixture/manifest.json'),
+  output: path.join(projectRoot, 'assets/rhyme/fixture.rhymebin'),
 };
 
 export async function buildRhymeData(argv = process.argv.slice(2)) {
@@ -54,16 +48,12 @@ export async function buildRhymeData(argv = process.argv.slice(2)) {
 }
 
 function parseArguments(argv) {
-  const options = { ...presets.production, check: false };
+  const options = { ...defaults, check: false };
 
   for (let index = 0; index < argv.length; index += 1) {
     const argument = argv[index];
     if (argument === '--check') {
       options.check = true;
-    } else if (argument === '--fixture') {
-      Object.assign(options, presets.fixture);
-    } else if (argument === '--production') {
-      Object.assign(options, presets.production);
     } else if (argument === '--manifest') {
       options.manifest = requireValue(argv, ++index, argument);
     } else if (argument === '--output' || argument === '--out') {
