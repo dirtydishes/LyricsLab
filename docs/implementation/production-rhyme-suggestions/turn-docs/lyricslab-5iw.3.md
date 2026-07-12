@@ -10,11 +10,44 @@ Produce a pinned, licensed, reproducible binary artifact and bounded asynchronou
 
 ## Orchestration Brief
 
-Not started. Record source/license inspection, artifact format hypotheses, checkout ownership, CI owner, and concrete callback binding after selection.
+```json
+{
+  "phase_issue_id": "lyricslab-5iw.3",
+  "risk": "high",
+  "strategy": "threads",
+  "implementation_owner": "visible delegated implementation task on lavender/production-rhyme-phase-03",
+  "review_independence": "fresh visible reviewer task using thermo-nuclear-code-quality-review after implementation",
+  "delegation_plan": [
+    "audit every proposed input's local availability, redistribution terms, version pin, and hash before choosing the committed artifact corpus",
+    "implement and verify a deterministic binary compiler plus bounded Expo loader behind the Phase 02 RhymeEngine seam",
+    "independently challenge provenance, byte reproducibility, binary validation, loading atomicity, hot-path boundaries, and CI evidence"
+  ],
+  "model_and_effort_rationale": "Use standard task speed and xhigh reasoning because source licensing, deterministic binary design, and asynchronous mobile publication create coupled correctness and provenance risks; fast mode remains disabled.",
+  "required_evidence": [
+    "symbolic branch and worktree preflight",
+    "reviewable source versions, redistribution terms, attribution, and SHA-256 pins",
+    "two byte-identical clean regenerations and a temporary-output freshness check",
+    "format header, numeric tables/indexes/flags, version, and source hashes",
+    "corruption and version-mismatch safe failures",
+    "bounded post-first-frame Expo Asset/FileSystem loading with atomic publication",
+    "no raw CMU parsing, SQLite, network, or large static JSON on the typing path",
+    "npm test, npm run typecheck, build:rhyme-data, check:rhyme-data, and Expo public config",
+    "independent strict review and terminal CI state"
+  ],
+  "user_constraints": [
+    "run task remains orchestrator-only",
+    "standard delegated-task speed; no fast mode",
+    "exactly one final callback per delegated task to 019f5428-f2ea-74c2-abfb-e37349c96391",
+    "one active implementation PR and one owner per mutable checkout",
+    "stop for approval if a required source cannot be legally redistributed or accepted provenance cannot be established"
+  ]
+}
+```
 
 ## Adaptations
 
-None.
+- Canonical base is `lavender/expo-clean-rebuild` at `7edb3ca8`, containing merged and closed Phase 01 and Phase 02 work.
+- Prepared symbolic branch `lavender/production-rhyme-phase-03` directly from that base.
 
 ## Discoveries And Decisions
 
@@ -34,7 +67,7 @@ Pending independent review.
 
 ## CI And Gates
 
-Owner: `unassigned`
+Owner: delegated Phase 03 implementation task, then independent review task
 
 State: `unresolved`
 
@@ -60,4 +93,4 @@ SUBTLEX-US attribution and every committed artifact source hash are acceptance e
 
 ## Closeout
 
-Not started.
+Selected and claimed in Beads; implementation delegation pending.
