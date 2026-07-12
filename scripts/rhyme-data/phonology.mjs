@@ -49,7 +49,7 @@ export function isValidArpabetPhone(phone) {
   if (!match) return false;
   const [, base, stress] = match;
   return VOWELS.has(base)
-    ? true
+    ? stress !== undefined
     : stress === undefined && Object.hasOwn(CONSONANT_MANNERS, base);
 }
 

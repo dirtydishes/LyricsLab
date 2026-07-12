@@ -1,0 +1,656 @@
+{
+  "schema_version": 2,
+  "evaluation_fingerprint": "46e085212d6e68e185f6f773c36f1b4a3fe0272c0b25b9cc2f02235baaf2ada6",
+  "input_hashes": {
+    "corrections_sha256": "9255ceb61614f3597bee15d50c096dbe9c90491a16ed0effa8e235219971766f",
+    "gold_schema_sha256": "43ed18dbab54825b5232f8b291ba7b2edf32270ded04b51768355be2c88d7e33",
+    "gold_sha256": "40aac8d4704a9ca44bf1d2d19f5843714b83c08c59818b81b123baa7e010d4d7",
+    "seal_manifest_sha256": "79dbc270e90574446ffc2c0089689865ba83cc9937b3d9e1a2b502934cf46049",
+    "source_manifest_sha256": "d8e2acb3b352a2589da8f71dd9ab082bc50c495698ab4359ad21d6c095fc9b29"
+  },
+  "source_manifest": "data/rhyme-sources/manifest.json",
+  "seal": {
+    "expected_sha256": "40aac8d4704a9ca44bf1d2d19f5843714b83c08c59818b81b123baa7e010d4d7",
+    "sha256_before": "40aac8d4704a9ca44bf1d2d19f5843714b83c08c59818b81b123baa7e010d4d7",
+    "sha256_after": "40aac8d4704a9ca44bf1d2d19f5843714b83c08c59818b81b123baa7e010d4d7",
+    "unchanged": true,
+    "mode": "0444"
+  },
+  "corpus": {
+    "all_cases": 250,
+    "positive_candidates": 240,
+    "positive_present_in_legacy_cmu": 111,
+    "positive_oov_before_corrections": 129,
+    "correction_exclusions": 1,
+    "valid_positive_oov": 128,
+    "ambiguous_negative_controls": 10
+  },
+  "coverage": {
+    "numerator": 128,
+    "denominator": 128,
+    "percentage": 100,
+    "threshold_percentage": 90,
+    "passed": true
+  },
+  "by_category": {
+    "ad-lib": {
+      "numerator": 16,
+      "denominator": 16,
+      "percentage": 100
+    },
+    "apostrophe-variant": {
+      "numerator": 17,
+      "denominator": 17,
+      "percentage": 100
+    },
+    "colloquialism": {
+      "numerator": 7,
+      "denominator": 7,
+      "percentage": 100
+    },
+    "dropped-sound": {
+      "numerator": 31,
+      "denominator": 31,
+      "percentage": 100
+    },
+    "fused-phrase": {
+      "numerator": 31,
+      "denominator": 31,
+      "percentage": 100
+    },
+    "proper-name-place-acronym": {
+      "numerator": 10,
+      "denominator": 10,
+      "percentage": 100
+    },
+    "stylized-spelling": {
+      "numerator": 16,
+      "denominator": 16,
+      "percentage": 100
+    }
+  },
+  "by_region": {
+    "atlanta": {
+      "numerator": 2,
+      "denominator": 2,
+      "percentage": 100
+    },
+    "atlanta-and-south": {
+      "numerator": 1,
+      "denominator": 1,
+      "percentage": 100
+    },
+    "bay-area-and-national": {
+      "numerator": 1,
+      "denominator": 1,
+      "percentage": 100
+    },
+    "brooklyn": {
+      "numerator": 1,
+      "denominator": 1,
+      "percentage": 100
+    },
+    "chicago": {
+      "numerator": 1,
+      "denominator": 1,
+      "percentage": 100
+    },
+    "chicago-and-national": {
+      "numerator": 1,
+      "denominator": 1,
+      "percentage": 100
+    },
+    "dc-maryland-virginia": {
+      "numerator": 1,
+      "denominator": 1,
+      "percentage": 100
+    },
+    "houston": {
+      "numerator": 1,
+      "denominator": 1,
+      "percentage": 100
+    },
+    "national": {
+      "numerator": 7,
+      "denominator": 7,
+      "percentage": 100
+    },
+    "national-aae": {
+      "numerator": 54,
+      "denominator": 54,
+      "percentage": 100
+    },
+    "national-colloquial": {
+      "numerator": 20,
+      "denominator": 20,
+      "percentage": 100
+    },
+    "national-digital": {
+      "numerator": 3,
+      "denominator": 3,
+      "percentage": 100
+    },
+    "national-digital-aae": {
+      "numerator": 1,
+      "denominator": 1,
+      "percentage": 100
+    },
+    "national-hip-hop": {
+      "numerator": 14,
+      "denominator": 14,
+      "percentage": 100
+    },
+    "new-orleans": {
+      "numerator": 1,
+      "denominator": 1,
+      "percentage": 100
+    },
+    "new-york-city": {
+      "numerator": 3,
+      "denominator": 3,
+      "percentage": 100
+    },
+    "new-york-drill": {
+      "numerator": 2,
+      "denominator": 2,
+      "percentage": 100
+    },
+    "northeast": {
+      "numerator": 1,
+      "denominator": 1,
+      "percentage": 100
+    },
+    "south": {
+      "numerator": 8,
+      "denominator": 8,
+      "percentage": 100
+    },
+    "south-and-midwest": {
+      "numerator": 2,
+      "denominator": 2,
+      "percentage": 100
+    },
+    "south-and-national-aae": {
+      "numerator": 1,
+      "denominator": 1,
+      "percentage": 100
+    },
+    "st-louis": {
+      "numerator": 1,
+      "denominator": 1,
+      "percentage": 100
+    },
+    "west-and-national": {
+      "numerator": 1,
+      "denominator": 1,
+      "percentage": 100
+    }
+  },
+  "misses": [],
+  "ambiguous_negatives": [
+    {
+      "id": "oov-241",
+      "normalized": "ong",
+      "rationale": "May be read as on God or as three letter names; no single pronunciation is safe without context.",
+      "curated_entry_present": false,
+      "scored": false
+    },
+    {
+      "id": "oov-242",
+      "normalized": "asl",
+      "rationale": "May mean as hell, American Sign Language, age/sex/location, or letter names; reject without context.",
+      "curated_entry_present": false,
+      "scored": false
+    },
+    {
+      "id": "oov-243",
+      "normalized": "fr",
+      "rationale": "May expand to for real or be spoken as letter names; reject without context.",
+      "curated_entry_present": false,
+      "scored": false
+    },
+    {
+      "id": "oov-244",
+      "normalized": "fs",
+      "rationale": "May expand to for sure or be spoken as letter names; reject without context.",
+      "curated_entry_present": false,
+      "scored": false
+    },
+    {
+      "id": "oov-245",
+      "normalized": "ts",
+      "rationale": "Multiple phrase expansions and letter-name reading compete; reject without context.",
+      "curated_entry_present": false,
+      "scored": false
+    },
+    {
+      "id": "oov-246",
+      "normalized": "p",
+      "rationale": "May be a letter name, initial, money/drug shorthand, or clipped address term; reject without context.",
+      "curated_entry_present": false,
+      "scored": false
+    },
+    {
+      "id": "oov-247",
+      "normalized": "b",
+      "rationale": "May be a letter name or several clipped address/group terms; reject without context.",
+      "curated_entry_present": false,
+      "scored": false
+    },
+    {
+      "id": "oov-248",
+      "normalized": "x",
+      "rationale": "May be a letter name, artist/name reference, multiplication marker, or drug shorthand; reject without context.",
+      "curated_entry_present": false,
+      "scored": false
+    },
+    {
+      "id": "oov-249",
+      "normalized": "dc",
+      "rationale": "May be District of Columbia, don't care, disconnect, or letter names; reject without context.",
+      "curated_entry_present": false,
+      "scored": false
+    },
+    {
+      "id": "oov-250",
+      "normalized": "oc",
+      "rationale": "May be Orange County, original character, or letter names; reject without context.",
+      "curated_entry_present": false,
+      "scored": false
+    }
+  ],
+  "disputes": [
+    {
+      "case_id": "oov-219",
+      "action": "exclude-from-valid-positive-oov-denominator",
+      "rationale": "The sealed expectation M has no vowel nucleus or stress and cannot satisfy the repository Phase 02 pronunciation-analysis contract or Phase 04 standard-ARPAbet stressed-vowel contract. Gold bytes remain unchanged; the case is reported as a dispute and excluded from numerator and denominator.",
+      "gold_sha256_before": "40aac8d4704a9ca44bf1d2d19f5843714b83c08c59818b81b123baa7e010d4d7",
+      "gold_sha256_after": "40aac8d4704a9ca44bf1d2d19f5843714b83c08c59818b81b123baa7e010d4d7"
+    }
+  ],
+  "policy": {
+    "passed": true,
+    "ordinary_profanity": {
+      "passed": true,
+      "controls": [
+        {
+          "normalized": "ass",
+          "curated_entry_id": "rap.ass",
+          "rap_flag": true,
+          "safety_blocked": false,
+          "unsolicited_eligible": true,
+          "passed": true
+        },
+        {
+          "normalized": "bitch",
+          "curated_entry_id": "rap.bitch",
+          "rap_flag": true,
+          "safety_blocked": false,
+          "unsolicited_eligible": true,
+          "passed": true
+        },
+        {
+          "normalized": "damn",
+          "curated_entry_id": "rap.damn",
+          "rap_flag": true,
+          "safety_blocked": false,
+          "unsolicited_eligible": true,
+          "passed": true
+        },
+        {
+          "normalized": "fuck",
+          "curated_entry_id": "rap.fuck",
+          "rap_flag": true,
+          "safety_blocked": false,
+          "unsolicited_eligible": true,
+          "passed": true
+        },
+        {
+          "normalized": "shit",
+          "curated_entry_id": "rap.shit",
+          "rap_flag": true,
+          "safety_blocked": false,
+          "unsolicited_eligible": true,
+          "passed": true
+        }
+      ]
+    },
+    "high_risk": {
+      "passed": true,
+      "count": 5,
+      "controls": [
+        {
+          "curated_entry_id": "safety.001",
+          "analyzable_as_anchor": true,
+          "unsolicited_with_prefix": false,
+          "unsolicited_without_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "safety.002",
+          "analyzable_as_anchor": true,
+          "unsolicited_with_prefix": false,
+          "unsolicited_without_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "safety.003",
+          "analyzable_as_anchor": true,
+          "unsolicited_with_prefix": false,
+          "unsolicited_without_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "safety.004",
+          "analyzable_as_anchor": true,
+          "unsolicited_with_prefix": false,
+          "unsolicited_without_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "safety.005",
+          "analyzable_as_anchor": true,
+          "unsolicited_with_prefix": false,
+          "unsolicited_without_prefix": false,
+          "passed": true
+        }
+      ]
+    },
+    "proper_noun_place_acronym": {
+      "passed": true,
+      "count": 32,
+      "controls": [
+        {
+          "curated_entry_id": "rap.atl",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.atlanta",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.austin",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.baltimore",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.bk",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.bronx",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.brooklyn",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.chi-town",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.chicago",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.compton",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.crenshaw",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.dallas",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.detroit",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.dmv",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.h-town",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.harlem",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.houston",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.hov",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.htown",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.inglewood",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.l-a",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.memphis",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.miami",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.nashville",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.newark",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.nyc",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.oakland",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.philly",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.queens",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.r-b",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.stl",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.weezy",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        }
+      ]
+    }
+  },
+  "source_summary": {
+    "total": 618,
+    "aliases": 22,
+    "direct": 596,
+    "reviewed": 618,
+    "categories": {
+      "ad-lib": 52,
+      "apostrophe-variant": 103,
+      "colloquialism": 125,
+      "common-inflection": 81,
+      "dropped-sound": 107,
+      "fused-phrase": 71,
+      "proper-name": 32,
+      "stylized-spelling": 47
+    },
+    "regions": {
+      "midwest": 5,
+      "national": 600,
+      "northeast": 13,
+      "south": 20,
+      "west-coast": 3
+    },
+    "flags": {
+      "proper-noun": 32,
+      "rap": 618,
+      "safety-blocked": 5
+    }
+  },
+  "acceptance": {
+    "coverage_passed": true,
+    "policy_passed": true,
+    "passed": true,
+    "blocker": null
+  }
+}

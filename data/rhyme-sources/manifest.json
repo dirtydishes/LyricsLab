@@ -1,0 +1,63 @@
+{
+  "corpus": {
+    "categoryMinimums": {
+      "ad-lib": 30,
+      "apostrophe-variant": 50,
+      "colloquialism": 50,
+      "common-inflection": 50,
+      "dropped-sound": 50,
+      "fused-phrase": 30,
+      "proper-name": 20,
+      "stylized-spelling": 25
+    },
+    "minimumEntries": 500,
+    "regionMinimums": {
+      "midwest": 5,
+      "national": 450,
+      "northeast": 10,
+      "south": 20,
+      "west-coast": 3
+    }
+  },
+  "ownership": {
+    "license": "LyricsLab project-owned source data; all rights reserved pending release-policy decision",
+    "owner": "LyricsLab",
+    "purpose": "Reviewed source inputs for later Phase 04A production artifact assembly; not a complete production dictionary"
+  },
+  "schema": "lyricslab.rhyme-sources",
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "project.evidence",
+      "ownership": "project-authored",
+      "path": "evidence.json",
+      "role": "evidence",
+      "sha256": "cd726b4d33933a6e64c5e493aa6bff7b58f84feb4b7308c61799e61d5a0cd05b",
+      "version": "2026.07.12"
+    },
+    {
+      "id": "project.lexicon",
+      "ownership": "project-authored",
+      "path": "lexicon.json",
+      "role": "lexicon",
+      "sha256": "dcaf5bf7848716a0cbf62e92dd4d70ab6c3252cbd81e571318327496bb0b6965",
+      "version": "2026.07.12"
+    },
+    {
+      "id": "project.safety-policy",
+      "ownership": "project-authored",
+      "path": "safety-policy.json",
+      "role": "safety-policy",
+      "sha256": "4a177bbac96385a13a81f2541b1a09ccf27887a81abb1aee2e01b0a13ee2bbd5",
+      "version": "2026.07.12"
+    },
+    {
+      "id": "project.proper-noun-policy",
+      "ownership": "project-authored",
+      "path": "proper-noun-policy.json",
+      "role": "proper-noun-policy",
+      "sha256": "795be09116340b4e65dccc963fcbb0cefa5ddca48439e53b0d15dd3063cc76a7",
+      "version": "2026.07.12"
+    }
+  ]
+}

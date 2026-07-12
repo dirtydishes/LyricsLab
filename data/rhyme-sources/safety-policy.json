@@ -1,0 +1,14 @@
+{
+  "anchorBehavior": "analyze",
+  "maintainedEntryIds": [
+    "safety.001",
+    "safety.002",
+    "safety.003",
+    "safety.004",
+    "safety.005"
+  ],
+  "ordinaryProfanity": "eligible",
+  "schema": "lyricslab.rhyme-safety-policy",
+  "schemaVersion": 1,
+  "unsolicitedBehavior": "suppress-safety-blocked"
+}

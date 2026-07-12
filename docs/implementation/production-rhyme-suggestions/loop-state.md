@@ -14,7 +14,7 @@ Current phase: 04 - Rap lexicon and safety data
 
 Current Beads issue: `lyricslab-5iw.4`
 
-Current PR: none; Phase 03 PR #25 merged
+Current PR: none; Phase 04 branch `lavender/production-rhyme-phase-04` prepared from canonical base `62c946b1`
 
 Current execution strategy: visible implementation task followed by independent review task
 
@@ -41,11 +41,11 @@ The earlier `lyricslab-8um` offline-rhyme MVP epic is closed and preserved. This
 | 01 | `lyricslab-5iw.1` | closed | merged PR #23 | `turn-docs/lyricslab-5iw.1.md` |
 | 02 | `lyricslab-5iw.2` | closed | merged PR #24 | `turn-docs/lyricslab-5iw.2.md` |
 | 03 | `lyricslab-5iw.3` | closed | merged PR #25 | `turn-docs/lyricslab-5iw.3.md` |
-| 04 | `lyricslab-5iw.4` | open | none | `turn-docs/lyricslab-5iw.4.md` |
+| 04 | `lyricslab-5iw.4` | in progress | none | `turn-docs/lyricslab-5iw.4.md` |
 | 04A | `lyricslab-5iw.4a` | open | none | `turn-docs/lyricslab-5iw.4a.md` |
 | 05 | `lyricslab-5iw.5` | open | none | `turn-docs/lyricslab-5iw.5.md` |
 | 06 | `lyricslab-5iw.6` | open | none | `turn-docs/lyricslab-5iw.6.md` |
 
 ## Last Coordinator Update
 
-Phase 03 merged through PR #25 as merge commit `0825591e` after full thermonuclear review and repairs. Beads issue `lyricslab-5iw.3` is closed; Phase 04 is the sole ready phase and no implementation PR is active.
+Phase 04 is selected and claimed on `lavender/production-rhyme-phase-04` from canonical base `62c946b1`. Its orchestration preserves source-curation versus sealed OOV-evaluation independence before strict review.

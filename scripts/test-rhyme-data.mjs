@@ -127,6 +127,7 @@ function verifyCompilerPhonology() {
   );
   assert.equal(isValidArpabetPhone('B1'), false);
   assert.equal(isValidArpabetPhone('AE1'), true);
+  assert.equal(isValidArpabetPhone('AE'), false);
 }
 
 async function assertBuildRejects(manifestPath, pattern) {

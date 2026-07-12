@@ -1,0 +1,5629 @@
+{
+  "$schema": "./oov-gold-v1.schema.json",
+  "schema_version": 1,
+  "authored_at": "2026-07-12T06:45:43Z",
+  "independence": "Authored in a task forked before Phase 04 curation, without reading Phase 04 source data, policy code, authoring scripts, diffs, PR material, counts, hashes, or the Phase 04 turn doc.",
+  "evidence_sources": [
+    {
+      "id": "green-aae-phonology",
+      "title": "Phonology of African American English",
+      "url": "https://doi.org/10.1017/CBO9780511800306.007",
+      "scope": "AAE sound patterns, consonant variation, and phonological category framing."
+    },
+    {
+      "id": "weldon-aae-variation",
+      "title": "Middle-Class African American English",
+      "url": "https://www.cambridge.org/core/books/middleclass-african-american-english/3B19D2A893A3E8438D6A04AB83B564CB",
+      "scope": "Variation including consonant-cluster reduction, unstressed nasal variation, and lexical features."
+    },
+    {
+      "id": "yale-tryna",
+      "title": "Tryna",
+      "url": "https://ygdp.yale.edu/phenomena/tryna",
+      "scope": "Independent evidence for the fused colloquial form tryna and its AAE distribution."
+    },
+    {
+      "id": "yale-null-copula",
+      "title": "Null copula",
+      "url": "https://ygdp.yale.edu/phenomena/null-copula",
+      "scope": "Independent evidence for AAE contraction and word-final cluster reduction."
+    },
+    {
+      "id": "hip-hop-archive",
+      "title": "Hiphop Archive and Research Institute",
+      "url": "https://hiphoparchive.org/",
+      "scope": "Category-level evidence that hip-hop language and regional cultural material form a research corpus; not used as a pronunciation oracle."
+    },
+    {
+      "id": "regional-aae-variation",
+      "title": "Folk perception of African American English regional variation",
+      "url": "https://doi.org/10.1017/jlg.2017.2",
+      "scope": "Evidence that AAE and hip-hop-linked speech vary regionally, supporting explicit region labels rather than a single undifferentiated dialect."
+    },
+    {
+      "id": "phase02-arpabet",
+      "title": "Repository Phase 02 ARPAbet primitives",
+      "url": "https://github.com/cmusphinx/cmudict",
+      "scope": "Standard ARPAbet phone inventory and repository normalization/phone-token conventions; local legacy membership is checked separately after authoring."
+    }
+  ],
+  "cases": [
+    {
+      "id": "oov-001",
+      "surface": "goin'",
+      "normalized": "goin",
+      "accepted_pronunciations": [
+        "G OW1 IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of going."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "G OY1 N",
+          "G OW1 AH0 N"
+        ]
+      }
+    },
+    {
+      "id": "oov-002",
+      "surface": "doin'",
+      "normalized": "doin",
+      "accepted_pronunciations": [
+        "D UW1 IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of doing."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "D UW1 IH0 N"
+        ]
+      }
+    },
+    {
+      "id": "oov-003",
+      "surface": "bein'",
+      "normalized": "bein",
+      "accepted_pronunciations": [
+        "B IY1 IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of being."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "B IY1 N",
+          "B IY1 IH0 N"
+        ]
+      }
+    },
+    {
+      "id": "oov-004",
+      "surface": "sayin'",
+      "normalized": "sayin",
+      "accepted_pronunciations": [
+        "S EY1 IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of saying."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "S EY1 IH0 N"
+        ]
+      }
+    },
+    {
+      "id": "oov-005",
+      "surface": "playin'",
+      "normalized": "playin",
+      "accepted_pronunciations": [
+        "P L EY1 IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of playing."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "P L EY1 IH0 N"
+        ]
+      }
+    },
+    {
+      "id": "oov-006",
+      "surface": "stayin'",
+      "normalized": "stayin",
+      "accepted_pronunciations": [
+        "S T EY1 IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of staying."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-007",
+      "surface": "makin'",
+      "normalized": "makin",
+      "accepted_pronunciations": [
+        "M EY1 K IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of making."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "M AE1 K IH0 N",
+          "M EY1 K IH0 N"
+        ]
+      }
+    },
+    {
+      "id": "oov-008",
+      "surface": "takin'",
+      "normalized": "takin",
+      "accepted_pronunciations": [
+        "T EY1 K IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of taking."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "T EY1 K IH0 N"
+        ]
+      }
+    },
+    {
+      "id": "oov-009",
+      "surface": "breakin'",
+      "normalized": "breakin",
+      "accepted_pronunciations": [
+        "B R EY1 K IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of breaking."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-010",
+      "surface": "shakin'",
+      "normalized": "shakin",
+      "accepted_pronunciations": [
+        "SH EY1 K IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of shaking."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-011",
+      "surface": "chasin'",
+      "normalized": "chasin",
+      "accepted_pronunciations": [
+        "CH EY1 S IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of chasing."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "CH AE1 S IH0 N"
+        ]
+      }
+    },
+    {
+      "id": "oov-012",
+      "surface": "racin'",
+      "normalized": "racin",
+      "accepted_pronunciations": [
+        "R EY1 S IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of racing."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-013",
+      "surface": "rollin'",
+      "normalized": "rollin",
+      "accepted_pronunciations": [
+        "R OW1 L IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of rolling."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "R AA1 L IH0 N",
+          "R OW1 L IH0 N"
+        ]
+      }
+    },
+    {
+      "id": "oov-014",
+      "surface": "flowin'",
+      "normalized": "flowin",
+      "accepted_pronunciations": [
+        "F L OW1 IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of flowing."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-015",
+      "surface": "knowin'",
+      "normalized": "knowin",
+      "accepted_pronunciations": [
+        "N OW1 IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of knowing."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-016",
+      "surface": "showin'",
+      "normalized": "showin",
+      "accepted_pronunciations": [
+        "SH OW1 IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of showing."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-017",
+      "surface": "throwin'",
+      "normalized": "throwin",
+      "accepted_pronunciations": [
+        "TH R OW1 IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of throwing."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-018",
+      "surface": "glowin'",
+      "normalized": "glowin",
+      "accepted_pronunciations": [
+        "G L OW1 IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of glowing."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-019",
+      "surface": "spittin'",
+      "normalized": "spittin",
+      "accepted_pronunciations": [
+        "S P IH1 T IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of spitting."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-020",
+      "surface": "hittin'",
+      "normalized": "hittin",
+      "accepted_pronunciations": [
+        "HH IH1 T IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of hitting."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-021",
+      "surface": "sittin'",
+      "normalized": "sittin",
+      "accepted_pronunciations": [
+        "S IH1 T IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of sitting."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "S IH1 T AH0 N"
+        ]
+      }
+    },
+    {
+      "id": "oov-022",
+      "surface": "gettin'",
+      "normalized": "gettin",
+      "accepted_pronunciations": [
+        "G EH1 T IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of getting."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "G IH1 T AH0 N"
+        ]
+      }
+    },
+    {
+      "id": "oov-023",
+      "surface": "lettin'",
+      "normalized": "lettin",
+      "accepted_pronunciations": [
+        "L EH1 T IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of letting."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-024",
+      "surface": "bettin'",
+      "normalized": "bettin",
+      "accepted_pronunciations": [
+        "B EH1 T IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of betting."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "B EH1 T IH0 N"
+        ]
+      }
+    },
+    {
+      "id": "oov-025",
+      "surface": "steppin'",
+      "normalized": "steppin",
+      "accepted_pronunciations": [
+        "S T EH1 P IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of stepping."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "S T EH1 P IH0 N"
+        ]
+      }
+    },
+    {
+      "id": "oov-026",
+      "surface": "reppin'",
+      "normalized": "reppin",
+      "accepted_pronunciations": [
+        "R EH1 P IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of repping."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-027",
+      "surface": "flexin'",
+      "normalized": "flexin",
+      "accepted_pronunciations": [
+        "F L EH1 K S IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of flexing."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-028",
+      "surface": "textin'",
+      "normalized": "textin",
+      "accepted_pronunciations": [
+        "T EH1 K S T IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of texting."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-029",
+      "surface": "stressin'",
+      "normalized": "stressin",
+      "accepted_pronunciations": [
+        "S T R EH1 S IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of stressing."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-030",
+      "surface": "blessin'",
+      "normalized": "blessin",
+      "accepted_pronunciations": [
+        "B L EH1 S IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of blessing."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-031",
+      "surface": "trappin'",
+      "normalized": "trappin",
+      "accepted_pronunciations": [
+        "T R AE1 P IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of trapping."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-032",
+      "surface": "rappin'",
+      "normalized": "rappin",
+      "accepted_pronunciations": [
+        "R AE1 P IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of rapping."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-033",
+      "surface": "cappin'",
+      "normalized": "cappin",
+      "accepted_pronunciations": [
+        "K AE1 P IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of capping."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-034",
+      "surface": "snappin'",
+      "normalized": "snappin",
+      "accepted_pronunciations": [
+        "S N AE1 P IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of snapping."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-035",
+      "surface": "clappin'",
+      "normalized": "clappin",
+      "accepted_pronunciations": [
+        "K L AE1 P IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of clapping."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-036",
+      "surface": "dancin'",
+      "normalized": "dancin",
+      "accepted_pronunciations": [
+        "D AE1 N S IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of dancing."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "D AE1 N S IH0 N"
+        ]
+      }
+    },
+    {
+      "id": "oov-037",
+      "surface": "prancin'",
+      "normalized": "prancin",
+      "accepted_pronunciations": [
+        "P R AE1 N S IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of prancing."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-038",
+      "surface": "grindin'",
+      "normalized": "grindin",
+      "accepted_pronunciations": [
+        "G R AY1 N D IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of grinding."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-039",
+      "surface": "shinin'",
+      "normalized": "shinin",
+      "accepted_pronunciations": [
+        "SH AY1 N IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of shining."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-040",
+      "surface": "vibin'",
+      "normalized": "vibin",
+      "accepted_pronunciations": [
+        "V AY1 B IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of vibing."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-041",
+      "surface": "ridin'",
+      "normalized": "ridin",
+      "accepted_pronunciations": [
+        "R AY1 D IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of riding."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-042",
+      "surface": "slidin'",
+      "normalized": "slidin",
+      "accepted_pronunciations": [
+        "S L AY1 D IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of sliding."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-043",
+      "surface": "wildin'",
+      "normalized": "wildin",
+      "accepted_pronunciations": [
+        "W AY1 L D IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of wilding."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-044",
+      "surface": "buildin'",
+      "normalized": "buildin",
+      "accepted_pronunciations": [
+        "B IH1 L D IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of building."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-045",
+      "surface": "chillin'",
+      "normalized": "chillin",
+      "accepted_pronunciations": [
+        "CH IH1 L IH0 N"
+      ],
+      "category": "dropped-sound",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive unstressed -ing nasal-fronting form of chilling."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-046",
+      "surface": "ain't",
+      "normalized": "ain't",
+      "accepted_pronunciations": [
+        "EY1 N T"
+      ],
+      "category": "apostrophe-variant",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Stable negative auxiliary contraction."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "EY1 N T"
+        ]
+      }
+    },
+    {
+      "id": "oov-047",
+      "surface": "y'all",
+      "normalized": "y'all",
+      "accepted_pronunciations": [
+        "Y AO1 L"
+      ],
+      "category": "apostrophe-variant",
+      "region": "south",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Second-person plural contraction."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "Y AO2 L"
+        ]
+      }
+    },
+    {
+      "id": "oov-048",
+      "surface": "y'all's",
+      "normalized": "y'all's",
+      "accepted_pronunciations": [
+        "Y AO1 L Z"
+      ],
+      "category": "apostrophe-variant",
+      "region": "south",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Possessive form of y'all."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-049",
+      "surface": "y'all'd",
+      "normalized": "y'all'd",
+      "accepted_pronunciations": [
+        "Y AO1 L D"
+      ],
+      "category": "apostrophe-variant",
+      "region": "south",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Y'all plus would or had; pronunciation is stable despite expansion ambiguity."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-050",
+      "surface": "y'all've",
+      "normalized": "y'all've",
+      "accepted_pronunciations": [
+        "Y AO1 L V"
+      ],
+      "category": "apostrophe-variant",
+      "region": "south",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Y'all plus have."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-051",
+      "surface": "can't've",
+      "normalized": "can't've",
+      "accepted_pronunciations": [
+        "K AE1 N T AH0 V"
+      ],
+      "category": "apostrophe-variant",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Stacked contraction can not have."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-052",
+      "surface": "couldn't've",
+      "normalized": "couldn't've",
+      "accepted_pronunciations": [
+        "K UH1 D AH0 N T AH0 V"
+      ],
+      "category": "apostrophe-variant",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Stacked contraction could not have."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-053",
+      "surface": "wouldn't've",
+      "normalized": "wouldn't've",
+      "accepted_pronunciations": [
+        "W UH1 D AH0 N T AH0 V"
+      ],
+      "category": "apostrophe-variant",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Stacked contraction would not have."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-054",
+      "surface": "shouldn't've",
+      "normalized": "shouldn't've",
+      "accepted_pronunciations": [
+        "SH UH1 D AH0 N T AH0 V"
+      ],
+      "category": "apostrophe-variant",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Stacked contraction should not have."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-055",
+      "surface": "might've",
+      "normalized": "might've",
+      "accepted_pronunciations": [
+        "M AY1 T AH0 V"
+      ],
+      "category": "apostrophe-variant",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Might plus have contraction."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "M AY1 T AH0 V"
+        ]
+      }
+    },
+    {
+      "id": "oov-056",
+      "surface": "must've",
+      "normalized": "must've",
+      "accepted_pronunciations": [
+        "M AH1 S T AH0 V"
+      ],
+      "category": "apostrophe-variant",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Must plus have contraction."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "M AH1 S T IH0 V"
+        ]
+      }
+    },
+    {
+      "id": "oov-057",
+      "surface": "coulda",
+      "normalized": "coulda",
+      "accepted_pronunciations": [
+        "K UH1 D AH0"
+      ],
+      "category": "apostrophe-variant",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Reduced could have."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-058",
+      "surface": "woulda",
+      "normalized": "woulda",
+      "accepted_pronunciations": [
+        "W UH1 D AH0"
+      ],
+      "category": "apostrophe-variant",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Reduced would have."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-059",
+      "surface": "shoulda",
+      "normalized": "shoulda",
+      "accepted_pronunciations": [
+        "SH UH1 D AH0"
+      ],
+      "category": "apostrophe-variant",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Reduced should have."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-060",
+      "surface": "oughta",
+      "normalized": "oughta",
+      "accepted_pronunciations": [
+        "AO1 T AH0"
+      ],
+      "category": "apostrophe-variant",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Reduced ought to."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "AO1 T AH0"
+        ]
+      }
+    },
+    {
+      "id": "oov-061",
+      "surface": "kinda",
+      "normalized": "kinda",
+      "accepted_pronunciations": [
+        "K AY1 N D AH0"
+      ],
+      "category": "apostrophe-variant",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Reduced kind of."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "K IH1 N D AH0"
+        ]
+      }
+    },
+    {
+      "id": "oov-062",
+      "surface": "sorta",
+      "normalized": "sorta",
+      "accepted_pronunciations": [
+        "S AO1 R T AH0"
+      ],
+      "category": "apostrophe-variant",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Reduced sort of."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-063",
+      "surface": "lotta",
+      "normalized": "lotta",
+      "accepted_pronunciations": [
+        "L AA1 T AH0"
+      ],
+      "category": "apostrophe-variant",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Reduced lot of."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "L AA1 T AH0"
+        ]
+      }
+    },
+    {
+      "id": "oov-064",
+      "surface": "outta",
+      "normalized": "outta",
+      "accepted_pronunciations": [
+        "AW1 T AH0"
+      ],
+      "category": "apostrophe-variant",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Reduced out of."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "UW1 T AH0",
+          "AW1 T AH0"
+        ]
+      }
+    },
+    {
+      "id": "oov-065",
+      "surface": "'bout",
+      "normalized": "bout",
+      "accepted_pronunciations": [
+        "B AW1 T"
+      ],
+      "category": "apostrophe-variant",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Apheretic form of about."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "B AW1 T"
+        ]
+      }
+    },
+    {
+      "id": "oov-066",
+      "surface": "'cause",
+      "normalized": "cause",
+      "accepted_pronunciations": [
+        "K AH0 Z",
+        "K AO1 Z"
+      ],
+      "category": "apostrophe-variant",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Apheretic form of because with reduced and full-vowel realizations."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "K AH0 Z",
+          "K AA1 Z",
+          "K AO1 Z"
+        ]
+      }
+    },
+    {
+      "id": "oov-067",
+      "surface": "'em",
+      "normalized": "em",
+      "accepted_pronunciations": [
+        "AH0 M",
+        "EH1 M"
+      ],
+      "category": "apostrophe-variant",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Reduced object pronoun them; stressed spelling-name realization also accepted."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "AH0 M",
+          "EH1 M"
+        ]
+      }
+    },
+    {
+      "id": "oov-068",
+      "surface": "'til",
+      "normalized": "til",
+      "accepted_pronunciations": [
+        "T IH1 L"
+      ],
+      "category": "apostrophe-variant",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Apheretic form of until."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "T IH1 L"
+        ]
+      }
+    },
+    {
+      "id": "oov-069",
+      "surface": "lil'",
+      "normalized": "lil",
+      "accepted_pronunciations": [
+        "L IH1 L"
+      ],
+      "category": "apostrophe-variant",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Conventional clipped spelling of little."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "L IH1 L"
+        ]
+      }
+    },
+    {
+      "id": "oov-070",
+      "surface": "ol'",
+      "normalized": "ol",
+      "accepted_pronunciations": [
+        "OW1 L"
+      ],
+      "category": "apostrophe-variant",
+      "region": "south",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Conventional clipped spelling of old."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "OW1 L"
+        ]
+      }
+    },
+    {
+      "id": "oov-071",
+      "surface": "nothin'",
+      "normalized": "nothin",
+      "accepted_pronunciations": [
+        "N AH1 TH IH0 N"
+      ],
+      "category": "apostrophe-variant",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Nothing with unstressed -ing nasal fronting."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "N AA1 TH IH0 N",
+          "N AH1 TH IH0 N"
+        ]
+      }
+    },
+    {
+      "id": "oov-072",
+      "surface": "somethin'",
+      "normalized": "somethin",
+      "accepted_pronunciations": [
+        "S AH1 M TH IH0 N"
+      ],
+      "category": "apostrophe-variant",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Something with unstressed -ing nasal fronting."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "S AH1 M TH IH0 N"
+        ]
+      }
+    },
+    {
+      "id": "oov-073",
+      "surface": "everythin'",
+      "normalized": "everythin",
+      "accepted_pronunciations": [
+        "EH1 V R IY0 TH IH0 N",
+        "EH1 V ER0 IY0 TH IH0 N"
+      ],
+      "category": "apostrophe-variant",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Everything with unstressed -ing nasal fronting and ordinary syllabic variation."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-074",
+      "surface": "anythin'",
+      "normalized": "anythin",
+      "accepted_pronunciations": [
+        "EH1 N IY0 TH IH0 N"
+      ],
+      "category": "apostrophe-variant",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "weldon-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Anything with unstressed -ing nasal fronting."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-075",
+      "surface": "trippin'",
+      "normalized": "trippin",
+      "accepted_pronunciations": [
+        "T R IH1 P IH0 N"
+      ],
+      "category": "apostrophe-variant",
+      "region": "national-hip-hop",
+      "evidence": [
+        "green-aae-phonology",
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive nasal-fronted form of tripping."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-076",
+      "surface": "frontin'",
+      "normalized": "frontin",
+      "accepted_pronunciations": [
+        "F R AH1 N T IH0 N"
+      ],
+      "category": "apostrophe-variant",
+      "region": "northeast",
+      "evidence": [
+        "green-aae-phonology",
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive nasal-fronted form of fronting."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-077",
+      "surface": "stuntin'",
+      "normalized": "stuntin",
+      "accepted_pronunciations": [
+        "S T AH1 N T IH0 N"
+      ],
+      "category": "apostrophe-variant",
+      "region": "south",
+      "evidence": [
+        "green-aae-phonology",
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive nasal-fronted form of stunting."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-078",
+      "surface": "ballin'",
+      "normalized": "ballin",
+      "accepted_pronunciations": [
+        "B AO1 L IH0 N"
+      ],
+      "category": "apostrophe-variant",
+      "region": "national-hip-hop",
+      "evidence": [
+        "green-aae-phonology",
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive nasal-fronted form of balling."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "B AE1 L IH0 N"
+        ]
+      }
+    },
+    {
+      "id": "oov-079",
+      "surface": "callin'",
+      "normalized": "callin",
+      "accepted_pronunciations": [
+        "K AO1 L IH0 N"
+      ],
+      "category": "apostrophe-variant",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive nasal-fronted form of calling."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-080",
+      "surface": "fallin'",
+      "normalized": "fallin",
+      "accepted_pronunciations": [
+        "F AO1 L IH0 N"
+      ],
+      "category": "apostrophe-variant",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Productive nasal-fronted form of falling."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "F AE1 L IH0 N"
+        ]
+      }
+    },
+    {
+      "id": "oov-081",
+      "surface": "tryna",
+      "normalized": "tryna",
+      "accepted_pronunciations": [
+        "T R AY1 N AH0"
+      ],
+      "category": "fused-phrase",
+      "region": "national-aae",
+      "evidence": [
+        "yale-tryna"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Established fused form of trying to."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-082",
+      "surface": "trynna",
+      "normalized": "trynna",
+      "accepted_pronunciations": [
+        "T R AY1 N AH0"
+      ],
+      "category": "fused-phrase",
+      "region": "national-aae",
+      "evidence": [
+        "yale-tryna"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Common doubled-n spelling variant of tryna."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-083",
+      "surface": "finna",
+      "normalized": "finna",
+      "accepted_pronunciations": [
+        "F IH1 N AH0"
+      ],
+      "category": "fused-phrase",
+      "region": "south-and-national-aae",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Prospective marker derived from fixing to."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-084",
+      "surface": "fitna",
+      "normalized": "fitna",
+      "accepted_pronunciations": [
+        "F IH1 T N AH0"
+      ],
+      "category": "fused-phrase",
+      "region": "south",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Consonant-preserving spelling variant of fixing to."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-085",
+      "surface": "finta",
+      "normalized": "finta",
+      "accepted_pronunciations": [
+        "F IH1 N T AH0"
+      ],
+      "category": "fused-phrase",
+      "region": "south",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Regional spelling variant of fixing to."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-086",
+      "surface": "gonna",
+      "normalized": "gonna",
+      "accepted_pronunciations": [
+        "G AH1 N AH0",
+        "G AO1 N AH0"
+      ],
+      "category": "fused-phrase",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology",
+        "yale-null-copula"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Established reduced future marker."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "G AA1 N AH0"
+        ]
+      }
+    },
+    {
+      "id": "oov-087",
+      "surface": "gon",
+      "normalized": "gon",
+      "accepted_pronunciations": [
+        "G AH1 N",
+        "G AO1 N"
+      ],
+      "category": "fused-phrase",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Further reduced future marker."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-088",
+      "surface": "gotta",
+      "normalized": "gotta",
+      "accepted_pronunciations": [
+        "G AA1 T AH0"
+      ],
+      "category": "fused-phrase",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Established fused got to."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "G AA1 T AH0"
+        ]
+      }
+    },
+    {
+      "id": "oov-089",
+      "surface": "wanna",
+      "normalized": "wanna",
+      "accepted_pronunciations": [
+        "W AA1 N AH0"
+      ],
+      "category": "fused-phrase",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Established fused want to."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "W AA1 N AH0"
+        ]
+      }
+    },
+    {
+      "id": "oov-090",
+      "surface": "lemme",
+      "normalized": "lemme",
+      "accepted_pronunciations": [
+        "L EH1 M IY0"
+      ],
+      "category": "fused-phrase",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Established fused let me."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "L EH1 M AH0"
+        ]
+      }
+    },
+    {
+      "id": "oov-091",
+      "surface": "gimme",
+      "normalized": "gimme",
+      "accepted_pronunciations": [
+        "G IH1 M IY0"
+      ],
+      "category": "fused-phrase",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Established fused give me."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "G IH1 M IY0"
+        ]
+      }
+    },
+    {
+      "id": "oov-092",
+      "surface": "imma",
+      "normalized": "imma",
+      "accepted_pronunciations": [
+        "AY1 M AH0"
+      ],
+      "category": "fused-phrase",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Fused first-person future construction."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-093",
+      "surface": "ima",
+      "normalized": "ima",
+      "accepted_pronunciations": [
+        "AY1 M AH0"
+      ],
+      "category": "fused-phrase",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Single-m spelling of imma."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-094",
+      "surface": "i'ma",
+      "normalized": "i'ma",
+      "accepted_pronunciations": [
+        "AY1 M AH0"
+      ],
+      "category": "fused-phrase",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Apostrophized spelling of imma."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-095",
+      "surface": "ion",
+      "normalized": "ion",
+      "accepted_pronunciations": [
+        "AY1 OW0 N"
+      ],
+      "category": "fused-phrase",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Contextual fused spelling of I don't with a stable colloquial pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "AY1 AH0 N",
+          "AY1 AA2 N"
+        ]
+      }
+    },
+    {
+      "id": "oov-096",
+      "surface": "dunno",
+      "normalized": "dunno",
+      "accepted_pronunciations": [
+        "D AH0 N OW1"
+      ],
+      "category": "fused-phrase",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Established fused don't know."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "D AH0 N OW1"
+        ]
+      }
+    },
+    {
+      "id": "oov-097",
+      "surface": "c'mon",
+      "normalized": "c'mon",
+      "accepted_pronunciations": [
+        "K AH0 M AA1 N"
+      ],
+      "category": "fused-phrase",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Apostrophized reduced come on."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "K AH0 M AA1 N"
+        ]
+      }
+    },
+    {
+      "id": "oov-098",
+      "surface": "cmon",
+      "normalized": "cmon",
+      "accepted_pronunciations": [
+        "K AH0 M AA1 N"
+      ],
+      "category": "fused-phrase",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Unpunctuated reduced come on."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-099",
+      "surface": "aight",
+      "normalized": "aight",
+      "accepted_pronunciations": [
+        "AY1 T"
+      ],
+      "category": "fused-phrase",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Reduced spelling and pronunciation of all right."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-100",
+      "surface": "sumn",
+      "normalized": "sumn",
+      "accepted_pronunciations": [
+        "S AH1 M"
+      ],
+      "category": "fused-phrase",
+      "region": "national-digital-aae",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Compressed spelling of something."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-101",
+      "surface": "sumthin",
+      "normalized": "sumthin",
+      "accepted_pronunciations": [
+        "S AH1 M TH IH0 N"
+      ],
+      "category": "fused-phrase",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Reduced spelling of something."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-102",
+      "surface": "nuthin",
+      "normalized": "nuthin",
+      "accepted_pronunciations": [
+        "N AH1 TH IH0 N"
+      ],
+      "category": "fused-phrase",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Reduced spelling of nothing."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-103",
+      "surface": "errbody",
+      "normalized": "errbody",
+      "accepted_pronunciations": [
+        "EH1 R B AA2 D IY0"
+      ],
+      "category": "fused-phrase",
+      "region": "south-and-midwest",
+      "evidence": [
+        "green-aae-phonology",
+        "regional-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Compressed spelling of everybody."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-104",
+      "surface": "erybody",
+      "normalized": "erybody",
+      "accepted_pronunciations": [
+        "EH1 R IY0 B AA2 D IY0"
+      ],
+      "category": "fused-phrase",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Reduced spelling of everybody."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-105",
+      "surface": "errybody",
+      "normalized": "errybody",
+      "accepted_pronunciations": [
+        "EH1 R IY0 B AA2 D IY0",
+        "EH1 R B AA2 D IY0"
+      ],
+      "category": "fused-phrase",
+      "region": "south-and-midwest",
+      "evidence": [
+        "green-aae-phonology",
+        "regional-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Doubled-r spelling of reduced everybody."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-106",
+      "surface": "talmbout",
+      "normalized": "talmbout",
+      "accepted_pronunciations": [
+        "T AO1 M B AW2 T"
+      ],
+      "category": "fused-phrase",
+      "region": "south",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Compressed talking about construction."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-107",
+      "surface": "talkinbout",
+      "normalized": "talkinbout",
+      "accepted_pronunciations": [
+        "T AO1 K IH0 N B AW2 T"
+      ],
+      "category": "fused-phrase",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Unspaced talking about form."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-108",
+      "surface": "whatchu",
+      "normalized": "whatchu",
+      "accepted_pronunciations": [
+        "W AH1 CH UW0"
+      ],
+      "category": "fused-phrase",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Fused what you."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-109",
+      "surface": "watchu",
+      "normalized": "watchu",
+      "accepted_pronunciations": [
+        "W AA1 CH UW0",
+        "W AH1 CH UW0"
+      ],
+      "category": "fused-phrase",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Alternate spelling of fused what you."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-110",
+      "surface": "whaddya",
+      "normalized": "whaddya",
+      "accepted_pronunciations": [
+        "W AH1 D Y AH0"
+      ],
+      "category": "fused-phrase",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Fused what do you."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-111",
+      "surface": "howdya",
+      "normalized": "howdya",
+      "accepted_pronunciations": [
+        "HH AW1 D Y AH0"
+      ],
+      "category": "fused-phrase",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Fused how do you."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-112",
+      "surface": "didja",
+      "normalized": "didja",
+      "accepted_pronunciations": [
+        "D IH1 JH AH0"
+      ],
+      "category": "fused-phrase",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Fused did you with palatalization."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-113",
+      "surface": "dontcha",
+      "normalized": "dontcha",
+      "accepted_pronunciations": [
+        "D OW1 N CH AH0"
+      ],
+      "category": "fused-phrase",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Fused don't you with palatalization."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-114",
+      "surface": "wontcha",
+      "normalized": "wontcha",
+      "accepted_pronunciations": [
+        "W OW1 N CH AH0"
+      ],
+      "category": "fused-phrase",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Fused won't you with palatalization."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-115",
+      "surface": "cantcha",
+      "normalized": "cantcha",
+      "accepted_pronunciations": [
+        "K AE1 N CH AH0"
+      ],
+      "category": "fused-phrase",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Fused can't you with palatalization."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-116",
+      "surface": "couldja",
+      "normalized": "couldja",
+      "accepted_pronunciations": [
+        "K UH1 JH AH0"
+      ],
+      "category": "fused-phrase",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Fused could you with palatalization."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-117",
+      "surface": "wouldja",
+      "normalized": "wouldja",
+      "accepted_pronunciations": [
+        "W UH1 JH AH0"
+      ],
+      "category": "fused-phrase",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Fused would you with palatalization."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-118",
+      "surface": "shouldja",
+      "normalized": "shouldja",
+      "accepted_pronunciations": [
+        "SH UH1 JH AH0"
+      ],
+      "category": "fused-phrase",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Fused should you with palatalization."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-119",
+      "surface": "betcha",
+      "normalized": "betcha",
+      "accepted_pronunciations": [
+        "B EH1 CH AH0"
+      ],
+      "category": "fused-phrase",
+      "region": "national-colloquial",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Fused bet you with palatalization."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "B EH1 CH AH0"
+        ]
+      }
+    },
+    {
+      "id": "oov-120",
+      "surface": "sposta",
+      "normalized": "sposta",
+      "accepted_pronunciations": [
+        "S P OW1 S T AH0"
+      ],
+      "category": "fused-phrase",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Compressed supposed to construction."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-121",
+      "surface": "luv",
+      "normalized": "luv",
+      "accepted_pronunciations": [
+        "L AH1 V"
+      ],
+      "category": "stylized-spelling",
+      "region": "national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Stylized spelling of love with unchanged pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-122",
+      "surface": "nite",
+      "normalized": "nite",
+      "accepted_pronunciations": [
+        "N AY1 T"
+      ],
+      "category": "stylized-spelling",
+      "region": "national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Stylized spelling of night with unchanged pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "N AY1 T"
+        ]
+      }
+    },
+    {
+      "id": "oov-123",
+      "surface": "tho",
+      "normalized": "tho",
+      "accepted_pronunciations": [
+        "DH OW1"
+      ],
+      "category": "stylized-spelling",
+      "region": "national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Clipped spelling of though."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "DH OW1"
+        ]
+      }
+    },
+    {
+      "id": "oov-124",
+      "surface": "thru",
+      "normalized": "thru",
+      "accepted_pronunciations": [
+        "TH R UW1"
+      ],
+      "category": "stylized-spelling",
+      "region": "national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Stylized spelling of through."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "TH R UW1"
+        ]
+      }
+    },
+    {
+      "id": "oov-125",
+      "surface": "dat",
+      "normalized": "dat",
+      "accepted_pronunciations": [
+        "D AE1 T"
+      ],
+      "category": "stylized-spelling",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Spelling reflecting voiced th-stopping in that."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "D AE1 T"
+        ]
+      }
+    },
+    {
+      "id": "oov-126",
+      "surface": "dis",
+      "normalized": "dis",
+      "accepted_pronunciations": [
+        "D IH1 S"
+      ],
+      "category": "stylized-spelling",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Spelling reflecting voiced th-stopping in this."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "D IH1 S"
+        ]
+      }
+    },
+    {
+      "id": "oov-127",
+      "surface": "dem",
+      "normalized": "dem",
+      "accepted_pronunciations": [
+        "D EH1 M"
+      ],
+      "category": "stylized-spelling",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Spelling reflecting voiced th-stopping in them."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-128",
+      "surface": "dese",
+      "normalized": "dese",
+      "accepted_pronunciations": [
+        "D IY1 Z"
+      ],
+      "category": "stylized-spelling",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Spelling reflecting voiced th-stopping in these."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-129",
+      "surface": "dose",
+      "normalized": "dose",
+      "accepted_pronunciations": [
+        "D OW1 Z"
+      ],
+      "category": "stylized-spelling",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Contextual spelling reflecting voiced th-stopping in those."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "D OW1 S"
+        ]
+      }
+    },
+    {
+      "id": "oov-130",
+      "surface": "wit",
+      "normalized": "wit",
+      "accepted_pronunciations": [
+        "W IH1 T"
+      ],
+      "category": "stylized-spelling",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Spelling reflecting final th-stopping in with."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "W IH1 T"
+        ]
+      }
+    },
+    {
+      "id": "oov-131",
+      "surface": "wut",
+      "normalized": "wut",
+      "accepted_pronunciations": [
+        "W AH1 T"
+      ],
+      "category": "stylized-spelling",
+      "region": "national-digital",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Stylized spelling of what."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-132",
+      "surface": "wat",
+      "normalized": "wat",
+      "accepted_pronunciations": [
+        "W AH1 T",
+        "W AA1 T"
+      ],
+      "category": "stylized-spelling",
+      "region": "national-digital",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Stylized spelling of what with common vowel variants."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "W AO1 T"
+        ]
+      }
+    },
+    {
+      "id": "oov-133",
+      "surface": "cuz",
+      "normalized": "cuz",
+      "accepted_pronunciations": [
+        "K AH1 Z"
+      ],
+      "category": "stylized-spelling",
+      "region": "national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Stylized spelling of because or cousin with shared surface pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-134",
+      "surface": "coz",
+      "normalized": "coz",
+      "accepted_pronunciations": [
+        "K AH1 Z"
+      ],
+      "category": "stylized-spelling",
+      "region": "national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Alternate stylized spelling of because."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "K AA1 Z"
+        ]
+      }
+    },
+    {
+      "id": "oov-135",
+      "surface": "boi",
+      "normalized": "boi",
+      "accepted_pronunciations": [
+        "B OY1"
+      ],
+      "category": "stylized-spelling",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Stylized spelling of boy."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-136",
+      "surface": "boyz",
+      "normalized": "boyz",
+      "accepted_pronunciations": [
+        "B OY1 Z"
+      ],
+      "category": "stylized-spelling",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Stylized plural spelling of boys."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "B OY1 Z"
+        ]
+      }
+    },
+    {
+      "id": "oov-137",
+      "surface": "gurl",
+      "normalized": "gurl",
+      "accepted_pronunciations": [
+        "G ER1 L"
+      ],
+      "category": "stylized-spelling",
+      "region": "national-digital",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Stylized spelling of girl."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-138",
+      "surface": "shawty",
+      "normalized": "shawty",
+      "accepted_pronunciations": [
+        "SH AO1 T IY0"
+      ],
+      "category": "stylized-spelling",
+      "region": "atlanta-and-south",
+      "evidence": [
+        "hip-hop-archive",
+        "regional-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Regional/stylized spelling of shorty."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-139",
+      "surface": "shordy",
+      "normalized": "shordy",
+      "accepted_pronunciations": [
+        "SH AO1 R D IY0"
+      ],
+      "category": "stylized-spelling",
+      "region": "south",
+      "evidence": [
+        "hip-hop-archive",
+        "regional-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Voiced-medial stylized variant of shorty."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-140",
+      "surface": "homie",
+      "normalized": "homie",
+      "accepted_pronunciations": [
+        "HH OW1 M IY0"
+      ],
+      "category": "stylized-spelling",
+      "region": "west-and-national",
+      "evidence": [
+        "hip-hop-archive",
+        "regional-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Conventional spelling of the colloquial form."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-141",
+      "surface": "homey",
+      "normalized": "homey",
+      "accepted_pronunciations": [
+        "HH OW1 M IY0"
+      ],
+      "category": "stylized-spelling",
+      "region": "west-and-national",
+      "evidence": [
+        "hip-hop-archive",
+        "regional-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Alternate spelling of homie."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "HH OW1 M IY0"
+        ]
+      }
+    },
+    {
+      "id": "oov-142",
+      "surface": "brotha",
+      "normalized": "brotha",
+      "accepted_pronunciations": [
+        "B R AH1 DH AH0"
+      ],
+      "category": "stylized-spelling",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Reduced/stylized spelling of brother."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-143",
+      "surface": "sista",
+      "normalized": "sista",
+      "accepted_pronunciations": [
+        "S IH1 S T AH0"
+      ],
+      "category": "stylized-spelling",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Reduced/stylized spelling of sister."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-144",
+      "surface": "motha",
+      "normalized": "motha",
+      "accepted_pronunciations": [
+        "M AH1 DH AH0"
+      ],
+      "category": "stylized-spelling",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Reduced/stylized spelling of mother."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-145",
+      "surface": "naw",
+      "normalized": "naw",
+      "accepted_pronunciations": [
+        "N AO1"
+      ],
+      "category": "stylized-spelling",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial negative response spelling."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "N AA1"
+        ]
+      }
+    },
+    {
+      "id": "oov-146",
+      "surface": "nah",
+      "normalized": "nah",
+      "accepted_pronunciations": [
+        "N AA1",
+        "N AE1"
+      ],
+      "category": "stylized-spelling",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial negative response with common vowel variation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "N AA1"
+        ]
+      }
+    },
+    {
+      "id": "oov-147",
+      "surface": "yep",
+      "normalized": "yep",
+      "accepted_pronunciations": [
+        "Y EH1 P"
+      ],
+      "category": "stylized-spelling",
+      "region": "national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial affirmative."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "Y EH1 P"
+        ]
+      }
+    },
+    {
+      "id": "oov-148",
+      "surface": "yup",
+      "normalized": "yup",
+      "accepted_pronunciations": [
+        "Y AH1 P"
+      ],
+      "category": "stylized-spelling",
+      "region": "national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial affirmative."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "Y AH1 P"
+        ]
+      }
+    },
+    {
+      "id": "oov-149",
+      "surface": "nope",
+      "normalized": "nope",
+      "accepted_pronunciations": [
+        "N OW1 P"
+      ],
+      "category": "stylized-spelling",
+      "region": "national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial negative response."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "N OW1 P"
+        ]
+      }
+    },
+    {
+      "id": "oov-150",
+      "surface": "hella",
+      "normalized": "hella",
+      "accepted_pronunciations": [
+        "HH EH1 L AH0"
+      ],
+      "category": "stylized-spelling",
+      "region": "bay-area-and-national",
+      "evidence": [
+        "hip-hop-archive",
+        "regional-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Regional intensifier with stable pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-151",
+      "surface": "milli",
+      "normalized": "milli",
+      "accepted_pronunciations": [
+        "M IH1 L IY0"
+      ],
+      "category": "stylized-spelling",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Clipped million."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "M IH1 L IY0"
+        ]
+      }
+    },
+    {
+      "id": "oov-152",
+      "surface": "trilli",
+      "normalized": "trilli",
+      "accepted_pronunciations": [
+        "T R IH1 L IY0"
+      ],
+      "category": "stylized-spelling",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Clipped trillion."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-153",
+      "surface": "killa",
+      "normalized": "killa",
+      "accepted_pronunciations": [
+        "K IH1 L AH0"
+      ],
+      "category": "stylized-spelling",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Stylized final-schwa spelling of killer."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-154",
+      "surface": "playa",
+      "normalized": "playa",
+      "accepted_pronunciations": [
+        "P L EY1 AH0"
+      ],
+      "category": "stylized-spelling",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Stylized final-schwa spelling of player."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "P L AY1 AH0"
+        ]
+      }
+    },
+    {
+      "id": "oov-155",
+      "surface": "gangsta",
+      "normalized": "gangsta",
+      "accepted_pronunciations": [
+        "G AE1 NG S T AH0"
+      ],
+      "category": "stylized-spelling",
+      "region": "west-and-national",
+      "evidence": [
+        "hip-hop-archive",
+        "regional-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Stylized final-schwa spelling of gangster."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "G AE1 NG S T AH0"
+        ]
+      }
+    },
+    {
+      "id": "oov-156",
+      "surface": "bruh",
+      "normalized": "bruh",
+      "accepted_pronunciations": [
+        "B R AH1"
+      ],
+      "category": "colloquialism",
+      "region": "national-aae",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Common address term."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-157",
+      "surface": "fam",
+      "normalized": "fam",
+      "accepted_pronunciations": [
+        "F AE1 M"
+      ],
+      "category": "colloquialism",
+      "region": "national-aae",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Clipped family used as an address term."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-158",
+      "surface": "cap",
+      "normalized": "cap",
+      "accepted_pronunciations": [
+        "K AE1 P"
+      ],
+      "category": "colloquialism",
+      "region": "national-aae",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial noun/verb for a lie or lying; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "K AE1 P"
+        ]
+      }
+    },
+    {
+      "id": "oov-159",
+      "surface": "opps",
+      "normalized": "opps",
+      "accepted_pronunciations": [
+        "AA1 P S"
+      ],
+      "category": "colloquialism",
+      "region": "chicago-and-national",
+      "evidence": [
+        "hip-hop-archive",
+        "regional-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Plural of opp, opponents."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-160",
+      "surface": "flex",
+      "normalized": "flex",
+      "accepted_pronunciations": [
+        "F L EH1 K S"
+      ],
+      "category": "colloquialism",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial display or boast; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "F L EH1 K S"
+        ]
+      }
+    },
+    {
+      "id": "oov-161",
+      "surface": "drip",
+      "normalized": "drip",
+      "accepted_pronunciations": [
+        "D R IH1 P"
+      ],
+      "category": "colloquialism",
+      "region": "atlanta-and-national",
+      "evidence": [
+        "hip-hop-archive",
+        "regional-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial stylish appearance; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "D R IH1 P"
+        ]
+      }
+    },
+    {
+      "id": "oov-162",
+      "surface": "lit",
+      "normalized": "lit",
+      "accepted_pronunciations": [
+        "L IH1 T"
+      ],
+      "category": "colloquialism",
+      "region": "national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial exciting or excellent; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "L IH1 T"
+        ]
+      }
+    },
+    {
+      "id": "oov-163",
+      "surface": "bussin",
+      "normalized": "bussin",
+      "accepted_pronunciations": [
+        "B AH1 S IH0 N"
+      ],
+      "category": "colloquialism",
+      "region": "national-aae",
+      "evidence": [
+        "green-aae-phonology",
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial excellent, with nasal-fronted ending."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-164",
+      "surface": "bet",
+      "normalized": "bet",
+      "accepted_pronunciations": [
+        "B EH1 T"
+      ],
+      "category": "colloquialism",
+      "region": "national-aae",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial agreement; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "B EH1 T"
+        ]
+      }
+    },
+    {
+      "id": "oov-165",
+      "surface": "sus",
+      "normalized": "sus",
+      "accepted_pronunciations": [
+        "S AH1 S"
+      ],
+      "category": "colloquialism",
+      "region": "national-digital",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Clipped suspicious."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "S AH1 S"
+        ]
+      }
+    },
+    {
+      "id": "oov-166",
+      "surface": "vibe",
+      "normalized": "vibe",
+      "accepted_pronunciations": [
+        "V AY1 B"
+      ],
+      "category": "colloquialism",
+      "region": "national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial atmosphere/feeling; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "V AY1 B"
+        ]
+      }
+    },
+    {
+      "id": "oov-167",
+      "surface": "clout",
+      "normalized": "clout",
+      "accepted_pronunciations": [
+        "K L AW1 T"
+      ],
+      "category": "colloquialism",
+      "region": "chicago-and-national",
+      "evidence": [
+        "hip-hop-archive",
+        "regional-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial influence/status; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "K L AW1 T"
+        ]
+      }
+    },
+    {
+      "id": "oov-168",
+      "surface": "guap",
+      "normalized": "guap",
+      "accepted_pronunciations": [
+        "G W AA1 P"
+      ],
+      "category": "colloquialism",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial money term."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-169",
+      "surface": "racks",
+      "normalized": "racks",
+      "accepted_pronunciations": [
+        "R AE1 K S"
+      ],
+      "category": "colloquialism",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial money term; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "R AE1 K S"
+        ]
+      }
+    },
+    {
+      "id": "oov-170",
+      "surface": "bands",
+      "normalized": "bands",
+      "accepted_pronunciations": [
+        "B AE1 N D Z"
+      ],
+      "category": "colloquialism",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial money term; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "B AE1 N D Z"
+        ]
+      }
+    },
+    {
+      "id": "oov-171",
+      "surface": "bag",
+      "normalized": "bag",
+      "accepted_pronunciations": [
+        "B AE1 G"
+      ],
+      "category": "colloquialism",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial money or opportunity term; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "B AE1 G"
+        ]
+      }
+    },
+    {
+      "id": "oov-172",
+      "surface": "bread",
+      "normalized": "bread",
+      "accepted_pronunciations": [
+        "B R EH1 D"
+      ],
+      "category": "colloquialism",
+      "region": "national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial money term; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "B R EH1 D"
+        ]
+      }
+    },
+    {
+      "id": "oov-173",
+      "surface": "cheddar",
+      "normalized": "cheddar",
+      "accepted_pronunciations": [
+        "CH EH1 D ER0"
+      ],
+      "category": "colloquialism",
+      "region": "national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial money term; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "CH EH1 D ER0"
+        ]
+      }
+    },
+    {
+      "id": "oov-174",
+      "surface": "ice",
+      "normalized": "ice",
+      "accepted_pronunciations": [
+        "AY1 S"
+      ],
+      "category": "colloquialism",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial jewelry term; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "AY1 S"
+        ]
+      }
+    },
+    {
+      "id": "oov-175",
+      "surface": "whip",
+      "normalized": "whip",
+      "accepted_pronunciations": [
+        "W IH1 P"
+      ],
+      "category": "colloquialism",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial vehicle term; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "W IH1 P",
+          "HH W IH1 P"
+        ]
+      }
+    },
+    {
+      "id": "oov-176",
+      "surface": "crib",
+      "normalized": "crib",
+      "accepted_pronunciations": [
+        "K R IH1 B"
+      ],
+      "category": "colloquialism",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial home term; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "K R IH1 B"
+        ]
+      }
+    },
+    {
+      "id": "oov-177",
+      "surface": "kicks",
+      "normalized": "kicks",
+      "accepted_pronunciations": [
+        "K IH1 K S"
+      ],
+      "category": "colloquialism",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial shoes term; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "K IH1 K S"
+        ]
+      }
+    },
+    {
+      "id": "oov-178",
+      "surface": "plug",
+      "normalized": "plug",
+      "accepted_pronunciations": [
+        "P L AH1 G"
+      ],
+      "category": "colloquialism",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial supplier/contact term; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "P L AH1 G"
+        ]
+      }
+    },
+    {
+      "id": "oov-179",
+      "surface": "trap",
+      "normalized": "trap",
+      "accepted_pronunciations": [
+        "T R AE1 P"
+      ],
+      "category": "colloquialism",
+      "region": "atlanta-and-national",
+      "evidence": [
+        "hip-hop-archive",
+        "regional-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Hip-hop sense has ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "T R AE1 P"
+        ]
+      }
+    },
+    {
+      "id": "oov-180",
+      "surface": "hood",
+      "normalized": "hood",
+      "accepted_pronunciations": [
+        "HH UH1 D"
+      ],
+      "category": "colloquialism",
+      "region": "national-aae",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Clipped neighborhood; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "HH UH1 D"
+        ]
+      }
+    },
+    {
+      "id": "oov-181",
+      "surface": "slatt",
+      "normalized": "slatt",
+      "accepted_pronunciations": [
+        "S L AE1 T"
+      ],
+      "category": "colloquialism",
+      "region": "atlanta",
+      "evidence": [
+        "hip-hop-archive",
+        "regional-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Regional hip-hop expression with a stable monosyllabic pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-182",
+      "surface": "wavy",
+      "normalized": "wavy",
+      "accepted_pronunciations": [
+        "W EY1 V IY0"
+      ],
+      "category": "colloquialism",
+      "region": "northeast-and-national",
+      "evidence": [
+        "hip-hop-archive",
+        "regional-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial stylish/excellent; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "W EY1 V IY0"
+        ]
+      }
+    },
+    {
+      "id": "oov-183",
+      "surface": "savage",
+      "normalized": "savage",
+      "accepted_pronunciations": [
+        "S AE1 V IH0 JH"
+      ],
+      "category": "colloquialism",
+      "region": "national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial fearless/ruthless sense; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "S AE1 V AH0 JH",
+          "S AE1 V IH0 JH"
+        ]
+      }
+    },
+    {
+      "id": "oov-184",
+      "surface": "goat",
+      "normalized": "goat",
+      "accepted_pronunciations": [
+        "G OW1 T"
+      ],
+      "category": "colloquialism",
+      "region": "national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Initialism lexicalized as the animal word pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "G OW1 T"
+        ]
+      }
+    },
+    {
+      "id": "oov-185",
+      "surface": "goated",
+      "normalized": "goated",
+      "accepted_pronunciations": [
+        "G OW1 T IH0 D"
+      ],
+      "category": "colloquialism",
+      "region": "national-digital",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Inflected form meaning regarded as greatest."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-186",
+      "surface": "mid",
+      "normalized": "mid",
+      "accepted_pronunciations": [
+        "M IH1 D"
+      ],
+      "category": "colloquialism",
+      "region": "national-digital",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial mediocre; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "M IH1 D"
+        ]
+      }
+    },
+    {
+      "id": "oov-187",
+      "surface": "fire",
+      "normalized": "fire",
+      "accepted_pronunciations": [
+        "F AY1 ER0",
+        "F AY1 R"
+      ],
+      "category": "colloquialism",
+      "region": "national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial excellent; common one- and two-syllable realizations."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "F AY1 ER0",
+          "F AY1 R"
+        ]
+      }
+    },
+    {
+      "id": "oov-188",
+      "surface": "dope",
+      "normalized": "dope",
+      "accepted_pronunciations": [
+        "D OW1 P"
+      ],
+      "category": "colloquialism",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial excellent; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "D OW1 P"
+        ]
+      }
+    },
+    {
+      "id": "oov-189",
+      "surface": "fly",
+      "normalized": "fly",
+      "accepted_pronunciations": [
+        "F L AY1"
+      ],
+      "category": "colloquialism",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial stylish; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "F L AY1"
+        ]
+      }
+    },
+    {
+      "id": "oov-190",
+      "surface": "fresh",
+      "normalized": "fresh",
+      "accepted_pronunciations": [
+        "F R EH1 SH"
+      ],
+      "category": "colloquialism",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial stylish/new; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "F R EH1 SH"
+        ]
+      }
+    },
+    {
+      "id": "oov-191",
+      "surface": "salty",
+      "normalized": "salty",
+      "accepted_pronunciations": [
+        "S AO1 L T IY0"
+      ],
+      "category": "colloquialism",
+      "region": "national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial resentful; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "S AO1 L T IY0"
+        ]
+      }
+    },
+    {
+      "id": "oov-192",
+      "surface": "pressed",
+      "normalized": "pressed",
+      "accepted_pronunciations": [
+        "P R EH1 S T"
+      ],
+      "category": "colloquialism",
+      "region": "national-aae",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial bothered; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "P R EH1 S T"
+        ]
+      }
+    },
+    {
+      "id": "oov-193",
+      "surface": "thirsty",
+      "normalized": "thirsty",
+      "accepted_pronunciations": [
+        "TH ER1 S T IY0"
+      ],
+      "category": "colloquialism",
+      "region": "national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial attention-seeking; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "TH ER1 S T IY0"
+        ]
+      }
+    },
+    {
+      "id": "oov-194",
+      "surface": "woke",
+      "normalized": "woke",
+      "accepted_pronunciations": [
+        "W OW1 K"
+      ],
+      "category": "colloquialism",
+      "region": "national-aae",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial socially aware; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "W OW1 K"
+        ]
+      }
+    },
+    {
+      "id": "oov-195",
+      "surface": "slept",
+      "normalized": "slept",
+      "accepted_pronunciations": [
+        "S L EH1 P T"
+      ],
+      "category": "colloquialism",
+      "region": "national-aae",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial overlooked; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "S L EH1 P T"
+        ]
+      }
+    },
+    {
+      "id": "oov-196",
+      "surface": "shade",
+      "normalized": "shade",
+      "accepted_pronunciations": [
+        "SH EY1 D"
+      ],
+      "category": "colloquialism",
+      "region": "national-aae",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial indirect disrespect; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "SH EY1 D"
+        ]
+      }
+    },
+    {
+      "id": "oov-197",
+      "surface": "tea",
+      "normalized": "tea",
+      "accepted_pronunciations": [
+        "T IY1"
+      ],
+      "category": "colloquialism",
+      "region": "national-aae",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial gossip/information; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "T IY1"
+        ]
+      }
+    },
+    {
+      "id": "oov-198",
+      "surface": "receipts",
+      "normalized": "receipts",
+      "accepted_pronunciations": [
+        "R IH0 S IY1 T S"
+      ],
+      "category": "colloquialism",
+      "region": "national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial evidence; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "R IH0 S IY1 T S",
+          "R IY0 S IY1 T S"
+        ]
+      }
+    },
+    {
+      "id": "oov-199",
+      "surface": "smoke",
+      "normalized": "smoke",
+      "accepted_pronunciations": [
+        "S M OW1 K"
+      ],
+      "category": "colloquialism",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial conflict; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "S M OW1 K"
+        ]
+      }
+    },
+    {
+      "id": "oov-200",
+      "surface": "beef",
+      "normalized": "beef",
+      "accepted_pronunciations": [
+        "B IY1 F"
+      ],
+      "category": "colloquialism",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Colloquial conflict; ordinary pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "B IY1 F"
+        ]
+      }
+    },
+    {
+      "id": "oov-201",
+      "surface": "ayy",
+      "normalized": "ayy",
+      "accepted_pronunciations": [
+        "EY1"
+      ],
+      "category": "ad-lib",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Common ad-lib spelling with diphthongal realization."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-202",
+      "surface": "ayyy",
+      "normalized": "ayyy",
+      "accepted_pronunciations": [
+        "EY1"
+      ],
+      "category": "ad-lib",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Lengthened spelling of ayy; duration is not encoded in ARPAbet."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-203",
+      "surface": "yuh",
+      "normalized": "yuh",
+      "accepted_pronunciations": [
+        "Y AH1"
+      ],
+      "category": "ad-lib",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Common ad-lib and reduced you spelling."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-204",
+      "surface": "yerr",
+      "normalized": "yerr",
+      "accepted_pronunciations": [
+        "Y ER1"
+      ],
+      "category": "ad-lib",
+      "region": "new-york-city",
+      "evidence": [
+        "hip-hop-archive",
+        "regional-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Regional greeting/ad-lib spelling."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-205",
+      "surface": "skrrt",
+      "normalized": "skrrt",
+      "accepted_pronunciations": [
+        "S K ER1 T"
+      ],
+      "category": "ad-lib",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Vehicle-sound ad-lib; repeated letters mark duration, not extra phones."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-206",
+      "surface": "skrt",
+      "normalized": "skrt",
+      "accepted_pronunciations": [
+        "S K ER1 T"
+      ],
+      "category": "ad-lib",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Compact spelling of skrrt."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-207",
+      "surface": "brr",
+      "normalized": "brr",
+      "accepted_pronunciations": [
+        "B ER1"
+      ],
+      "category": "ad-lib",
+      "region": "national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Cold-sound/ad-lib spelling."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-208",
+      "surface": "brrr",
+      "normalized": "brrr",
+      "accepted_pronunciations": [
+        "B ER1"
+      ],
+      "category": "ad-lib",
+      "region": "national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Lengthened brr spelling; duration is not encoded in ARPAbet."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-209",
+      "surface": "grr",
+      "normalized": "grr",
+      "accepted_pronunciations": [
+        "G R ER1"
+      ],
+      "category": "ad-lib",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Growl ad-lib spelling."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-210",
+      "surface": "grrr",
+      "normalized": "grrr",
+      "accepted_pronunciations": [
+        "G R ER1"
+      ],
+      "category": "ad-lib",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Lengthened grr spelling; duration is not encoded in ARPAbet."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-211",
+      "surface": "grah",
+      "normalized": "grah",
+      "accepted_pronunciations": [
+        "G R AA1"
+      ],
+      "category": "ad-lib",
+      "region": "new-york-drill",
+      "evidence": [
+        "hip-hop-archive",
+        "regional-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Drill-associated ad-lib spelling."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-212",
+      "surface": "grrah",
+      "normalized": "grrah",
+      "accepted_pronunciations": [
+        "G R AA1"
+      ],
+      "category": "ad-lib",
+      "region": "new-york-drill",
+      "evidence": [
+        "hip-hop-archive",
+        "regional-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Lengthened spelling of grah; duration is not encoded in ARPAbet."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-213",
+      "surface": "rah",
+      "normalized": "rah",
+      "accepted_pronunciations": [
+        "R AA1"
+      ],
+      "category": "ad-lib",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Common exclamatory ad-lib."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "R AA1"
+        ]
+      }
+    },
+    {
+      "id": "oov-214",
+      "surface": "sheesh",
+      "normalized": "sheesh",
+      "accepted_pronunciations": [
+        "SH IY1 SH"
+      ],
+      "category": "ad-lib",
+      "region": "national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Common reaction/ad-lib."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "SH IY1 SH"
+        ]
+      }
+    },
+    {
+      "id": "oov-215",
+      "surface": "woah",
+      "normalized": "woah",
+      "accepted_pronunciations": [
+        "W OW1"
+      ],
+      "category": "ad-lib",
+      "region": "national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Common transposed spelling of whoa."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-216",
+      "surface": "woo",
+      "normalized": "woo",
+      "accepted_pronunciations": [
+        "W UW1"
+      ],
+      "category": "ad-lib",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Common celebratory ad-lib."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "W UW1"
+        ]
+      }
+    },
+    {
+      "id": "oov-217",
+      "surface": "huh",
+      "normalized": "huh",
+      "accepted_pronunciations": [
+        "HH AH1"
+      ],
+      "category": "ad-lib",
+      "region": "national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Common questioning ad-lib."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "HH AH1"
+        ]
+      }
+    },
+    {
+      "id": "oov-218",
+      "surface": "uh",
+      "normalized": "uh",
+      "accepted_pronunciations": [
+        "AH1",
+        "AH0"
+      ],
+      "category": "ad-lib",
+      "region": "national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Common hesitation/ad-lib with stressed and unstressed realizations."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "AH1"
+        ]
+      }
+    },
+    {
+      "id": "oov-219",
+      "surface": "mmm",
+      "normalized": "mmm",
+      "accepted_pronunciations": [
+        "M"
+      ],
+      "category": "ad-lib",
+      "region": "national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Syllabic nasal ad-lib; duration is not encoded."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-220",
+      "surface": "pow",
+      "normalized": "pow",
+      "accepted_pronunciations": [
+        "P AW1"
+      ],
+      "category": "ad-lib",
+      "region": "national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Impact-sound ad-lib."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "P AW1"
+        ]
+      }
+    },
+    {
+      "id": "oov-221",
+      "surface": "bow",
+      "normalized": "bow",
+      "accepted_pronunciations": [
+        "B AW1"
+      ],
+      "category": "ad-lib",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Impact-sound ad-lib; distinguished from ordinary homographs by ad-lib context."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "B AW1",
+          "B OW1"
+        ]
+      }
+    },
+    {
+      "id": "oov-222",
+      "surface": "brrt",
+      "normalized": "brrt",
+      "accepted_pronunciations": [
+        "B ER1 T"
+      ],
+      "category": "ad-lib",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Percussive ad-lib spelling."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-223",
+      "surface": "pew",
+      "normalized": "pew",
+      "accepted_pronunciations": [
+        "P Y UW1"
+      ],
+      "category": "ad-lib",
+      "region": "national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Sound-effect ad-lib."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "P Y UW1"
+        ]
+      }
+    },
+    {
+      "id": "oov-224",
+      "surface": "ganggang",
+      "normalized": "ganggang",
+      "accepted_pronunciations": [
+        "G AE1 NG G AE2 NG"
+      ],
+      "category": "ad-lib",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Fused repeated group-call ad-lib."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-225",
+      "surface": "letsgo",
+      "normalized": "letsgo",
+      "accepted_pronunciations": [
+        "L EH1 T S G OW1"
+      ],
+      "category": "ad-lib",
+      "region": "national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Fused hype ad-lib let's go."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-226",
+      "surface": "ATL",
+      "normalized": "atl",
+      "accepted_pronunciations": [
+        "EY1 T IY1 EH1 L"
+      ],
+      "category": "proper-name-place-acronym",
+      "region": "atlanta",
+      "evidence": [
+        "hip-hop-archive",
+        "regional-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Letter-name pronunciation of Atlanta abbreviation."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-227",
+      "surface": "NYC",
+      "normalized": "nyc",
+      "accepted_pronunciations": [
+        "EH1 N W AY1 S IY1"
+      ],
+      "category": "proper-name-place-acronym",
+      "region": "new-york-city",
+      "evidence": [
+        "hip-hop-archive",
+        "regional-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Letter-name pronunciation of New York City abbreviation."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-228",
+      "surface": "DMV",
+      "normalized": "dmv",
+      "accepted_pronunciations": [
+        "D IY1 EH1 M V IY1"
+      ],
+      "category": "proper-name-place-acronym",
+      "region": "dc-maryland-virginia",
+      "evidence": [
+        "hip-hop-archive",
+        "regional-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Letter-name pronunciation of the regional abbreviation."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-229",
+      "surface": "H-Town",
+      "normalized": "h-town",
+      "accepted_pronunciations": [
+        "EY1 CH T AW1 N"
+      ],
+      "category": "proper-name-place-acronym",
+      "region": "houston",
+      "evidence": [
+        "hip-hop-archive",
+        "regional-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Letter-name plus town pronunciation for Houston nickname."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-230",
+      "surface": "Chi-Town",
+      "normalized": "chi-town",
+      "accepted_pronunciations": [
+        "SH AY1 T AW2 N"
+      ],
+      "category": "proper-name-place-acronym",
+      "region": "chicago",
+      "evidence": [
+        "hip-hop-archive",
+        "regional-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Conventional Chicago nickname pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-231",
+      "surface": "NOLA",
+      "normalized": "nola",
+      "accepted_pronunciations": [
+        "N OW1 L AH0"
+      ],
+      "category": "proper-name-place-acronym",
+      "region": "new-orleans",
+      "evidence": [
+        "hip-hop-archive",
+        "regional-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Lexicalized New Orleans Louisiana abbreviation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "N OW1 L AH0"
+        ]
+      }
+    },
+    {
+      "id": "oov-232",
+      "surface": "Cali",
+      "normalized": "cali",
+      "accepted_pronunciations": [
+        "K AE1 L IY0"
+      ],
+      "category": "proper-name-place-acronym",
+      "region": "california",
+      "evidence": [
+        "hip-hop-archive",
+        "regional-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Conventional California clipping."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "K AA1 L IY0",
+          "K AE1 L IY0"
+        ]
+      }
+    },
+    {
+      "id": "oov-233",
+      "surface": "BK",
+      "normalized": "bk",
+      "accepted_pronunciations": [
+        "B IY1 K EY1"
+      ],
+      "category": "proper-name-place-acronym",
+      "region": "brooklyn",
+      "evidence": [
+        "hip-hop-archive",
+        "regional-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Letter-name Brooklyn abbreviation."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-234",
+      "surface": "STL",
+      "normalized": "stl",
+      "accepted_pronunciations": [
+        "EH1 S T IY1 EH1 L"
+      ],
+      "category": "proper-name-place-acronym",
+      "region": "st-louis",
+      "evidence": [
+        "hip-hop-archive",
+        "regional-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Letter-name St. Louis abbreviation."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-235",
+      "surface": "Pac",
+      "normalized": "pac",
+      "accepted_pronunciations": [
+        "P AE1 K"
+      ],
+      "category": "proper-name-place-acronym",
+      "region": "west-coast",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Common artist-name clipping with stable pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "P AE1 K"
+        ]
+      }
+    },
+    {
+      "id": "oov-236",
+      "surface": "Hov",
+      "normalized": "hov",
+      "accepted_pronunciations": [
+        "HH OW1 V"
+      ],
+      "category": "proper-name-place-acronym",
+      "region": "new-york-city",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Artist-name clipping with stable pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-237",
+      "surface": "Weezy",
+      "normalized": "weezy",
+      "accepted_pronunciations": [
+        "W IY1 Z IY0"
+      ],
+      "category": "proper-name-place-acronym",
+      "region": "new-orleans",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Artist nickname with stable pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-238",
+      "surface": "R&B",
+      "normalized": "r&b",
+      "accepted_pronunciations": [
+        "AA1 R AH0 N B IY1"
+      ],
+      "category": "proper-name-place-acronym",
+      "region": "national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Letter-name genre abbreviation with reduced and."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-239",
+      "surface": "Bey",
+      "normalized": "bey",
+      "accepted_pronunciations": [
+        "B EY1"
+      ],
+      "category": "proper-name-place-acronym",
+      "region": "houston-and-national",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Artist-name clipping with stable pronunciation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "B EY1"
+        ]
+      }
+    },
+    {
+      "id": "oov-240",
+      "surface": "LA",
+      "normalized": "la",
+      "accepted_pronunciations": [
+        "EH1 L EY1"
+      ],
+      "category": "proper-name-place-acronym",
+      "region": "los-angeles",
+      "evidence": [
+        "hip-hop-archive",
+        "regional-aae-variation"
+      ],
+      "adjudication": {
+        "state": "accepted",
+        "rationale": "Letter-name pronunciation of Los Angeles abbreviation."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "L AA1"
+        ]
+      }
+    },
+    {
+      "id": "oov-241",
+      "surface": "ONG",
+      "normalized": "ong",
+      "accepted_pronunciations": [],
+      "category": "ambiguous-negative",
+      "region": "national-digital",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "rejected-ambiguous",
+        "rationale": "May be read as on God or as three letter names; no single pronunciation is safe without context."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "AO1 NG"
+        ]
+      }
+    },
+    {
+      "id": "oov-242",
+      "surface": "ASL",
+      "normalized": "asl",
+      "accepted_pronunciations": [],
+      "category": "ambiguous-negative",
+      "region": "national-digital",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "rejected-ambiguous",
+        "rationale": "May mean as hell, American Sign Language, age/sex/location, or letter names; reject without context."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-243",
+      "surface": "FR",
+      "normalized": "fr",
+      "accepted_pronunciations": [],
+      "category": "ambiguous-negative",
+      "region": "national-digital",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "rejected-ambiguous",
+        "rationale": "May expand to for real or be spoken as letter names; reject without context."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    },
+    {
+      "id": "oov-244",
+      "surface": "FS",
+      "normalized": "fs",
+      "accepted_pronunciations": [],
+      "category": "ambiguous-negative",
+      "region": "national-digital",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "rejected-ambiguous",
+        "rationale": "May expand to for sure or be spoken as letter names; reject without context."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "F S",
+          "EH1 F EH1 S"
+        ]
+      }
+    },
+    {
+      "id": "oov-245",
+      "surface": "TS",
+      "normalized": "ts",
+      "accepted_pronunciations": [],
+      "category": "ambiguous-negative",
+      "region": "national-digital",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "rejected-ambiguous",
+        "rationale": "Multiple phrase expansions and letter-name reading compete; reject without context."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "T IY1 EH1 S"
+        ]
+      }
+    },
+    {
+      "id": "oov-246",
+      "surface": "P",
+      "normalized": "p",
+      "accepted_pronunciations": [],
+      "category": "ambiguous-negative",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "rejected-ambiguous",
+        "rationale": "May be a letter name, initial, money/drug shorthand, or clipped address term; reject without context."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "P IY1"
+        ]
+      }
+    },
+    {
+      "id": "oov-247",
+      "surface": "B",
+      "normalized": "b",
+      "accepted_pronunciations": [],
+      "category": "ambiguous-negative",
+      "region": "national-aae",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "rejected-ambiguous",
+        "rationale": "May be a letter name or several clipped address/group terms; reject without context."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "B IY1"
+        ]
+      }
+    },
+    {
+      "id": "oov-248",
+      "surface": "X",
+      "normalized": "x",
+      "accepted_pronunciations": [],
+      "category": "ambiguous-negative",
+      "region": "national-hip-hop",
+      "evidence": [
+        "hip-hop-archive"
+      ],
+      "adjudication": {
+        "state": "rejected-ambiguous",
+        "rationale": "May be a letter name, artist/name reference, multiplication marker, or drug shorthand; reject without context."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "EH1 K S",
+          "AE1 K S"
+        ]
+      }
+    },
+    {
+      "id": "oov-249",
+      "surface": "DC",
+      "normalized": "dc",
+      "accepted_pronunciations": [],
+      "category": "ambiguous-negative",
+      "region": "dc-and-national-digital",
+      "evidence": [
+        "regional-aae-variation"
+      ],
+      "adjudication": {
+        "state": "rejected-ambiguous",
+        "rationale": "May be District of Columbia, don't care, disconnect, or letter names; reject without context."
+      },
+      "legacy_cmu": {
+        "status": "present-in-legacy-cmu",
+        "matches": [
+          "D IY2 S IY1"
+        ]
+      }
+    },
+    {
+      "id": "oov-250",
+      "surface": "OC",
+      "normalized": "oc",
+      "accepted_pronunciations": [],
+      "category": "ambiguous-negative",
+      "region": "national-digital",
+      "evidence": [
+        "regional-aae-variation"
+      ],
+      "adjudication": {
+        "state": "rejected-ambiguous",
+        "rationale": "May be Orange County, original character, or letter names; reject without context."
+      },
+      "legacy_cmu": {
+        "status": "confirmed-oov",
+        "matches": []
+      }
+    }
+  ]
+}

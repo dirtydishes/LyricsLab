@@ -1,0 +1,62 @@
+[
+  {
+    "basis": "Project editorial review of productive -ing to -in forms: the spelling represents an unstressed IH0 nucleus followed by alveolar N, not deletion of the nasal. Direct transcriptions were checked against the repository legacy CMU snapshot and must be revalidated against the exact Phase 04A pin; regional tags indicate relevance, not claimed origin.",
+    "id": "editorial.dropped",
+    "kind": "project-editorial",
+    "reviewedAt": "2026-07-12"
+  },
+  {
+    "basis": "Project editorial review of apostrophe-marked colloquial spellings and their unmarked counterparts.",
+    "id": "editorial.apostrophe",
+    "kind": "project-editorial",
+    "reviewedAt": "2026-07-12"
+  },
+  {
+    "basis": "Project editorial review of established fused conversational forms used in contemporary US hip-hop writing.",
+    "id": "editorial.fused",
+    "kind": "project-editorial",
+    "reviewedAt": "2026-07-12"
+  },
+  {
+    "basis": "Project editorial review of deliberate phonetic and stylized spellings used in contemporary writing.",
+    "id": "editorial.stylized",
+    "kind": "project-editorial",
+    "reviewedAt": "2026-07-12"
+  },
+  {
+    "basis": "Project editorial review of contemporary colloquial vocabulary and ordinary profanity.",
+    "id": "editorial.colloquial",
+    "kind": "project-editorial",
+    "reviewedAt": "2026-07-12"
+  },
+  {
+    "basis": "Project editorial review of non-lexical and lexical hip-hop ad-libs with direct ARPAbet transcription.",
+    "id": "editorial.adlib",
+    "kind": "project-editorial",
+    "reviewedAt": "2026-07-12"
+  },
+  {
+    "basis": "Project editorial review of productive inflections of contemporary vocabulary.",
+    "id": "editorial.inflection",
+    "kind": "project-editorial",
+    "reviewedAt": "2026-07-12"
+  },
+  {
+    "basis": "Narrow project-maintained high-risk identity-slur policy review; retained only to analyze typed anchors and suppress unsolicited output.",
+    "id": "editorial.safety",
+    "kind": "project-editorial",
+    "reviewedAt": "2026-07-12"
+  },
+  {
+    "basis": "Project editorial review of US place names and regional acronyms relevant to hip-hop writing; inclusion does not imply origin claims.",
+    "id": "editorial.proper",
+    "kind": "project-editorial",
+    "reviewedAt": "2026-07-12"
+  },
+  {
+    "basis": "Disclosed project editorial remediation after inspecting the immutable independent OOV evaluation. Additions were individually reviewed for the already accepted contemporary categories and standard ARPAbet; this evidence is intentionally not independent of the sealed acceptance set.",
+    "id": "editorial.post-seal-remediation",
+    "kind": "project-editorial",
+    "reviewedAt": "2026-07-12"
+  }
+]
