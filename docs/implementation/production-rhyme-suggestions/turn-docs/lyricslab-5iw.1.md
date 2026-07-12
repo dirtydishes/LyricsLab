@@ -96,7 +96,9 @@ Evidence:
 
 ## PR And Commits
 
-None.
+- `0549c3ee` — `build production rhyme theme foundation`
+- PR #23: `https://github.com/dirtydishes/lyricslab/pull/23`
+- Explicit base/head: `lavender/expo-clean-rebuild` <- `lavender/production-rhyme-phase-01`
 
 ## Beads Updates And Follow-Ups
 
