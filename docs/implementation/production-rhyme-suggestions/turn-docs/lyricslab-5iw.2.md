@@ -125,12 +125,14 @@ Evidence:
 - PR: [#24](https://github.com/dirtydishes/lyricslab/pull/24), opened as exactly one PR with explicit base `lavender/expo-clean-rebuild` and head `lavender/production-rhyme-phase-02`.
 - PR-evidence commit: `d75873e4` (`record phase two pull request`).
 - Review-repair commit: `5023233d` (`repair phase two review findings`), committed and pushed by the orchestrator after the reviewer returned the repaired working tree.
+- Review-closeout commit: `130c3573` (`record phase two review closeout`).
+- PR #24 merged into `lavender/expo-clean-rebuild` as merge commit `75c3a5b2`.
 
 ## Beads Updates And Follow-Ups
 
 Issue depends on `lyricslab-5iw.1`.
 
-- `.beads/issues.jsonl` records `lyricslab-5iw.2` as `in_progress`; this task did not close or mutate Beads.
+- Beads issue `lyricslab-5iw.2` is closed after the reviewed PR merged; exported canonical state records the review evidence and `ci-unavailable-with-evidence` close reason.
 - Phase 03 should consume the production construction seam behind `RhymeEngine` when it adds compiled data/loading; it must not expose artifact or loader types to editor callers.
 - No new follow-up issue is recommended from implementation evidence. Independent review findings, if any, should remain Phase 02 repairs unless they belong to an already-planned later phase.
 
@@ -146,4 +148,4 @@ The bundled provider intentionally uses `createLegacyRhymeEngineAdapter` until t
 
 ## Closeout
 
-Implementation, strict independent review, review repair commit/push, and hosted reinspection are complete. The repaired head is green locally, cleanly mergeable on GitHub, and has no remaining in-scope findings. Merge and Beads closeout remain orchestrator-owned.
+Implementation, strict independent review, repairs, hosted reinspection, merge, and Beads closeout are complete. Phase 03 may now build its deterministic data pipeline behind the accepted `RhymeEngine` seam.
