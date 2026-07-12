@@ -113,8 +113,9 @@ Evidence:
 - Deterministic controls cover repeated identical queries, reversed lexicon construction, reversed pronunciation order, stable IDs, exact `0.12` lemma repetition penalties, and explicit/omitted result limits.
 - Forbidden-import control recursively scans the production and transitional adapter import graph for React, React Native, WebView, SQLite, Expo, network clients, and the generated CMU artifact; passed.
 - `git diff --check` — passed.
-- Local mergeability evidence: `origin/lavender/expo-clean-rebuild` is an ancestor of PR head `d75873e4`; local divergence is `0 3`, with no base-side divergence.
-- Hosted state: `ci-unavailable-with-evidence`. The repository contains no checked-in `.github` workflow files. Review-final `gh pr view 24 ...` and `gh pr checks 24` both failed with `error connecting to api.github.com` under the task's restricted network. GitHub mergeability/check conclusions therefore remain unavailable; the orchestrator owns the post-push hosted recheck.
+- Local mergeability evidence: `origin/lavender/expo-clean-rebuild` is an ancestor of the reviewed phase history, with no base-side divergence.
+- Hosted recheck after the repair push: PR #24 reports head `5023233d`, explicit base/head `lavender/expo-clean-rebuild` / `lavender/production-rhyme-phase-02`, `MERGEABLE`, and `CLEAN`.
+- Hosted CI remains `ci-unavailable-with-evidence`: the repository contains no checked-in `.github` workflow files, the commit status API reports zero contexts, and the workflow-run query returns no runs.
 
 ## PR And Commits
 
@@ -122,7 +123,8 @@ Evidence:
 - Preparation commit: `c6c863ab` (`prepare production rhyme phase two`).
 - Implementation commit: `50d15c6d` (`build production rhyme engine core`), committed and pushed by the orchestrator after the delegated task returned its complete working tree.
 - PR: [#24](https://github.com/dirtydishes/lyricslab/pull/24), opened as exactly one PR with explicit base `lavender/expo-clean-rebuild` and head `lavender/production-rhyme-phase-02`.
-- Review began at PR head `d75873e4` (`record phase two pull request`). Review repairs are complete in the working tree but uncommitted because Git metadata is read-only; the orchestrator must commit and push them to the same PR before hosted reinspection.
+- PR-evidence commit: `d75873e4` (`record phase two pull request`).
+- Review-repair commit: `5023233d` (`repair phase two review findings`), committed and pushed by the orchestrator after the reviewer returned the repaired working tree.
 
 ## Beads Updates And Follow-Ups
 
@@ -144,4 +146,4 @@ The bundled provider intentionally uses `createLegacyRhymeEngineAdapter` until t
 
 ## Closeout
 
-Implementation and strict independent review are complete locally. The repaired working tree is green with no remaining in-scope findings. Review repair commit/push, hosted reinspection, merge, and Beads closeout remain orchestrator-owned.
+Implementation, strict independent review, review repair commit/push, and hosted reinspection are complete. The repaired head is green locally, cleanly mergeable on GitHub, and has no remaining in-scope findings. Merge and Beads closeout remain orchestrator-owned.
