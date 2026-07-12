@@ -1,0 +1,2 @@
+# Preserve pinned third-party acknowledgement bytes verbatim.
+data/rhyme-production/cmudict-README.txt -whitespace

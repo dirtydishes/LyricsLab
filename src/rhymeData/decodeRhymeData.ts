@@ -188,10 +188,6 @@ export async function decodeRhymeData(
   const lexemes: RhymeLexemeInput[] = [];
   for (let index = 0; index < words.length; index += 1) {
     const word = words[index];
-    if ((word.flags & RhymeDataWordFlag.safetyBlocked) !== 0) {
-      await maybeYield(index + 1, options);
-      continue;
-    }
     lexemes.push({
       commonness: word.commonness,
       lemma: word.lemma,
@@ -209,6 +205,10 @@ export async function decodeRhymeData(
             )
             .map((phoneId) => phoneNames[phoneId]),
         })),
+      suggestionEligible: (
+        word.flags &
+        (RhymeDataWordFlag.safetyBlocked | RhymeDataWordFlag.properNoun)
+      ) === 0,
       word: word.word,
     });
     await maybeYield(index + 1, options);

@@ -11,6 +11,7 @@ import {
   MAX_PRONUNCIATIONS_PER_WORD,
   MAX_STRING_BYTES,
 } from './format.mjs';
+import { loadProductionRhymeData } from './production-sources.mjs';
 
 const SHA256_PATTERN = /^[a-f0-9]{64}$/u;
 const ALLOWED_FLAGS = new Set(['proper-noun', 'rap', 'safety-blocked']);
@@ -22,10 +23,12 @@ export async function loadRhymeDataManifest(manifestPath) {
   validateManifest(manifest);
 
   const manifestDirectory = await realpath(path.dirname(absoluteManifestPath));
+  const projectRoot = path.resolve(import.meta.dirname, '../..');
+  const sourceRoot = manifest.provenance.production ? projectRoot : manifestDirectory;
   const sources = [];
 
   for (const source of manifest.sources) {
-    const sourcePath = await resolveContainedPath(manifestDirectory, source.path);
+    const sourcePath = await resolveContainedPath(sourceRoot, source.path);
     const bytes = await readFile(sourcePath);
     const actualHash = sha256(bytes);
 
@@ -36,6 +39,15 @@ export async function loadRhymeDataManifest(manifestPath) {
     }
 
     sources.push({ ...source, absolutePath: sourcePath, bytes });
+  }
+
+  if (manifest.provenance.production) {
+    return loadProductionRhymeData({
+      manifest,
+      manifestHash: sha256(rawManifest),
+      projectRoot,
+      sources,
+    });
   }
 
   const lexiconSources = sources.filter(
@@ -59,9 +71,12 @@ export async function loadRhymeDataManifest(manifestPath) {
 
 function validateManifest(value) {
   assertObject(value, 'Manifest');
+  const isProduction = value.provenance?.production === true;
   assertExactKeys(
     value,
-    ['artifact', 'provenance', 'schema', 'schemaVersion', 'sources'],
+    isProduction
+      ? ['artifact', 'externalPins', 'provenance', 'schema', 'schemaVersion', 'sources']
+      : ['artifact', 'provenance', 'schema', 'schemaVersion', 'sources'],
     'Manifest',
   );
 
@@ -86,8 +101,11 @@ function validateManifest(value) {
   assertNonEmptyString(value.provenance.owner, 'Manifest provenance owner');
   assertNonEmptyString(value.provenance.purpose, 'Manifest provenance purpose');
 
-  if (value.provenance.production !== false) {
-    throw new Error('Phase 03 accepts only a non-production project fixture');
+  if (
+    value.provenance.production !== false &&
+    value.provenance.production !== true
+  ) {
+    throw new Error('Manifest provenance production must be boolean');
   }
 
   if (!Array.isArray(value.sources) || value.sources.length === 0) {
@@ -112,7 +130,10 @@ function validateManifest(value) {
       throw new Error(`Manifest source ${source.id} has an invalid SHA-256`);
     }
 
-    if (source.ownership !== 'project-authored') {
+    if (
+      !isProduction &&
+      source.ownership !== 'project-authored'
+    ) {
       throw new Error(`Phase 03 source ${source.id} is not project-authored`);
     }
 
@@ -235,7 +256,18 @@ async function resolveContainedPath(root, relativePath) {
     throw new Error('Manifest source paths must be relative');
   }
 
-  const resolved = await realpath(path.resolve(root, relativePath));
+  const candidate = path.resolve(root, relativePath);
+  const candidateRelative = path.relative(root, candidate);
+
+  if (
+    candidateRelative === '..' ||
+    candidateRelative.startsWith(`..${path.sep}`) ||
+    path.isAbsolute(candidateRelative)
+  ) {
+    throw new Error(`Manifest source path escapes its directory: ${relativePath}`);
+  }
+
+  const resolved = await realpath(candidate);
   const relative = path.relative(root, resolved);
 
   if (
