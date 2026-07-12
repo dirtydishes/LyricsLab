@@ -260,6 +260,7 @@ function validateLexemes(value) {
   }
 
   const words = new Set();
+  const ranks = new Set();
 
   for (const [index, lexeme] of value.entries()) {
     assertObject(lexeme, `Lexeme ${index}`);
@@ -303,6 +304,7 @@ function validateLexemes(value) {
     ) {
       throw new Error(`Lexeme ${index} rank must be a positive integer`);
     }
+    ranks.add(lexeme.rank);
 
     if (words.has(normalizedWord)) {
       throw new Error(`Duplicate fixture word: ${normalizedWord}`);
@@ -357,6 +359,13 @@ function validateLexemes(value) {
         throw new Error(`Lexeme ${index} contains invalid or duplicate flags`);
       }
     }
+  }
+
+  if (
+    ranks.size !== value.length ||
+    value.some((_lexeme, index) => !ranks.has(index + 1))
+  ) {
+    throw new Error('Lexeme ranks must be a contiguous permutation from 1 to the lexeme count');
   }
 }
 

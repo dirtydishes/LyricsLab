@@ -7,6 +7,30 @@ import { isValidArpabetPhone, normalizeRhymeWord } from './phonology.mjs';
 const TAR_BLOCK_BYTES = 512;
 const MAX_UNPACKED_SUBTLEX_BYTES = 8 * 1024 * 1024;
 const MAX_CMU_BYTES = 8 * 1024 * 1024;
+const CMUDICT_PIN = Object.freeze({
+  branch: 'master',
+  committedAt: '2025-10-24T13:40:26-04:00',
+  license: 'CMUdict license, Copyright (C) 1993-2015 Carnegie Mellon University',
+  repository: 'https://github.com/cmusphinx/cmudict.git',
+  revision: '74790861f652b15e4ac49015a90074ad62a27690',
+});
+const SUBTLEX_PIN = Object.freeze({
+  copyright: 'Copyright (c) 2015 Zeke Sikelianos <zeke@sikelianos.com>',
+  entries: 74286,
+  license: 'ISC',
+  name: 'subtlex-word-frequencies',
+  publishedAt: '2020-02-13T08:21:39.120Z',
+  registry: 'https://registry.npmjs.org/',
+  tarball: 'https://registry.npmjs.org/subtlex-word-frequencies/-/subtlex-word-frequencies-2.0.0.tgz',
+  upstream: 'https://www.ugent.be/pp/experimentele-psychologie/en/research/documents/subtlexus',
+  version: '2.0.0',
+});
+const SUBTLEX_INTERNAL_PATHS = Object.freeze([
+  'package/index.json',
+  'package/license',
+  'package/package.json',
+  'package/readme.md',
+]);
 
 /**
  * Verifies the pinned npm archive and returns its validated frequency records.
@@ -155,9 +179,11 @@ export function verifyProductionProvenance(value) {
   }
   if (
     !value.cmudict ||
-    value.cmudict.repository !== 'https://github.com/cmusphinx/cmudict.git' ||
-    value.cmudict.branch !== 'master' ||
-    !/^[a-f0-9]{40}$/u.test(value.cmudict.revision) ||
+    value.cmudict.repository !== CMUDICT_PIN.repository ||
+    value.cmudict.branch !== CMUDICT_PIN.branch ||
+    value.cmudict.revision !== CMUDICT_PIN.revision ||
+    value.cmudict.committedAt !== CMUDICT_PIN.committedAt ||
+    value.cmudict.license !== CMUDICT_PIN.license ||
     !Array.isArray(value.cmudict.files) ||
     value.cmudict.files.length !== 3 ||
     !value.cmudict.acknowledgement?.includes('Carnegie Mellon')
@@ -187,10 +213,21 @@ export function verifyProductionProvenance(value) {
   }
   if (
     !value.subtlex ||
-    value.subtlex.name !== 'subtlex-word-frequencies' ||
-    value.subtlex.version !== '2.0.0' ||
-    value.subtlex.license !== 'ISC' ||
-    value.subtlex.entries !== 74286 ||
+    value.subtlex.name !== SUBTLEX_PIN.name ||
+    value.subtlex.version !== SUBTLEX_PIN.version ||
+    value.subtlex.license !== SUBTLEX_PIN.license ||
+    value.subtlex.entries !== SUBTLEX_PIN.entries ||
+    value.subtlex.registry !== SUBTLEX_PIN.registry ||
+    value.subtlex.tarball !== SUBTLEX_PIN.tarball ||
+    value.subtlex.publishedAt !== SUBTLEX_PIN.publishedAt ||
+    value.subtlex.copyright !== SUBTLEX_PIN.copyright ||
+    value.subtlex.upstream !== SUBTLEX_PIN.upstream ||
+    !Number.isSafeInteger(value.subtlex.bytes) ||
+    value.subtlex.bytes <= 0 ||
+    !/^[a-f0-9]{40}$/u.test(value.subtlex.shasum) ||
+    !/^[a-f0-9]{64}$/u.test(value.subtlex.sha256) ||
+    !/^[a-f0-9]{128}$/u.test(value.subtlex.sha512) ||
+    !/^sha512-[A-Za-z0-9+/]+={0,2}$/u.test(value.subtlex.integrity) ||
     !value.subtlex.citation?.includes('https://doi.org/10.3758/BRM.41.4.977') ||
     !value.subtlex.upstreamCaveat?.includes('does not state an ISC license')
   ) {
@@ -205,6 +242,26 @@ export function verifyProductionProvenance(value) {
     ],
     'SUBTLEX provenance',
   );
+  if (
+    !Array.isArray(value.subtlex.internalFiles) ||
+    value.subtlex.internalFiles.length !== SUBTLEX_INTERNAL_PATHS.length
+  ) {
+    throw new Error('SUBTLEX provenance internal file pin is malformed');
+  }
+  const internalPaths = value.subtlex.internalFiles.map((file) => file.path).sort();
+  if (JSON.stringify(internalPaths) !== JSON.stringify(SUBTLEX_INTERNAL_PATHS)) {
+    throw new Error('SUBTLEX provenance internal file set is incomplete');
+  }
+  for (const file of value.subtlex.internalFiles) {
+    assertExactKeys(file, ['bytes', 'path', 'sha256'], 'SUBTLEX internal file pin');
+    if (
+      !Number.isSafeInteger(file.bytes) ||
+      file.bytes < 0 ||
+      !/^[a-f0-9]{64}$/u.test(file.sha256)
+    ) {
+      throw new Error(`SUBTLEX provenance internal file pin is malformed: ${file.path}`);
+    }
+  }
 }
 
 function parseCmuDictionary(bytes) {

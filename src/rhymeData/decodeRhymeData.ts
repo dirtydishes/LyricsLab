@@ -451,6 +451,7 @@ async function readRanks(
   options: DecodeRhymeDataOptions,
 ) {
   const commonness: number[] = [];
+  const ranks = new Set<number>();
   for (let index = 0; index < section.count; index += 1) {
     const offset = section.offset + index * section.width;
     const rank = view.getUint32(offset, true);
@@ -458,8 +459,16 @@ async function readRanks(
     if (rank === 0 || scaledCommonness > 1_000_000) {
       throw new Error('Word rank record is out of bounds');
     }
+    ranks.add(rank);
     commonness.push(scaledCommonness / 1_000_000);
     await maybeYield(index + 1, options);
+  }
+  let ranksAreContiguous = ranks.size === section.count;
+  for (let rank = 1; ranksAreContiguous && rank <= section.count; rank += 1) {
+    ranksAreContiguous = ranks.has(rank);
+  }
+  if (!ranksAreContiguous) {
+    throw new Error('Word ranks must be a contiguous permutation');
   }
   return commonness;
 }

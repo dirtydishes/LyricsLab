@@ -6,6 +6,7 @@ import { gzipSync } from 'node:zlib';
 
 import {
   assembleProductionLexemes,
+  verifyProductionProvenance,
   verifySubtlexPackage,
 } from './rhyme-data/productionSources.mjs';
 
@@ -15,10 +16,43 @@ await assert.rejects(
   /archive path/u,
 );
 
+for (const unsafePath of [
+  '/absolute',
+  'C:/windows',
+  '..\\backslash-escape',
+  'package/../escape',
+]) {
+  const tarball = gzipSync(createTar(unsafePath, Buffer.from('nope')));
+  await assert.rejects(
+    async () => verifySubtlexPackage(tarball, pinForTar(tarball)),
+    /archive path/u,
+    unsafePath,
+  );
+}
+
 const linkTarball = gzipSync(createTar('package/index.json', Buffer.from('{}'), '2'));
 await assert.rejects(
   async () => verifySubtlexPackage(linkTarball, pinForTar(linkTarball)),
   /regular file/u,
+);
+
+for (const type of ['1', '5', 'x']) {
+  const tarball = gzipSync(createTar('package/index.json', Buffer.from('{}'), type));
+  await assert.rejects(
+    async () => verifySubtlexPackage(tarball, pinForTar(tarball)),
+    /regular file/u,
+    `archive entry type ${type}`,
+  );
+}
+
+const linkedRegularTarball = gzipSync(createTarEntries([{
+  contents: Buffer.from('{}'),
+  linkTarget: '../target',
+  name: 'package/index.json',
+}]));
+await assert.rejects(
+  async () => verifySubtlexPackage(linkedRegularTarball, pinForTar(linkedRegularTarball)),
+  /link target/u,
 );
 
 const corruptedHeader = createTar('package/index.json', Buffer.from('{}'));
@@ -29,6 +63,22 @@ await assert.rejects(
     return verifySubtlexPackage(tarball, pinForTar(tarball));
   },
   /checksum/u,
+);
+
+const truncatedTarball = gzipSync(
+  createTar('package/index.json', Buffer.from('{}')).subarray(0, -512),
+);
+await assert.rejects(
+  async () => verifySubtlexPackage(truncatedTarball, pinForTar(truncatedTarball)),
+  /end markers/u,
+);
+
+const trailingArchive = createTar('package/index.json', Buffer.from('{}'));
+trailingArchive[trailingArchive.length - 1] = 1;
+const trailingTarball = gzipSync(trailingArchive);
+await assert.rejects(
+  async () => verifySubtlexPackage(trailingTarball, pinForTar(trailingTarball)),
+  /trailing data/u,
 );
 
 const provenance = JSON.parse(
@@ -44,6 +94,26 @@ assert.equal(
 );
 assert.match(provenance.subtlex.citation, /10\.3758\/BRM\.41\.4\.977/u);
 assert.match(provenance.subtlex.upstreamCaveat, /does not state an ISC license/u);
+
+for (const [label, mutate] of [
+  ['CMU commit timestamp', (copy) => { copy.cmudict.committedAt = 'not-a-timestamp'; }],
+  ['CMU license declaration', (copy) => { copy.cmudict.license = 'unknown'; }],
+  ['SUBTLEX registry', (copy) => { copy.subtlex.registry = 'https://example.invalid/'; }],
+  ['SUBTLEX tarball', (copy) => { copy.subtlex.tarball = 'https://example.invalid/package.tgz'; }],
+  ['SUBTLEX publication timestamp', (copy) => { copy.subtlex.publishedAt = 'not-a-timestamp'; }],
+  ['SUBTLEX upstream', (copy) => { copy.subtlex.upstream = 'https://example.invalid/'; }],
+  ['SUBTLEX internal file duplication', (copy) => {
+    copy.subtlex.internalFiles[1].path = copy.subtlex.internalFiles[0].path;
+  }],
+]) {
+  const changed = structuredClone(provenance);
+  mutate(changed);
+  assert.throws(
+    () => verifyProductionProvenance(changed),
+    /provenance|pin|metadata|file/u,
+    label,
+  );
+}
 const verifiedPackage = verifySubtlexPackage(
   await readFile(path.join(
     path.resolve('data/rhyme-production'),
@@ -78,6 +148,26 @@ for (const [label, records, pattern] of [
   [
     'invalid count',
     [{ word: 'zero', count: 0 }],
+    /Invalid SUBTLEX frequency record/u,
+  ],
+  [
+    'unsafe count',
+    [{ word: 'unsafe', count: Number.MAX_SAFE_INTEGER + 1 }],
+    /Invalid SUBTLEX frequency record/u,
+  ],
+  [
+    'fractional count',
+    [{ word: 'fractional', count: 1.5 }],
+    /Invalid SUBTLEX frequency record/u,
+  ],
+  [
+    'increasing counts',
+    [{ word: 'lower', count: 1 }, { word: 'higher', count: 2 }],
+    /Invalid SUBTLEX frequency record/u,
+  ],
+  [
+    'unexpected field',
+    [{ word: 'extra', count: 1, extra: true }],
     /Invalid SUBTLEX frequency record/u,
   ],
 ]) {
@@ -119,7 +209,7 @@ function createTar(name, contents, type = '0') {
 
 function createTarEntries(entries) {
   const blocks = [];
-  for (const { name, contents, type = '0' } of entries) {
+  for (const { name, contents, linkTarget = '', type = '0' } of entries) {
     const header = Buffer.alloc(512);
     header.write(name, 0, 100, 'utf8');
     writeOctal(header, 100, 8, 0o644);
@@ -129,6 +219,7 @@ function createTarEntries(entries) {
     writeOctal(header, 136, 12, 0);
     header.fill(0x20, 148, 156);
     header[156] = type.charCodeAt(0);
+    header.write(linkTarget, 157, 100, 'utf8');
     header.write('ustar\0', 257, 6, 'ascii');
     header.write('00', 263, 2, 'ascii');
     writeOctal(header, 148, 8, header.reduce((sum, byte) => sum + byte, 0));

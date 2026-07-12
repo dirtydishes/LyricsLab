@@ -142,6 +142,21 @@ describe('rhyme data decoder', () => {
     );
   });
 
+  it('rejects duplicate or missing word ranks after integrity is recomputed', async () => {
+    const malformed = mutateAndRehash(artifact, (view) => {
+      const ranks = getSection(artifact, RhymeDataSection.ranks);
+      view.setUint32(
+        ranks.offset + ranks.width,
+        view.getUint32(ranks.offset, true),
+        true,
+      );
+    });
+
+    await expect(decodeRhymeData(malformed, { sha256 })).rejects.toThrow(
+      'contiguous permutation',
+    );
+  });
+
   it('rejects pronunciation keys that disagree with their phone sequence', async () => {
     const malformed = mutateAndRehash(artifact, (view) => {
       const pronunciations = getSection(artifact, RhymeDataSection.pronunciations);

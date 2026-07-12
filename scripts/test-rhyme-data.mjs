@@ -78,6 +78,21 @@ async function verifyManifestFailures() {
   });
   await assertBuildRejects(manifestPath, /duplicate pronunciation/u);
 
+  const duplicateRanks = structuredClone(originalLexemes);
+  duplicateRanks[1].rank = duplicateRanks[0].rank;
+  await writeFile(
+    path.join(copiedFixture, 'lexemes.json'),
+    JSON.stringify(duplicateRanks),
+  );
+  const duplicateRankHash = createHash('sha256')
+    .update(await readFile(path.join(copiedFixture, 'lexemes.json')))
+    .digest('hex');
+  await writeManifest({
+    ...originalManifest,
+    sources: [{ ...originalManifest.sources[0], sha256: duplicateRankHash }],
+  });
+  await assertBuildRejects(manifestPath, /ranks must be a contiguous permutation/u);
+
   originalLexemes[0].normalizedWord = ' CAT ';
   await writeFile(
     path.join(copiedFixture, 'lexemes.json'),
@@ -126,8 +141,12 @@ function verifyCompilerPhonology() {
     },
   );
   assert.equal(isValidArpabetPhone('B1'), false);
+  assert.equal(isValidArpabetPhone('B'), true);
   assert.equal(isValidArpabetPhone('AE1'), true);
   assert.equal(isValidArpabetPhone('AE'), false);
+  assert.equal(isValidArpabetPhone('AE3'), false);
+  assert.equal(isValidArpabetPhone('ae1'), false);
+  assert.equal(isValidArpabetPhone('ZZ'), false);
 }
 
 async function assertBuildRejects(manifestPath, pattern) {
