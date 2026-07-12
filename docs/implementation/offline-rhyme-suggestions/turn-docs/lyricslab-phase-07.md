@@ -103,9 +103,9 @@ Local gate evidence:
 Hosted CI and mergeability evidence:
 
 - PR: `https://github.com/dirtydishes/lyricslab/pull/22`
-- `gh pr view 22 --json ...`: `state` `OPEN`, `isDraft` `false`, `baseRefName` `lavender/expo-clean-rebuild`, `headRefName` `lavender/offline-rhyme-phase-07`, `headRefOid` `4827dfeee9c5fbad3f70dd39cec09bd248b7c22b`, `mergeable` `MERGEABLE`, `mergeStateStatus` `CLEAN`, `statusCheckRollup` `[]`.
+- `gh pr view 22 --json ...`: `state` `OPEN`, `isDraft` `false`, `baseRefName` `lavender/expo-clean-rebuild`, `headRefName` `lavender/offline-rhyme-phase-07`, `mergeable` `MERGEABLE`, `mergeStateStatus` `CLEAN`, `statusCheckRollup` `[]`.
 - `gh pr checks 22 --repo dirtydishes/lyricslab`: no checks reported on the `lavender/offline-rhyme-phase-07` branch.
-- `git merge-tree --write-tree origin/lavender/expo-clean-rebuild HEAD`: passed, tree `035d0315c1a19495ea8800e723e1abe2c4eb4e33`.
+- `git merge-tree --write-tree origin/lavender/expo-clean-rebuild HEAD`: passed.
 
 ## Device Evidence
 
@@ -169,10 +169,11 @@ PR details:
 - mergeability at PR-detail update: `MERGEABLE`, `CLEAN`
 - hosted checks: unavailable with evidence; GitHub reports an empty status check rollup and `gh pr checks` reports no checks.
 
-Commits:
+Commit summary:
 
-- `4827dfe record offline rhyme phase seven closeout evidence`
-- PR-detail turn-doc update: this follow-up commit records PR #22 and hosted-check evidence.
+- closeout evidence commit records the Beads claim/export, storyboard generator, final HTML, local gate evidence, and device limitation.
+- PR-detail turn-doc commits record PR #22 and hosted-check evidence.
+- Exact final pushed commit SHAs are reported in the implementation callback.
 
 ## Beads Updates
 
