@@ -48,6 +48,7 @@ Curate at least 500 reviewed contemporary US hip-hop forms and prove the 90% ind
 
 - User-approved 2026-07-12 sequence amendment keeps this phase focused on human-reviewable project-owned rap, safety, and proper-noun sources. New Phase 04A owns the external-source pins, NOTICE, and complete production artifact.
 - Source curation and the sealed evaluation remain separate owners. This turn created, inspected, and validated only the curation corpus; it did not create, inspect, anticipate, or tune against the later 250-case set and makes no 90% coverage claim.
+- The independent evaluation task was forked before Phase 04 and observed the sealed-set information barrier. It authored and persisted all 250 cases before reading this turn doc, `data/rhyme-sources/**`, `scripts/rhyme-sources/**`, `src/rhymeSources/**`, the Phase 04 diff, PR, corpus counts, policies, or hashes. No curation file was changed after the barrier opened.
 
 ## Discoveries And Decisions
 
@@ -59,6 +60,8 @@ Approved sequence amendment: `lyricslab-5iw.4a` now follows this issue, and nati
 - High-risk spellings exist only in the narrowly necessary lexicon records. The policy manifest refers to five opaque maintained IDs; ordinary profanity remains `rap`-eligible and is not safety-blocked.
 - Proper-name/place/acronym entries are a 25-entry maintained subset. Their dormant pure policy requires a non-empty normalized prefix for suggestions while keeping them analyzable as anchors.
 - Known review ambiguities are direct editorial pronunciations, context-sensitive regional relevance, and words with multiple conversational realizations. These are intentionally handed to the independent evaluator instead of being tuned against its sealed cases.
+- The sealed evaluator found a systematic dropped-sound transcription defect: many curated `-in` forms remove legacy `NG` without adding the pronounced final `N`; several other curated forms retain `NG`. This category scored `0/31` and is a concrete remediation blocker, not a gold-tuning request.
+- The independently chosen set included 111 positive candidates already present in the repository legacy CMU bytes. They remain in the sealed file with exact matches and are excluded from the valid OOV denominator rather than silently replaced. One post-seal dispute (`oov-219`) lacks a vowel/stress and is excluded through the append-only correction log without changing gold bytes.
 
 ## Implementation And Delegation Evidence
 
@@ -102,15 +105,46 @@ Corpus summary:
 
 Committed source hashes are `evidence.json` `6f1c482158a2a4629169ea3a51d089102c6710e697f7c8a8eadf1a3e6be5f71c`, `lexicon.json` `dd611d0ae936bc5e59e933dd5a8ba6c2f1aa8c4210367ddc23d74a3e34bc6d2b`, `manifest.json` `5f76e59c9cd19fa95298d31ef1850baedb1a690628dca5587ff94448bbbd1bed`, `proper-noun-policy.json` `f802b484f8fd31284d9dc31e445b4fd7fed188d95e5d39b9038b194ca82a27b9`, and `safety-policy.json` `4a177bbac96385a13a81f2541b1a09ccf27887a81abb1aee2e01b0a13ee2bbd5`.
 
+## Independent Sealed OOV Evaluation
+
+The complete 250-case gold corpus was sealed at `2026-07-12T06:55:31Z`, made mode `0444`, and hashed as `40aac8d4704a9ca44bf1d2d19f5843714b83c08c59818b81b123baa7e010d4d7`. The evaluator checks that hash before and after every run and fails if the file is writable or changes.
+
+Candidate composition was fixed before the legacy baseline check: 45 dropped-sound, 35 apostrophe-variant, 40 fused-phrase, 35 stylized-spelling, 45 colloquialism, 25 ad-lib, 15 proper-name/place/acronym, and 10 ambiguous-negative cases. The corrected single-space legacy-CMU parser found 129 positive OOV candidates and 111 legacy-present positives; no case was replaced. The append-only correction log excludes one invalid consonant-only/no-stress expectation, leaving 128 valid positive OOV cases.
+
+Acceptance result: **failed**, `29/128` correct pronunciations (`22.66%`) against a required `90%`.
+
+| Category | Correct | Valid OOV | Coverage |
+| --- | ---: | ---: | ---: |
+| Ad-lib | 7 | 16 | 43.75% |
+| Apostrophe variant | 4 | 17 | 23.53% |
+| Colloquialism | 3 | 7 | 42.86% |
+| Dropped sound | 0 | 31 | 0.00% |
+| Fused phrase | 8 | 31 | 25.81% |
+| Proper name/place/acronym | 3 | 10 | 30.00% |
+| Stylized spelling | 4 | 16 | 25.00% |
+
+The 99 misses comprise 71 missing curated entries and 28 pronunciation mismatches. Full per-region numerators/denominators/percentages, every miss and accepted pronunciation, all 10 unscored ambiguous negatives, the correction dispute, source summary, and policy controls are recorded in `evaluation/rhyme-sources/oov-evaluation-result-v1.json`.
+
+Independent policy controls all passed against the actual `isCuratedEntryEligible` implementation: five ordinary-profane entries remain rap-eligible and unsolicited, all five maintained high-risk entries remain analyzable as anchors and suppressed with or without a matching suggestion prefix, and all 25 proper names/places/acronyms remain analyzable as anchors while requiring a normalized matching explicit prefix.
+
+Evaluation-only files:
+
+- `evaluation/rhyme-sources/oov-gold-v1.json` and `oov-gold-v1.schema.json`: sealed 250-case corpus and strict schema.
+- `evaluation/rhyme-sources/oov-evaluation-manifest-v1.json`: seal timestamp/hash, baseline method, counts, and independence declaration.
+- `evaluation/rhyme-sources/oov-gold-corrections-v1.jsonl`: append-only post-seal dispute; before/after gold hashes are identical.
+- `scripts/evaluate-rhyme-sources.mjs`: source/alias resolver, coverage/breakdown reporter, ambiguous-negative/dispute reporter, actual policy adversarial checks, and before/after seal enforcement.
+- `evaluation/rhyme-sources/oov-evaluation-result-v1.json`: complete machine-readable failed-acceptance evidence.
+- `package.json`: `npm run evaluate:rhyme-sources` acceptance command.
+
 ## Review
 
-Pending the fresh independent sealed-set evaluator, followed by the separate strict reviewer. Curation evidence must not be treated as the independent 90% result.
+The fresh independent sealed-set evaluator is complete and blocks acceptance at `22.66%`. It did not mutate the curated lexicon, policies, authoring scripts, or existing curation tests. A separately isolated strict reviewer remains required after a disclosed remediation turn returns the unchanged sealed set to at least `90%`; the current failed result must not be presented as review-ready Phase 04 completion.
 
 ## CI And Gates
 
-Owner: delegated Phase 04 source-curation task, independent evaluation task, then strict review task
+Owner: independent evaluation task for local evaluation/gates; orchestrator/remediation task for publication and rerun; later strict-review task for hosted reinspection
 
-State: `ci-unavailable-with-evidence`
+State: `ci-blocked-with-cause`
 
 Evidence:
 
@@ -118,10 +152,13 @@ Evidence:
 - `npm run typecheck`: passed.
 - `npm run check:rhyme-sources`: passed with 547 reviewed entries and the distributions above.
 - `npm run test:rhyme-sources`: passed all focused adversarial and boundary controls.
+- `npm run evaluate:rhyme-sources`: wrote the complete result and exited `1` as designed because coverage was `29/128` (`22.66%`), below `90%`; policy controls passed and the gold hash was unchanged before/after.
 - `git diff --check`: passed.
 - Two consecutive `node scripts/rhyme-sources/author-phase04.mjs` runs were byte/hash stable and each reported 547 reviewed entries.
 - Initial `npm test` found the prepared worktree had no dependencies; a temporary shared dependency link then exposed that the shared install predated the branch's Expo Asset/FileSystem additions. A lockfile-exact online install could not complete under restricted network, so the final run used a temporary symlink forest from the canonical install plus the exact cached `expo-asset@56.0.17` and `expo-file-system@56.0.8` tarballs. This dependency tree is not source and is removed before handoff.
+- The evaluation task independently reproduced that setup: the no-install attempts failed only because `jest`/`tsc` were absent; the canonical link then exposed only the two known Expo modules; a temporary symlink forest plus cache-content-addressed extraction of exact `expo-asset@56.0.17` and `expo-file-system@56.0.8` produced final passes (`24/24` suites, `185/185` tests, and clean `tsc --noEmit`). The temporary tree and tarballs were removed before handoff.
 - Hosted inspection could not authenticate or reach GitHub: `gh auth status` reported the `dirtydishes` token invalid, and `gh pr list --state all --head lavender/production-rhyme-phase-04 --base lavender/expo-clean-rebuild ...` returned `error connecting to api.github.com`. No hosted checks can exist for the unpushed working tree. The orchestrator owns commit/push/explicit PR creation or update; the independent evaluator/reviewer owns the next hosted-check inspection.
+- The evaluation task repeated hosted inspection after sealing: `gh auth status` still reported the `dirtydishes` token invalid; `gh pr checks 26` and `gh pr view 26 --json ...statusCheckRollup` both failed to connect to `api.github.com`. Hosted state is unavailable, but CI is classified blocked by the local acceptance failure rather than green or merely unavailable.
 
 ## PR And Commits
 
@@ -129,6 +166,8 @@ Evidence:
 - Curation commit: `19594887` (`curate production rhyme source corpus`), committed and pushed by the orchestrator after the delegated task returned the complete working tree.
 - PR [#26](https://github.com/dirtydishes/lyricslab/pull/26) is the only exact-head PR, opened with explicit base `lavender/expo-clean-rebuild` and head `lavender/production-rhyme-phase-04`.
 - The delegated worktree Git metadata was read-only; independent evaluation, strict review, and hosted reinspection remain orchestrator-owned.
+- Evaluation artifacts and this evidence update are complete in the prepared worktree. Publication state is recorded below after the Git-metadata write probe; PR #26 remains the target and no second PR is permitted.
+- Git metadata is read-only in this delegated worktree. Exact publication probe: `git add <evaluation files> package.json <turn doc>` failed with `fatal: Unable to create '/home/delta/dev/lyricslab/.git/worktrees/lyricslab4/index.lock': Read-only file system`. No evaluation commit or push was created. The orchestrator must stage these exact files, commit with a lowercase human message, push `lavender/production-rhyme-phase-04`, and update existing PR #26; it must not open a second PR.
 
 ## Beads Updates And Follow-Ups
 
@@ -137,6 +176,7 @@ Issue depends on `lyricslab-5iw.3`.
 - Do not close or mutate `lyricslab-5iw.4` until the independent evaluator authors the sealed 250 cases and reports the actual coverage/negative-control result, then the strict reviewer completes review.
 - Phase 04A must revalidate all aliases and CMU-assisted direct phones against its exact CMU pin, retain required license/notice evidence, combine SUBTLEX and reviewed sources, and assemble the production artifact. It must not treat the legacy local CMU hash as the accepted pin.
 - Disputed pronunciations or regional scopes found by the evaluator should be repaired as explicit source-review changes with disclosure; the curation owner must not retroactively claim the sealed set was unseen after such feedback.
+- Recommended follow-up Beads work for a separately disclosed remediation turn: repair the systematic final-`N` dropped-sound transcriptions; adjudicate the 28 exact-phone mismatches; decide which of the 71 missing independent OOV forms belong within accepted Phase 04 categories; rerun the unchanged sealed evaluator; and only then request strict review. The evaluator did not mutate Beads.
 
 ## Plan Amendments
 
@@ -146,8 +186,10 @@ None.
 
 Gold-set independence and disputed-pronunciation review must be preserved; the lexicon cannot be tuned against the acceptance set without disclosure. Keep source manifests compatible with the Phase 03 format, but do not claim a complete production artifact in this phase.
 
+The sealed gold hash must remain `40aac8d4704a9ca44bf1d2d19f5843714b83c08c59818b81b123baa7e010d4d7` across remediation. The existing result is a blocking baseline and must remain reviewable even after a later result passes.
+
 Normal app startup remains unchanged. No source manifest, fixture, safety source, or eligibility module is imported by `app`, `src/editor`, `src/platform`, or `src/settings`; Phase 04A owns assembly and Phase 05 owns provider activation.
 
 ## Closeout
 
-Source curation, local evidence, commit, push, and explicit PR publication are complete. Canonical issue closeout remains pending the separate sealed evaluation and strict review tasks, not additional curation work.
+Source curation and PR #26 publication are complete, but the independent acceptance evaluation is blocked at `22.66%`. Phase 04 and Beads must remain open. The next action is a separately disclosed curation-remediation turn against the immutable gold set, followed by a new evaluation result and independent strict review.
