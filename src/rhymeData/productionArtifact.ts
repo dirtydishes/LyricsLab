@@ -1,0 +1,5 @@
+export const PRODUCTION_RHYME_ARTIFACT_VERSION =
+  'cmudict-74790861-subtlex-2.0.0-phase04-2026.07.12';
+
+export const PRODUCTION_RHYME_MANIFEST_SHA256 =
+  'b6b827989c4af5d0d15eea519d6726ebf52044f9a76dfa14ae5b9240226fab1c';

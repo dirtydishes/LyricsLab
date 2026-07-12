@@ -1,2 +1,1 @@
-# Preserve pinned third-party acknowledgement bytes verbatim.
-data/rhyme-production/cmudict-README.txt -whitespace
+data/rhyme-production/CMUDICT-README.txt whitespace=-blank-at-eof

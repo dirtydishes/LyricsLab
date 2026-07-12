@@ -41,6 +41,11 @@ type MutableTailSegment = {
   vowel: ParsedPhoneToken;
 };
 
+type FamilyTailSegment = {
+  readonly consonantManners: readonly string[];
+  readonly vowel: string;
+};
+
 const VOWEL_FAMILIES: readonly ReadonlySet<string>[] = [
   new Set(['IY', 'IH']),
   new Set(['EY', 'EH', 'AE']),
@@ -48,6 +53,63 @@ const VOWEL_FAMILIES: readonly ReadonlySet<string>[] = [
   new Set(['OW', 'UH', 'UW']),
   new Set(['AH', 'ER']),
 ];
+
+export function createSlantBucketKey(familyKey: string) {
+  const vowels = familyKey
+    .split('|')
+    .filter((segment) => segment.startsWith('v:'))
+    .map((segment) => {
+      const phone = segment.slice(2);
+      const familyIndex = VOWEL_FAMILIES.findIndex((family) => family.has(phone));
+      return familyIndex < 0 ? segment : `vf:${familyIndex}`;
+    });
+  return vowels.length <= 3 ? vowels.join('|') : `vc:${vowels.length}`;
+}
+
+export function createCompatibleSlantBucketKeys(
+  familyKey: string,
+  threshold: number,
+) {
+  const vowelCount = parseFamilyTailSegments(familyKey).length;
+  if (vowelCount <= 3) return [createSlantBucketKey(familyKey)];
+  const minimum = Math.max(4, Math.ceil(vowelCount * threshold));
+  const maximum = Math.floor(vowelCount / threshold);
+  return Array.from(
+    { length: maximum - minimum + 1 },
+    (_value, index) => `vc:${minimum + index}`,
+  );
+}
+
+export function scoreFamilyKeySlantUpperBound(
+  anchorFamilyKey: string,
+  candidateFamilyKey: string,
+) {
+  const anchor = parseFamilyTailSegments(anchorFamilyKey);
+  const candidate = parseFamilyTailSegments(candidateFamilyKey);
+  const segmentCount = Math.max(anchor.length, candidate.length);
+  if (segmentCount === 0) return 0;
+
+  let coda = 0;
+  let vowel = 0;
+  for (let index = 0; index < segmentCount; index += 1) {
+    const anchorSegment = anchor[index];
+    const candidateSegment = candidate[index];
+    if (!anchorSegment || !candidateSegment) continue;
+    vowel += compareVowelsByPhone(anchorSegment.vowel, candidateSegment.vowel);
+    coda += compareAlignedSequences(
+      anchorSegment.consonantManners,
+      candidateSegment.consonantManners,
+      (left, right) => left === right ? 1 : 0.5,
+    );
+  }
+
+  const alignedSegments = Math.min(anchor.length, candidate.length);
+  return clampScore(
+    (vowel / segmentCount) * 0.55 +
+    (coda / segmentCount) * 0.3 +
+    (alignedSegments / segmentCount) * 0.15,
+  );
+}
 
 type ConsonantFeature = {
   readonly manner: string;
@@ -139,6 +201,27 @@ function createTailSegments(
   }
 
   return segments;
+}
+
+function parseFamilyTailSegments(
+  familyKey: string,
+): readonly FamilyTailSegment[] {
+  const segments: Array<{ consonantManners: string[]; vowel: string }> = [];
+  for (const token of familyKey.split('|')) {
+    if (token.startsWith('v:')) {
+      segments.push({ consonantManners: [], vowel: token.slice(2) });
+    } else if (token.startsWith('c:')) {
+      segments.at(-1)?.consonantManners.push(token.slice(2));
+    }
+  }
+  return segments;
+}
+
+function compareVowelsByPhone(left: string, right: string) {
+  if (left === right) return 1;
+  return VOWEL_FAMILIES.some(
+    (family) => family.has(left) && family.has(right),
+  ) ? 0.88 : 0;
 }
 
 function alignTailSegments(

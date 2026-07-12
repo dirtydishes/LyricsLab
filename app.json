@@ -31,7 +31,15 @@
     },
     "plugins": [
       "expo-sqlite",
-      "expo-router"
+      "expo-router",
+      [
+        "expo-asset",
+        {
+          "assets": [
+            "./assets/rhyme/production.rhymebin"
+          ]
+        }
+      ]
     ]
   }
 }

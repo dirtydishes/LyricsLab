@@ -3,7 +3,14 @@
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
-import { mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import {
+  copyFileSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  statSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -367,6 +374,11 @@ function compileRhymeRuntime() {
       `failed to compile rhyme runtime\n${result.stdout}${result.stderr}`,
     );
   }
+
+  copyFileSync(
+    path.join(sourceDir, 'normalizeCore.cjs'),
+    path.join(tempDir, 'normalizeCore.cjs'),
+  );
 
   const runtimeRequire = createRequire(path.join(tempDir, 'runtime.cjs'));
   const artifactRuntime = runtimeRequire(path.join(tempDir, 'artifact.js'));

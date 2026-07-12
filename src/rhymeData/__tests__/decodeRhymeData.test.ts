@@ -33,11 +33,83 @@ describe('rhyme data decoder', () => {
       sourceManifestSha256: manifestHash,
       version: 'fixture-1',
     });
-    expect(decoded.engine.suggest({ anchor: 'cat' })).toEqual([
+    expect(decoded.engine.suggest({ anchor: 'cat' })).toEqual(expect.arrayContaining([
       expect.objectContaining({ normalizedWord: 'hat', kind: 'exact' }),
-    ]);
+    ]));
     expect(yields).toHaveBeenCalled();
     expect(Object.keys(decoded.engine)).toEqual(['suggest']);
+  });
+
+  it('uses indexed exact/slant buckets and retains deterministic candidate policy', async () => {
+    const decoded = await decodeRhymeData(artifact, { sha256 });
+    const first = decoded.engine.suggest({ anchor: 'bet' });
+    expect(first).toEqual(expect.arrayContaining([
+      expect.objectContaining({ normalizedWord: 'cat', kind: 'slant' }),
+    ]));
+    expect(decoded.engine.suggest({ anchor: 'bet', excludedWords: ['cat'] }))
+      .not.toEqual(expect.arrayContaining([expect.objectContaining({ normalizedWord: 'cat' })]));
+    expect(decoded.policy?.get('properat')).toEqual({
+      properNoun: true,
+      rap: true,
+      safetyBlocked: false,
+    });
+    expect(decoded.policy?.get('blockedat')).toEqual({
+      properNoun: false,
+      rap: true,
+      safetyBlocked: true,
+    });
+    expect(first).not.toEqual(expect.arrayContaining([
+      expect.objectContaining({ normalizedWord: 'properat' }),
+      expect.objectContaining({ normalizedWord: 'blockedat' }),
+    ]));
+    expect(decoded.engine.suggest({ anchor: 'blockedat' }).length).toBeGreaterThan(0);
+    expect(decoded.engine.suggest({ anchor: 'bet' })).toEqual(first);
+  });
+
+  it('keeps the indexed candidate set complete for accepted consonant-cluster slants', async () => {
+    const decoded = await decodeRhymeData(artifact, { sha256 });
+
+    expect(decoded.engine.suggest({ anchor: 'clustered' })).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          kind: 'slant',
+          normalizedWord: 'shorter',
+        }),
+      ]),
+    );
+  });
+
+  it('keeps long-tail slants whose accepted score crosses vowel families', async () => {
+    const decoded = await decodeRhymeData(artifact, { sha256 });
+
+    expect(decoded.engine.suggest({ anchor: 'longanchor' })).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          kind: 'slant',
+          normalizedWord: 'longcandidate',
+        }),
+      ]),
+    );
+  });
+
+  it('allows a future provider policy to admit prefixed proper nouns but never safety-blocked forms', async () => {
+    let activePrefix = 'proper';
+    const decoded = await decodeRhymeData(artifact, {
+      isProperNounEligible: (normalizedWord, policy) =>
+        policy.properNoun && normalizedWord.startsWith(activePrefix) && activePrefix.length > 0,
+      sha256,
+    });
+    const suggestions = decoded.engine.suggest({ anchor: 'bet' });
+    expect(suggestions).toEqual(expect.arrayContaining([
+      expect.objectContaining({ normalizedWord: 'properat' }),
+    ]));
+    expect(suggestions).not.toEqual(expect.arrayContaining([
+      expect.objectContaining({ normalizedWord: 'blockedat' }),
+    ]));
+    activePrefix = '';
+    expect(decoded.engine.suggest({ anchor: 'bet' })).not.toEqual(expect.arrayContaining([
+      expect.objectContaining({ normalizedWord: 'properat' }),
+    ]));
   });
 
   it('yields while decoding every potentially large record table', async () => {
@@ -68,6 +140,23 @@ describe('rhyme data decoder', () => {
     expect(yields.mock.calls.length).toBeGreaterThanOrEqual(minimumYields);
   });
 
+  it('stops decoding at the next yield when its generation is cancelled', async () => {
+    let cancelled = false;
+    const yields = jest.fn(async () => {
+      cancelled = true;
+    });
+
+    await expect(
+      decodeRhymeData(artifact, {
+        recordsPerChunk: 1,
+        sha256,
+        shouldCancel: () => cancelled,
+        yieldToHost: yields,
+      }),
+    ).rejects.toThrow('cancelled');
+    expect(yields).toHaveBeenCalledTimes(1);
+  });
+
   it.each([
     ['truncation', (bytes: Uint8Array) => bytes.subarray(0, bytes.length - 1), 'total size'],
     ['format version', (bytes: Uint8Array) => mutate(bytes, (view) => view.setUint16(8, 99, true)), 'format version'],
@@ -93,6 +182,13 @@ describe('rhyme data decoder', () => {
         sha256,
       }),
     ).rejects.toThrow('manifest hash mismatch');
+  });
+
+  it('rejects the legacy v1 slant-index interpretation', async () => {
+    const legacyVersion = mutate(artifact, (view) => view.setUint16(8, 1, true));
+    await expect(decodeRhymeData(legacyVersion, { sha256 })).rejects.toThrow(
+      'format version',
+    );
   });
 
   it('rejects non-zero descriptor and section padding bytes', async () => {
@@ -121,7 +217,22 @@ describe('rhyme data decoder', () => {
     });
 
     await expect(decodeRhymeData(malformed, { sha256 })).rejects.toThrow(
-      'Pronunciation phone ranges',
+      /Pronunciation phone ranges|pronunciation key/u,
+    );
+  });
+
+  it('rejects duplicate or missing word ranks after integrity is recomputed', async () => {
+    const malformed = mutateAndRehash(artifact, (view) => {
+      const ranks = getSection(artifact, RhymeDataSection.ranks);
+      view.setUint32(
+        ranks.offset + ranks.width,
+        view.getUint32(ranks.offset, true),
+        true,
+      );
+    });
+
+    await expect(decodeRhymeData(malformed, { sha256 })).rejects.toThrow(
+      'contiguous permutation',
     );
   });
 

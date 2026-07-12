@@ -8,6 +8,13 @@ import {
   type RhymeLexemeInput,
 } from '../createRhymeEngine';
 import {
+  analyzePronunciation,
+  createCompatibleSlantBucketKeys,
+  createSlantBucketKey,
+  scoreFamilyKeySlantUpperBound,
+  scoreFullTailSlant,
+} from '../productionPhonology';
+import {
   createFixtureRhymeEngineFromCmu,
 } from '../rhymeEngineTesting';
 
@@ -29,6 +36,21 @@ const CORE_FIXTURE: readonly RhymeLexemeInput[] = [
 ];
 
 describe('production rhyme engine', () => {
+  it('analyzes a blocked anchor without emitting it as a candidate', () => {
+    const engine = createRhymeEngine([
+      {
+        ...lexeme('blocked', ['B', 'L', 'AA1', 'K', 'T']),
+        suggestionEligible: false,
+      },
+      lexeme('clocked', ['K', 'L', 'AA1', 'K', 'T']),
+    ]);
+
+    expect(engine.suggest({ anchor: 'blocked' })).toEqual([
+      expect.objectContaining({ normalizedWord: 'clocked' }),
+    ]);
+    expect(engine.suggest({ anchor: 'clocked' })).toEqual([]);
+  });
+
   it('applies the accepted weights and rejects balanced slants below 0.86', () => {
     const engine = createDiagnosticRhymeEngine(CORE_FIXTURE);
     const suggestions = engine.diagnose({ anchor: 'cat' });
@@ -123,6 +145,36 @@ TIN T IH1 N
     });
   });
 
+  it('keeps every accepted tail in a compatible compiled slant bucket', () => {
+    const pronunciations = [
+      ['AE1', 'S', 'T', 'R'],
+      ['AE1', 'T', 'R'],
+      ['AE1', 'T'],
+      ['EH1', 'T'],
+      ['AE1', 'T', 'AE0', 'T', 'AE0', 'T', 'AE0', 'T'],
+      ['AE1', 'T', 'AE0', 'T', 'AE0', 'T', 'IH0', 'T'],
+      ['AE1', 'T', ...Array.from({ length: 6 }, () => ['AE0', 'T']).flat()],
+      ['AE1', 'T', ...Array.from({ length: 7 }, () => ['AE0', 'T']).flat()],
+    ].map((phones) => analyzePronunciation(phones)).filter((value) => value !== null);
+
+    for (const anchor of pronunciations) {
+      for (const candidate of pronunciations) {
+        const score = scoreFullTailSlant(anchor, candidate).phonetic;
+        if (score < BALANCED_SLANT_THRESHOLD) continue;
+
+        expect(
+          createCompatibleSlantBucketKeys(
+            anchor.familyKey,
+            BALANCED_SLANT_THRESHOLD,
+          ),
+        ).toContain(createSlantBucketKey(candidate.familyKey));
+        expect(
+          scoreFamilyKeySlantUpperBound(anchor.familyKey, candidate.familyKey),
+        ).toBeGreaterThanOrEqual(score);
+      }
+    }
+  });
+
   it('rejects raw scores below 0.86 instead of rounding them into acceptance', () => {
     const engine = createDiagnosticRhymeEngine([
       lexeme('threshold', [
@@ -201,25 +253,6 @@ TIN T IH1 N
     });
 
     expect(suggestions.map(({ lemma }) => lemma)).not.toContain('run');
-  });
-
-  it('keeps ineligible lexemes analyzable as anchors without returning them as candidates', () => {
-    const engine = createRhymeEngine([
-      lexeme('risk-anchor', ['R', 'IH1', 'S', 'K']),
-      lexeme('risk-candidate', ['R', 'IH1', 'S', 'K'], {
-        suggestionEligible: false,
-      }),
-      lexeme('brisk', ['B', 'R', 'IH1', 'S', 'K']),
-    ]);
-
-    expect(
-      engine.suggest({ anchor: 'risk-candidate' })
-        .map(({ normalizedWord }) => normalizedWord),
-    ).toContain('brisk');
-    expect(
-      engine.suggest({ anchor: 'risk-anchor' })
-        .map(({ normalizedWord }) => normalizedWord),
-    ).not.toContain('riskcandidate');
   });
 
   it('keeps diagnostics out of the production engine runtime surface', () => {
@@ -307,10 +340,7 @@ TIN T IH1 N
 function lexeme(
   word: string,
   phones: readonly string[],
-  metadata: Pick<
-    RhymeLexemeInput,
-    'commonness' | 'lemma' | 'suggestionEligible'
-  > = {},
+  metadata: Pick<RhymeLexemeInput, 'commonness' | 'lemma'> = {},
 ): RhymeLexemeInput {
   return {
     ...metadata,

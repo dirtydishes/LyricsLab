@@ -7,14 +7,32 @@ import {
   normalizeRhymeWord,
 } from './phonology.mjs';
 import {
+  assembleProductionLexemes,
+  verifyProductionProvenance,
+} from './productionSources.mjs';
+import { loadAndValidateRhymeSources } from '../rhyme-sources/contract.mjs';
+import {
   MAX_PHONES_PER_PRONUNCIATION,
   MAX_PRONUNCIATIONS_PER_WORD,
   MAX_STRING_BYTES,
 } from './format.mjs';
-import { loadProductionRhymeData } from './production-sources.mjs';
 
 const SHA256_PATTERN = /^[a-f0-9]{64}$/u;
 const ALLOWED_FLAGS = new Set(['proper-noun', 'rap', 'safety-blocked']);
+const PRODUCTION_SOURCE_KINDS = new Set([
+  'cmudict-acknowledgement',
+  'cmudict-dictionary',
+  'cmudict-license',
+  'production-notice',
+  'production-provenance',
+  'production-readme',
+  'project-proper-noun-policy',
+  'project-rhyme-evidence',
+  'project-rhyme-lexicon',
+  'project-rhyme-manifest',
+  'project-safety-policy',
+  'subtlex-npm-package',
+]);
 
 export async function loadRhymeDataManifest(manifestPath) {
   const absoluteManifestPath = path.resolve(manifestPath);
@@ -23,12 +41,10 @@ export async function loadRhymeDataManifest(manifestPath) {
   validateManifest(manifest);
 
   const manifestDirectory = await realpath(path.dirname(absoluteManifestPath));
-  const projectRoot = path.resolve(import.meta.dirname, '../..');
-  const sourceRoot = manifest.provenance.production ? projectRoot : manifestDirectory;
   const sources = [];
 
   for (const source of manifest.sources) {
-    const sourcePath = await resolveContainedPath(sourceRoot, source.path);
+    const sourcePath = await resolveContainedPath(manifestDirectory, source.path);
     const bytes = await readFile(sourcePath);
     const actualHash = sha256(bytes);
 
@@ -41,24 +57,35 @@ export async function loadRhymeDataManifest(manifestPath) {
     sources.push({ ...source, absolutePath: sourcePath, bytes });
   }
 
+  let lexemes;
   if (manifest.provenance.production) {
-    return loadProductionRhymeData({
-      manifest,
-      manifestHash: sha256(rawManifest),
-      projectRoot,
-      sources,
+    const production = Object.fromEntries(
+      sources.map((source) => [source.kind, source]),
+    );
+    const provenance = parseJson(
+      requiredProductionSource(production, 'production-provenance').bytes,
+      'production provenance',
+    );
+    verifyProductionSourceMetadata(production, provenance);
+    const project = await loadAndValidateRhymeSources(
+      requiredProductionSource(production, 'project-rhyme-manifest').absolutePath,
+    );
+    verifyProjectSourceDeclarations(production, project.manifest);
+    lexemes = assembleProductionLexemes({
+      cmudictBytes: requiredProductionSource(production, 'cmudict-dictionary').bytes,
+      projectEntries: project.entries,
+      provenance,
+      subtlexTarballBytes: requiredProductionSource(production, 'subtlex-npm-package').bytes,
     });
+  } else {
+    const lexiconSources = sources.filter(
+      (source) => source.kind === 'fixture-lexicon',
+    );
+    if (lexiconSources.length !== 1) {
+      throw new Error('Manifest must declare exactly one fixture-lexicon source');
+    }
+    lexemes = parseJson(lexiconSources[0].bytes, 'fixture lexicon');
   }
-
-  const lexiconSources = sources.filter(
-    (source) => source.kind === 'fixture-lexicon',
-  );
-
-  if (lexiconSources.length !== 1) {
-    throw new Error('Manifest must declare exactly one fixture-lexicon source');
-  }
-
-  const lexemes = parseJson(lexiconSources[0].bytes, 'fixture lexicon');
   validateLexemes(lexemes);
 
   return {
@@ -71,12 +98,9 @@ export async function loadRhymeDataManifest(manifestPath) {
 
 function validateManifest(value) {
   assertObject(value, 'Manifest');
-  const isProduction = value.provenance?.production === true;
   assertExactKeys(
     value,
-    isProduction
-      ? ['artifact', 'externalPins', 'provenance', 'schema', 'schemaVersion', 'sources']
-      : ['artifact', 'provenance', 'schema', 'schemaVersion', 'sources'],
+    ['artifact', 'provenance', 'schema', 'schemaVersion', 'sources'],
     'Manifest',
   );
 
@@ -101,10 +125,7 @@ function validateManifest(value) {
   assertNonEmptyString(value.provenance.owner, 'Manifest provenance owner');
   assertNonEmptyString(value.provenance.purpose, 'Manifest provenance purpose');
 
-  if (
-    value.provenance.production !== false &&
-    value.provenance.production !== true
-  ) {
+  if (typeof value.provenance.production !== 'boolean') {
     throw new Error('Manifest provenance production must be boolean');
   }
 
@@ -113,6 +134,7 @@ function validateManifest(value) {
   }
 
   const sourceIds = new Set();
+  const sourceKinds = new Set();
 
   for (const source of value.sources) {
     assertObject(source, 'Manifest source');
@@ -131,17 +153,104 @@ function validateManifest(value) {
     }
 
     if (
-      !isProduction &&
-      source.ownership !== 'project-authored'
+      (!value.provenance.production && source.ownership !== 'project-authored') ||
+      (value.provenance.production &&
+        !['project-authored', 'third-party-pinned'].includes(source.ownership))
     ) {
-      throw new Error(`Phase 03 source ${source.id} is not project-authored`);
+      throw new Error(`Manifest source ${source.id} has invalid ownership`);
     }
 
     if (sourceIds.has(source.id)) {
       throw new Error(`Duplicate manifest source id: ${source.id}`);
     }
+    if (sourceKinds.has(source.kind)) {
+      throw new Error(`Duplicate manifest source kind: ${source.kind}`);
+    }
 
     sourceIds.add(source.id);
+    sourceKinds.add(source.kind);
+  }
+
+  if (value.provenance.production) {
+    if (
+      sourceKinds.size !== PRODUCTION_SOURCE_KINDS.size ||
+      [...sourceKinds].some((kind) => !PRODUCTION_SOURCE_KINDS.has(kind))
+    ) {
+      throw new Error('Production manifest source kinds are incomplete or unsupported');
+    }
+  } else if (sourceKinds.size !== 1 || !sourceKinds.has('fixture-lexicon')) {
+    throw new Error('Fixture manifest must declare only fixture-lexicon data');
+  }
+}
+
+function requiredProductionSource(sources, kind) {
+  const source = sources[kind];
+  if (!source) throw new Error(`Production manifest is missing ${kind}`);
+  return source;
+}
+
+function verifyProductionSourceMetadata(sources, provenance) {
+  verifyProductionProvenance(provenance);
+  const cmuKinds = [
+    ['cmudict-acknowledgement', 'README'],
+    ['cmudict-dictionary', 'cmudict.dict'],
+    ['cmudict-license', 'LICENSE'],
+  ];
+  for (const [kind, pinnedPath] of cmuKinds) {
+    const source = requiredProductionSource(sources, kind);
+    const filePin = provenance.cmudict.files.find((file) => file.path === pinnedPath);
+    if (
+      !filePin ||
+      source.version !== provenance.cmudict.revision ||
+      source.sha256 !== filePin.sha256 ||
+      source.bytes.length !== filePin.bytes ||
+      source.license !== 'CMUdict' ||
+      source.ownership !== 'third-party-pinned'
+    ) {
+      throw new Error(`Production ${kind} metadata does not match CMUdict provenance`);
+    }
+  }
+  const subtlex = requiredProductionSource(sources, 'subtlex-npm-package');
+  if (
+    subtlex.version !== provenance.subtlex.version ||
+    subtlex.sha256 !== provenance.subtlex.sha256 ||
+    subtlex.license !== 'ISC' ||
+    subtlex.ownership !== 'third-party-pinned'
+  ) {
+    throw new Error('Production SUBTLEX source metadata does not match provenance');
+  }
+  const notice = requiredProductionSource(sources, 'production-notice').bytes.toString('utf8');
+  for (const required of [
+    'Copyright (C) 1993-2015 Carnegie Mellon University',
+    'Copyright (c) 2015 Zeke Sikelianos',
+    'https://doi.org/10.3758/BRM.41.4.977',
+    'does not state an ISC license',
+  ]) {
+    if (!notice.includes(required)) {
+      throw new Error(`Production NOTICE is missing required text: ${required}`);
+    }
+  }
+}
+
+function verifyProjectSourceDeclarations(sources, projectManifest) {
+  const byRole = new Map(projectManifest.sources.map((source) => [source.role, source]));
+  const mappings = [
+    ['evidence', 'project-rhyme-evidence'],
+    ['lexicon', 'project-rhyme-lexicon'],
+    ['proper-noun-policy', 'project-proper-noun-policy'],
+    ['safety-policy', 'project-safety-policy'],
+  ];
+  for (const [role, kind] of mappings) {
+    const nested = byRole.get(role);
+    const declared = requiredProductionSource(sources, kind);
+    if (
+      !nested ||
+      declared.sha256 !== nested.sha256 ||
+      !declared.path.endsWith(`/${nested.path}`) ||
+      declared.ownership !== 'project-authored'
+    ) {
+      throw new Error(`Production declaration does not match Phase 04 ${role}`);
+    }
   }
 }
 
@@ -151,6 +260,7 @@ function validateLexemes(value) {
   }
 
   const words = new Set();
+  const ranks = new Set();
 
   for (const [index, lexeme] of value.entries()) {
     assertObject(lexeme, `Lexeme ${index}`);
@@ -194,6 +304,7 @@ function validateLexemes(value) {
     ) {
       throw new Error(`Lexeme ${index} rank must be a positive integer`);
     }
+    ranks.add(lexeme.rank);
 
     if (words.has(normalizedWord)) {
       throw new Error(`Duplicate fixture word: ${normalizedWord}`);
@@ -249,6 +360,13 @@ function validateLexemes(value) {
       }
     }
   }
+
+  if (
+    ranks.size !== value.length ||
+    value.some((_lexeme, index) => !ranks.has(index + 1))
+  ) {
+    throw new Error('Lexeme ranks must be a contiguous permutation from 1 to the lexeme count');
+  }
 }
 
 async function resolveContainedPath(root, relativePath) {
@@ -256,18 +374,7 @@ async function resolveContainedPath(root, relativePath) {
     throw new Error('Manifest source paths must be relative');
   }
 
-  const candidate = path.resolve(root, relativePath);
-  const candidateRelative = path.relative(root, candidate);
-
-  if (
-    candidateRelative === '..' ||
-    candidateRelative.startsWith(`..${path.sep}`) ||
-    path.isAbsolute(candidateRelative)
-  ) {
-    throw new Error(`Manifest source path escapes its directory: ${relativePath}`);
-  }
-
-  const resolved = await realpath(candidate);
+  const resolved = await realpath(path.resolve(root, relativePath));
   const relative = path.relative(root, resolved);
 
   if (
