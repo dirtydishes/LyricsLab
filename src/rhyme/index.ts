@@ -7,9 +7,14 @@ import { normalizeRhymeToken } from './normalize';
 import {
   buildRhymeIndex as buildIndexedRhymeIndex,
   findExactRhymeCandidates as findIndexedExactRhymeCandidates,
+  findRhymeCandidates as findIndexedRhymeCandidates,
   type ExactRhymeCandidate as IndexedExactRhymeCandidate,
   type ParsedRhymeLexeme,
+  type RhymeCandidate as IndexedRhymeCandidate,
+  type RhymeCandidateKind as IndexedRhymeCandidateKind,
   type RhymeIndex as IndexedRhymeIndex,
+  type RhymeQueryOptions as IndexedRhymeQueryOptions,
+  type SlantRhymeCandidate as IndexedSlantRhymeCandidate,
 } from './rhymeIndex';
 import {
   extractRhymeTailFromPhonemes,
@@ -54,6 +59,20 @@ export type ExactRhymeQuery = {
 };
 
 export type ExactRhymeCandidate = IndexedExactRhymeCandidate;
+
+export type SlantRhymeCandidate = IndexedSlantRhymeCandidate;
+
+export type RhymeCandidate = IndexedRhymeCandidate;
+
+export type RhymeCandidateKind = IndexedRhymeCandidateKind;
+
+export type RhymeQueryOptions = IndexedRhymeQueryOptions;
+
+export type RhymeQuery = RhymeQueryOptions & {
+  anchor: string;
+};
+
+export type RhymeCandidateQuery = RhymeQuery;
 
 export function parseCmuDictionary(source: string): CmuPronunciationEntry[] {
   return parseCmuDictionarySource(source);
@@ -134,6 +153,29 @@ export function findExactRhymeCandidates(
     excludeTokens: query.excludedWords,
     maxCandidates: query.maxResults,
   });
+}
+
+export function findRhymeCandidates(
+  index: RhymeIndex,
+  query: RhymeQuery,
+): RhymeCandidate[];
+
+export function findRhymeCandidates(
+  index: RhymeIndex,
+  anchor: string,
+  options?: RhymeQueryOptions,
+): RhymeCandidate[];
+
+export function findRhymeCandidates(
+  index: RhymeIndex,
+  anchorOrQuery: string | RhymeQuery,
+  options: RhymeQueryOptions = {},
+): RhymeCandidate[] {
+  if (typeof anchorOrQuery === 'string') {
+    return findIndexedRhymeCandidates(index, anchorOrQuery, options);
+  }
+
+  return findIndexedRhymeCandidates(index, anchorOrQuery.anchor, anchorOrQuery);
 }
 
 export function extractRhymeTail(

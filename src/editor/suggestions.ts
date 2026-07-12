@@ -1,9 +1,9 @@
 import type { SuggestionContext } from './bridge';
 import {
-  findExactRhymeCandidates as findDefaultExactRhymeCandidates,
+  findRhymeCandidates as findDefaultRhymeCandidates,
   normalizeRhymeToken,
-  type ExactRhymeCandidate,
   type ExactRhymeQuery,
+  type RhymeQuery,
   type RhymeIndex,
 } from '../rhyme';
 
@@ -19,16 +19,24 @@ export type SuggestionProvider = {
 
 export type RhymeSuggestionProviderOptions = {
   fallbackProvider?: SuggestionProvider;
+  findRhymeCandidates?: RhymeCandidateFinder;
   findExactRhymeCandidates?: RhymeCandidateFinder;
   maxSuggestions?: number;
 };
 
 export type RhymeIndexSource = RhymeIndex | (() => RhymeIndex);
 
+export type RhymeSuggestionCandidate = {
+  readonly id: string;
+  readonly label?: string;
+  readonly normalizedWord?: string;
+  readonly word: string;
+};
+
 export type RhymeCandidateFinder = (
   index: RhymeIndex,
-  query: ExactRhymeQuery,
-) => readonly ExactRhymeCandidate[];
+  query: RhymeQuery,
+) => readonly RhymeSuggestionCandidate[];
 
 const DEFAULT_WORDS = [
   'again',
@@ -85,8 +93,10 @@ export function createRhymeSuggestionProvider(
     options.maxSuggestions ?? MAX_SUGGESTIONS,
   );
   const fallbackProvider = options.fallbackProvider ?? staticSuggestionProvider;
-  const findExactRhymeCandidates =
-    options.findExactRhymeCandidates ?? findDefaultExactRhymeCandidates;
+  const findRhymeCandidates =
+    options.findRhymeCandidates ??
+    options.findExactRhymeCandidates ??
+    findDefaultRhymeCandidates;
 
   return {
     getSuggestions(context) {
@@ -105,8 +115,9 @@ export function createRhymeSuggestionProvider(
       const excludedWords = getExcludedTokens(context);
 
       for (const anchor of anchors) {
-        const candidates = findExactRhymeCandidates(index, {
+        const candidates = findRhymeCandidates(index, {
           anchor,
+          candidateKinds: ['exact', 'slant'],
           excludedWords,
         })
           .filter((candidate) => !isActiveWordCandidate(candidate, activeWord))
@@ -229,22 +240,48 @@ function getFallbackSuggestions(
   return fallbackProvider.getSuggestions(context).slice(0, maxSuggestions);
 }
 
-function createRhymeSuggestion(
-  candidate: ExactRhymeCandidate,
-): WordSuggestion {
-  return {
+function createRhymeSuggestion(candidate: RhymeSuggestionCandidate) {
+  const suggestion: WordSuggestion = {
     id: candidate.id,
     word: candidate.word,
   };
+
+  const label = getWordInclusiveLabel(candidate);
+
+  if (label) {
+    suggestion.label = label;
+  }
+
+  return suggestion;
 }
 
 function isActiveWordCandidate(
-  candidate: ExactRhymeCandidate,
+  candidate: RhymeSuggestionCandidate,
   activeWord: string,
 ) {
   return Boolean(
-    activeWord && candidate.normalizedWord.startsWith(activeWord),
+    activeWord && getCandidateNormalizedWord(candidate).startsWith(activeWord),
   );
+}
+
+function getCandidateNormalizedWord(candidate: RhymeSuggestionCandidate) {
+  return normalizeToken(candidate.normalizedWord ?? candidate.word);
+}
+
+function getWordInclusiveLabel(candidate: RhymeSuggestionCandidate) {
+  const label = candidate.label?.trim();
+
+  if (!label) {
+    return undefined;
+  }
+
+  const normalizedWord = getCandidateNormalizedWord(candidate);
+  const includesWord = label
+    .split(/\s+/u)
+    .map(normalizeToken)
+    .includes(normalizedWord);
+
+  return includesWord ? label : undefined;
 }
 
 function normalizeMaxSuggestions(maxSuggestions: number) {

@@ -100,6 +100,7 @@ describe('rhyme artifact runtime privacy guard', () => {
       try {
         const {
           findExactRhymeCandidates,
+          findRhymeCandidates,
           loadRhymeIndexFromArtifact,
           RHYME_INDEX_ARTIFACT_FORMAT,
         } = jest.requireActual<typeof import('../index')>('../index');
@@ -128,6 +129,16 @@ describe('rhyme artifact runtime privacy guard', () => {
               ],
               word: 'hook',
             },
+            {
+              normalizedWord: 'hug',
+              pronunciations: [
+                {
+                  phones: ['HH', 'AH1', 'G'],
+                  rhymeTail: ['AH1', 'G'],
+                },
+              ],
+              word: 'hug',
+            },
           ],
         });
 
@@ -146,6 +157,32 @@ describe('rhyme artifact runtime privacy guard', () => {
             slantSimilarity: null,
             word: 'hook',
           },
+        ]);
+        expect(
+          findRhymeCandidates(index, {
+            anchor: SENSITIVE_LYRIC_TOKEN,
+            excludedWords: [SENSITIVE_LYRIC_CONTENT],
+            maxResults: 2,
+            minSlantSimilarity: 0,
+            sourceTokens: [SENSITIVE_LYRIC_CONTENT],
+          }),
+        ).toEqual([
+          expect.objectContaining({
+            id: 'rhyme:exact:hook',
+            kind: 'exact',
+            matchedSyllables: 1,
+            normalizedWord: 'hook',
+            repetitionPenalty: 0,
+            rhymeTailKey: 'UH1 K',
+            slantSimilarity: null,
+            stressCompatibility: 1,
+            word: 'hook',
+          }),
+          expect.objectContaining({
+            kind: 'slant',
+            normalizedWord: 'hug',
+            slantSimilarity: expect.any(Number),
+          }),
         ]);
 
         for (const spy of consoleSpies) {

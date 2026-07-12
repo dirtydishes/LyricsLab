@@ -1,5 +1,13 @@
 import { normalizeRhymeToken } from './normalize';
-import { extractRhymeTailFromPhonemes } from './rhymeTail';
+import {
+  extractRhymeTailFromPhonemes,
+} from './rhymeTail';
+import {
+  compareRhymeCandidates,
+  createRankedExactCandidate,
+  DEFAULT_MIN_SLANT_SIMILARITY,
+  findSlantRhymeCandidates,
+} from './rhymeRanking';
 
 export { normalizeRhymeToken } from './normalize';
 
@@ -45,6 +53,29 @@ export type ExactRhymeCandidate = {
   readonly slantSimilarity: null;
 };
 
+export type RhymeCandidateRankFeatures = {
+  readonly matchedSyllables: number;
+  readonly repetitionPenalty: number;
+  readonly stressCompatibility: number;
+};
+
+export type RankedExactRhymeCandidate = ExactRhymeCandidate &
+  RhymeCandidateRankFeatures;
+
+export type SlantRhymeCandidate = RhymeCandidateRankFeatures & {
+  readonly id: string;
+  readonly kind: 'slant';
+  readonly word: string;
+  readonly normalizedWord: string;
+  readonly rhymeTailKey: string;
+  readonly score: number;
+  readonly slantSimilarity: number;
+};
+
+export type RhymeCandidate = RankedExactRhymeCandidate | SlantRhymeCandidate;
+
+export type RhymeCandidateKind = RhymeCandidate['kind'];
+
 export type ExactRhymeQueryOptions = {
   readonly sourceTokens?: readonly string[];
   readonly excludeTokens?: readonly string[];
@@ -53,10 +84,22 @@ export type ExactRhymeQueryOptions = {
   readonly maxResults?: number;
 };
 
+export type RhymeQueryOptions = ExactRhymeQueryOptions & {
+  readonly candidateKinds?: readonly RhymeCandidateKind[];
+  readonly minSlantSimilarity?: number;
+};
+
 export type ExactRhymeQuery = ExactRhymeQueryOptions & {
   readonly anchor?: string;
   readonly anchorToken?: string;
 };
+
+export type RhymeQuery = RhymeQueryOptions & {
+  readonly anchor?: string;
+  readonly anchorToken?: string;
+};
+
+export type RhymeCandidateQuery = RhymeQuery;
 
 type MutableIndexedRhymeLexeme = Omit<
   IndexedRhymeLexeme,
@@ -211,6 +254,91 @@ export function findExactRhymeCandidates(
   return limitedCandidates.map(stripCandidateSortMetadata);
 }
 
+export function findRhymeCandidates(
+  index: RhymeIndex,
+  query: RhymeQuery,
+): RhymeCandidate[];
+
+export function findRhymeCandidates(
+  index: RhymeIndex,
+  anchorToken: string,
+  options?: RhymeQueryOptions,
+): RhymeCandidate[];
+
+export function findRhymeCandidates(
+  index: RhymeIndex,
+  anchorOrQuery: string | RhymeQuery,
+  options: RhymeQueryOptions = {},
+): RhymeCandidate[] {
+  const query = normalizeRhymeQuery(anchorOrQuery, options);
+
+  if (query.maxResults !== undefined && query.maxResults <= 0) {
+    return [];
+  }
+
+  const anchorNormalizedWord = normalizeRhymeToken(query.anchorToken);
+  const anchorLexeme = index.lexemesByToken.get(anchorNormalizedWord);
+
+  if (!anchorLexeme) {
+    return [];
+  }
+
+  const candidateKinds = new Set(query.candidateKinds);
+  const maxResults =
+    query.maxResults === undefined ? undefined : Math.floor(query.maxResults);
+  const repeatedWords = buildRepeatedWordSet(query);
+  const exactQuery = createMixedExactQuery(query);
+  const exactCandidates = candidateKinds.has('exact')
+    ? findExactRhymeCandidates(index, anchorNormalizedWord, exactQuery)
+        .map((candidate) =>
+          createRankedExactCandidate(
+            index,
+            anchorLexeme,
+            candidate,
+            repeatedWords,
+          ),
+        )
+        .sort(compareRhymeCandidates)
+    : [];
+
+  if (
+    maxResults !== undefined &&
+    exactCandidates.length >= maxResults
+  ) {
+    return exactCandidates.slice(0, maxResults);
+  }
+
+  if (!candidateKinds.has('slant')) {
+    return exactCandidates;
+  }
+
+  const remainingResults =
+    maxResults === undefined ? undefined : maxResults - exactCandidates.length;
+  const slantBlockedWords = buildBlockedWordSet(
+    anchorNormalizedWord,
+    exactQuery,
+  );
+  const slantCandidates = findSlantRhymeCandidates(
+    index,
+    {
+      anchorLexeme,
+      blockedWords: slantBlockedWords,
+      exactCandidateWords: new Set(
+        exactCandidates.map((candidate) => candidate.normalizedWord),
+      ),
+      maxResults: remainingResults,
+      minSlantSimilarity: query.minSlantSimilarity,
+      repeatedWords,
+    },
+  );
+
+  const candidates = [...exactCandidates, ...slantCandidates].sort(
+    compareRhymeCandidates,
+  );
+
+  return maxResults === undefined ? candidates : candidates.slice(0, maxResults);
+}
+
 export function extractExactRhymeTail(
   phones: readonly string[],
 ): readonly string[] | null {
@@ -223,7 +351,7 @@ export function createRhymeTailKey(tail: readonly string[]): string {
 
 function buildBlockedWordSet(
   anchorNormalizedWord: string,
-  options: NormalizedExactRhymeQuery,
+  options: RhymeCandidateExclusionOptions,
 ) {
   const blockedWords = new Set<string>([anchorNormalizedWord]);
 
@@ -241,6 +369,36 @@ function buildBlockedWordSet(
 
   return blockedWords;
 }
+
+function buildRepeatedWordSet(options: Pick<RhymeQueryOptions, 'sourceTokens'>) {
+  const repeatedWords = new Set<string>();
+
+  for (const token of options.sourceTokens ?? []) {
+    const normalizedToken = normalizeRhymeToken(token);
+
+    if (normalizedToken) {
+      repeatedWords.add(normalizedToken);
+    }
+  }
+
+  return repeatedWords;
+}
+
+function createMixedExactQuery(
+  query: NormalizedRhymeQuery,
+): NormalizedExactRhymeQuery {
+  return {
+    ...query,
+    maxCandidates: undefined,
+    maxResults: undefined,
+    sourceTokens: [],
+  };
+}
+
+type RhymeCandidateExclusionOptions = Pick<
+  ExactRhymeQueryOptions,
+  'excludeTokens' | 'excludedWords' | 'sourceTokens'
+>;
 
 type NormalizedExactRhymeQuery = Required<
   Pick<ExactRhymeQuery, 'anchorToken'>
@@ -266,6 +424,62 @@ function normalizeExactRhymeQuery(
     anchorToken: anchorOrQuery.anchorToken ?? anchorOrQuery.anchor ?? '',
     maxResults: anchorOrQuery.maxResults ?? anchorOrQuery.maxCandidates,
   };
+}
+
+type NormalizedRhymeQuery = Required<Pick<RhymeQuery, 'anchorToken'>> &
+  RhymeQueryOptions & {
+    readonly candidateKinds: readonly RhymeCandidateKind[];
+    readonly maxResults?: number;
+    readonly minSlantSimilarity: number;
+  };
+
+function normalizeRhymeQuery(
+  anchorOrQuery: string | RhymeQuery,
+  options: RhymeQueryOptions,
+): NormalizedRhymeQuery {
+  const query =
+    typeof anchorOrQuery === 'string'
+      ? {
+          ...options,
+          anchorToken: anchorOrQuery,
+          maxResults: options.maxResults ?? options.maxCandidates,
+        }
+      : {
+          ...anchorOrQuery,
+          anchorToken: anchorOrQuery.anchorToken ?? anchorOrQuery.anchor ?? '',
+          maxResults: anchorOrQuery.maxResults ?? anchorOrQuery.maxCandidates,
+        };
+
+  return {
+    ...query,
+    candidateKinds: normalizeCandidateKinds(query),
+    minSlantSimilarity:
+      query.minSlantSimilarity ?? DEFAULT_MIN_SLANT_SIMILARITY,
+  };
+}
+
+function normalizeCandidateKinds(
+  query: RhymeQueryOptions,
+): readonly RhymeCandidateKind[] {
+  const candidateKinds = query.candidateKinds;
+
+  if (candidateKinds === undefined || candidateKinds.length === 0) {
+    return ['exact', 'slant'];
+  }
+
+  const normalizedKinds: RhymeCandidateKind[] = [];
+  const seenKinds = new Set<RhymeCandidateKind>();
+
+  for (const candidateKind of candidateKinds) {
+    if (seenKinds.has(candidateKind)) {
+      continue;
+    }
+
+    normalizedKinds.push(candidateKind);
+    seenKinds.add(candidateKind);
+  }
+
+  return normalizedKinds;
 }
 
 function normalizeRhymeTail(

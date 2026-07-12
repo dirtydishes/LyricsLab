@@ -68,6 +68,14 @@ npx expo config --type public
 
 Full CMU artifact smoke tests and lookup performance checks belong to the CMU artifact and performance phases, not the default `npm test` command. Future non-default gates should record the command, artifact size, representative lookup count, p50/p95 timings, and the device, simulator, or host used.
 
+Run this non-default lookup ranking harness when rhyme ranking performance changes:
+
+```bash
+npm run perf:rhyme-ranking
+```
+
+`npm run perf:rhyme-ranking` checks the generated CMU artifact freshness before measuring representative `findRhymeCandidates` lookups in mixed and slant-only modes. The JSON report includes artifact size, representative lookup count, p50/p95/max timings, candidate kinds/scores in samples, and host details.
+
 ## Manual Device Checklist
 
 The Expo rebuild is not validated as the daily app until this passes on a physical iPhone:

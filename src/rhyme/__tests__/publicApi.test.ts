@@ -1,5 +1,10 @@
 /// <reference types="jest" />
 
+import type {
+  RhymeCandidate,
+  RhymeQuery,
+} from '../index';
+
 describe('rhyme public API', () => {
   afterEach(() => {
     jest.dontMock('../../editor/EditorWebView');
@@ -29,6 +34,7 @@ describe('rhyme public API', () => {
           buildRhymeIndex: expect.any(Function),
           extractRhymeTail: expect.any(Function),
           findExactRhymes: expect.any(Function),
+          findRhymeCandidates: expect.any(Function),
           loadRhymeIndexFromArtifact: expect.any(Function),
           normalizeRhymeToken: expect.any(Function),
           parseCmuDictionary: expect.any(Function),
@@ -46,6 +52,7 @@ describe('rhyme public API', () => {
       extractRhymeTail,
       findExactRhymeCandidates,
       findExactRhymes,
+      findRhymeCandidates,
       normalizeRhymeToken,
       parseCmuDictionary,
       parseCmuDictionaryLines,
@@ -87,6 +94,72 @@ THE DH AH0
     expect(findExactRhymes(index, 'time', { includeSelf: true, limit: 2 }))
       .toEqual(['climb', 'lime']);
     expect(findExactRhymes(index, 'the')).toEqual([]);
+    const exactCandidates = findExactRhymeCandidates(index, {
+      anchor: 'time!',
+      excludedWords: ['lime'],
+      maxResults: 1,
+    });
+
+    expect(Object.keys(exactCandidates[0] ?? {}).sort()).toEqual([
+      'id',
+      'kind',
+      'normalizedWord',
+      'rhymeTailKey',
+      'score',
+      'slantSimilarity',
+      'word',
+    ]);
+    expect(exactCandidates).toEqual([
+      {
+        id: 'rhyme:exact:climb',
+        kind: 'exact',
+        normalizedWord: 'climb',
+        rhymeTailKey: 'AY1 M',
+        score: 1,
+        slantSimilarity: null,
+        word: 'climb',
+      },
+    ]);
+
+    const mixedQuery = {
+      anchor: 'time!',
+      excludedWords: ['lime'],
+      maxResults: 6,
+      minSlantSimilarity: 0,
+      sourceTokens: ['rhyme'],
+    } satisfies RhymeQuery;
+    const mixedCandidates = findRhymeCandidates(index, mixedQuery);
+    const firstMixedCandidate: RhymeCandidate | undefined = mixedCandidates[0];
+
+    expect(firstMixedCandidate).toEqual(
+      expect.objectContaining({
+        kind: 'exact',
+        matchedSyllables: 1,
+        normalizedWord: 'climb',
+        repetitionPenalty: 0,
+        slantSimilarity: null,
+        stressCompatibility: 1,
+        word: 'climb',
+      }),
+    );
+    expect(
+      numericFeature(
+        requiredCandidate(mixedCandidates, 'rhyme'),
+        'repetitionPenalty',
+      ),
+    ).toBeGreaterThan(0);
+    expect(mixedCandidates.some((candidate) => candidate.kind === 'slant'))
+      .toBe(true);
+    expect(
+      mixedCandidates.find((candidate) => candidate.kind === 'slant'),
+    ).toEqual(
+      expect.objectContaining({
+        matchedSyllables: 1,
+        slantSimilarity: expect.any(Number),
+        stressCompatibility: 1,
+      }),
+    );
+
     expect(
       findExactRhymeCandidates(index, {
         anchor: 'time!',
@@ -106,6 +179,27 @@ THE DH AH0
     ]);
   });
 });
+
+function requiredCandidate(
+  candidates: readonly RhymeCandidate[],
+  normalizedWord: string,
+): RhymeCandidate {
+  const candidate = candidates.find(
+    (entry) => entry.normalizedWord === normalizedWord,
+  );
+
+  expect(candidate).toBeDefined();
+
+  return candidate as RhymeCandidate;
+}
+
+function numericFeature(candidate: RhymeCandidate, key: string): number {
+  const value = (candidate as Record<string, unknown>)[key];
+
+  expect(value).toEqual(expect.any(Number));
+
+  return value as number;
+}
 
 function mockForbiddenDependency(moduleName: string) {
   jest.doMock(moduleName, () => {
