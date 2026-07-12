@@ -73,7 +73,7 @@ Evidence:
 
 ## PR And Commits
 
-Local implementation commit is recorded after final gate reruns. No push, PR, merge, or hosted state was mutated.
+Implementation commit: `578f3f5831d70e0d721478beedab855379a5ee9f` (`activate production rhyme suggestions`). The accepted detached checkout remains atop the exact Phase 05 base; the orchestrator can publish/cherry-pick the reported commits onto `lavender/production-rhyme-phase-05-sol`. No push, PR, merge, or hosted state was mutated.
 
 ## Beads Updates And Follow-Ups
 
