@@ -89,17 +89,14 @@ Implementation-helper synthesis:
 
 ## Review
 
-Reviewer skill:
-
-`thermo-nuclear-code-quality-review`
-
-Pending.
+Reviewer closeout remains orchestrator-owned. This implementation worker did not
+launch a review thread or close Beads.
 
 ## CI And Gates
 
 CI owner: reviewer/verification agents
 
-Current CI state: `not-run`
+Current CI state: `ci-unavailable-with-evidence`
 
 Evidence:
 
@@ -115,20 +112,21 @@ Local implementation gates:
 - `node --check scripts/perf-rhyme-ranking.mjs`: passed.
 - `git diff --check`: passed.
 
-Hosted CI placeholder:
+Hosted CI evidence:
 
-- PR checks: `TODO`
-- If hosted checks are unavailable, record `ci-unavailable-with-evidence` with PR metadata and check output instead of treating missing checks as green.
+- PR: `https://github.com/dirtydishes/lyricslab/pull/21`
+- `gh pr view 21 --repo dirtydishes/lyricslab --json url,number,state,isDraft,mergeable,baseRefName,headRefName,statusCheckRollup,title`: open, non-draft, base `lavender/expo-clean-rebuild`, head `lavender/offline-rhyme-phase-06`, mergeable `MERGEABLE`, `statusCheckRollup` empty.
+- `gh pr checks 21 --repo dirtydishes/lyricslab`: no checks reported on the branch.
 
 ## PR And Commits
 
-- PR: `TODO`
+- PR: `https://github.com/dirtydishes/lyricslab/pull/21`
 - Branch: `lavender/offline-rhyme-phase-06`
 - Expected base: `lavender/expo-clean-rebuild`
-- Implementation commit: `TODO`
-- Turn-doc / PR-detail commit: `TODO`
-- Review repair commit: `TODO` if applicable.
-- Reviewer-observed PR state: `TODO`
+- Implementation commit: `38fa93465f7c9afdf1af0aa3b2f07b108c375b5a add slant rhyme ranking guard`
+- Turn-doc / PR-detail commit: `record phase six pr details`
+- Review repair commit: none by implementation worker.
+- Reviewer-observed PR state: pending reviewer closeout.
 
 ## Beads Updates
 
@@ -149,4 +147,4 @@ None.
 
 ## Closeout
 
-Open.
+Implementation PR open and ready for orchestrator callback.
