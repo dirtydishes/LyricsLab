@@ -304,3 +304,42 @@ The four independent-review blockers are repaired and Phase 04A is **pr-ready lo
   ]
 }
 ```
+
+## Fresh Independent Runtime Review Closeout
+
+Outcome: **repaired and approved locally**. The runtime remediation removed the original eager-expansion/full-scan blocker, but the fresh review found and repaired two additional correctness defects before approval. No finding remains in scope.
+
+### Findings and repairs
+
+- **High — binary v2 slant retrieval was not Phase 02 complete.** The first v2 slant key retained the full consonant-manner sequence. Phase 02 already proves that `AE1 S T R` and `AE1 T R` score `0.9`, but those pronunciations occupied different runtime buckets. The same exact-sequence scheme also missed accepted four-plus-syllable tails when one vowel crossed families. Red decoder tracer bullets reproduced both omissions. The compiler/runtime now use a threshold-derived hybrid index: tails of up to three syllables use vowel-family sequences, longer tails use vowel count, and queries include only neighboring counts capable of reaching `0.86`. A cheap family-key upper bound filters impossible candidates before lexeme decoding. Property-style tests cover consonant clusters, long vowel mismatches, and 7/8-syllable length differences and prove that every accepted test pair reaches a compatible bucket without the upper bound undershooting the real score.
+- **High — seal setup trusted coordinated gold-plus-manifest tampering.** Gold-only tampering failed, but changing both the gold bytes and adjacent manifest hash allowed setup to bless new content. A red adversarial test reproduced this. The seal module now pins the immutable SHA-256 `40aac8d4704a9ca44bf1d2d19f5843714b83c08c59818b81b123baa7e010d4d7` independently of the manifest, verifies content before `chmod`, establishes local `0444`, and rejects coordinated tampering.
+- **Structural — two engine-construction architectures remained.** After indexed decode replaced eager construction, `createRhymeEngineAsync` and its cooperative merge-sort path were dead except for a self-referential test. The obsolete 120-line layer was deleted; cancellation remains at the canonical decoder/runtime generation boundary with fixture and production-artifact coverage.
+- **Evidence gap — the production probe used two friendly anchors.** It now samples 64 evenly distributed unique anchors, records cold p50/p95/max, forces GC before and after the sequence, enforces heap/RSS cache-growth ceilings, and performs a real production-artifact cancellation run. The startup ceiling moved from `5,000` to `6,000` ms only after a full-suite run measured `5,220` ms while isolated runs were `3,730-4,322` ms; the revised ceiling still rejects the independently measured eager runtime at `7,633` ms.
+
+Repair commit: `ce23daea57851fe3d89bdecacb56fa1616084cce` (`repair indexed rhyme parity and review guards`). No file crosses 1,000 lines after repair (`decodeRhymeData.ts` is 873; `createRhymeEngine.ts` is 591). The candidate adapter continues to reuse the deep Phase 02 engine and does not expose artifact/runtime types through `RhymeEngine`.
+
+### Runtime and artifact evidence
+
+- Two consecutive final forced-GC runs passed. Run one: retained heap `41,354,768` bytes, retained RSS `52,400,128`, startup `4,111.775` ms, warm p50/p95 `26.767/67.294` ms, sampled cold p50/p95/max `35.129/131.918/217.126` ms, and post-64-anchor cache growth `85,680` heap / `41,689,088` RSS bytes. Run two: retained heap `41,383,792`, retained RSS `62,410,752`, startup `3,729.603` ms, warm p50/p95 `22.755/63.345` ms, sampled cold p50/p95/max `37.479/126.125/213.264` ms, and cache growth `114,296` heap / `37,019,648` RSS bytes.
+- The engine retains one bounded query working set; repeated same-query calls reuse it, changing anchors replaces it, and the many-anchor GC probe shows no accumulating heap cache. Runtime tests prove repeated suggestions perform no further artifact reads. Exact/slant index range lookups, lazy candidate decoding, production cancellation, overlapping-generation rejection, atomic last-good publication, retry, listener isolation, stable proxy identity, and reader cleanup pass.
+- Fixture v2 is `3,092` bytes / SHA-256 `04145680c60ff41981c4af545680c32067ee03e1b0ab4a51930d3ff8711688af`. Its four new project-owned tracer words exist only to prove the two previously missed Phase 02 slant classes.
+- Production v2 is `19,413,208` bytes / SHA-256 `9edd36f22608a86ac34f375bcf05b72a0c30e10a64a980df94d469e139862b58`. The source manifest remains SHA-256 `b6b827989c4af5d0d15eea519d6726ebf52044f9a76dfa14ae5b9240226fab1`. Two explicit temporary clean builds and the committed artifact were byte-identical.
+- Production remains dormant. App/editor/settings/provider/bridge activation is unchanged; Expo packaging still points only to the dormant production factory. Safety-blocked words remain analyzable anchors and never candidates, proper nouns remain denied by default, the dynamic internal eligibility callback cannot override safety, and rap/proper/safety policy bits remain queryable internally.
+
+### Final gates and CI state
+
+CI owner: fresh independent reviewer for all local evidence. Terminal state: **`ci-unavailable-with-evidence`**. The review branch is local-only, push/PR/merge were forbidden, and the repository contains no tracked `.github` workflows, so no hosted-green claim is possible. All requested local gates are green after repair:
+
+- `npm ci`: passed from the root lockfile with the existing Expo worklets peer warning and 10 moderate transitive audit findings. `npm ci --prefix packages/editor-web`: passed with zero vulnerabilities.
+- Core: final `npm test` passed 24/24 suites and 196/196 tests; `npm run typecheck` passed.
+- External and Phase 04 sources: two consecutive `author-phase04` runs reproduced 618 reviewed entries; `check:rhyme-sources`, `test:rhyme-sources`, `check:rhyme-production-sources`, and `test:rhyme-production-sources` passed with exact CMU/SUBTLEX pins and the full containment/archive/numeric/ARPAbet adversarial suite.
+- Seal/evaluation: setup, check, coordinated-tamper adversarial test, evaluator self-test, and normal evaluator passed at local mode `0444`, unchanged immutable gold hash, and 128/128 with policy controls green.
+- Fixture/compiler/production: fixture build/check/compiler passed; production build/check/data passed; two additional clean regenerations matched the committed bytes exactly; decoder format/version/padding/rank/cross-reference/alternate/index/parity/policy tests passed.
+- Editor: 3/3 files and 25/25 tests passed; editor build, generated HTML build, and freshness check passed.
+- Legacy artifact: build/check/smoke passed at unchanged SHA-256 `075fd521ac9f2660f6bc970e1beecb89216fea70d86a768f7190045396a32249`; compact perf passed with mixed p50/p95 `0.329/1.496` ms and slant p50/p95 `3.454/9.289` ms.
+- Expo/platform: public config passed at SDK 56, introspected config contains `production.rhymebin`, direct `expo-asset@56.0.17`, `expo-file-system@56.0.8`, and `expo-crypto@56.0.4` were verified, and platform/runtime boundary tests passed.
+- Final `git diff --check` passed. No Beads, PR, push, merge, provider, editor, settings, app-route, or bridge state was mutated.
+
+### Review disposition
+
+Phase 04A is locally approved after repairs. Phase 06 still owns physical-device release proof; the host probe deliberately reports slower cold unique-anchor tails separately rather than presenting them as warm p95. No further Phase 04A context is required beyond preserving the hybrid slant-index completeness property, immutable seal hash, artifact/source lockstep, dormant activation boundary, and the final device-evidence caveat.
