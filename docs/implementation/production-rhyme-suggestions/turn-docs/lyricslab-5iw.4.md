@@ -14,11 +14,11 @@ Not started. Record editorial/evaluation independence, provenance ownership, CI 
 
 ## Adaptations
 
-None.
+- User-approved 2026-07-12 sequence amendment keeps this phase focused on human-reviewable project-owned rap, safety, and proper-noun sources. New Phase 04A owns the external-source pins, NOTICE, and complete production artifact.
 
 ## Discoveries And Decisions
 
-None.
+Approved sequence amendment: `lyricslab-5iw.4a` now follows this issue, and native integration waits for that production artifact phase.
 
 ## Implementation And Delegation Evidence
 
@@ -56,7 +56,7 @@ None.
 
 ## Context To Keep
 
-Gold-set independence and disputed-pronunciation review must be preserved; the lexicon cannot be tuned against the acceptance set without disclosure.
+Gold-set independence and disputed-pronunciation review must be preserved; the lexicon cannot be tuned against the acceptance set without disclosure. Keep source manifests compatible with the Phase 03 format, but do not claim a complete production artifact in this phase.
 
 ## Closeout
 

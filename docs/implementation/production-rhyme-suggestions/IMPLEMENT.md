@@ -27,6 +27,7 @@ Focused in-editor highlighting is the next milestone. Phrase rhymes, scheme pred
 - Balanced slants use full-tail alignment and require a phonetic score of at least `0.86`.
 - Ranking weights are `0.65` phonetic, `0.15` exact, `0.12` multisyllabic, `0.08` SUBTLEX commonness, minus `0.12` current-song repetition.
 - The runtime consumes a versioned bundled binary loaded asynchronously after the first interactive frame.
+- Phase 03 proves the manifest-driven binary/compiler/loader framework with project-owned fixtures; Phase 04 authors reviewed project sources; Phase 04A resolves external-source rights and assembles the complete production artifact.
 - The native provider seam and narrow bridge envelope remain stable.
 - Physical validation occurs at final closeout and completion means a validated local iPhone release build, not TestFlight.
 
@@ -65,11 +66,12 @@ Focused in-editor highlighting is the next milestone. Phrase rhymes, scheme pred
 
 | Beads Issue | Phase | Outcome | Phase Doc | Depends On | Status |
 |---|---|---|---|---|---|
-| `lyricslab-5iw.1` | 01 | Foundation, theme, and editor contract | `01-foundation-theme-editor-contract.md` | none | open |
-| `lyricslab-5iw.2` | 02 | Pure phonological engine | `02-pure-phonological-engine.md` | `lyricslab-5iw.1` | open |
-| `lyricslab-5iw.3` | 03 | Deterministic data pipeline | `03-deterministic-data-pipeline.md` | `lyricslab-5iw.2` | open |
+| `lyricslab-5iw.1` | 01 | Foundation, theme, and editor contract | `01-foundation-theme-editor-contract.md` | none | closed |
+| `lyricslab-5iw.2` | 02 | Pure phonological engine | `02-pure-phonological-engine.md` | `lyricslab-5iw.1` | closed |
+| `lyricslab-5iw.3` | 03 | Deterministic pipeline framework | `03-deterministic-data-pipeline.md` | `lyricslab-5iw.2` | in progress |
 | `lyricslab-5iw.4` | 04 | Rap lexicon and safety data | `04-rap-lexicon-safety-data.md` | `lyricslab-5iw.3` | open |
-| `lyricslab-5iw.5` | 05 | Native integration and suggestion UI | `05-native-integration-suggestion-ui.md` | `lyricslab-5iw.4` | open |
+| `lyricslab-5iw.4a` | 04A | Production artifact assembly | `04a-production-artifact-assembly.md` | `lyricslab-5iw.4` | open |
+| `lyricslab-5iw.5` | 05 | Native integration and suggestion UI | `05-native-integration-suggestion-ui.md` | `lyricslab-5iw.4a` | open |
 | `lyricslab-5iw.6` | 06 | Diagnostics, benchmarks, and writer review | `06-diagnostics-benchmarks-writer-review.md` | `lyricslab-5iw.5` | open |
 
 ## Quality Gates

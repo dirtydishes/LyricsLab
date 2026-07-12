@@ -43,7 +43,7 @@ None.
 
 ## Dependencies
 
-- Depends on: `lyricslab-5iw.4`
+- Depends on: `lyricslab-5iw.4a`
 - Parallel-safe: no
 
 ## Acceptance Evidence
