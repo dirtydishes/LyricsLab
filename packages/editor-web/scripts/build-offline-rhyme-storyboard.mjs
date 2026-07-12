@@ -119,14 +119,14 @@ const phaseLedger = [
     phase: '07',
     title: 'Device evidence and closeout',
     issue: 'lyricslab-bhs',
-    pr: 'phase PR',
+    pr: '#22',
     status: 'pr-ready',
     summary:
       'Final gates, physical-device availability, follow-up inventory, and this storyboard are packaged for review and orchestrator-owned Beads closeout.',
     repair:
-      'No product repair is claimed here. The key limitation is evidence: this Debian host has no physical-device session.',
+      'Review repaired the follow-up mapping and generator whitespace; the key limitation is evidence because this Debian host has no physical-device session.',
     gates:
-      'Automated gates are rerun in Phase 07; physical-device validation remains unavailable until a real-device run is recorded.',
+      'Automated gates pass locally; hosted CI is absent with evidence; physical-device validation remains unavailable until a real-device run is recorded.',
   },
 ];
 
@@ -182,27 +182,27 @@ const diffSpecs = [
 ];
 
 const followUps = [
-  'highlighting',
-  'phrase rhymes',
-  'audio',
-  'IAP',
-  'sync',
-  'AI collaborator room',
-  'neural reranking',
-  'user-teachable slant preferences',
+  ['lyricslab-icz', 'WebView rhyme highlighting'],
+  ['lyricslab-abf', 'phrase rhymes'],
+  ['lyricslab-3ci', 'audio'],
+  ['lyricslab-6mo', 'IAP'],
+  ['lyricslab-1ez', 'sync'],
+  ['lyricslab-oy7', 'AI collaborator room'],
+  ['lyricslab-9x4', 'neural reranking'],
+  ['lyricslab-60g', 'user-teachable slant preferences'],
 ];
 
 const gateRows = [
-  ['npm test', 'final automated gate'],
-  ['npm run typecheck', 'TypeScript surface gate'],
-  ['npm run editor:test', 'editor-web unit gate'],
-  ['npm run build:editor-html', 'generated editor HTML repair/build gate'],
-  ['npm run check:editor-html', 'freshness gate after build'],
-  ['npx expo config --type public', 'Expo public config sanity check'],
-  ['npm run check:rhyme-artifact', 'CMU artifact freshness gate'],
-  ['npm run smoke:rhyme-artifact -- --compact', 'full artifact lookup smoke'],
-  ['npm run perf:rhyme-ranking -- --compact', 'non-default ranking performance guard'],
-  ['git diff --check', 'whitespace and patch sanity gate'],
+  ['npm test', 'final automated gate', 'passed locally'],
+  ['npm run typecheck', 'TypeScript surface gate', 'passed locally'],
+  ['npm run editor:test', 'editor-web unit gate', 'passed locally'],
+  ['npm run build:editor-html', 'generated editor HTML repair/build gate', 'passed locally'],
+  ['npm run check:editor-html', 'freshness gate after build', 'passed locally'],
+  ['npx expo config --type public', 'Expo public config sanity check', 'passed locally'],
+  ['npm run check:rhyme-artifact', 'CMU artifact freshness gate', 'passed locally'],
+  ['npm run smoke:rhyme-artifact -- --compact', 'full artifact lookup smoke', 'passed locally'],
+  ['npm run perf:rhyme-ranking -- --compact', 'non-default ranking performance guard', 'passed locally'],
+  ['git diff --check', 'whitespace and patch sanity gate', 'passed locally'],
 ];
 
 await main();
@@ -210,7 +210,7 @@ await main();
 async function main() {
   await validateCommits();
   const diffCards = await Promise.all(diffSpecs.map(renderDiffCard));
-  const html = buildHtml(diffCards.join('\n'));
+  const html = stripTrailingWhitespace(buildHtml(diffCards.join('\n')));
   validateHtml(html);
 
   if (options.check) {
@@ -314,14 +314,14 @@ function buildHtml(diffCards) {
   const phaseArticles = phaseLedger.map(phaseArticle).join('\n');
   const followUpItems = followUps
     .map(
-      (item) =>
-        `<li><span class="status-chip status-chip--follow-up">missing follow-up</span>${escapeHtml(item)}</li>`,
+      ([id, title]) =>
+        `<li><span class="status-chip status-chip--follow-up">${escapeHtml(id)}</span>${escapeHtml(title)}</li>`,
     )
     .join('\n');
   const gateTable = gateRows
     .map(
-      ([command, purpose]) =>
-        `<tr><td><code>${escapeHtml(command)}</code></td><td>${escapeHtml(purpose)}</td><td><span class="status-chip status-chip--pending">recorded in Phase 07 turn doc after local run</span></td></tr>`,
+      ([command, purpose, state]) =>
+        `<tr><td><code>${escapeHtml(command)}</code></td><td>${escapeHtml(purpose)}</td><td><span class="status-chip status-chip--passed">${escapeHtml(state)}</span></td></tr>`,
     )
     .join('\n');
 
@@ -708,7 +708,7 @@ function buildHtml(diffCards) {
       <div class="evidence-panel">
         <div class="table-scroll">
           <table>
-            <caption>Phase 07 final gates are recorded in the turn doc after this storyboard generation.</caption>
+            <caption>Phase 07 final gates are recorded in the turn doc and remain separate from physical-device validation.</caption>
             <thead>
               <tr>
                 <th scope="col">Command</th>
@@ -729,7 +729,7 @@ function buildHtml(diffCards) {
 
     <section aria-labelledby="follow-up-title">
       <h2 id="follow-up-title">Follow-Up Inventory</h2>
-      <p>The read-only Beads inventory found no distinct follow-up issue titles for the required post-MVP topics. This worker reports them for orchestrator-owned creation instead of mutating Beads.</p>
+      <p>Beads now maps each required post-MVP topic to an open follow-up issue discovered from <code>lyricslab-bhs</code>. They are intentionally not implemented in Phase 07.</p>
       <ul class="follow-up-list">
         ${followUpItems}
       </ul>
@@ -810,6 +810,12 @@ function validateHtml(html) {
       throw new Error(`Storyboard is missing Phase ${phase.phase}.`);
     }
   }
+
+  for (const [id] of followUps) {
+    if (!html.includes(id)) {
+      throw new Error(`Storyboard is missing follow-up issue ${id}.`);
+    }
+  }
 }
 
 function countMatches(value, pattern) {
@@ -849,6 +855,10 @@ function parseArgs(args) {
   }
 
   return parsed;
+}
+
+function stripTrailingWhitespace(value) {
+  return `${value.replace(/[ \t]+$/gm, '').trimEnd()}\n`;
 }
 
 function escapeHtml(value) {

@@ -77,7 +77,14 @@ Reviewer skill:
 
 `thermo-nuclear-code-quality-review`
 
-Pending. The review thread should own final review, hosted CI/mergeability evidence, and any in-scope repairs. No separate review doc was created; this turn doc is the phase evidence surface.
+Final review status: `repaired`.
+
+Review repaired two Phase 07 closeout defects before approval:
+
+- The storyboard generator and generated HTML still reported required post-MVP follow-ups as missing even though Beads had already created all eight discovered follow-up issues from `lyricslab-bhs`.
+- The generated storyboard contained trailing whitespace from the SSR diff payload, so `git diff --check` failed on the committed PR head.
+
+The repair keeps the storyboard generated from source: `packages/editor-web/scripts/build-offline-rhyme-storyboard.mjs` now maps exact follow-up IDs, validates those IDs in generated HTML, and strips trailing whitespace before write/check. The HTML artifact was regenerated from the repaired generator. No separate review doc was created; this turn doc is the phase evidence surface.
 
 ## CI And Gates
 
@@ -94,11 +101,12 @@ Local gate evidence:
 - `npm run check:editor-html`: passed after build.
 - `npx expo config --type public`: passed; public config reported app name `LyricsLab`, slug `lyricslab-mobile`, SDK `56.0.0`, platforms `ios`, `android`, and `web`, plugins `expo-sqlite` and `expo-router`, and iOS bundle id `com.dirtydishes.lyricslab-mobile`.
 - `npm run check:rhyme-artifact`: passed; generated CMU artifact is fresh.
-- `npm run smoke:rhyme-artifact -- --compact`: passed; artifact size 9,596,136 bytes, sha256 `075fd521ac9f2660f6bc970e1beecb89216fea70d86a768f7190045396a32249`, 125,213 lexemes, 135,166 pronunciations, 35,869 tails, 10/10 lookup anchors hit, p50 0.047 ms, p95 0.371 ms.
-- `npm run perf:rhyme-ranking -- --compact`: passed; mixed p50 0.353 ms, p95 1.706 ms, max 12.626 ms; slant p50 3.204 ms, p95 8.057 ms, max 19.985 ms; 600/600 hit lookups for both suites.
+- `npm run smoke:rhyme-artifact -- --compact`: passed; artifact size 9,596,136 bytes, sha256 `075fd521ac9f2660f6bc970e1beecb89216fea70d86a768f7190045396a32249`, 125,213 lexemes, 135,166 pronunciations, 35,869 tails, 10/10 lookup anchors hit, p50 0.049 ms, p95 0.399 ms.
+- `npm run perf:rhyme-ranking -- --compact`: passed; mixed p50 0.349 ms, p95 1.838 ms, max 10.513 ms; slant p50 3.719 ms, p95 12.163 ms, max 24.908 ms; 600/600 hit lookups for both suites.
 - `cd packages/editor-web && node scripts/build-offline-rhyme-storyboard.mjs --check`: passed, storyboard is fresh.
 - `node --check packages/editor-web/scripts/build-offline-rhyme-storyboard.mjs`: passed.
-- `git diff --check`: passed after the closeout evidence update and again after this PR-detail update before final push.
+- Storyboard static validation: passed; 6 SSR renderer blocks, 282 `data-diff` markers, 3,960 `data-line-type` markers, all eight follow-up IDs present, no forbidden raw artifact diff headers, no renderer error markers, and no trailing whitespace.
+- `git diff --check`: passed against the repaired working-tree diff before the review repair commit.
 
 Hosted CI and mergeability evidence:
 
@@ -144,14 +152,16 @@ Technical checks:
 - Generated HTML includes diff renderer data attributes and line metadata.
 - Generated HTML excludes raw generated CMU artifact and raw CMU dictionary diff headers.
 - Static check counted 6 SSR renderer blocks, 282 `data-diff` markers, and 3,960 `data-line-type` markers.
+- Static check confirms all eight follow-up issue IDs are present and no `missing follow-up`, `SSR_RENDER_ERROR`, or `Cannot find module` markers are present.
+- Static check confirms generated HTML has no trailing whitespace after the generator repair.
 - Fragment-target Chromium screenshots for `#diffs-title` were blank, so visual evidence relies on full-page screenshots plus DOM/static renderer checks.
 
 Browser visual checks:
 
-- Desktop screenshot: `/tmp/lyricslab-phase07-storyboard-desktop.png`, 1440 x 1600, readable first viewport, no obvious overlap.
-- Mobile screenshot: `/tmp/lyricslab-phase07-storyboard-mobile.png`, 390 x 1200, hero text wraps and metric cards stack cleanly.
-- Full-height screenshot: `/tmp/lyricslab-phase07-storyboard-full.png`, 1440 x 9000, includes the phase ledger, final shape, evidence matrix, follow-up inventory, and SSR diff gallery.
-- DOM dump: `/tmp/lyricslab-phase07-storyboard.dom.html`, confirmed title and SSR renderer markers with no recorded renderer error markers.
+- Desktop screenshot: `/tmp/lyricslab-phase07-storyboard-desktop-review.png`, 1440 x 1600, readable first viewport, no obvious overlap.
+- Mobile screenshot: `/tmp/lyricslab-phase07-storyboard-mobile-review.png`, 390 x 1200, hero text wraps and metric cards stack cleanly.
+- Full-height screenshot: `/tmp/lyricslab-phase07-storyboard-full-review.png`, 1440 x 9000, includes the phase ledger, final shape, evidence matrix, follow-up inventory, and SSR diff gallery.
+- DOM dump: `/tmp/lyricslab-phase07-storyboard-review.dom.html`, confirmed title and six SSR renderer markers with no recorded renderer error markers.
 
 ## PR And Commits
 
@@ -183,29 +193,27 @@ Final Beads closure is orchestrator-owned and pending review.
 
 ## Follow-Ups Filed
 
-No follow-up Beads issue was created by this worker.
+All required post-MVP follow-ups exist in Beads and are discovered from `lyricslab-bhs`:
 
-Read-only inventory found no distinct title/label Beads issue for these required post-MVP follow-ups:
+- `lyricslab-icz`: `Follow-up: WebView rhyme highlighting`
+- `lyricslab-abf`: `Follow-up: phrase rhymes`
+- `lyricslab-3ci`: `Follow-up: audio`
+- `lyricslab-6mo`: `Follow-up: IAP`
+- `lyricslab-1ez`: `Follow-up: sync`
+- `lyricslab-oy7`: `Follow-up: AI collaborator room`
+- `lyricslab-9x4`: `Follow-up: neural reranking`
+- `lyricslab-60g`: `Follow-up: user-teachable slant preferences`
 
-- `Follow-up: WebView rhyme highlighting`
-- `Follow-up: phrase rhymes`
-- `Follow-up: audio`
-- `Follow-up: IAP`
-- `Follow-up: sync`
-- `Follow-up: AI collaborator room`
-- `Follow-up: neural reranking`
-- `Follow-up: user-teachable slant preferences`
-
-These should be created or explicitly mapped by the orchestrator before review/closeout if the epic requires persistent tracker coverage.
+These issues are intentionally not implemented in Phase 07.
 
 ## Context To Keep
 
 - Physical-device validation is unavailable on this Debian host and remains required before claiming the Expo rebuild as the primary product lane.
-- Missing follow-ups to create or map: `Follow-up: WebView rhyme highlighting`, `Follow-up: phrase rhymes`, `Follow-up: audio`, `Follow-up: IAP`, `Follow-up: sync`, `Follow-up: AI collaborator room`, `Follow-up: neural reranking`, `Follow-up: user-teachable slant preferences`.
+- Required follow-ups are mapped in Beads: `lyricslab-icz`, `lyricslab-abf`, `lyricslab-3ci`, `lyricslab-6mo`, `lyricslab-1ez`, `lyricslab-oy7`, `lyricslab-9x4`, and `lyricslab-60g`.
 - `@pierre/diffs` was already present in `packages/editor-web`; storyboard diffs render through `@pierre/diffs/ssr`.
 - Beads closure is orchestrator-owned after review; the worker only includes the orchestrator claim/export.
-- Storyboard is ready for review, but final epic closeout still depends on review and orchestrator Beads actions.
+- Storyboard review repair updated the follow-up inventory and generator whitespace cleanup; final epic closeout still depends on orchestrator Beads actions.
 
 ## Closeout
 
-Implementation PR ready. Final Beads closure remains orchestrator-owned after review. One implementation callback remains pending after the PR-detail commit is pushed.
+Final review repaired in-scope closeout defects and reran required gates. Final Beads closure remains orchestrator-owned after review. One final review callback is sent to the orchestrator thread after the repair commit is pushed.
