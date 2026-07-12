@@ -180,7 +180,7 @@ Format v1 is little-endian and deterministic:
 - Canonical code-unit sorting, fixed-point millionths, stable numeric IDs, sorted alternate phone sequences, sorted exact/slant members, zero-filled padding, and explicit source order avoid locale, timestamp, filesystem-enumeration, and absolute-checkout-path nondeterminism.
 - The runtime validates magic/version/sizes/reserved fields, required and unique canonical sections, widths/counts/alignment/overlap/bounds, payload and expected manifest hashes, strict/contiguous UTF-8 strings, every cross-reference/range, alternate ordinals, exact/slant key membership and ordering, ranks/commonness, flags, and source hashes before creating a `RhymeEngine`.
 
-The committed artifact is `assets/rhyme/fixture.rhymebin`: format version `1`, artifact version `fixture-1`, 1,752 bytes, SHA-256 `68f98b225c352fd228c8cea480aa07fc1a43ccb7fbb30af274159aff4e0ec0ed`.
+The implementation handoff artifact was `assets/rhyme/fixture.rhymebin`: format version `1`, artifact version `fixture-1`, 1,752 bytes, SHA-256 `68f98b225c352fd228c8cea480aa07fc1a43ccb7fbb30af274159aff4e0ec0ed`. Independent-review repairs regenerated the final artifact recorded below.
 
 ### Build and freshness commands
 
@@ -212,7 +212,7 @@ The new generic loader path itself never parses CMU, imports a large JSON artifa
 - Documentation: only this existing Phase 03 turn doc was updated. No side review doc or Beads mutation was created.
 - Normal application suggestions, navigation, Settings rendering, and app startup remain behaviorally unchanged because the fixture runtime is dormant.
 
-## Resumed Gates And Evidence
+## Implementation Handoff Gates And Evidence
 
 Final local state is green:
 
@@ -255,4 +255,66 @@ The original production-corpus attempt stopped correctly at the mandatory proven
 
 ## Implementation Closeout
 
-The amended Phase 03 fixture framework is implemented, locally verified, committed, pushed, and published as PR #25. Fresh independent strict review, any repairs, hosted reinspection, merge, and Beads closeout remain.
+The amended Phase 03 fixture framework was implemented, locally verified, committed, pushed, and published as PR #25. The independent strict review and its repairs are recorded below; hosted reinspection, repair publication, merge, and Beads closeout remain orchestrator-owned.
+
+## Independent Thermo-Nuclear Review
+
+Review task `019f54db-1b34-7972-9cab-32cf527843f5` started from clean symbolic branch `lavender/production-rhyme-phase-03` at `86368b3c`. It read and faithfully applied `/home/delta/.agents/skills/thermo-nuclear-code-quality-review/SKILL.md`, used test-first repair cycles for reproduced defects, retained sole mutable-checkout ownership, and did not mutate Beads.
+
+### Findings and repairs
+
+1. **Compiler phonology keys disagreed with the accepted Phase 02 engine.** The compiler selected the last primary-or-secondary stress rather than preferring primary stress before secondary stress, and its slant family key was a stress-stripped phone string rather than the engine's vowel/consonant-manner family. A focused compiler phonology module now implements the accepted primary-then-secondary-then-vowel fallback and engine-compatible family keys. The runtime independently recomputes `analyzePronunciation` and rejects any stored exact/family key that disagrees with its phone sequence, preventing future compiler/runtime drift.
+2. **Cross-reference validation was incomplete.** A self-consistent rehashed artifact could overlap or orphan flattened phone ranges, carry non-zero inter-section/trailing padding, or contain semantically false pronunciation keys. The decoder now requires canonical zero padding, safe record-size arithmetic, contiguous ownership of every flattened phone ID, complete phone inventory use, non-empty required tables/metadata/sources, canonical words/lemmas, bounded strings/alternates/phones, and exact/slant key agreement with Phase 02 analysis.
+3. **Chunk yielding covered only words and pronunciations.** Strings, phones, flattened IDs, rank/flag tables, exact/slant indexes, sources, cross-reference validation, and lexeme assembly could run as unbroken loops. Every potentially large record pass now uses the configured bounded yield cadence. The final synchronous `createRhymeEngine` construction remains after complete validation and before atomic publication; production-scale measurement remains explicitly owned by Phase 04A.
+4. **Runtime cancellation and generation semantics were incomplete.** The scheduled-start cancel handle was discarded, cancellation could not invalidate in-flight work, explicit retry could later be duplicated by `start()`, and stale reads continued unnecessarily. `RhymeEngineRuntime.cancel()` now cancels the two-frame/idle schedule, invalidates the active generation, prevents stale publication, and stops bounded reads at the next chunk boundary. Retry cancels pending startup and marks initialization active. The stable `RhymeEngine` proxy identity is preserved across every load/reload.
+5. **Subscriber exceptions could corrupt engine state.** A throwing listener during ready publication entered the load failure path and could prevent later listeners from observing state. Snapshot publication now isolates subscriber failures and notifies a stable listener copy; tests assert the observable `loading -> ready` sequence.
+6. **File and scheduler cleanup had race gaps.** Reader validation/allocation did not share one `finally`, an Expo `FileHandle.size` getter failure could leak the handle, and an already-queued idle callback could run after cancellation. Reader ownership now has one close path, Expo size inspection closes on failure, and both frame/idle stages guard cancellation. A mocked SDK 56 integration test proves bundled-module-only Asset resolution, read-only bounded FileSystem reads, Crypto hashing, ready publication, and handle closure on success and inspection failure.
+7. **Manifest/compiler hardening was incomplete.** Containment was lexical and did not resolve symlinks; normalized words were not required to match the Phase 02 canonicalizer; invalid stressed consonants, duplicate pronunciations, rank overflow, unsafe buffer arithmetic, and oversized records lacked explicit rejection; the focused compiler test leaked its temporary directory. The manifest now uses real paths for containment, validates canonical NFC/lowercase token forms and standard ARPAbet/stress, bounds ranks/strings/alternates/phones, rejects duplicate pronunciations, and the compiler caps artifacts at the runtime's 64 MiB envelope with safe arithmetic. The compiler test cleans up in `finally` and verifies hash drift, malformed fields, invalid phones, duplicate pronunciations, noncanonical words, path escape, deterministic bytes, and primary/secondary phonology.
+8. **Fixture licensing language claimed a nonexistent repository license.** No repository `LICENSE`, `COPYING`, or `NOTICE` file exists. The fixture now records `project-owned-data` and states that it is not published under a separate dataset license, without inventing redistribution terms.
+9. **Boundary tests were too shallow.** They inspected three files with a few regular expressions. The strengthened controls scan every generic runtime module for platform/storage/network/editor imports, scan normal app/editor sources for fixture activation, and assert the dormant Expo adapter uses `Asset.fromModule`, `downloadAsync`, `FileMode.ReadOnly`, and bounded `readBytes` without `Asset.fromURI`, fetch, or SQLite.
+
+No substantive in-scope finding remains. The 697-line decoder remains one cohesive deep module below the skill's 1,000-line decomposition threshold; splitting its tightly coupled table-validation flow would add interfaces without deleting complexity, so no speculative file shuffle was made.
+
+### Final artifact and format evidence
+
+- Final artifact: `assets/rhyme/fixture.rhymebin`, format `1`, artifact `fixture-1`, 1,768 bytes.
+- Artifact SHA-256: `5ee1917cd55635a9a486fe43d635ef402ae30ef7611f578f628360fd6c9985ca`.
+- Manifest SHA-256: `7d62f04d3665f01f450c154c3a0429973117a07fa9162f2c88610d06bd895d0a`.
+- Fixture lexicon SHA-256 remains `467d12f776b343bc45a5c0e27b54646b0ae6875e24b9543bfe3c513eb4722a76`.
+- Two explicit clean outputs and the committed artifact were byte-identical and shared the final artifact hash.
+- `check:rhyme-data` left the committed artifact mtime and size unchanged. The compiler control left no `lyricslab-rhyme-data-test-*` temporary directory behind.
+
+### Final review gates
+
+- `npm test` — 23 suites, 182 tests passed.
+- `npm run typecheck` — passed with no diagnostics.
+- `npm run build:rhyme-data` — regenerated the 1,768-byte final artifact.
+- `npm run check:rhyme-data` — passed via temporary regeneration without changing artifact mtime/bytes.
+- `npm run test:rhyme-data-compiler` — passed deterministic, cleanup, manifest, containment, phone, duplicate, normalization, and phonology controls.
+- Focused runtime/binary/platform/settings matrix — 6 suites, 38 tests passed.
+- Two explicit `build-rhyme-data.mjs` regenerations plus `cmp` against each other and the committed artifact — passed with identical SHA-256 values.
+- `npx expo config --type public` — exited 0; resolved `LyricsLab`, `lyricslab-mobile`, SDK `56.0.0`.
+- `npm ls expo-asset expo-file-system --package-lock-only --all` — exited 0 with direct `expo-asset@56.0.17` and `expo-file-system@56.0.8` plus compatible Expo resolutions.
+- Metro config inspection — confirmed `rhymebin` is registered exactly through the Expo default config.
+- `git diff --check` — passed.
+- Local base proof — `lavender/production-rhyme-phase-03` remains a descendant of explicit base `lavender/expo-clean-rebuild` at `7edb3ca8`.
+
+### Review-time changed files
+
+- Compiler/manifest/artifact: `scripts/rhyme-data/{compile.mjs,format.mjs,manifest.mjs,phonology.mjs}`, `scripts/test-rhyme-data.mjs`, `data/rhyme-fixture/{README.md,manifest.json}`, `assets/rhyme/fixture.rhymebin`.
+- Runtime/platform: `src/rhymeData/{binaryFormat.ts,decodeRhymeData.ts,rhymeEngineRuntime.ts}`, `src/platform/{afterFirstFrameScheduler.ts,createExpoRhymeEngineRuntime.ts}`.
+- Tests: `src/rhymeData/__tests__/{afterFirstFrameScheduler.test.ts,decodeRhymeData.test.ts,rhymeEngineRuntime.test.ts,runtimeBoundary.test.ts}` and new `src/platform/__tests__/createExpoRhymeEngineRuntime.test.ts`.
+- Evidence: this existing Phase 03 turn doc only. No side review doc, app startup/provider mutation, Phase 04/04A/05 source, or Beads state was changed.
+
+### PR, CI, and publication state
+
+- Review target remains [PR #25](https://github.com/dirtydishes/lyricslab/pull/25), explicit base `lavender/expo-clean-rebuild`, head `lavender/production-rhyme-phase-03`.
+- `ci-unavailable-with-evidence`: repeated `gh pr view 25 ...` and `gh pr checks 25 ...` calls failed with `error connecting to api.github.com`; the repository contains no `.github` workflow files to inspect locally. Hosted mergeability/check state therefore cannot be truthfully claimed.
+- Local and remote branch tips remain `86368b3c5ae90d26965e3b196df1e561d3e1ce26` before review repairs. Git metadata at `/home/delta/dev/lyricslab/.git/worktrees/lyricslab4` is read-only, so the reviewer cannot stage, commit, or push.
+- The orchestrator must commit the completed review working tree with a lowercase human message, push `lavender/production-rhyme-phase-03`, then re-inspect PR #25 mergeability/checks. CI remains `ci-unavailable-with-evidence` until that hosted inspection is possible.
+
+### Scope and follow-up disposition
+
+- Normal app startup, Settings rendering, and `bundledSuggestionProvider -> createLegacyRhymeEngineAdapter` behavior remain unchanged. The project fixture is still dormant and cannot become user-facing suggestions in Phase 03.
+- Phase 04 still owns reviewed project rap/safety/proper-noun sources. Phase 04A still owns exact CMU and `words/subtlex-word-frequencies` 2.0.0 pins/notices, complete production assembly, and production-scale construction/load measurement. Phase 05 still owns provider/settings activation.
+- Those already-authored phases cover the only remaining work; no new Beads recommendation is needed, and this review did not mutate or close Beads.

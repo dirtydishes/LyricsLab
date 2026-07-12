@@ -17,7 +17,7 @@
       "version": "1",
       "path": "lexemes.json",
       "sha256": "467d12f776b343bc45a5c0e27b54646b0ae6875e24b9543bfe3c513eb4722a76",
-      "license": "repository-license",
+      "license": "project-owned-data",
       "ownership": "project-authored"
     }
   ]

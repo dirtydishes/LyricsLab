@@ -1,6 +1,16 @@
 import { createHash } from 'node:crypto';
-import { readFile } from 'node:fs/promises';
+import { readFile, realpath } from 'node:fs/promises';
 import path from 'node:path';
+
+import {
+  isValidArpabetPhone,
+  normalizeRhymeWord,
+} from './phonology.mjs';
+import {
+  MAX_PHONES_PER_PRONUNCIATION,
+  MAX_PRONUNCIATIONS_PER_WORD,
+  MAX_STRING_BYTES,
+} from './format.mjs';
 
 const SHA256_PATTERN = /^[a-f0-9]{64}$/u;
 const ALLOWED_FLAGS = new Set(['proper-noun', 'rap', 'safety-blocked']);
@@ -11,11 +21,11 @@ export async function loadRhymeDataManifest(manifestPath) {
   const manifest = parseJson(rawManifest, 'manifest');
   validateManifest(manifest);
 
-  const manifestDirectory = path.dirname(absoluteManifestPath);
+  const manifestDirectory = await realpath(path.dirname(absoluteManifestPath));
   const sources = [];
 
   for (const source of manifest.sources) {
-    const sourcePath = resolveContainedPath(manifestDirectory, source.path);
+    const sourcePath = await resolveContainedPath(manifestDirectory, source.path);
     const bytes = await readFile(sourcePath);
     const actualHash = sha256(bytes);
 
@@ -137,19 +147,32 @@ function validateLexemes(value) {
     assertNonEmptyString(lexeme.word, `Lexeme ${index} word`);
     assertNonEmptyString(lexeme.lemma, `Lexeme ${index} lemma`);
 
-    if (
-      lexeme.normalizedWord !== undefined &&
-      (typeof lexeme.normalizedWord !== 'string' ||
-        lexeme.normalizedWord.length === 0)
-    ) {
+    const normalizedWord = normalizeRhymeWord(
+      lexeme.normalizedWord ?? lexeme.word,
+    );
+    if (!normalizedWord) {
       throw new Error(`Lexeme ${index} normalizedWord must be non-empty`);
     }
-
-    if (!Number.isInteger(lexeme.rank) || lexeme.rank <= 0) {
-      throw new Error(`Lexeme ${index} rank must be a positive integer`);
+    if (Buffer.byteLength(normalizedWord, 'utf8') > MAX_STRING_BYTES) {
+      throw new Error(`Lexeme ${index} normalizedWord exceeds ${MAX_STRING_BYTES} UTF-8 bytes`);
+    }
+    if (
+      lexeme.normalizedWord !== undefined &&
+      lexeme.normalizedWord !== normalizedWord
+    ) {
+      throw new Error(`Lexeme ${index} normalizedWord must be canonical`);
+    }
+    if (lexeme.lemma !== normalizeRhymeWord(lexeme.lemma)) {
+      throw new Error(`Lexeme ${index} lemma must be canonical`);
     }
 
-    const normalizedWord = lexeme.normalizedWord ?? lexeme.word.toLowerCase();
+    if (
+      !Number.isInteger(lexeme.rank) ||
+      lexeme.rank <= 0 ||
+      lexeme.rank > 0xffff_ffff
+    ) {
+      throw new Error(`Lexeme ${index} rank must be a positive integer`);
+    }
 
     if (words.has(normalizedWord)) {
       throw new Error(`Duplicate fixture word: ${normalizedWord}`);
@@ -166,20 +189,33 @@ function validateLexemes(value) {
       throw new Error(`Lexeme ${index} commonness must be between zero and one`);
     }
 
-    if (!Array.isArray(lexeme.pronunciations) || lexeme.pronunciations.length === 0) {
-      throw new Error(`Lexeme ${index} pronunciations must be non-empty`);
+    if (
+      !Array.isArray(lexeme.pronunciations) ||
+      lexeme.pronunciations.length === 0 ||
+      lexeme.pronunciations.length > MAX_PRONUNCIATIONS_PER_WORD
+    ) {
+      throw new Error(
+        `Lexeme ${index} pronunciations must contain 1-${MAX_PRONUNCIATIONS_PER_WORD} entries`,
+      );
     }
 
+    const pronunciationKeys = new Set();
     for (const pronunciation of lexeme.pronunciations) {
       if (
         !Array.isArray(pronunciation) ||
         pronunciation.length === 0 ||
+        pronunciation.length > MAX_PHONES_PER_PRONUNCIATION ||
         pronunciation.some(
-          (phone) => typeof phone !== 'string' || !/^[A-Z]+[0-2]?$/u.test(phone),
+          (phone) => !isValidArpabetPhone(phone),
         )
       ) {
         throw new Error(`Lexeme ${index} contains an invalid pronunciation`);
       }
+      const pronunciationKey = pronunciation.join(' ');
+      if (pronunciationKeys.has(pronunciationKey)) {
+        throw new Error(`Lexeme ${index} contains a duplicate pronunciation`);
+      }
+      pronunciationKeys.add(pronunciationKey);
     }
 
     if (lexeme.flags !== undefined) {
@@ -194,15 +230,19 @@ function validateLexemes(value) {
   }
 }
 
-function resolveContainedPath(root, relativePath) {
+async function resolveContainedPath(root, relativePath) {
   if (path.isAbsolute(relativePath)) {
     throw new Error('Manifest source paths must be relative');
   }
 
-  const resolved = path.resolve(root, relativePath);
+  const resolved = await realpath(path.resolve(root, relativePath));
   const relative = path.relative(root, resolved);
 
-  if (relative.startsWith('..') || path.isAbsolute(relative)) {
+  if (
+    relative === '..' ||
+    relative.startsWith(`..${path.sep}`) ||
+    path.isAbsolute(relative)
+  ) {
     throw new Error(`Manifest source path escapes its directory: ${relativePath}`);
   }
 
@@ -230,6 +270,9 @@ function assertObject(value, label) {
 function assertNonEmptyString(value, label) {
   if (typeof value !== 'string' || value.trim().length === 0) {
     throw new Error(`${label} must be a non-empty string`);
+  }
+  if (Buffer.byteLength(value, 'utf8') > MAX_STRING_BYTES) {
+    throw new Error(`${label} exceeds ${MAX_STRING_BYTES} UTF-8 bytes`);
   }
 }
 

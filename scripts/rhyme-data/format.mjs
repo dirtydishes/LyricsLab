@@ -2,6 +2,9 @@ export const MAGIC = Buffer.from('LLRHYME\0', 'ascii');
 export const FORMAT_VERSION = 1;
 export const HEADER_BYTES = 96;
 export const DIRECTORY_ENTRY_BYTES = 24;
+export const MAX_PHONES_PER_PRONUNCIATION = 64;
+export const MAX_PRONUNCIATIONS_PER_WORD = 32;
+export const MAX_STRING_BYTES = 4096;
 
 export const SECTION = Object.freeze({
   METADATA: 1,
@@ -40,7 +43,11 @@ export const WORD_FLAG = Object.freeze({
 });
 
 export function align4(value) {
-  return (value + 3) & ~3;
+  const aligned = Math.ceil(value / 4) * 4;
+  if (!Number.isSafeInteger(aligned)) {
+    throw new Error('Rhyme data size exceeds JavaScript safe integer bounds');
+  }
+  return aligned;
 }
 
 export function compareCodeUnits(left, right) {

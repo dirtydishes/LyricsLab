@@ -51,4 +51,32 @@ describe('post-first-frame scheduler', () => {
     expect(task).not.toHaveBeenCalled();
     expect(cancelFrame).toHaveBeenCalledWith(1);
   });
+
+  it('guards against an idle callback racing with cancellation', () => {
+    const frames: Array<() => void> = [];
+    const idle: Array<() => void> = [];
+    const task = jest.fn();
+    const cancelIdle = jest.fn();
+    const schedule = createAfterFirstFrameScheduler({
+      cancelFrame: jest.fn(),
+      cancelIdle,
+      requestFrame(callback) {
+        frames.push(callback);
+        return frames.length;
+      },
+      requestIdle(callback) {
+        idle.push(callback);
+        return idle.length;
+      },
+    });
+
+    const cancel = schedule(task);
+    frames.shift()?.();
+    frames.shift()?.();
+    cancel();
+    idle.shift()?.();
+
+    expect(cancelIdle).toHaveBeenCalledWith(1);
+    expect(task).not.toHaveBeenCalled();
+  });
 });

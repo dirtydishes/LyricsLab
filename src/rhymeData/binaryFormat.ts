@@ -1,6 +1,9 @@
 export const RHYME_DATA_FORMAT_VERSION = 1;
 export const RHYME_DATA_HEADER_BYTES = 96;
 export const RHYME_DATA_DIRECTORY_ENTRY_BYTES = 24;
+export const RHYME_DATA_MAX_PHONES_PER_PRONUNCIATION = 64;
+export const RHYME_DATA_MAX_PRONUNCIATIONS_PER_WORD = 32;
+export const RHYME_DATA_MAX_STRING_BYTES = 4096;
 export const RHYME_DATA_MAGIC = [76, 76, 82, 72, 89, 77, 69, 0] as const;
 
 export const RhymeDataSection = {

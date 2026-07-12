@@ -23,6 +23,7 @@ export type RhymeEngineRuntimeSnapshot = {
 
 export type RhymeEngineRuntime = {
   readonly engine: RhymeEngine;
+  cancel(): void;
   getSnapshot(): RhymeEngineRuntimeSnapshot;
   retry(): Promise<void>;
   start(): void;
@@ -32,7 +33,6 @@ export type RhymeEngineRuntime = {
 export type CreateRhymeEngineRuntimeOptions = {
   readonly decode: (bytes: Uint8Array) => Promise<DecodedRhymeData>;
   readonly initialVersion: string;
-  readonly maxArtifactBytes?: number;
   readonly readChunkBytes?: number;
   readonly scheduleAfterFirstFrame: (task: () => void) => () => void;
   readonly source: RhymeArtifactSource;
@@ -44,6 +44,8 @@ export function createRhymeEngineRuntime(
 ): RhymeEngineRuntime {
   let activeEngine: RhymeEngine | null = null;
   let attempt = 0;
+  let cancelScheduledStart: (() => void) | null = null;
+  let scheduleGeneration = 0;
   let started = false;
   let snapshot: RhymeEngineRuntimeSnapshot = {
     state: 'loading',
@@ -66,7 +68,9 @@ export function createRhymeEngineRuntime(
     });
 
     try {
-      const bytes = await readArtifact(options);
+      const isCurrent = () => currentAttempt === attempt;
+      const bytes = await readArtifact(options, isCurrent);
+      if (!isCurrent()) return;
       const decoded = await options.decode(bytes);
 
       if (currentAttempt !== attempt) return;
@@ -89,17 +93,41 @@ export function createRhymeEngineRuntime(
 
   function publish(next: RhymeEngineRuntimeSnapshot) {
     snapshot = Object.freeze(next);
-    for (const listener of listeners) listener();
+    for (const listener of [...listeners]) {
+      try {
+        listener();
+      } catch {
+        // A subscriber cannot turn a completed load into an engine failure.
+      }
+    }
+  }
+
+  function cancelSchedule() {
+    scheduleGeneration += 1;
+    cancelScheduledStart?.();
+    cancelScheduledStart = null;
   }
 
   return {
     engine,
+    cancel() {
+      cancelSchedule();
+      attempt += 1;
+      started = false;
+    },
     getSnapshot: () => snapshot,
-    retry: load,
+    retry() {
+      started = true;
+      cancelSchedule();
+      return load();
+    },
     start() {
       if (started) return;
       started = true;
-      options.scheduleAfterFirstFrame(() => {
+      const currentSchedule = ++scheduleGeneration;
+      cancelScheduledStart = options.scheduleAfterFirstFrame(() => {
+        if (currentSchedule !== scheduleGeneration) return;
+        cancelScheduledStart = null;
         void load();
       });
     },
@@ -110,24 +138,29 @@ export function createRhymeEngineRuntime(
   };
 }
 
-async function readArtifact(options: CreateRhymeEngineRuntimeOptions) {
+async function readArtifact(
+  options: CreateRhymeEngineRuntimeOptions,
+  isCurrent: () => boolean,
+) {
   const reader = await options.source.open();
-  const maxArtifactBytes = options.maxArtifactBytes ?? DEFAULT_MAX_ARTIFACT_BYTES;
   const readChunkBytes = options.readChunkBytes ?? DEFAULT_READ_CHUNK_BYTES;
-
-  if (!Number.isInteger(reader.size) || reader.size <= 0 || reader.size > maxArtifactBytes) {
-    reader.close();
-    throw new Error('Bundled rhyme artifact size is invalid');
-  }
-  if (!Number.isInteger(readChunkBytes) || readChunkBytes <= 0 || readChunkBytes > DEFAULT_READ_CHUNK_BYTES) {
-    reader.close();
-    throw new Error('Rhyme artifact read chunk is invalid');
-  }
-
-  const output = new Uint8Array(reader.size);
-  let offset = 0;
   try {
+    if (
+      !Number.isInteger(reader.size) ||
+      reader.size <= 0 ||
+      reader.size > DEFAULT_MAX_ARTIFACT_BYTES
+    ) {
+      throw new Error('Bundled rhyme artifact size is invalid');
+    }
+    if (!Number.isInteger(readChunkBytes) || readChunkBytes <= 0 || readChunkBytes > DEFAULT_READ_CHUNK_BYTES) {
+      throw new Error('Rhyme artifact read chunk is invalid');
+    }
+    if (!isCurrent()) throw new Error('Rhyme artifact load was cancelled');
+
+    const output = new Uint8Array(reader.size);
+    let offset = 0;
     while (offset < output.length) {
+      if (!isCurrent()) throw new Error('Rhyme artifact load was cancelled');
       const requested = Math.min(readChunkBytes, output.length - offset);
       const chunk = reader.read(requested);
       if (chunk.length === 0 || chunk.length > requested) {
@@ -137,10 +170,10 @@ async function readArtifact(options: CreateRhymeEngineRuntimeOptions) {
       offset += chunk.length;
       if (options.yieldToHost) await options.yieldToHost();
     }
+    return output;
   } finally {
     reader.close();
   }
-  return output;
 }
 
 function normalizeError(error: unknown) {

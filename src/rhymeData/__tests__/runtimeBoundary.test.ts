@@ -1,6 +1,6 @@
 /// <reference types="jest" />
 
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 
 describe('Phase 03 runtime boundary', () => {
@@ -20,6 +20,67 @@ describe('Phase 03 runtime boundary', () => {
     }
     expect(adapter).toContain("from 'expo-asset'");
     expect(adapter).toContain("from 'expo-file-system'");
+    expect(adapter).toContain('Asset.fromModule(moduleId)');
+    expect(adapter).toContain('downloadAsync()');
+    expect(adapter).toContain('FileMode.ReadOnly');
+    expect(adapter).toContain('readBytes(maxBytes)');
+    expect(adapter).not.toContain('Asset.fromURI');
     expect(adapter).not.toMatch(/fetch\s*\(|expo-sqlite/u);
   });
+
+  it('keeps every generic runtime module free of platform, storage, network, and editor imports', () => {
+    const runtimeRoot = path.join(process.cwd(), 'src/rhymeData');
+    const forbidden = [
+      'cmuParser',
+      'cmuRhymeArtifact',
+      'defaultCmuIndex',
+      'expo-',
+      'react',
+      'react-native',
+      'sqlite',
+      '/editor/',
+    ];
+
+    for (const file of listTypeScriptFiles(runtimeRoot)) {
+      const source = readFileSync(file, 'utf8');
+      for (const specifier of extractModuleSpecifiers(source)) {
+        for (const token of forbidden) {
+          expect({ file: path.relative(runtimeRoot, file), matchingImport: specifier.includes(token) })
+            .toEqual({ file: path.relative(runtimeRoot, file), matchingImport: false });
+        }
+      }
+      expect(source).not.toMatch(/\b(?:fetch|XMLHttpRequest|WebSocket|EventSource)\b/u);
+    }
+  });
+
+  it('does not activate the fixture runtime from normal app or editor source', () => {
+    const roots = ['app', 'src/editor'].map((root) => path.join(process.cwd(), root));
+    for (const root of roots) {
+      for (const file of listTypeScriptFiles(root)) {
+        const source = readFileSync(file, 'utf8');
+        expect(source).not.toMatch(
+          /(?:rhymeData|createExpoRhymeEngineRuntime|fixture\.rhymebin)/u,
+        );
+      }
+    }
+  });
 });
+
+function listTypeScriptFiles(root: string): string[] {
+  const files: string[] = [];
+  for (const entry of readdirSync(root)) {
+    if (entry === '__tests__') continue;
+    const entryPath = path.join(root, entry);
+    if (statSync(entryPath).isDirectory()) {
+      files.push(...listTypeScriptFiles(entryPath));
+    } else if (/\.tsx?$/u.test(entry)) {
+      files.push(entryPath);
+    }
+  }
+  return files;
+}
+
+function extractModuleSpecifiers(source: string) {
+  return [...source.matchAll(/(?:from\s+|import\s*\(|require\s*\()\s*['"]([^'"]+)['"]/gu)]
+    .map(([, specifier]) => specifier);
+}

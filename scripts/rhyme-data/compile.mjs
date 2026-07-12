@@ -11,8 +11,15 @@ import {
   align4,
   compareCodeUnits,
 } from './format.mjs';
+import { createRhymeKeys, normalizeRhymeWord } from './phonology.mjs';
+
+const MAX_ARTIFACT_BYTES = 64 * 1024 * 1024;
+const MAX_UINT32 = 0xffff_ffff;
 
 export function compileRhymeData({ manifest, manifestHash, lexemes, sources }) {
+  if (!/^[a-f0-9]{64}$/u.test(manifestHash)) {
+    throw new Error('Manifest hash must be a lowercase SHA-256 value');
+  }
   const model = buildModel(manifest, lexemes, sources);
   const sections = buildSections(model);
   const directoryBytes = sections.length * DIRECTORY_ENTRY_BYTES;
@@ -21,6 +28,10 @@ export function compileRhymeData({ manifest, manifestHash, lexemes, sources }) {
   for (const section of sections) {
     section.offset = cursor;
     cursor = align4(cursor + section.bytes.length);
+  }
+
+  if (cursor > MAX_ARTIFACT_BYTES || cursor > MAX_UINT32) {
+    throw new Error('Compiled rhyme data exceeds the bounded artifact size');
   }
 
   const output = Buffer.alloc(cursor);
@@ -54,7 +65,8 @@ function buildModel(manifest, inputLexemes, inputSources) {
   const lexemes = inputLexemes
     .map((lexeme) => ({
       ...lexeme,
-      normalizedWord: lexeme.normalizedWord ?? lexeme.word.toLowerCase(),
+      lemma: normalizeRhymeWord(lexeme.lemma),
+      normalizedWord: normalizeRhymeWord(lexeme.normalizedWord ?? lexeme.word),
       pronunciations: [...lexeme.pronunciations]
         .map((phones) => [...phones])
         .sort(comparePhoneSequences),
@@ -97,9 +109,7 @@ function buildModel(manifest, inputLexemes, inputSources) {
         strings.add(phone);
       }
 
-      const tail = findRhymeTail(phoneSequence);
-      const exactKey = tail.join(' ');
-      const familyKey = buildFamilyKey(tail);
+      const { exactKey, familyKey } = createRhymeKeys(phoneSequence);
       strings.add(exactKey);
       strings.add(familyKey);
       pronunciations.push({
@@ -255,28 +265,6 @@ function buildIndex(model, key) {
   });
 }
 
-function findRhymeTail(phones) {
-  let lastVowel = -1;
-  let lastStressedVowel = -1;
-
-  phones.forEach((phone, index) => {
-    if (/[0-2]$/u.test(phone)) {
-      lastVowel = index;
-      if (/[12]$/u.test(phone)) lastStressedVowel = index;
-    }
-  });
-
-  const start = lastStressedVowel >= 0 ? lastStressedVowel : lastVowel;
-  if (start < 0) throw new Error(`Pronunciation has no vowel: ${phones.join(' ')}`);
-  return phones.slice(start);
-}
-
-function buildFamilyKey(tail) {
-  return tail
-    .map((phone) => phone.replace(/[0-2]$/u, ''))
-    .join('-');
-}
-
 function encodeFlags(flags) {
   let value = 0;
   for (const flag of flags) {
@@ -288,7 +276,17 @@ function encodeFlags(flags) {
 }
 
 function recordBuffer(count, width, writer) {
-  const buffer = Buffer.alloc(count * width);
+  const byteLength = count * width;
+  if (
+    !Number.isSafeInteger(count) ||
+    count < 0 ||
+    count > MAX_UINT32 ||
+    !Number.isSafeInteger(byteLength) ||
+    byteLength > MAX_ARTIFACT_BYTES
+  ) {
+    throw new Error('Rhyme data table exceeds format bounds');
+  }
+  const buffer = Buffer.alloc(byteLength);
   for (let index = 0; index < count; index += 1) {
     writer(buffer, index * width, index);
   }

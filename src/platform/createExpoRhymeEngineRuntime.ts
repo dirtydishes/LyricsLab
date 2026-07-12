@@ -38,19 +38,21 @@ export function createExpoRhymeEngineRuntime(
       });
     },
     initialVersion: options.initialVersion,
-    scheduleAfterFirstFrame,
+    scheduleAfterFirstFrame: createNativeAfterFirstFrameScheduler(),
     source: createExpoBundledArtifactSource(options.artifactModuleId),
     yieldToHost,
   });
 }
 
-const scheduleAfterFirstFrame = createAfterFirstFrameScheduler({
-  cancelFrame: cancelAnimationFrame,
-  cancelIdle: cancelIdleCallback,
-  requestFrame: (callback) => requestAnimationFrame(callback),
-  requestIdle: (callback) =>
-    requestIdleCallback(callback, { timeout: 250 }),
-});
+function createNativeAfterFirstFrameScheduler() {
+  return createAfterFirstFrameScheduler({
+    cancelFrame: cancelAnimationFrame,
+    cancelIdle: cancelIdleCallback,
+    requestFrame: (callback) => requestAnimationFrame(callback),
+    requestIdle: (callback) =>
+      requestIdleCallback(callback, { timeout: 250 }),
+  });
+}
 
 function createExpoBundledArtifactSource(moduleId: number): RhymeArtifactSource {
   return {
@@ -59,15 +61,20 @@ function createExpoBundledArtifactSource(moduleId: number): RhymeArtifactSource 
       await asset.downloadAsync();
       if (!asset.localUri) throw new Error('Bundled rhyme artifact is unavailable');
       const handle = new File(asset.localUri).open(FileMode.ReadOnly);
-      if (handle.size === null) {
+      try {
+        const size = handle.size;
+        if (size === null) {
+          throw new Error('Bundled rhyme artifact size is unavailable');
+        }
+        return {
+          size,
+          close: () => handle.close(),
+          read: (maxBytes) => handle.readBytes(maxBytes),
+        };
+      } catch (error) {
         handle.close();
-        throw new Error('Bundled rhyme artifact size is unavailable');
+        throw error;
       }
-      return {
-        size: handle.size,
-        close: () => handle.close(),
-        read: (maxBytes) => handle.readBytes(maxBytes),
-      };
     },
   };
 }

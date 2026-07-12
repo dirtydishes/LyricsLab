@@ -13,9 +13,12 @@ export function createAfterFirstFrameScheduler(host: FirstFrameHost) {
     let cancelled = false;
 
     firstFrame = host.requestFrame(() => {
+      if (cancelled) return;
       secondFrame = host.requestFrame(() => {
         if (cancelled) return;
-        idle = host.requestIdle(task);
+        idle = host.requestIdle(() => {
+          if (!cancelled) task();
+        });
       });
     });
 

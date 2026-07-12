@@ -1,10 +1,15 @@
 import { createRhymeEngine, type RhymeLexemeInput } from '../rhyme/createRhymeEngine';
 import type { RhymeEngine } from '../rhyme/RhymeEngine';
+import { analyzePronunciation } from '../rhyme/productionPhonology';
+import { normalizeRhymeToken } from '../rhyme/normalize';
 import {
   RHYME_DATA_DIRECTORY_ENTRY_BYTES,
   RHYME_DATA_FORMAT_VERSION,
   RHYME_DATA_HEADER_BYTES,
   RHYME_DATA_MAGIC,
+  RHYME_DATA_MAX_PHONES_PER_PRONUNCIATION,
+  RHYME_DATA_MAX_PRONUNCIATIONS_PER_WORD,
+  RHYME_DATA_MAX_STRING_BYTES,
   RHYME_DATA_REQUIRED_SECTIONS,
   RHYME_DATA_SECTION_WIDTHS,
   RhymeDataSection,
@@ -56,7 +61,7 @@ export async function decodeRhymeData(
   const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
   validateHeader(bytes, view);
   const descriptors = readDirectory(view);
-  validateSectionLayout(bytes.length, descriptors);
+  validateSectionLayout(bytes, descriptors);
   await validateHashes(bytes, options);
 
   const getSection = (id: number) => {
@@ -64,38 +69,90 @@ export async function decodeRhymeData(
     if (!section) throw new Error(`Missing rhyme data section ${id}`);
     return section;
   };
-  const strings = readStrings(
+  for (const [id, label] of [
+    [RhymeDataSection.stringBytes, 'string bytes'],
+    [RhymeDataSection.stringIndex, 'string index'],
+    [RhymeDataSection.phones, 'phone table'],
+    [RhymeDataSection.words, 'word table'],
+    [RhymeDataSection.pronunciations, 'pronunciation table'],
+    [RhymeDataSection.phoneIds, 'phone id table'],
+    [RhymeDataSection.sources, 'source table'],
+  ] as const) {
+    if (getSection(id).count === 0) {
+      throw new Error(`Rhyme data ${label} must not be empty`);
+    }
+  }
+  const strings = await readStrings(
     bytes,
     view,
     getSection(RhymeDataSection.stringBytes),
     getSection(RhymeDataSection.stringIndex),
+    options,
   );
   const metadata = getSection(RhymeDataSection.metadata);
+  if (metadata.count !== 1) throw new Error('Rhyme data must contain one metadata record');
   const artifactId = readStringReference(view, metadata.offset, strings, 'artifact id');
   const version = readStringReference(view, metadata.offset + 4, strings, 'artifact version');
-  readStringReference(view, metadata.offset + 8, strings, 'provenance owner');
-  readStringReference(view, metadata.offset + 12, strings, 'provenance purpose');
+  const provenanceOwner = readStringReference(
+    view,
+    metadata.offset + 8,
+    strings,
+    'provenance owner',
+  );
+  const provenancePurpose = readStringReference(
+    view,
+    metadata.offset + 12,
+    strings,
+    'provenance purpose',
+  );
+  if (
+    [artifactId, version, provenanceOwner, provenancePurpose].some(
+      (value) => !value.trim(),
+    )
+  ) {
+    throw new Error('Rhyme data metadata values must be non-empty');
+  }
 
-  const phoneNames = readPhoneNames(
+  const phoneNames = await readPhoneNames(
     view,
     getSection(RhymeDataSection.phones),
     strings,
+    options,
   );
-  const phoneIds = readUint32Records(view, getSection(RhymeDataSection.phoneIds));
+  const phoneIds = await readUint32Records(
+    view,
+    getSection(RhymeDataSection.phoneIds),
+    options,
+  );
+  const referencedPhones = new Set<number>();
   for (const phoneId of phoneIds) {
     if (phoneId >= phoneNames.length) throw new Error('Phone id is out of bounds');
+    referencedPhones.add(phoneId);
+  }
+  if (referencedPhones.size !== phoneNames.length) {
+    throw new Error('Phone table contains unreferenced records');
   }
 
   const pronunciationSection = getSection(RhymeDataSection.pronunciations);
   const pronunciations = await readPronunciations(
     view,
     pronunciationSection,
-    strings.length,
-    phoneIds.length,
+    strings,
+    phoneNames,
+    phoneIds,
     options,
   );
-  const flags = readUint32Records(view, getSection(RhymeDataSection.flags));
-  const commonness = readRanks(view, getSection(RhymeDataSection.ranks));
+  await validatePronunciationPhoneRanges(pronunciations, phoneIds.length, options);
+  const flags = await readUint32Records(
+    view,
+    getSection(RhymeDataSection.flags),
+    options,
+  );
+  const commonness = await readRanks(
+    view,
+    getSection(RhymeDataSection.ranks),
+    options,
+  );
   const words = await readWords(
     view,
     getSection(RhymeDataSection.words),
@@ -106,24 +163,36 @@ export async function decodeRhymeData(
     options,
   );
 
-  validateWordPronunciationRanges(words, pronunciations);
-  validateIndex(
+  await validateWordPronunciationRanges(words, pronunciations, options);
+  await validateIndex(
     view,
     getSection(RhymeDataSection.exactIndex),
     pronunciations,
     'exact',
+    options,
   );
-  validateIndex(
+  await validateIndex(
     view,
     getSection(RhymeDataSection.slantIndex),
     pronunciations,
     'slant',
+    options,
   );
-  validateSources(view, getSection(RhymeDataSection.sources), strings);
+  await validateSources(
+    view,
+    getSection(RhymeDataSection.sources),
+    strings,
+    options,
+  );
 
-  const lexemes = words
-    .filter((word) => (word.flags & RhymeDataWordFlag.safetyBlocked) === 0)
-    .map<RhymeLexemeInput>((word) => ({
+  const lexemes: RhymeLexemeInput[] = [];
+  for (let index = 0; index < words.length; index += 1) {
+    const word = words[index];
+    if ((word.flags & RhymeDataWordFlag.safetyBlocked) !== 0) {
+      await maybeYield(index + 1, options);
+      continue;
+    }
+    lexemes.push({
       commonness: word.commonness,
       lemma: word.lemma,
       normalizedWord: word.normalizedWord,
@@ -141,7 +210,9 @@ export async function decodeRhymeData(
             .map((phoneId) => phoneNames[phoneId]),
         })),
       word: word.word,
-    }));
+    });
+    await maybeYield(index + 1, options);
+  }
 
   return {
     artifactId,
@@ -210,7 +281,7 @@ function readDirectory(view: DataView) {
 }
 
 function validateSectionLayout(
-  totalBytes: number,
+  bytes: Uint8Array,
   descriptors: ReadonlyMap<number, RhymeDataSectionDescriptor>,
 ) {
   const directoryEnd =
@@ -224,16 +295,28 @@ function validateSectionLayout(
     if (descriptor.width !== expectedWidth) throw new Error('Rhyme data record width mismatch');
     if (descriptor.offset % 4 !== 0) throw new Error('Rhyme data section is misaligned');
     if (descriptor.offset < directoryEnd) throw new Error('Rhyme data section overlaps its directory');
-    if (descriptor.length !== descriptor.count * descriptor.width) {
+    const calculatedLength = descriptor.count * descriptor.width;
+    if (!Number.isSafeInteger(calculatedLength) || descriptor.length !== calculatedLength) {
       throw new Error('Rhyme data section length/count mismatch');
     }
     const end = descriptor.offset + descriptor.length;
-    if (!Number.isSafeInteger(end) || end > totalBytes) {
+    if (!Number.isSafeInteger(end) || end > bytes.length) {
       throw new Error('Rhyme data section is out of bounds');
     }
     if (descriptor.offset < previousEnd) throw new Error('Rhyme data sections overlap');
+    const expectedOffset = align4(previousEnd);
+    if (descriptor.offset !== expectedOffset) {
+      throw new Error('Rhyme data section padding is not canonical');
+    }
+    assertZeroPadding(bytes, previousEnd, descriptor.offset);
     previousEnd = end;
   }
+
+  const expectedTotal = align4(previousEnd);
+  if (bytes.length !== expectedTotal) {
+    throw new Error('Rhyme data trailing padding is not canonical');
+  }
+  assertZeroPadding(bytes, previousEnd, bytes.length);
 }
 
 async function validateHashes(bytes: Uint8Array, options: DecodeRhymeDataOptions) {
@@ -243,6 +326,12 @@ async function validateHashes(bytes: Uint8Array, options: DecodeRhymeDataOptions
   }
   const manifestHash = bytesToHex(bytes.subarray(24, 56));
   if (
+    options.expectedManifestSha256 !== undefined &&
+    !/^[a-f0-9]{64}$/iu.test(options.expectedManifestSha256)
+  ) {
+    throw new Error('Expected rhyme data manifest hash is malformed');
+  }
+  if (
     options.expectedManifestSha256 &&
     manifestHash !== options.expectedManifestSha256.toLowerCase()
   ) {
@@ -250,11 +339,12 @@ async function validateHashes(bytes: Uint8Array, options: DecodeRhymeDataOptions
   }
 }
 
-function readStrings(
+async function readStrings(
   bytes: Uint8Array,
   view: DataView,
   blob: RhymeDataSectionDescriptor,
   index: RhymeDataSectionDescriptor,
+  options: DecodeRhymeDataOptions,
 ) {
   const strings: string[] = [];
   let previous = '';
@@ -263,6 +353,9 @@ function readStrings(
     const offset = index.offset + record * index.width;
     const start = view.getUint32(offset, true);
     const length = view.getUint32(offset + 4, true);
+    if (length > RHYME_DATA_MAX_STRING_BYTES) {
+      throw new Error('String record exceeds the bounded format limit');
+    }
     if (start + length > blob.length) throw new Error('String range is out of bounds');
     if (start !== expectedStart) throw new Error('String ranges are not contiguous');
     const value = decodeUtf8(bytes.subarray(blob.offset + start, blob.offset + start + length));
@@ -270,12 +363,18 @@ function readStrings(
     strings.push(value);
     previous = value;
     expectedStart += length;
+    await maybeYield(record + 1, options);
   }
   if (expectedStart !== blob.length) throw new Error('String bytes are not fully indexed');
   return strings;
 }
 
-function readPhoneNames(view: DataView, section: RhymeDataSectionDescriptor, strings: readonly string[]) {
+async function readPhoneNames(
+  view: DataView,
+  section: RhymeDataSectionDescriptor,
+  strings: readonly string[],
+  options: DecodeRhymeDataOptions,
+) {
   const names: string[] = [];
   let previous = '';
   for (let index = 0; index < section.count; index += 1) {
@@ -283,6 +382,7 @@ function readPhoneNames(view: DataView, section: RhymeDataSectionDescriptor, str
     if (index > 0 && name <= previous) throw new Error('Phone table is not strictly sorted');
     names.push(name);
     previous = name;
+    await maybeYield(index + 1, options);
   }
   return names;
 }
@@ -303,24 +403,37 @@ async function readWords(
   for (let index = 0; index < section.count; index += 1) {
     const offset = section.offset + index * section.width;
     const normalizedWord = readStringReference(view, offset + 4, strings, 'normalized word');
+    const word = readStringReference(view, offset, strings, 'word');
+    const lemma = readStringReference(view, offset + 8, strings, 'lemma');
+    if (!word.trim()) throw new Error('Word display value must be non-empty');
+    if (!normalizedWord || normalizeRhymeToken(normalizedWord) !== normalizedWord) {
+      throw new Error('Normalized word is not canonical');
+    }
+    if (!lemma || normalizeRhymeToken(lemma) !== lemma) {
+      throw new Error('Lemma is not canonical');
+    }
     if (index > 0 && normalizedWord <= previousNormalizedWord) {
       throw new Error('Word table is not strictly sorted');
     }
     const pronunciationStart = view.getUint32(offset + 12, true);
     const wordPronunciationCount = view.getUint32(offset + 16, true);
     if (view.getUint32(offset + 20, true) !== 0) throw new Error('Non-zero reserved word field');
-    if (pronunciationStart + wordPronunciationCount > pronunciationCount || wordPronunciationCount === 0) {
+    if (
+      wordPronunciationCount === 0 ||
+      wordPronunciationCount > RHYME_DATA_MAX_PRONUNCIATIONS_PER_WORD ||
+      pronunciationStart + wordPronunciationCount > pronunciationCount
+    ) {
       throw new Error('Word pronunciation range is invalid');
     }
     if ((flags[index] & ~7) !== 0) throw new Error('Unknown word flag bits');
     words.push({
       commonness: commonnessValues[index],
       flags: flags[index],
-      lemma: readStringReference(view, offset + 8, strings, 'lemma'),
+      lemma,
       normalizedWord,
       pronunciationCount: wordPronunciationCount,
       pronunciationStart,
-      word: readStringReference(view, offset, strings, 'word'),
+      word,
     });
     previousNormalizedWord = normalizedWord;
     await maybeYield(index + 1, options);
@@ -328,7 +441,11 @@ async function readWords(
   return words;
 }
 
-function readRanks(view: DataView, section: RhymeDataSectionDescriptor) {
+async function readRanks(
+  view: DataView,
+  section: RhymeDataSectionDescriptor,
+  options: DecodeRhymeDataOptions,
+) {
   const commonness: number[] = [];
   for (let index = 0; index < section.count; index += 1) {
     const offset = section.offset + index * section.width;
@@ -338,6 +455,7 @@ function readRanks(view: DataView, section: RhymeDataSectionDescriptor) {
       throw new Error('Word rank record is out of bounds');
     }
     commonness.push(scaledCommonness / 1_000_000);
+    await maybeYield(index + 1, options);
   }
   return commonness;
 }
@@ -345,8 +463,9 @@ function readRanks(view: DataView, section: RhymeDataSectionDescriptor) {
 async function readPronunciations(
   view: DataView,
   section: RhymeDataSectionDescriptor,
-  stringCount: number,
-  phoneIdCount: number,
+  strings: readonly string[],
+  phoneNames: readonly string[],
+  phoneIds: readonly number[],
   options: DecodeRhymeDataOptions,
 ) {
   const values: PronunciationRecord[] = [];
@@ -360,11 +479,26 @@ async function readPronunciations(
       familyKeyId: view.getUint32(offset + 16, true),
       ordinal: view.getUint32(offset + 20, true),
     };
-    if (value.phoneCount === 0 || value.phoneStart + value.phoneCount > phoneIdCount) {
+    if (
+      value.phoneCount === 0 ||
+      value.phoneCount > RHYME_DATA_MAX_PHONES_PER_PRONUNCIATION ||
+      value.phoneStart + value.phoneCount > phoneIds.length
+    ) {
       throw new Error('Pronunciation phone range is invalid');
     }
-    if (value.exactKeyId >= stringCount || value.familyKeyId >= stringCount) {
+    if (value.exactKeyId >= strings.length || value.familyKeyId >= strings.length) {
       throw new Error('Pronunciation key is out of bounds');
+    }
+    const phones = phoneIds
+      .slice(value.phoneStart, value.phoneStart + value.phoneCount)
+      .map((phoneId) => phoneNames[phoneId]);
+    const analysis = analyzePronunciation(phones);
+    if (
+      !analysis ||
+      strings[value.exactKeyId] !== analysis.tailKey ||
+      strings[value.familyKeyId] !== analysis.familyKey
+    ) {
+      throw new Error('Rhyme data pronunciation key does not match its phones');
     }
     values.push(value);
     await maybeYield(index + 1, options);
@@ -372,9 +506,33 @@ async function readPronunciations(
   return values;
 }
 
-function validateWordPronunciationRanges(words: readonly WordRecord[], pronunciations: readonly PronunciationRecord[]) {
+async function validatePronunciationPhoneRanges(
+  pronunciations: readonly PronunciationRecord[],
+  phoneIdCount: number,
+  options: DecodeRhymeDataOptions,
+) {
+  let nextPhone = 0;
+  for (let index = 0; index < pronunciations.length; index += 1) {
+    const pronunciation = pronunciations[index];
+    if (pronunciation.phoneStart !== nextPhone) {
+      throw new Error('Pronunciation phone ranges are not contiguous');
+    }
+    nextPhone += pronunciation.phoneCount;
+    await maybeYield(index + 1, options);
+  }
+  if (nextPhone !== phoneIdCount) {
+    throw new Error('Pronunciation phone ranges do not own every phone id');
+  }
+}
+
+async function validateWordPronunciationRanges(
+  words: readonly WordRecord[],
+  pronunciations: readonly PronunciationRecord[],
+  options: DecodeRhymeDataOptions,
+) {
   let nextPronunciation = 0;
-  words.forEach((word, wordId) => {
+  for (let wordId = 0; wordId < words.length; wordId += 1) {
+    const word = words[wordId];
     if (word.pronunciationStart !== nextPronunciation) throw new Error('Word pronunciation ranges are not contiguous');
     for (let index = word.pronunciationStart; index < word.pronunciationStart + word.pronunciationCount; index += 1) {
       if (pronunciations[index].wordId !== wordId) throw new Error('Pronunciation references the wrong word');
@@ -383,15 +541,17 @@ function validateWordPronunciationRanges(words: readonly WordRecord[], pronuncia
       }
     }
     nextPronunciation += word.pronunciationCount;
-  });
+    await maybeYield(wordId + 1, options);
+  }
   if (nextPronunciation !== pronunciations.length) throw new Error('Unowned pronunciation records');
 }
 
-function validateIndex(
+async function validateIndex(
   view: DataView,
   section: RhymeDataSectionDescriptor,
   pronunciations: readonly PronunciationRecord[],
   kind: 'exact' | 'slant',
+  options: DecodeRhymeDataOptions,
 ) {
   if (section.count !== pronunciations.length) throw new Error(`${kind} index count mismatch`);
   const seen = new Set<number>();
@@ -410,30 +570,48 @@ function validateIndex(
     if (previous && compareNumberTuple(previous, tuple) >= 0) throw new Error(`${kind} index is not strictly sorted`);
     previous = tuple;
     seen.add(pronunciationId);
+    await maybeYield(index + 1, options);
   }
 }
 
-function validateSources(view: DataView, section: RhymeDataSectionDescriptor, strings: readonly string[]) {
+async function validateSources(
+  view: DataView,
+  section: RhymeDataSectionDescriptor,
+  strings: readonly string[],
+  options: DecodeRhymeDataOptions,
+) {
+  if (section.count === 0) throw new Error('Rhyme data must contain a source record');
   let previous = '';
   for (let index = 0; index < section.count; index += 1) {
     const offset = section.offset + index * section.width;
     const id = readStringReference(view, offset, strings, 'source id');
     if (index > 0 && id <= previous) throw new Error('Source table is not strictly sorted');
-    readStringReference(view, offset + 4, strings, 'source kind');
-    readStringReference(view, offset + 8, strings, 'source version');
-    readStringReference(view, offset + 12, strings, 'source path');
+    const kind = readStringReference(view, offset + 4, strings, 'source kind');
+    const version = readStringReference(view, offset + 8, strings, 'source version');
+    const path = readStringReference(view, offset + 12, strings, 'source path');
     const hash = readStringReference(view, offset + 16, strings, 'source hash');
     if (!/^[a-f0-9]{64}$/u.test(hash)) throw new Error('Source hash is malformed');
-    readStringReference(view, offset + 20, strings, 'source license');
-    readStringReference(view, offset + 24, strings, 'source ownership');
+    const license = readStringReference(view, offset + 20, strings, 'source license');
+    const ownership = readStringReference(view, offset + 24, strings, 'source ownership');
+    if ([id, kind, version, path, license, ownership].some((value) => !value.trim())) {
+      throw new Error('Rhyme data source values must be non-empty');
+    }
     previous = id;
+    await maybeYield(index + 1, options);
   }
 }
 
-function readUint32Records(view: DataView, section: RhymeDataSectionDescriptor) {
-  return Array.from({ length: section.count }, (_, index) =>
-    view.getUint32(section.offset + index * section.width, true),
-  );
+async function readUint32Records(
+  view: DataView,
+  section: RhymeDataSectionDescriptor,
+  options: DecodeRhymeDataOptions,
+) {
+  const values: number[] = [];
+  for (let index = 0; index < section.count; index += 1) {
+    values.push(view.getUint32(section.offset + index * section.width, true));
+    await maybeYield(index + 1, options);
+  }
+  return values;
 }
 
 function readStringReference(view: DataView, offset: number, strings: readonly string[], label: string) {
@@ -452,6 +630,16 @@ function normalizeChunkSize(value: number | undefined) {
   if (value === undefined) return 256;
   if (!Number.isInteger(value) || value <= 0 || value > 4096) throw new Error('Invalid decode chunk size');
   return value;
+}
+
+function align4(value: number) {
+  return Math.ceil(value / 4) * 4;
+}
+
+function assertZeroPadding(bytes: Uint8Array, start: number, end: number) {
+  for (let offset = start; offset < end; offset += 1) {
+    if (bytes[offset] !== 0) throw new Error('Rhyme data padding must be zero');
+  }
 }
 
 function compareNumberTuple(left: readonly number[], right: readonly number[]) {

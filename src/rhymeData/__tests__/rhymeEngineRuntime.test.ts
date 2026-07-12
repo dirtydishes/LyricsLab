@@ -2,7 +2,11 @@
 
 import type { RhymeEngine } from '../../rhyme/RhymeEngine';
 import type { DecodedRhymeData } from '../decodeRhymeData';
-import { createRhymeEngineRuntime, type RhymeArtifactReader } from '../rhymeEngineRuntime';
+import {
+  createRhymeEngineRuntime,
+  type RhymeArtifactReader,
+  type RhymeEngineRuntime,
+} from '../rhymeEngineRuntime';
 
 describe('rhyme engine runtime', () => {
   it('waits for the post-frame scheduler and publishes only a complete engine', async () => {
@@ -49,6 +53,7 @@ describe('rhyme engine runtime', () => {
       scheduleAfterFirstFrame: () => () => undefined,
       source: { open: async () => createReader(Uint8Array.of(1)) },
     });
+    const stableProxy = runtime.engine;
 
     await runtime.retry();
     await runtime.retry();
@@ -62,6 +67,7 @@ describe('rhyme engine runtime', () => {
     await runtime.retry();
     expect(runtime.getSnapshot()).toEqual({ state: 'ready', usingLastKnownGood: false, version: 'two' });
     expect(runtime.engine.suggest({ anchor: 'cat' })[0]?.word).toBe('night');
+    expect(runtime.engine).toBe(stableProxy);
   });
 
   it('prevents a stale overlapping load from replacing a newer result', async () => {
@@ -83,6 +89,130 @@ describe('rhyme engine runtime', () => {
     await olderAttempt;
     expect(runtime.getSnapshot().version).toBe('newer');
     expect(runtime.engine.suggest({ anchor: 'cat' })[0]?.word).toBe('night');
+  });
+
+  it('cancels scheduled work and invalidates an in-flight generation', async () => {
+    let scheduled: (() => void) | undefined;
+    const cancelScheduled = jest.fn();
+    const inFlight = deferred<DecodedRhymeData>();
+    const source = { open: jest.fn(async () => createReader(Uint8Array.of(1))) };
+    const runtime = createRhymeEngineRuntime({
+      decode: () => inFlight.promise,
+      initialVersion: 'pending',
+      scheduleAfterFirstFrame(task) {
+        scheduled = task;
+        return cancelScheduled;
+      },
+      source,
+    });
+
+    runtime.start();
+    runtime.cancel();
+    scheduled?.();
+    await flushPromises();
+    expect(cancelScheduled).toHaveBeenCalledTimes(1);
+    expect(source.open).not.toHaveBeenCalled();
+
+    const attempt = runtime.retry();
+    await flushPromises();
+    runtime.cancel();
+    inFlight.resolve(decodedData('stale', engineWithLabel('hat')));
+    await attempt;
+    expect(runtime.getSnapshot().version).toBe('pending');
+    expect(runtime.engine.suggest({ anchor: 'cat' })).toEqual([]);
+  });
+
+  it('isolates subscriber failures from state publication', async () => {
+    const runtime = createRhymeEngineRuntime({
+      decode: async () => decodedData('ready', engineWithLabel('hat')),
+      initialVersion: 'pending',
+      scheduleAfterFirstFrame: () => () => undefined,
+      source: { open: async () => createReader(Uint8Array.of(1)) },
+    });
+    const healthySubscriber = jest.fn();
+    const observedStates: string[] = [];
+    runtime.subscribe(() => {
+      throw new Error('subscriber failure');
+    });
+    runtime.subscribe(() => {
+      observedStates.push(runtime.getSnapshot().state);
+      healthySubscriber();
+    });
+
+    await expect(runtime.retry()).resolves.toBeUndefined();
+    expect(runtime.getSnapshot().state).toBe('ready');
+    expect(healthySubscriber).toHaveBeenCalledTimes(2);
+    expect(observedStates).toEqual(['loading', 'ready']);
+  });
+
+  it('closes artifact readers after invalid size and read failures', async () => {
+    const invalidSizeReader = createReader(Uint8Array.of(1));
+    Object.defineProperty(invalidSizeReader, 'size', { value: 0 });
+    const readFailureReader: RhymeArtifactReader = {
+      size: 1,
+      close: jest.fn(),
+      read: jest.fn(() => {
+        throw new Error('read failed');
+      }),
+    };
+    const readers = [invalidSizeReader, readFailureReader];
+    const runtime = createRhymeEngineRuntime({
+      decode: async () => decodedData('ready', engineWithLabel('hat')),
+      initialVersion: 'pending',
+      scheduleAfterFirstFrame: () => () => undefined,
+      source: { open: async () => readers.shift()! },
+    });
+
+    await runtime.retry();
+    expect(invalidSizeReader.close).toHaveBeenCalledTimes(1);
+    await runtime.retry();
+    expect(readFailureReader.close).toHaveBeenCalledTimes(1);
+    expect(runtime.getSnapshot()).toMatchObject({
+      errorMessage: 'read failed',
+      state: 'error',
+    });
+  });
+
+  it('stops bounded reads and closes the reader when an attempt is cancelled', async () => {
+    let runtime!: RhymeEngineRuntime;
+    const reader: RhymeArtifactReader = {
+      size: 3,
+      close: jest.fn(),
+      read: jest.fn(() => {
+        runtime.cancel();
+        return Uint8Array.of(1);
+      }),
+    };
+    const decode = jest.fn(async () => decodedData('ready', engineWithLabel('hat')));
+    runtime = createRhymeEngineRuntime({
+      decode,
+      initialVersion: 'pending',
+      readChunkBytes: 1,
+      scheduleAfterFirstFrame: () => () => undefined,
+      source: { open: async () => reader },
+      yieldToHost: async () => undefined,
+    });
+
+    await runtime.retry();
+
+    expect(reader.read).toHaveBeenCalledTimes(1);
+    expect(reader.close).toHaveBeenCalledTimes(1);
+    expect(decode).not.toHaveBeenCalled();
+  });
+
+  it('does not schedule a duplicate initial load after an explicit retry', async () => {
+    const schedule = jest.fn(() => () => undefined);
+    const runtime = createRhymeEngineRuntime({
+      decode: async () => decodedData('ready', engineWithLabel('hat')),
+      initialVersion: 'pending',
+      scheduleAfterFirstFrame: schedule,
+      source: { open: async () => createReader(Uint8Array.of(1)) },
+    });
+
+    await runtime.retry();
+    runtime.start();
+
+    expect(schedule).not.toHaveBeenCalled();
   });
 });
 
