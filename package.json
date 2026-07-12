@@ -37,6 +37,8 @@
     "check:rhyme-artifact": "node scripts/build-cmu-artifact.mjs --check",
     "build:rhyme-data": "node scripts/build-rhyme-data.mjs",
     "check:rhyme-data": "node scripts/build-rhyme-data.mjs --check",
+    "check:rhyme-sources": "node scripts/check-rhyme-sources.mjs",
+    "test:rhyme-sources": "node scripts/test-rhyme-sources.mjs",
     "test:rhyme-data-compiler": "node scripts/test-rhyme-data.mjs",
     "smoke:rhyme-artifact": "npm run check:rhyme-artifact && node scripts/smoke-cmu-rhyme-artifact.mjs",
     "perf:rhyme-ranking": "node scripts/perf-rhyme-ranking.mjs",

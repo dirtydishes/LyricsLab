@@ -47,41 +47,93 @@ Curate at least 500 reviewed contemporary US hip-hop forms and prove the 90% ind
 ## Adaptations
 
 - User-approved 2026-07-12 sequence amendment keeps this phase focused on human-reviewable project-owned rap, safety, and proper-noun sources. New Phase 04A owns the external-source pins, NOTICE, and complete production artifact.
+- Source curation and the sealed evaluation remain separate owners. This turn created, inspected, and validated only the curation corpus; it did not create, inspect, anticipate, or tune against the later 250-case set and makes no 90% coverage claim.
 
 ## Discoveries And Decisions
 
 Approved sequence amendment: `lyricslab-5iw.4a` now follows this issue, and native integration waits for that production artifact phase.
 
+- Dropped final sounds cannot truthfully reuse the full CMU `-ing` pronunciation as an alias. Those records therefore carry direct ARPAbet with final `NG` removed. The existing repository `data/cmudict.txt` bytes at SHA-256 `81917843c7f44ce2b094ac63873c2c7a4cf802040792c455ba3ca406891c3d22` were used only as a local transcription-validation aid; Phase 03 already established that the file has no exact upstream revision or retained notice. It was not newly acquired, pinned, copied into the source corpus, or claimed as a production source. Phase 04A must revalidate all 25 aliases and any CMU-assisted direct transcription against its exact licensed pin.
+- Regional scopes are project-authored editorial relevance tags, not claims of linguistic origin or exclusivity. Category evidence records say so explicitly rather than inventing third-party provenance or licensing.
+- Normalization removes edge apostrophes, so apostrophe-marked and unmarked spellings that collapse to one engine token cannot both be compiled. The catalog keeps one reviewed surface per normalized form and records its displayed category.
+- High-risk spellings exist only in the narrowly necessary lexicon records. The policy manifest refers to five opaque maintained IDs; ordinary profanity remains `rap`-eligible and is not safety-blocked.
+- Proper-name/place/acronym entries are a 25-entry maintained subset. Their dormant pure policy requires a non-empty normalized prefix for suggestions while keeping them analyzable as anchors.
+- Known review ambiguities are direct editorial pronunciations, context-sensitive regional relevance, and words with multiple conversational realizations. These are intentionally handed to the independent evaluator instead of being tuned against its sealed cases.
+
 ## Implementation And Delegation Evidence
 
 - Canonical base is `lavender/expo-clean-rebuild` at `62c946b1`, containing closed Phases 01-03 and the approved seven-phase sequence.
 - Prepared symbolic branch `lavender/production-rhyme-phase-04` directly from that base.
+- Mandatory preflight passed before file inspection: `pwd` and `git rev-parse --show-toplevel` both returned `/home/delta/.codex/worktrees/1295/lyricslab`; `git symbolic-ref --short HEAD` returned `lavender/production-rhyme-phase-04`; `git status --short --branch` showed a clean branch tracking `origin/lavender/production-rhyme-phase-04`; both local and remote preparation heads were `6a79d72f`.
+- The dirtyloops run contracts, repo Beads skill, implementation/roadmap/Phase 03/Phase 04/Phase 04A/loop documents, and existing turn doc were read before implementation. `bd prime` succeeded. `bd show lyricslab-5iw.4 --json` could not acquire the read-only Dolt lock, so `.beads/issues.jsonl` was used as the canonical tracked fallback; Beads was not mutated.
+- TDD established the policy behavior and adversarial source contract before the final corpus pass. The module boundary stays deep: editor-facing code sees no source/manifest/policy types, while the build-time contract owns schema, contained paths, hashes, normalization, pronunciation, provenance, count, policy, and Phase 03 flag validation.
+- The authoring tool deterministically emits the human-readable reviewed JSON and hashes. Two consecutive clean authoring runs produced the same combined manifest/lexicon digest `b03a56269332e36293aebdc1f6bc6da54e20b676b6be3196b93cff51d8e9aec3`.
 
 ## Changed Behavior And Files
 
-None.
+- `data/rhyme-sources/manifest.json`: strict v1 four-role manifest, project ownership statement, SHA-256s, overall floor 500, per-category floors, and per-region floors.
+- `data/rhyme-sources/lexicon.json`: 547 unique normalized, reviewed entries, each with stable ID, surface, direct or verified-alias pronunciation, category, regions, evidence IDs, review state, and flags.
+- `data/rhyme-sources/evidence.json`: nine project-editorial evidence records that distinguish editorial judgment from external-source claims.
+- `data/rhyme-sources/safety-policy.json`: exact opaque maintained high-risk subset plus analyzable-anchor, unsolicited-suppression, and ordinary-profanity-eligible policy.
+- `data/rhyme-sources/proper-noun-policy.json`: exact maintained proper subset plus analyzable-anchor and explicit-prefix policy.
+- `data/rhyme-sources/README.md`: ownership, provenance, source/policy, sealed-evaluation, and Phase 04A boundaries.
+- `scripts/rhyme-sources/contract.mjs`: strict loader/validator, contained paths, declared-JSON enforcement, SHA-256 verification, exact schemas, canonical uniqueness, ARPAbet/stress bounds, alias verification phones, evidence/review/category/region/flag/count checks, exact policy coverage, summaries, and Phase 03 `WORD_FLAG` mapping.
+- `scripts/rhyme-sources/author-phase04.mjs`: deterministic project editorial source authoring and local legacy-CMU transcription validation; it neither downloads nor compiles a production artifact.
+- `scripts/check-rhyme-sources.mjs`, `scripts/test-rhyme-sources.mjs`, and `package.json`: source gate plus adversarial direct/alias, malformed data, ambiguity, provenance, review, enums, policy completeness, hash, sealed-boundary, count-floor, runtime non-activation, and Phase 03 flag controls.
+- `src/rhymeSources/suggestionEligibility.ts` and its focused test: dormant pure eligibility policy proving ordinary profanity allowance, high-risk anchor analysis/unsolicited suppression, and normalized explicit-prefix proper-noun behavior without editor/provider activation.
+
+Corpus summary:
+
+| Dimension | Count |
+| --- | ---: |
+| Total / reviewed | 547 / 547 |
+| Direct / verified alias | 522 / 25 |
+| Ad-lib | 44 |
+| Apostrophe variant | 94 |
+| Colloquialism | 121 |
+| Common inflection | 81 |
+| Dropped sound | 97 |
+| Fused phrase | 48 |
+| Proper name/place/acronym | 25 |
+| Stylized spelling | 37 |
+| National | 529 |
+| Midwest / Northeast / South / West Coast | 39 / 42 / 45 / 38 |
+| Safety-blocked / proper-noun flags | 5 / 25 |
+
+Committed source hashes are `evidence.json` `6f1c482158a2a4629169ea3a51d089102c6710e697f7c8a8eadf1a3e6be5f71c`, `lexicon.json` `dd611d0ae936bc5e59e933dd5a8ba6c2f1aa8c4210367ddc23d74a3e34bc6d2b`, `manifest.json` `5f76e59c9cd19fa95298d31ef1850baedb1a690628dca5587ff94448bbbd1bed`, `proper-noun-policy.json` `f802b484f8fd31284d9dc31e445b4fd7fed188d95e5d39b9038b194ca82a27b9`, and `safety-policy.json` `4a177bbac96385a13a81f2541b1a09ccf27887a81abb1aee2e01b0a13ee2bbd5`.
 
 ## Review
 
-Pending independent review.
+Pending the fresh independent sealed-set evaluator, followed by the separate strict reviewer. Curation evidence must not be treated as the independent 90% result.
 
 ## CI And Gates
 
 Owner: delegated Phase 04 source-curation task, independent evaluation task, then strict review task
 
-State: `unresolved`
+State: `ci-unavailable-with-evidence`
 
 Evidence:
 
-None.
+- `npm test`: passed, 24 suites and 185 tests.
+- `npm run typecheck`: passed.
+- `npm run check:rhyme-sources`: passed with 547 reviewed entries and the distributions above.
+- `npm run test:rhyme-sources`: passed all focused adversarial and boundary controls.
+- `git diff --check`: passed.
+- Two consecutive `node scripts/rhyme-sources/author-phase04.mjs` runs were byte/hash stable and each reported 547 reviewed entries.
+- Initial `npm test` found the prepared worktree had no dependencies; a temporary shared dependency link then exposed that the shared install predated the branch's Expo Asset/FileSystem additions. A lockfile-exact online install could not complete under restricted network, so the final run used a temporary symlink forest from the canonical install plus the exact cached `expo-asset@56.0.17` and `expo-file-system@56.0.8` tarballs. This dependency tree is not source and is removed before handoff.
+- Hosted inspection could not authenticate or reach GitHub: `gh auth status` reported the `dirtydishes` token invalid, and `gh pr list --state all --head lavender/production-rhyme-phase-04 --base lavender/expo-clean-rebuild ...` returned `error connecting to api.github.com`. No hosted checks can exist for the unpushed working tree. The orchestrator owns commit/push/explicit PR creation or update; the independent evaluator/reviewer owns the next hosted-check inspection.
 
 ## PR And Commits
 
-None.
+The prepared worktree Git directory is `/home/delta/dev/lyricslab/.git/worktrees/lyricslab4` and is read-only in this task (`test -w` false). No commit, push, or PR mutation was attempted. The orchestrator must commit the completed working tree with a lowercase human message, push `lavender/production-rhyme-phase-04`, and create or update exactly one PR with explicit base `lavender/expo-clean-rebuild` and head `lavender/production-rhyme-phase-04` after checking whether one already exists.
 
 ## Beads Updates And Follow-Ups
 
 Issue depends on `lyricslab-5iw.3`.
+
+- Do not close or mutate `lyricslab-5iw.4` until the independent evaluator authors the sealed 250 cases and reports the actual coverage/negative-control result, then the strict reviewer completes review.
+- Phase 04A must revalidate all aliases and CMU-assisted direct phones against its exact CMU pin, retain required license/notice evidence, combine SUBTLEX and reviewed sources, and assemble the production artifact. It must not treat the legacy local CMU hash as the accepted pin.
+- Disputed pronunciations or regional scopes found by the evaluator should be repaired as explicit source-review changes with disclosure; the curation owner must not retroactively claim the sealed set was unseen after such feedback.
 
 ## Plan Amendments
 
@@ -91,6 +143,8 @@ None.
 
 Gold-set independence and disputed-pronunciation review must be preserved; the lexicon cannot be tuned against the acceptance set without disclosure. Keep source manifests compatible with the Phase 03 format, but do not claim a complete production artifact in this phase.
 
+Normal app startup remains unchanged. No source manifest, fixture, safety source, or eligibility module is imported by `app`, `src/editor`, `src/platform`, or `src/settings`; Phase 04A owns assembly and Phase 05 owns provider activation.
+
 ## Closeout
 
-Selected and claimed in Beads; source-curation delegation pending.
+Source-curation implementation and local evidence are complete. Git publication is an explicit orchestrator handoff because metadata is read-only. Canonical issue closeout remains blocked on the separate sealed evaluation and strict review tasks, not on additional curation work in this turn.
