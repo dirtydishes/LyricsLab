@@ -10,15 +10,15 @@ Stream: `production-rhyme-suggestions`
 
 Execution policy: `orchestrator-callback`
 
-Current phase: 04 - Rap lexicon and safety data
+Current phase: 04A - Production artifact assembly
 
-Current Beads issue: `lyricslab-5iw.4`
+Current Beads issue: `lyricslab-5iw.4a`
 
-Current PR: none; Phase 04 branch `lavender/production-rhyme-phase-04` prepared from canonical base `62c946b1`
+Current PR: none; Phase 04 PR #26 merged
 
 Current execution strategy: visible implementation task followed by independent review task
 
-Last completed phase: 03 - Deterministic pipeline framework
+Last completed phase: 04 - Rap lexicon and safety data
 
 Blocked: no
 
@@ -41,11 +41,11 @@ The earlier `lyricslab-8um` offline-rhyme MVP epic is closed and preserved. This
 | 01 | `lyricslab-5iw.1` | closed | merged PR #23 | `turn-docs/lyricslab-5iw.1.md` |
 | 02 | `lyricslab-5iw.2` | closed | merged PR #24 | `turn-docs/lyricslab-5iw.2.md` |
 | 03 | `lyricslab-5iw.3` | closed | merged PR #25 | `turn-docs/lyricslab-5iw.3.md` |
-| 04 | `lyricslab-5iw.4` | in progress | none | `turn-docs/lyricslab-5iw.4.md` |
+| 04 | `lyricslab-5iw.4` | closed | merged PR #26 | `turn-docs/lyricslab-5iw.4.md` |
 | 04A | `lyricslab-5iw.4a` | open | none | `turn-docs/lyricslab-5iw.4a.md` |
 | 05 | `lyricslab-5iw.5` | open | none | `turn-docs/lyricslab-5iw.5.md` |
 | 06 | `lyricslab-5iw.6` | open | none | `turn-docs/lyricslab-5iw.6.md` |
 
 ## Last Coordinator Update
 
-Phase 04 is selected and claimed on `lavender/production-rhyme-phase-04` from canonical base `62c946b1`. Its orchestration preserves source-curation versus sealed OOV-evaluation independence before strict review.
+Phase 04 merged through PR #26 as merge commit `b3bce410` after sealed independent evaluation, disclosed remediation from 29/128 to hardened deterministic 128/128, and full thermonuclear review. Beads issue `lyricslab-5iw.4` is closed; Phase 04A is the sole ready phase.

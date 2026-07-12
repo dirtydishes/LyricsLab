@@ -275,3 +275,10 @@ Normal app startup remains unchanged. No source manifest, fixture, safety source
 ## Closeout
 
 Final independent review is locally approved after repair: the immutable evaluation passes `128/128`, policy and adversarial controls pass, deterministic sources and all required local gates are green, and no Phase 04A/05/runtime scope was activated. The repaired head is pushed and cleanly mergeable; hosted automation is absent, so CI is honestly `ci-unavailable-with-evidence`. Merge and canonical Beads closeout remain orchestrator-owned.
+
+Final orchestrator closeout:
+
+- Review-closeout commit: `a6dd2c95` (`record phase four review closeout`).
+- PR #26 merged into `lavender/expo-clean-rebuild` as merge commit `b3bce410`.
+- Beads issue `lyricslab-5iw.4` is closed with the sealed-evaluation baseline, disclosed remediation, deterministic 128/128 result, strict review repairs, and `ci-unavailable-with-evidence` state.
+- Phase 04A is ready to pin licensed external sources and assemble the production artifact.
