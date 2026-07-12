@@ -1,0 +1,24 @@
+{
+  "schema": "lyricslab.rhyme-data-manifest",
+  "schemaVersion": 1,
+  "artifact": {
+    "id": "lyricslab-project-fixture",
+    "version": "fixture-1"
+  },
+  "provenance": {
+    "owner": "dirtydishes/lyricslab",
+    "production": false,
+    "purpose": "Project-authored format and loader verification fixture"
+  },
+  "sources": [
+    {
+      "id": "project-lexemes",
+      "kind": "fixture-lexicon",
+      "version": "1",
+      "path": "lexemes.json",
+      "sha256": "467d12f776b343bc45a5c0e27b54646b0ae6875e24b9543bfe3c513eb4722a76",
+      "license": "repository-license",
+      "ownership": "project-authored"
+    }
+  ]
+}

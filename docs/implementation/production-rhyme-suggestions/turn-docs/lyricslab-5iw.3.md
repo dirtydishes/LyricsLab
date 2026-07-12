@@ -158,6 +158,95 @@ SUBTLEX-US attribution and every committed artifact source hash are acceptance e
 
 The prior CMU-only generated JSON is useful historical implementation evidence but does not satisfy this phase's five-source, binary-format, licensing, or asynchronous-loader acceptance criteria.
 
-## Closeout
+## Resumed Fixture-Framework Implementation
+
+The approved amendment was implemented without acquiring or claiming any production corpus. Two bounded read-only helper audits challenged the binary layout, SDK 56 APIs, publication model, and hot-path boundary; this implementation task retained sole mutation ownership.
+
+### Manifest and fixture provenance
+
+- `data/rhyme-fixture/manifest.json` is a strict `lyricslab.rhyme-data-manifest` schema v1 manifest. It requires `production: false`, project-authored ownership, unique stable source IDs, contained relative paths, exact source SHA-256 values, and one fixture lexicon source.
+- The six-word/eight-pronunciation fixture in `data/rhyme-fixture/lexemes.json` was authored only to test tables, alternates, ranks, commonness, and a rap flag. It is not CMU, SUBTLEX-US, a production rap corpus, a safety source, or a proper-noun source. `data/rhyme-fixture/README.md` makes that boundary explicit.
+- Fixture lexicon SHA-256: `467d12f776b343bc45a5c0e27b54646b0ae6875e24b9543bfe3c513eb4722a76`.
+- Manifest SHA-256: `6d84f8a41c7bbbfc19f6e3a40ae4800add86a7eefb1cf317e868a13fd9b9ecd2`.
+- The compiler rejects hash drift, path escape, external/unreviewed ownership, production claims, duplicate words/source IDs, unsupported fields, malformed pronunciations, invalid ranks/commonness, and invalid/duplicate flags.
+
+### Versioned binary format
+
+Format v1 is little-endian and deterministic:
+
+- A fixed 96-byte header contains `LLRHYME\0`, format version, header/total/directory sizes, section count/flags, the 32-byte manifest SHA-256, the 32-byte payload SHA-256, and zeroed reserved bytes.
+- A fixed 24-byte descriptor per section contains section ID, record width, absolute aligned offset, byte length, record count, and zeroed reserved fields.
+- Twelve required, ascending, four-byte-aligned sections encode metadata, UTF-8 string bytes, string ranges, phone IDs, word/lemma/pronunciation ranges, pronunciation phone IDs and derived exact/family keys, flattened phone IDs, exact-tail index entries, slant-family index entries, fixed-point rank/commonness records, rap/safety/proper-noun flags, and source ID/kind/version/path/hash/license/ownership references.
+- Canonical code-unit sorting, fixed-point millionths, stable numeric IDs, sorted alternate phone sequences, sorted exact/slant members, zero-filled padding, and explicit source order avoid locale, timestamp, filesystem-enumeration, and absolute-checkout-path nondeterminism.
+- The runtime validates magic/version/sizes/reserved fields, required and unique canonical sections, widths/counts/alignment/overlap/bounds, payload and expected manifest hashes, strict/contiguous UTF-8 strings, every cross-reference/range, alternate ordinals, exact/slant key membership and ordering, ranks/commonness, flags, and source hashes before creating a `RhymeEngine`.
+
+The committed artifact is `assets/rhyme/fixture.rhymebin`: format version `1`, artifact version `fixture-1`, 1,752 bytes, SHA-256 `68f98b225c352fd228c8cea480aa07fc1a43ccb7fbb30af274159aff4e0ec0ed`.
+
+### Build and freshness commands
+
+- `npm run build:rhyme-data` uses the project fixture manifest/artifact by default. The underlying command accepts `--manifest` and `--output`/`--out` explicitly.
+- `npm run check:rhyme-data` compiles into an OS temporary directory, byte-compares that output with the committed artifact, and deletes the temporary directory. Artifact mtime/size remained exactly `1783834815:1752` before and after the final check.
+- `npm run test:rhyme-data-compiler` independently proves two explicit clean outputs are byte-identical and exercises source-hash drift and malformed-manifest rejection.
+
+### Bounded loader and publication boundary
+
+- `src/rhymeData/rhymeEngineRuntime.ts` owns a stable `RhymeEngine` proxy, fixed maximum 64 KiB reads, maximum artifact size, yielding between reads, generation-token retry semantics, observable loading/ready/error snapshots, atomic replacement only after decode and engine construction complete, stale-attempt rejection, and last-known-good retention after reload failure.
+- `src/rhymeData/decodeRhymeData.ts` decodes and validates word/pronunciation records in configurable bounded record chunks, yielding to the host. The current Phase 02 `createRhymeEngine` construction happens only after all bytes and records validate, so no partial engine is published.
+- `src/platform/createExpoRhymeEngineRuntime.ts` is the dormant SDK 56 construction boundary: a caller supplies a bundled Metro module ID and expected manifest hash; Expo Asset downloads/resolves that bundled asset locally; Expo FileSystem opens it read-only and returns bounded `FileHandle.readBytes` chunks; Expo Crypto verifies SHA-256.
+- `src/platform/afterFirstFrameScheduler.ts` requires two animation-frame turns followed by an idle callback before acquisition begins. Cancellation and the three scheduling stages are deterministic and directly tested.
+- Expo SDK evidence required direct `expo-asset ~56.0.17` and `expo-file-system ~56.0.8` dependencies. Metro's default asset list did not contain `rhymebin`, so `metro.config.js` registers that extension and `assets.d.ts` defines its module type.
+- The generic settings adapter maps runtime loading/ready/error and retained-last-good diagnostics into the existing engine settings snapshot without exposing manifest, artifact, decoder, or index types to editor callers.
+
+### Provider integration scope decision
+
+The shipped `bundledSuggestionProvider -> createLegacyRhymeEngineAdapter -> getBundledCmuRhymeIndex` path remains unchanged. An implementation-time proposal to activate the tiny fixture through `app/_layout.tsx`, Settings, and the bundled provider was explicitly rejected and removed before final gates. Activating the fixture would degrade existing suggestions and masquerade as production integration. Phase 03 therefore proves a dormant construction boundary; Phase 04A owns the production artifact and Phase 05 owns provider/settings activation. A boundary test locks this decision.
+
+The new generic loader path itself never parses CMU, imports a large JSON artifact, queries SQLite, or accesses network APIs. The already-shipped legacy path is intentionally preserved under the explicit scope correction until Phase 05.
+
+## Resumed Changed Files And Behavior
+
+- Manifest/compiler/artifact: `data/rhyme-fixture/{README.md,manifest.json,lexemes.json}`, `scripts/build-rhyme-data.mjs`, `scripts/test-rhyme-data.mjs`, `scripts/rhyme-data/{format.mjs,manifest.mjs,compile.mjs}`, `assets/rhyme/fixture.rhymebin`.
+- Runtime/platform: `src/rhymeData/{binaryFormat.ts,decodeRhymeData.ts,rhymeEngineRuntime.ts}`, `src/platform/{afterFirstFrameScheduler.ts,createExpoRhymeEngineRuntime.ts}`, `metro.config.js`, `assets.d.ts`.
+- Tests/settings boundary: four focused tests under `src/rhymeData/__tests__`, plus `src/settings/engineSettings.ts` and its existing test.
+- Dependency/scripts: `package.json` and `package-lock.json` add exact SDK-compatible Asset/FileSystem dependencies and build/check/focused-test commands.
+- Documentation: only this existing Phase 03 turn doc was updated. No side review doc or Beads mutation was created.
+- Normal application suggestions, navigation, Settings rendering, and app startup remain behaviorally unchanged because the fixture runtime is dormant.
+
+## Resumed Gates And Evidence
+
+Final local state is green:
+
+- `npm test` — 22 suites, 162 tests passed.
+- `npm run typecheck` — passed with no diagnostics.
+- `npm run build:rhyme-data` — produced 1,752 bytes at SHA-256 `68f98b225c352fd228c8cea480aa07fc1a43ccb7fbb30af274159aff4e0ec0ed`.
+- `npm run check:rhyme-data` — passed using temporary regeneration; committed artifact bytes and mtime were unchanged.
+- `npm run test:rhyme-data-compiler` — passed deterministic-output, source-hash, and malformed-manifest controls.
+- Focused runtime/binary/settings tests — 5 suites, 18 tests passed, covering corruption, truncation, version, manifest/payload hashes, duplicate/overlapping/out-of-bounds sections, bounded reads/chunk yields, first-frame scheduling, atomic publication, last-good retention, retry, stale attempts, and provider/platform boundaries.
+- `npx expo config --type public` — exited 0 and resolved `LyricsLab`, `lyricslab-mobile`, SDK `56.0.0`.
+- `git diff --check` — passed.
+- Two explicit clean outputs — both 1,752 bytes and both SHA-256 `68f98b225c352fd228c8cea480aa07fc1a43ccb7fbb30af274159aff4e0ec0ed`; `cmp` passed against each other and the committed artifact.
+- `npm ls expo-asset expo-file-system --package-lock-only --all` — exited 0 with direct versions `56.0.17` and `56.0.8` and compatible Expo resolution.
+
+## Resumed CI, PR, And Git State
+
+CI state: `ci-unavailable-with-evidence`.
+
+- `gh pr list --repo dirtydishes/lyricslab --head lavender/production-rhyme-phase-03 --base lavender/expo-clean-rebuild --state all ...`, commit-status lookup, and check-run lookup all failed on 2026-07-12 with `error connecting to api.github.com`.
+- Hosted checks and PR mergeability therefore could not be truthfully inspected from this environment. Independent review owns rechecking them after the orchestrator publishes the completed tree.
+- Git metadata resolves to `/home/delta/dev/lyricslab/.git/worktrees/lyricslab4` and is read-only. Source/test/doc work is complete, but this task cannot stage, commit, push, or open/update the explicit-base PR.
+- Local and remote branch tips remain amendment commit `a9e661befd2893d7b05814cfc7441675ab353418`; no implementation commit exists yet. The orchestrator must commit the working tree with a lowercase human message, push `lavender/production-rhyme-phase-03`, and open/update exactly one PR with base `lavender/expo-clean-rebuild` and head `lavender/production-rhyme-phase-03`.
+- Temporary worktree dependency links were used only to run local gates and were removed before handoff.
+
+## Resumed Follow-Ups And Context
+
+- Phase 04A must still pin exact CMU and `words/subtlex-word-frequencies` 2.0.0 bytes/integrities, preserve all required notices/citations/caveats, assemble the complete production artifact, and measure production-scale decode/index construction. This fixture does not reduce those obligations.
+- Phase 05 must activate the production runtime in the existing provider/settings seams. It must not activate this fixture as user-facing suggestion data.
+- No additional Beads issue was created: these responsibilities already belong to accepted Phase 04A and Phase 05 scope.
+
+## Original Blocked-Attempt Closeout
 
 The original production-corpus attempt stopped correctly at the mandatory provenance gate. The user approved the sequence amendment, Beads and docs are updated, and Phase 03 is resumed for fixture-driven framework implementation.
+
+## Implementation Closeout
+
+The amended Phase 03 fixture framework is fully implemented and locally verified. The only remaining publication actions are the orchestrator-owned commit, push, explicit-base PR creation/update, and hosted-CI inspection, followed by a fresh independent strict review.

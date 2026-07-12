@@ -1,4 +1,5 @@
 import { RHYME_INDEX_ARTIFACT_VERSION } from '../rhyme/artifact';
+import type { RhymeEngineRuntimeSnapshot } from '../rhymeData/rhymeEngineRuntime';
 
 export type RhymeEngineState = 'error' | 'loading' | 'ready';
 
@@ -22,6 +23,20 @@ export function getBundledEngineSettingsSnapshot(): RhymeEngineSettingsSnapshot 
     diagnostics: 'not-enabled',
     state: 'ready',
     version: `artifact-v${RHYME_INDEX_ARTIFACT_VERSION}`,
+  };
+}
+
+export function toEngineSettingsSnapshot(
+  snapshot: RhymeEngineRuntimeSnapshot,
+): RhymeEngineSettingsSnapshot {
+  return {
+    diagnostics: 'not-enabled',
+    errorMessage:
+      snapshot.state === 'error' && snapshot.usingLastKnownGood
+        ? `${snapshot.errorMessage ?? 'Reload failed.'} The last loaded engine remains available.`
+        : snapshot.errorMessage,
+    state: snapshot.state,
+    version: snapshot.version,
   };
 }
 

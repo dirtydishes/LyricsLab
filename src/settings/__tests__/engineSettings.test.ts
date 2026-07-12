@@ -1,8 +1,27 @@
 /// <reference types="jest" />
 
-import { buildEngineSettingsViewModel } from '../engineSettings';
+import {
+  buildEngineSettingsViewModel,
+  toEngineSettingsSnapshot,
+} from '../engineSettings';
 
 describe('engine Settings visibility', () => {
+  it('reports failed reload retention through the existing settings boundary', () => {
+    expect(
+      toEngineSettingsSnapshot({
+        errorMessage: 'Hash mismatch.',
+        state: 'error',
+        usingLastKnownGood: true,
+        version: 'fixture-1',
+      }),
+    ).toEqual({
+      diagnostics: 'not-enabled',
+      errorMessage: 'Hash mismatch. The last loaded engine remains available.',
+      state: 'error',
+      version: 'fixture-1',
+    });
+  });
+
   it('shows ready version and diagnostics state without a retry action', () => {
     expect(
       buildEngineSettingsViewModel({
