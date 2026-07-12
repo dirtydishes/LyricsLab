@@ -4,7 +4,7 @@ Canonical tracker: Beads epic `lyricslab-8um`
 
 This file is a compact resume aid only. If this file disagrees with Beads, Beads wins.
 
-Status: active
+Status: complete
 
 Stream: `offline-rhyme-suggestions`
 
@@ -16,7 +16,7 @@ Current Beads issue: none
 
 Current PR: none
 
-Last completed phase: 06 (`lyricslab-8um.2`)
+Last completed phase: 07 (`lyricslab-bhs`)
 
 Blocked: no
 
@@ -47,8 +47,8 @@ Blocked: no
 | 04 | `lyricslab-8um.4` | closed | `https://github.com/dirtydishes/lyricslab/pull/19` | `turn-docs/lyricslab-phase-04.md` |
 | 05 | `lyricslab-gg4` | closed | `https://github.com/dirtydishes/lyricslab/pull/20` | `turn-docs/lyricslab-phase-05.md` |
 | 06 | `lyricslab-8um.2` | closed | `https://github.com/dirtydishes/lyricslab/pull/21` | `turn-docs/lyricslab-phase-06.md` |
-| 07 | `lyricslab-bhs` | open | none | `turn-docs/lyricslab-phase-07.md` |
+| 07 | `lyricslab-bhs` | closed | `https://github.com/dirtydishes/lyricslab/pull/22` | `turn-docs/lyricslab-phase-07.md` |
 
 ## Last Coordinator Update
 
-Phase 06 closed after PR #21 merged into `lavender/expo-clean-rebuild` at merge commit `7b29c77598b8f0060ce80d4f46342eb28d63f3f0`. Thermo-nuclear review repaired module depth, exact repetition ranking, and bounded slant discovery and reported `ci-unavailable-with-evidence`; default tests, typecheck, editor tests, artifact smoke, the non-default ranking benchmark, script syntax, and diff checks passed with no findings remaining. `bd ready --json` now selects Phase 07 (`lyricslab-bhs`) as the next expected phase, pending the required selector report.
+Phase 07 and epic `lyricslab-8um` are closed after PR #22 merged into `lavender/expo-clean-rebuild` at merge commit `14ac4cf51fb175ab46cce158fe09205813dc1f7a`. Thermo-nuclear and Impeccable review repaired follow-up mappings and generator whitespace and reported `ci-unavailable-with-evidence`; all final product, artifact, storyboard, browser, and diff gates passed with no findings remaining. The verified storyboard is `storyboard-post-run-07-11-2026.html`, and all eight post-MVP follow-ups are filed. Physical-device validation is unavailable on this Debian host, so the manual checklist still blocks declaring the Expo lane primary even though the offline-rhyme implementation stream is complete.

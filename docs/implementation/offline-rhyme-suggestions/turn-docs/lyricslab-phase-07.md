@@ -216,4 +216,12 @@ These issues are intentionally not implemented in Phase 07.
 
 ## Closeout
 
-Final review repaired in-scope closeout defects and reran required gates. Final Beads closure remains orchestrator-owned after review. One final review callback is sent to the orchestrator thread after the repair commit is pushed.
+Closed.
+
+- PR #22 merged into `lavender/expo-clean-rebuild` at merge commit `14ac4cf51fb175ab46cce158fe09205813dc1f7a`.
+- Final phase head: `c262f44dc142e88b250aa26bde0d4109dd5bc9e7`, including the orchestrator review-callback export.
+- Final reviewed head: `dc7790ea1ee5f1027c100a5e530eb679cb4fd728`.
+- The final `gpt-5.5`/`xhigh` closeout-selector reported `ready`, found no closeout risks, and authorized Phase 07 and epic closure.
+- Beads issue `lyricslab-bhs` was closed with the merged PR, repaired thermo-nuclear review, `ci-unavailable-with-evidence`, complete automated/storyboard evidence, filed follow-ups, and no findings remaining.
+- Beads epic `lyricslab-8um` was closed after all eight phase children reached closed state and the final storyboard/follow-up evidence was verified.
+- Physical-device validation remains unavailable from this host. The manual real-device checklist still blocks declaring the Expo lane primary; this does not reopen the completed offline-rhyme implementation stream.
