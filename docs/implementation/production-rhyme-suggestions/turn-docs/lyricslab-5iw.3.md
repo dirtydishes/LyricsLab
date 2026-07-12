@@ -318,3 +318,10 @@ No substantive in-scope finding remains. The 697-line decoder remains one cohesi
 - Normal app startup, Settings rendering, and `bundledSuggestionProvider -> createLegacyRhymeEngineAdapter` behavior remain unchanged. The project fixture is still dormant and cannot become user-facing suggestions in Phase 03.
 - Phase 04 still owns reviewed project rap/safety/proper-noun sources. Phase 04A still owns exact CMU and `words/subtlex-word-frequencies` 2.0.0 pins/notices, complete production assembly, and production-scale construction/load measurement. Phase 05 still owns provider/settings activation.
 - Those already-authored phases cover the only remaining work; no new Beads recommendation is needed, and this review did not mutate or close Beads.
+
+## Final Merge And Beads Closeout
+
+- Review-closeout commit: `ec55aef7` (`record phase three review closeout`).
+- PR #25 merged into `lavender/expo-clean-rebuild` as merge commit `0825591e`.
+- Beads issue `lyricslab-5iw.3` is closed with the amended fixture-framework outcome, 182-test review evidence, and `ci-unavailable-with-evidence` state.
+- Phase 04 is now ready; Phase 04A remains downstream of its reviewed project sources.
