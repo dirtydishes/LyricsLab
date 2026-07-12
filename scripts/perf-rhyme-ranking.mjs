@@ -154,6 +154,7 @@ function compileRhymeRuntime() {
     'index.ts',
     'normalize.ts',
     'rhymeIndex.ts',
+    'rhymeRanking.ts',
     'rhymeTail.ts',
   ].map((file) => path.join(sourceDir, file));
   const result = spawnSync(

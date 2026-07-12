@@ -36,7 +36,7 @@ Integrated implementation:
 1. Kept `findExactRhymeCandidates` exact-only and shape-stable. The existing exact candidate snapshots still contain only `id`, `kind`, `word`, `normalizedWord`, `rhymeTailKey`, `score`, and `slantSimilarity`.
 2. Added additive mixed ranking through `findRhymeCandidates`. Mixed results include exact candidates plus bounded slant candidates, with deterministic metadata for `matchedSyllables`, `stressCompatibility`, and `repetitionPenalty`.
 3. Added pure ARPAbet helpers in `src/rhyme/rhymeTail.ts` for vowel/stress parsing, syllable nuclei/counting, and tail comparison. No raw CMU parsing or generated artifact schema changes were added.
-4. Added a private `WeakMap<RhymeIndex, SlantLookup>` cache in `src/rhyme/rhymeIndex.ts`. Slant queries use hydrated index data and bounded bucket scans; they do not scan all lexemes on every lookup after the cache exists.
+4. Added a private `WeakMap<RhymeIndex, SlantLookup>` cache in `src/rhyme/rhymeRanking.ts`. Slant queries use hydrated index data, narrow vowel/coda-family buckets, and bounded stratified bucket scans; they do not scan all lexemes on every lookup after the cache exists.
 5. Updated `src/editor/suggestions.ts` to use `findRhymeCandidates` by default while preserving the Phase 05 provider seam: early no-index guards, previous-token-first anchors, active-word fallback, deterministic fallback suggestions, active-prefix filtering before slicing, and `WordSuggestion` mapping.
 6. Kept `src/editor/bundledSuggestionProvider.ts` unchanged as the thin runtime adapter over `getBundledCmuRhymeIndex`.
 7. Added fixture-sized Jest coverage for exact API stability, exact-plus-slant ordering, matched syllables, stress compatibility, repetition penalty, public API exports, runtime privacy, provider guards, and slant fill-in behavior.
@@ -89,8 +89,16 @@ Implementation-helper synthesis:
 
 ## Review
 
-Reviewer closeout remains orchestrator-owned. This implementation worker did not
-launch a review thread or close Beads.
+Thermo-nuclear reviewer pass used `/home/delta/.agents/skills/thermo-nuclear-code-quality-review/SKILL.md`.
+
+Reviewer-owned repairs:
+
+1. Split the slant lookup, `WeakMap` cache, scoring, and mixed candidate ranking helpers out of `src/rhyme/rhymeIndex.ts` into `src/rhyme/rhymeRanking.ts`. Final file sizes: `src/rhyme/rhymeIndex.ts` 578 lines, `src/rhyme/rhymeRanking.ts` 911 lines, so no Phase 06 runtime file crosses the 1k-line review bar.
+2. Fixed mixed exact ranking so `findRhymeCandidates` applies repetition penalties before final `maxResults` slicing instead of truncating exact candidates first.
+3. Fixed slant discovery so high-scoring late-bucket candidates are not missed by broad bucket prefixes. Slant lookup now tries narrow vowel+coda/family+coda and related specific keys before broad fallback keys, uses deterministic stratified scans, and only falls back to broad keys when specific buckets do not fill the requested slant budget.
+4. Added fixture regressions for default mixed API behavior, exact repetition-before-slice behavior, and narrow slant bucket discovery.
+
+Review result: repaired and approved. No findings remaining. This reviewer did not close Beads.
 
 ## CI And Gates
 
@@ -102,21 +110,22 @@ Evidence:
 
 Local implementation gates:
 
-- `npm test -- --runTestsByPath src/rhyme/__tests__/candidateRanking.integration.test.ts src/rhyme/__tests__/rhymeIndex.test.ts src/rhyme/__tests__/publicApi.test.ts src/rhyme/__tests__/runtimePrivacyGuard.test.ts src/editor/__tests__/suggestions.test.ts`: passed, 5 suites, 45 tests.
+- `npm test -- --runTestsByPath src/rhyme/__tests__/candidateRanking.integration.test.ts src/rhyme/__tests__/rhymeIndex.test.ts src/rhyme/__tests__/publicApi.test.ts src/rhyme/__tests__/runtimePrivacyGuard.test.ts src/editor/__tests__/suggestions.test.ts`: passed after review repairs, 5 suites, 48 tests.
 - `npm test -- --runTestsByPath src/editor/__tests__/suggestions.test.ts src/rhyme/__tests__/candidateRanking.integration.test.ts`: passed after provider opted into mixed ranking, 2 suites, 33 tests.
 - `npm run typecheck`: passed.
-- `npm test`: passed, 12 suites, 101 tests.
+- `npm test`: passed after review repairs, 12 suites, 104 tests.
 - `npm run editor:test`: passed, 2 files, 15 tests.
-- `npm run smoke:rhyme-artifact -- --compact`: passed; artifact fresh, 9,596,136 bytes, 125,213 lexemes, 135,166 pronunciations, 35,869 rhyme tails, 10/10 representative exact anchors hit, p50 0.082 ms, p95 5.971 ms.
-- `npm run perf:rhyme-ranking -- --compact`: passed; artifact fresh, mixed mode 600/600 hit lookups with p50 0.065 ms and p95 0.143 ms; slant-only mode 600/600 hit lookups with p50 2.868 ms and p95 8.163 ms on `deltaisland.io` / Node v22.23.1 / AMD EPYC-Genoa Processor.
+- `npm run smoke:rhyme-artifact -- --compact`: passed after review repairs; artifact fresh, 9,596,136 bytes, 125,213 lexemes, 135,166 pronunciations, 35,869 rhyme tails, 10/10 representative exact anchors hit, p50 0.075 ms, p95 0.614 ms.
+- `npm run perf:rhyme-ranking -- --compact`: passed after review repairs; artifact fresh, mixed mode 600/600 hit lookups with p50 0.362 ms and p95 1.845 ms; slant-only mode 600/600 hit lookups with p50 3.499 ms and p95 9.015 ms on `deltaisland.io` / Node v22.23.1 / AMD EPYC-Genoa Processor. The `mind` slant-only sample includes repaired high-similarity candidates such as `headlined`, `mastermind`, and `nevermind`.
 - `node --check scripts/perf-rhyme-ranking.mjs`: passed.
 - `git diff --check`: passed.
 
 Hosted CI evidence:
 
 - PR: `https://github.com/dirtydishes/lyricslab/pull/21`
-- `gh pr view 21 --repo dirtydishes/lyricslab --json url,number,state,isDraft,mergeable,baseRefName,headRefName,statusCheckRollup,title`: open, non-draft, base `lavender/expo-clean-rebuild`, head `lavender/offline-rhyme-phase-06`, mergeable `MERGEABLE`, `statusCheckRollup` empty.
-- `gh pr checks 21 --repo dirtydishes/lyricslab`: no checks reported on the branch.
+- Reviewer pre-push `gh pr view 21 --repo dirtydishes/lyricslab --json url,number,state,isDraft,mergeable,baseRefName,headRefName,headRefOid,statusCheckRollup,title`: open, non-draft, base `lavender/expo-clean-rebuild`, head `lavender/offline-rhyme-phase-06`, mergeable `MERGEABLE`, `statusCheckRollup` empty.
+- Reviewer pre-push `gh pr checks 21 --repo dirtydishes/lyricslab`: no checks reported on the branch.
+- Final PR state, hosted checks, and merge-tree evidence recorded after reviewer commit/push.
 
 ## PR And Commits
 
@@ -125,8 +134,8 @@ Hosted CI evidence:
 - Expected base: `lavender/expo-clean-rebuild`
 - Implementation commit: `38fa93465f7c9afdf1af0aa3b2f07b108c375b5a add slant rhyme ranking guard`
 - Turn-doc / PR-detail commit: `record phase six pr details`
-- Review repair commit: none by implementation worker.
-- Reviewer-observed PR state: pending reviewer closeout.
+- Review repair commit: reviewer closeout commit on `lavender/offline-rhyme-phase-06`.
+- Reviewer-observed PR state: repaired, pending final post-push evidence.
 
 ## Beads Updates
 
@@ -147,4 +156,4 @@ None.
 
 ## Closeout
 
-Implementation PR open and ready for orchestrator callback.
+Implementation PR repaired by reviewer and ready for orchestrator callback after final push.

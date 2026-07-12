@@ -54,6 +54,23 @@ const mixedFixtureIndex = createRhymeIndex(
   parseCmuDictionary(MIXED_CANDIDATE_FIXTURE),
 );
 
+const narrowSlantFixtureIndex = createRhymeIndex(
+  parseCmuDictionary(
+    [
+      'MIND M AY1 N D',
+      ...Array.from(
+        { length: 120 },
+        (_, index) => `ACODA${index} D AA1 N D`,
+      ),
+      ...Array.from(
+        { length: 120 },
+        (_, index) => `AVOWEL${index} D AY1 B`,
+      ),
+      'ZONED Z AY2 N D',
+    ].join('\n'),
+  ),
+);
+
 function exactRhymes(
   anchor: string,
   options: {
@@ -257,6 +274,14 @@ describe('rhyme candidate generation and ranking integration', () => {
     );
   });
 
+  it('defaults the mixed Phase 06 API to exact plus slant results', () => {
+    expect(
+      findRhymeCandidates(mixedFixtureIndex, 'time').some(
+        (candidate) => candidate.kind === 'slant',
+      ),
+    ).toBe(true);
+  });
+
   it('orders balanced slant candidates by explainable phonetic closeness', () => {
     const candidates = mixedRhymes('time', {
       minSlantSimilarity: 0,
@@ -340,6 +365,33 @@ describe('rhyme candidate generation and ranking integration', () => {
     expect(positionOf(words, 'line')).toBeGreaterThan(
       positionOf(words, 'mind'),
     );
+  });
+
+  it('applies repetition penalties before slicing exact mixed candidates', () => {
+    expect(
+      mixedWordsFor('time', {
+        maxResults: 1,
+        sourceTokens: ['climb'],
+      }),
+    ).toEqual(['dime']);
+  });
+
+  it('uses narrow slant lookup buckets instead of broad bucket prefixes', () => {
+    expect(
+      findRhymeCandidates(narrowSlantFixtureIndex, {
+        anchor: 'mind',
+        candidateKinds: ['slant'],
+        maxResults: 1,
+        minSlantSimilarity: 0,
+      }),
+    ).toEqual([
+      expect.objectContaining({
+        kind: 'slant',
+        normalizedWord: 'zoned',
+        rhymeTailKey: 'AY2 N D',
+        word: 'zoned',
+      }),
+    ]);
   });
 
   it('hard-excludes normalized words and applies maxResults after mixed ranking', () => {
