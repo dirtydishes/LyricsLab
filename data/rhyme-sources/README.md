@@ -19,9 +19,11 @@ unsolicited suggestion output. Ordinary profanity is not safety-blocked.
 Proper names, places, and acronyms require a non-empty normalized active prefix
 before they are eligible as suggestions.
 
-Run `npm run check:rhyme-sources` after any edit. The check verifies hashes,
-schema strictness, count floors, canonical uniqueness, category and region
-enums, evidence and review completeness, direct ARPAbet, alias shape, policy
-coverage, Phase 03 flag compatibility, and the sealed-evaluation boundary.
+Run `npm run check:rhyme-sources` after any edit. The check authors a fresh
+temporary corpus and byte-compares every committed source before it verifies
+hashes, schema strictness, count floors, canonical uniqueness, category and
+region enums, evidence and review completeness, direct ARPAbet, alias shape,
+policy coverage, Phase 03 flag compatibility, and the sealed-evaluation
+boundary.
 The independent acceptance set is deliberately not stored, read, generated,
 or described here.

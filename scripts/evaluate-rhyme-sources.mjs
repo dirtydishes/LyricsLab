@@ -1,8 +1,13 @@
+import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFile, stat, writeFile } from 'node:fs/promises';
 
 import { loadAndValidateRhymeSources } from './rhyme-sources/contract.mjs';
-import { isCuratedEntryEligible } from '../src/rhymeSources/suggestionEligibility.ts';
+import {
+  isValidArpabetPhone,
+  normalizeRhymeWord,
+} from './rhyme-data/phonology.mjs';
+import { isCuratedEntryEligible } from '../src/rhymeSources/suggestionEligibilityCore.cjs';
 
 const GOLD_PATH = 'evaluation/rhyme-sources/oov-gold-v1.json';
 const GOLD_SCHEMA_PATH = 'evaluation/rhyme-sources/oov-gold-v1.schema.json';
@@ -15,26 +20,36 @@ const ACCEPTANCE_PERCENT = 90;
 
 const goldBytesBefore = await readFile(GOLD_PATH);
 const goldHashBefore = sha256(goldBytesBefore);
-const seal = JSON.parse(await readFile(MANIFEST_PATH, 'utf8'));
+const [sealBytes, goldSchemaBytes, correctionBytes, sourceManifestBytes] = await Promise.all([
+  readFile(MANIFEST_PATH),
+  readFile(GOLD_SCHEMA_PATH),
+  readFile(CORRECTIONS_PATH),
+  readFile(SOURCE_MANIFEST_PATH),
+]);
+const seal = parseJson(sealBytes, 'evaluation manifest');
 
 if (goldHashBefore !== seal.gold_sha256) {
   throw new Error(`Sealed gold hash mismatch before evaluation: ${goldHashBefore}`);
 }
 
 const goldMode = (await stat(GOLD_PATH)).mode & 0o777;
-if ((goldMode & 0o222) !== 0) {
+if (goldMode !== 0o444) {
   throw new Error(`Sealed gold must be read-only, got mode ${goldMode.toString(8)}`);
 }
 
-const [gold, goldSchema, corrections, sources, legacyCmu] = await Promise.all([
+const [gold, sources, legacyCmu] = await Promise.all([
   parseJson(goldBytesBefore, 'sealed gold'),
-  readFile(GOLD_SCHEMA_PATH, 'utf8').then((value) => parseJson(value, 'gold schema')),
-  loadCorrections(CORRECTIONS_PATH),
   loadAndValidateRhymeSources(SOURCE_MANIFEST_PATH),
   readFile(LEGACY_CMU_PATH, 'utf8').then(parseLegacyCmu),
 ]);
+const goldSchema = parseJson(goldSchemaBytes, 'gold schema');
+const corrections = parseCorrections(correctionBytes);
 
-validateGold(gold, goldSchema, corrections);
+validateSeal(seal, gold, goldMode);
+validateGold(gold, goldSchema, corrections, legacyCmu);
+if (process.argv.includes('--self-test')) {
+  runEvaluationAdversarialControls(gold, goldSchema, corrections, legacyCmu);
+}
 
 const entriesByWord = new Map(sources.entries.map((entry) => [entry.normalized, entry]));
 const correctionByCase = new Map(corrections.map((correction) => [correction.case_id, correction]));
@@ -58,9 +73,23 @@ if (goldHashAfter !== goldHashBefore) {
   throw new Error(`Sealed gold changed during evaluation: ${goldHashBefore} -> ${goldHashAfter}`);
 }
 
+const inputHashes = {
+  corrections_sha256: sha256(correctionBytes),
+  gold_schema_sha256: sha256(goldSchemaBytes),
+  gold_sha256: goldHashBefore,
+  seal_manifest_sha256: sha256(sealBytes),
+  source_manifest_sha256: sha256(sourceManifestBytes),
+};
+const evaluationFingerprint = sha256(Buffer.from(JSON.stringify({
+  contract: 'lyricslab.oov-evaluator.v2',
+  inputHashes,
+  threshold: ACCEPTANCE_PERCENT,
+})));
+
 const result = {
-  schema_version: 1,
-  evaluated_at: new Date().toISOString(),
+  schema_version: 2,
+  evaluation_fingerprint: evaluationFingerprint,
+  input_hashes: inputHashes,
   source_manifest: SOURCE_MANIFEST_PATH,
   seal: {
     expected_sha256: seal.gold_sha256,
@@ -289,7 +318,30 @@ function flags(entry) {
   };
 }
 
-function validateGold(gold, schema, corrections) {
+function validateSeal(seal, gold, goldMode) {
+  if (
+    seal.schema_version !== 1 ||
+    seal.gold_path !== GOLD_PATH ||
+    seal.gold_sha256 !== goldHashBefore ||
+    seal.sealed_mode !== '0444' ||
+    goldMode !== 0o444
+  ) {
+    throw new Error('Evaluation manifest does not match the sealed gold contract');
+  }
+  const positives = gold.cases.filter((testCase) => testCase.adjudication.state === 'accepted');
+  const expectedCounts = {
+    all: gold.cases.length,
+    positive_candidates: positives.length,
+    valid_positive_oov: positives.filter((testCase) => testCase.legacy_cmu.status === 'confirmed-oov').length,
+    positive_present_in_legacy_cmu: positives.filter((testCase) => testCase.legacy_cmu.status === 'present-in-legacy-cmu').length,
+    ambiguous_negative_controls: gold.cases.filter((testCase) => testCase.adjudication.state === 'rejected-ambiguous').length,
+  };
+  if (JSON.stringify(seal.case_counts) !== JSON.stringify(expectedCounts)) {
+    throw new Error('Evaluation manifest case counts do not match sealed gold');
+  }
+}
+
+function validateGold(gold, schema, corrections, legacyCmu) {
   if (schema.$id !== 'oov-gold-v1.schema.json' || gold.schema_version !== 1) {
     throw new Error('Unsupported sealed gold schema');
   }
@@ -297,26 +349,121 @@ function validateGold(gold, schema, corrections) {
     throw new Error(`Sealed gold must contain exactly 250 cases, got ${gold.cases?.length}`);
   }
 
+  const evidenceIds = new Set(gold.evidence_sources.map((source) => source.id));
+  const correctionIds = new Set();
+  for (const correction of corrections) {
+    exactKeys(correction, [
+      'action',
+      'case_id',
+      'gold_sha256_after',
+      'gold_sha256_before',
+      'rationale',
+      'recorded_at',
+      'schema_version',
+    ], `Correction ${correction.case_id}`);
+    if (
+      correction.schema_version !== 1 ||
+      correction.action !== 'exclude-from-valid-positive-oov-denominator' ||
+      typeof correction.rationale !== 'string' ||
+      correction.rationale.trim().length === 0 ||
+      correctionIds.has(correction.case_id)
+    ) {
+      throw new Error(`Invalid or duplicate correction: ${correction.case_id}`);
+    }
+    if (correction.gold_sha256_before !== seal.gold_sha256 || correction.gold_sha256_after !== seal.gold_sha256) {
+      throw new Error(`Correction changed or references the wrong sealed hash: ${correction.case_id}`);
+    }
+    correctionIds.add(correction.case_id);
+  }
+
   const ids = new Set();
   const normalized = new Set();
+  const casesById = new Map();
   for (const [index, testCase] of gold.cases.entries()) {
     const expectedId = `oov-${String(index + 1).padStart(3, '0')}`;
     if (testCase.id !== expectedId || ids.has(testCase.id)) throw new Error(`Invalid gold id at ${index}`);
     if (normalized.has(testCase.normalized)) throw new Error(`Duplicate normalized gold case: ${testCase.normalized}`);
-    if (normalize(testCase.surface) !== testCase.normalized) throw new Error(`Noncanonical normalized gold case: ${testCase.id}`);
+    if (normalizeRhymeWord(testCase.surface) !== testCase.normalized) throw new Error(`Noncanonical normalized gold case: ${testCase.id}`);
+    if (!testCase.evidence.every((id) => evidenceIds.has(id))) throw new Error(`Unknown evidence in gold case: ${testCase.id}`);
     if (testCase.adjudication.state === 'accepted' && testCase.accepted_pronunciations.length === 0) throw new Error(`Accepted case has no pronunciation: ${testCase.id}`);
     if (testCase.adjudication.state === 'rejected-ambiguous' && testCase.accepted_pronunciations.length !== 0) throw new Error(`Ambiguous negative has a pronunciation: ${testCase.id}`);
     if (!['confirmed-oov', 'present-in-legacy-cmu'].includes(testCase.legacy_cmu.status)) throw new Error(`Unchecked legacy status: ${testCase.id}`);
+    const expectedMatches = legacyCmu.get(testCase.normalized) ?? [];
+    const expectedStatus = expectedMatches.length > 0 ? 'present-in-legacy-cmu' : 'confirmed-oov';
+    if (
+      testCase.legacy_cmu.status !== expectedStatus ||
+      JSON.stringify(testCase.legacy_cmu.matches) !== JSON.stringify(expectedMatches)
+    ) {
+      throw new Error(`Legacy CMU baseline mismatch: ${testCase.id}`);
+    }
+    const pronunciationValidity = testCase.accepted_pronunciations.map(isValidGoldPronunciation);
+    if (
+      testCase.adjudication.state === 'accepted' &&
+      !correctionIds.has(testCase.id) &&
+      pronunciationValidity.some((valid) => !valid)
+    ) {
+      throw new Error(`Invalid accepted pronunciation: ${testCase.id}`);
+    }
     ids.add(testCase.id);
     normalized.add(testCase.normalized);
+    casesById.set(testCase.id, testCase);
   }
 
   for (const correction of corrections) {
-    if (!ids.has(correction.case_id)) throw new Error(`Correction references unknown case: ${correction.case_id}`);
-    if (correction.gold_sha256_before !== seal.gold_sha256 || correction.gold_sha256_after !== seal.gold_sha256) {
-      throw new Error(`Correction changed or references the wrong sealed hash: ${correction.case_id}`);
+    const testCase = casesById.get(correction.case_id);
+    if (
+      !testCase ||
+      testCase.adjudication.state !== 'accepted' ||
+      testCase.legacy_cmu.status !== 'confirmed-oov' ||
+      testCase.accepted_pronunciations.some(isValidGoldPronunciation)
+    ) {
+      throw new Error(`Correction does not identify a demonstrably invalid positive OOV case: ${correction.case_id}`);
     }
   }
+}
+
+function isValidGoldPronunciation(pronunciation) {
+  const phones = pronunciation.split(' ');
+  return phones.length > 0 &&
+    phones.every(isValidArpabetPhone) &&
+    phones.some((phone) => /[0-2]$/u.test(phone));
+}
+
+function runEvaluationAdversarialControls(gold, schema, corrections, legacyCmu) {
+  const baselineTamper = structuredClone(gold);
+  const oovCase = baselineTamper.cases.find((testCase) => testCase.legacy_cmu.status === 'confirmed-oov');
+  oovCase.legacy_cmu.status = 'present-in-legacy-cmu';
+  assert.throws(
+    () => validateGold(baselineTamper, schema, corrections, legacyCmu),
+    /Legacy CMU baseline mismatch/u,
+  );
+
+  const validPositive = gold.cases.find((testCase) =>
+    testCase.adjudication.state === 'accepted' &&
+    testCase.legacy_cmu.status === 'confirmed-oov' &&
+    testCase.accepted_pronunciations.some(isValidGoldPronunciation)
+  );
+  const invalidExclusion = {
+    action: 'exclude-from-valid-positive-oov-denominator',
+    case_id: validPositive.id,
+    gold_sha256_after: seal.gold_sha256,
+    gold_sha256_before: seal.gold_sha256,
+    rationale: 'adversarial denominator exclusion',
+    recorded_at: seal.sealed_at,
+    schema_version: 1,
+  };
+  assert.throws(
+    () => validateGold(gold, schema, [...corrections, invalidExclusion], legacyCmu),
+    /demonstrably invalid positive OOV case/u,
+  );
+
+  const ambiguousTamper = structuredClone(gold);
+  const ambiguous = ambiguousTamper.cases.find((testCase) => testCase.adjudication.state === 'rejected-ambiguous');
+  ambiguous.adjudication.state = 'accepted';
+  assert.throws(
+    () => validateGold(ambiguousTamper, schema, corrections, legacyCmu),
+    /Accepted case has no pronunciation/u,
+  );
 }
 
 function parseLegacyCmu(contents) {
@@ -326,7 +473,7 @@ function parseLegacyCmu(contents) {
     if (!line || line.startsWith(';;;')) continue;
     const match = line.match(/^(\S+)\s+(.+)$/u);
     if (!match) continue;
-    const word = normalize(match[1].replace(/\(\d+\)$/u, ''));
+    const word = normalizeRhymeWord(match[1].replace(/\(\d+\)$/u, ''));
     const phones = match[2].trim();
     const values = pronunciations.get(word) ?? [];
     if (!values.includes(phones)) values.push(phones);
@@ -335,16 +482,9 @@ function parseLegacyCmu(contents) {
   return pronunciations;
 }
 
-async function loadCorrections(path) {
-  const contents = await readFile(path, 'utf8');
-  return contents.split(/\r?\n/u).filter(Boolean).map((line) => parseJson(line, 'gold correction'));
-}
-
-function normalize(token) {
-  return token.normalize('NFC').toLowerCase()
-    .replace(/[\u2018\u2019\u201A\u201B\u02BC\uFF07]/gu, "'")
-    .trim()
-    .replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, '');
+function parseCorrections(contents) {
+  return contents.toString('utf8').split(/\r?\n/u).filter(Boolean)
+    .map((line) => parseJson(line, 'gold correction'));
 }
 
 function roundPercent(numerator, denominator) {
@@ -356,6 +496,12 @@ function parseJson(value, label) {
     return JSON.parse(value.toString('utf8'));
   } catch {
     throw new Error(`Invalid JSON in ${label}`);
+  }
+}
+
+function exactKeys(value, expected, label) {
+  if (JSON.stringify(Object.keys(value).sort()) !== JSON.stringify([...expected].sort())) {
+    throw new Error(`${label} fields do not match the correction schema`);
   }
 }
 

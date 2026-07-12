@@ -12,11 +12,11 @@
     },
     "minimumEntries": 500,
     "regionMinimums": {
-      "midwest": 20,
+      "midwest": 5,
       "national": 450,
-      "northeast": 20,
+      "northeast": 10,
       "south": 20,
-      "west-coast": 20
+      "west-coast": 3
     }
   },
   "ownership": {
@@ -40,7 +40,7 @@
       "ownership": "project-authored",
       "path": "lexicon.json",
       "role": "lexicon",
-      "sha256": "ba9d0dad83a0017eaf4ae43205242fbe9023304bf59eaf448af417f4e53f26a9",
+      "sha256": "dcaf5bf7848716a0cbf62e92dd4d70ab6c3252cbd81e571318327496bb0b6965",
       "version": "2026.07.12"
     },
     {

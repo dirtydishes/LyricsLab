@@ -20,8 +20,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "actin'"
@@ -75,8 +74,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "addin"
@@ -229,8 +227,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "arrivin'"
@@ -256,8 +253,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "askin'"
@@ -455,8 +451,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "backin"
@@ -979,8 +974,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "battlin"
@@ -1030,8 +1024,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "beatin'"
@@ -1084,8 +1077,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "believin"
@@ -1113,8 +1105,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "belongin'"
@@ -1141,8 +1132,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "bendin"
@@ -1270,8 +1260,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "bettin'"
@@ -1453,8 +1442,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "blowin"
@@ -1730,8 +1718,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "bouncin'"
@@ -1856,8 +1843,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "breakin"
@@ -1884,8 +1870,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "breathin'"
@@ -1941,8 +1926,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "bringin"
@@ -2328,8 +2312,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "burnin"
@@ -2429,8 +2412,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "callin'"
@@ -2610,8 +2592,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "carryin"
@@ -2637,8 +2618,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "catchin'"
@@ -2693,8 +2673,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "celebratin"
@@ -2747,8 +2726,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "chasin'"
@@ -2854,8 +2832,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "chillin"
@@ -2907,8 +2884,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "choosin'"
@@ -2962,8 +2938,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "climbin'"
@@ -3041,8 +3016,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "closin"
@@ -3272,8 +3246,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "comin"
@@ -3331,8 +3304,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "connectin'"
@@ -3518,8 +3490,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "countin"
@@ -3547,8 +3518,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "creatin'"
@@ -3652,8 +3622,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "cruisin'"
@@ -3705,8 +3674,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "cryin"
@@ -3732,8 +3700,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "cuttin'"
@@ -3989,8 +3956,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "dealin'"
@@ -4018,8 +3984,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "decidin"
@@ -4048,8 +4013,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "deliverin'"
@@ -4203,8 +4167,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "diggin"
@@ -4287,8 +4250,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "disappearin"
@@ -4365,8 +4327,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "doin'"
@@ -4492,8 +4453,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "dreamin"
@@ -4706,8 +4666,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "drivin"
@@ -4734,8 +4693,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "droppin'"
@@ -4785,8 +4743,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "earnin"
@@ -4811,8 +4768,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "eatin'"
@@ -5000,8 +4956,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "escapin"
@@ -5059,8 +5014,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "explainin'"
@@ -5109,8 +5063,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "facin"
@@ -5162,8 +5115,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "fadin'"
@@ -5189,8 +5141,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "fallin'"
@@ -5266,8 +5217,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "feelin"
@@ -5293,8 +5243,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "fightin'"
@@ -5320,8 +5269,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "fillin'"
@@ -5348,8 +5296,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "findin"
@@ -5483,8 +5430,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "fittin"
@@ -5649,8 +5595,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "flippin'"
@@ -5700,8 +5645,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "flowin"
@@ -5754,8 +5698,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "flyin'"
@@ -5771,12 +5714,10 @@
     "id": "rap.fo",
     "normalized": "fo",
     "pronunciation": {
-      "kind": "alias",
-      "target": "for",
-      "verifiedPhones": [
+      "kind": "direct",
+      "phones": [
         "F",
-        "AO1",
-        "R"
+        "OW1"
       ]
     },
     "regions": [
@@ -5808,8 +5749,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "focusin"
@@ -5863,8 +5803,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "followin'"
@@ -5974,8 +5913,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "freezin'"
@@ -6159,8 +6097,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "gettin"
@@ -6316,8 +6253,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "givin'"
@@ -6444,8 +6380,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "goin"
@@ -6488,7 +6423,7 @@
       "kind": "direct",
       "phones": [
         "G",
-        "AH0",
+        "AH1",
         "N",
         "AH0"
       ]
@@ -6754,8 +6689,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "growin"
@@ -6879,8 +6813,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "guessin'"
@@ -7032,8 +6965,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "hangin"
@@ -7087,8 +7019,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "hearin'"
@@ -7187,8 +7118,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "hidin"
@@ -7290,8 +7220,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "holdin'"
@@ -7417,8 +7346,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "hopin"
@@ -7608,8 +7536,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "hustlin'"
@@ -7838,8 +7765,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "imaginin"
@@ -7919,8 +7845,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "improvin'"
@@ -8072,8 +7997,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "joinin"
@@ -8124,8 +8048,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "jumpin"
@@ -8202,8 +8125,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "kickin"
@@ -8279,8 +8201,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "killin'"
@@ -8383,8 +8304,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "knowin"
@@ -8535,8 +8455,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "landin'"
@@ -8588,8 +8507,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "leadin'"
@@ -8615,8 +8533,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "learnin"
@@ -8642,8 +8559,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "leavin'"
@@ -8804,8 +8720,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "lettin"
@@ -8982,8 +8897,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "livin"
@@ -9036,8 +8950,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "lookin'"
@@ -9092,8 +9005,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "losin"
@@ -9144,8 +9056,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "lovin'"
@@ -9247,8 +9158,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "lyin'"
@@ -9327,8 +9237,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "meanin'"
@@ -9354,8 +9263,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "meetin"
@@ -9461,8 +9369,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "missin'"
@@ -9489,8 +9396,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "mixin'"
@@ -9700,8 +9606,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "movin"
@@ -10188,8 +10093,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "openin"
@@ -10411,8 +10315,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "passin"
@@ -10437,8 +10340,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "payin'"
@@ -10515,8 +10417,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "pickin'"
@@ -10543,8 +10444,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "plannin"
@@ -10570,8 +10470,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "playin"
@@ -10597,8 +10496,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "poppin'"
@@ -10752,8 +10650,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "prayin'"
@@ -10832,8 +10729,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "pullin"
@@ -10859,8 +10755,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "pushin'"
@@ -10886,8 +10781,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "puttin"
@@ -11067,8 +10961,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "rappin"
@@ -11094,8 +10987,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "reachin'"
@@ -11121,8 +11013,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "readin"
@@ -11203,8 +11094,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "recordin"
@@ -11234,8 +11124,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "rememberin'"
@@ -11263,8 +11152,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "repeatin"
@@ -11317,8 +11205,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "ridin'"
@@ -11576,8 +11463,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "rollin'"
@@ -11628,8 +11514,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "runnin"
@@ -11731,8 +11616,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "sayin'"
@@ -11812,8 +11696,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "seein"
@@ -11866,8 +11749,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "sendin"
@@ -11893,8 +11775,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "servin'"
@@ -12019,8 +11900,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "shinin"
@@ -12093,8 +11973,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "shootin'"
@@ -12276,8 +12155,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "singin'"
@@ -12329,8 +12207,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "sittin"
@@ -12613,8 +12490,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "sleepin'"
@@ -12641,8 +12517,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "slidin"
@@ -12878,8 +12753,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "speakin"
@@ -12907,8 +12781,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "spendin'"
@@ -12961,8 +12834,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "spinnin"
@@ -13204,8 +13076,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "standin'"
@@ -13259,8 +13130,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "stayin'"
@@ -13287,8 +13157,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "steppin"
@@ -13344,8 +13213,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "stoppin'"
@@ -13606,8 +13474,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "talkin"
@@ -13795,8 +13662,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "throwin"
@@ -13896,8 +13762,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "touchin'"
@@ -13976,8 +13841,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "trappin"
@@ -14035,8 +13899,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "travelin'"
@@ -14376,8 +14239,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "turnin'"
@@ -14751,8 +14613,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "walkin"
@@ -14856,8 +14717,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "watchin'"
@@ -15033,8 +14893,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "wearin"
@@ -15415,8 +15274,7 @@
       ]
     },
     "regions": [
-      "national",
-      "south"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "wishin"
@@ -15615,8 +15473,7 @@
       ]
     },
     "regions": [
-      "national",
-      "northeast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "workin'"
@@ -15721,8 +15578,7 @@
       ]
     },
     "regions": [
-      "national",
-      "midwest"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "writin"
@@ -15889,11 +15745,10 @@
     "id": "rap.ya",
     "normalized": "ya",
     "pronunciation": {
-      "kind": "alias",
-      "target": "you",
-      "verifiedPhones": [
+      "kind": "direct",
+      "phones": [
         "Y",
-        "UW1"
+        "AH0"
       ]
     },
     "regions": [
@@ -15993,8 +15848,7 @@
       ]
     },
     "regions": [
-      "national",
-      "west-coast"
+      "national"
     ],
     "reviewState": "reviewed",
     "surface": "yellin'"

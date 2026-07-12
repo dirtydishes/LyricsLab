@@ -1,3 +1,5 @@
+import { isCuratedEntryEligible as isCuratedEntryEligibleCore } from './suggestionEligibilityCore.cjs';
+
 export type CuratedSuggestionFlags = {
   readonly properNoun: boolean;
   readonly safetyBlocked: boolean;
@@ -16,27 +18,5 @@ export function isCuratedEntryEligible(
   flags: CuratedSuggestionFlags,
   context: CuratedSuggestionContext,
 ): boolean {
-  if (context.mode === 'anchor') {
-    return true;
-  }
-
-  if (flags.safetyBlocked) {
-    return false;
-  }
-
-  if (!flags.properNoun) {
-    return true;
-  }
-
-  const prefix = normalizePrefix(context.activePrefix);
-  return prefix.length > 0 && normalizedWord.startsWith(prefix);
-}
-
-function normalizePrefix(prefix: string): string {
-  return prefix
-    .normalize('NFC')
-    .toLowerCase()
-    .replace(/[\u2018\u2019\u201A\u201B\u02BC\uFF07]/gu, "'")
-    .trim()
-    .replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, '');
+  return isCuratedEntryEligibleCore(normalizedWord, flags, context);
 }

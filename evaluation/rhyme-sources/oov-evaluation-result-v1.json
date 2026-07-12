@@ -1,6 +1,13 @@
 {
-  "schema_version": 1,
-  "evaluated_at": "2026-07-12T07:13:44.976Z",
+  "schema_version": 2,
+  "evaluation_fingerprint": "46e085212d6e68e185f6f773c36f1b4a3fe0272c0b25b9cc2f02235baaf2ada6",
+  "input_hashes": {
+    "corrections_sha256": "9255ceb61614f3597bee15d50c096dbe9c90491a16ed0effa8e235219971766f",
+    "gold_schema_sha256": "43ed18dbab54825b5232f8b291ba7b2edf32270ded04b51768355be2c88d7e33",
+    "gold_sha256": "40aac8d4704a9ca44bf1d2d19f5843714b83c08c59818b81b123baa7e010d4d7",
+    "seal_manifest_sha256": "79dbc270e90574446ffc2c0089689865ba83cc9937b3d9e1a2b502934cf46049",
+    "source_manifest_sha256": "d8e2acb3b352a2589da8f71dd9ab082bc50c495698ab4359ad21d6c095fc9b29"
+  },
   "source_manifest": "data/rhyme-sources/manifest.json",
   "seal": {
     "expected_sha256": "40aac8d4704a9ca44bf1d2d19f5843714b83c08c59818b81b123baa7e010d4d7",
@@ -614,8 +621,8 @@
   },
   "source_summary": {
     "total": 618,
-    "aliases": 24,
-    "direct": 594,
+    "aliases": 22,
+    "direct": 596,
     "reviewed": 618,
     "categories": {
       "ad-lib": 52,
@@ -628,11 +635,11 @@
       "stylized-spelling": 47
     },
     "regions": {
-      "midwest": 41,
+      "midwest": 5,
       "national": 600,
-      "northeast": 49,
-      "south": 56,
-      "west-coast": 38
+      "northeast": 13,
+      "south": 20,
+      "west-coast": 3
     },
     "flags": {
       "proper-noun": 32,

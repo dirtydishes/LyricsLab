@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { access, mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
@@ -39,9 +39,29 @@ const properEntry = loaded.entries.find((entry) => entry.flags.includes('proper-
 assert.equal(toPhase3WordFlags(safetyEntry), WORD_FLAG.RAP | WORD_FLAG.SAFETY_BLOCKED);
 assert.equal(toPhase3WordFlags(properEntry), WORD_FLAG.RAP | WORD_FLAG.PROPER_NOUN);
 assert.ok(loaded.entries.some((entry) => entry.normalized === 'shit' && !entry.flags.includes('safety-blocked')));
+assert.deepEqual(
+  loaded.entries.find((entry) => entry.normalized === 'gonna')?.pronunciation,
+  { kind: 'direct', phones: ['G', 'AH1', 'N', 'AH0'] },
+);
+assert.deepEqual(
+  loaded.entries.find((entry) => entry.normalized === 'ya')?.pronunciation,
+  { kind: 'direct', phones: ['Y', 'AH0'] },
+);
+assert.deepEqual(
+  loaded.entries.find((entry) => entry.normalized === 'fo')?.pronunciation,
+  { kind: 'direct', phones: ['F', 'OW1'] },
+);
+for (const entry of loaded.entries.filter((candidate) =>
+  candidate.evidenceIds.some((id) => ['editorial.apostrophe', 'editorial.dropped'].includes(id))
+)) {
+  assert.deepEqual(entry.regions, ['national'], `${entry.id} has synthetic regional scope`);
+}
 
+const visitedRuntimeModules = new Set();
 for (const runtimePath of ['app', 'src/editor', 'src/platform', 'src/settings']) {
-  await assertNoRuntimeActivation(path.resolve(runtimePath));
+  for (const entrypoint of await collectTypeScriptFiles(path.resolve(runtimePath))) {
+    await assertNoRuntimeActivation(entrypoint, visitedRuntimeModules);
+  }
 }
 
 await rejectsMutation('duplicate surface', ({ lexicon }) => {
@@ -151,19 +171,62 @@ async function rejectsMutation(label, mutateValues, expected, mutateManifest = (
   }
 }
 
-async function assertNoRuntimeActivation(root) {
-  const { readdir } = await import('node:fs/promises');
+async function collectTypeScriptFiles(root) {
+  const files = [];
   for (const entry of await readdir(root, { withFileTypes: true })) {
     const entryPath = path.join(root, entry.name);
     if (entry.isDirectory()) {
-      await assertNoRuntimeActivation(entryPath);
+      files.push(...await collectTypeScriptFiles(entryPath));
     } else if (/\.(?:ts|tsx)$/u.test(entry.name)) {
-      const source = await readFile(entryPath, 'utf8');
-      assert.doesNotMatch(
-        source,
-        /(?:from|require\()\s*['"][^'"]*rhymeSources/u,
-        `Phase 04 source activated by ${entryPath}`,
-      );
+      files.push(entryPath);
     }
   }
+  return files;
+}
+
+async function assertNoRuntimeActivation(modulePath, visited) {
+  const absolutePath = path.resolve(modulePath);
+  if (visited.has(absolutePath)) return;
+  visited.add(absolutePath);
+
+  const source = await readFile(absolutePath, 'utf8');
+  const specifiers = [...source.matchAll(
+    /(?:from\s*|import\s*\(|require\s*\(|import\s*)['"]([^'"]+)['"]/gu,
+  )].map((match) => match[1]);
+
+  for (const specifier of specifiers) {
+    assert.doesNotMatch(
+      specifier,
+      /(?:^|\/)(?:data\/rhyme-sources|scripts\/rhyme-sources|src\/rhymeSources|rhymeSources)(?:\/|$)/u,
+      `Phase 04 source activated by ${absolutePath}`,
+    );
+    if (!specifier.startsWith('.')) continue;
+    const dependency = await resolveTypeScriptDependency(absolutePath, specifier);
+    if (dependency) {
+      assert.equal(
+        dependency.includes(`${path.sep}src${path.sep}rhymeSources${path.sep}`),
+        false,
+        `Phase 04 source transitively activated by ${absolutePath}`,
+      );
+      await assertNoRuntimeActivation(dependency, visited);
+    }
+  }
+}
+
+async function resolveTypeScriptDependency(importer, specifier) {
+  const base = path.resolve(path.dirname(importer), specifier);
+  for (const candidate of [
+    `${base}.ts`,
+    `${base}.tsx`,
+    path.join(base, 'index.ts'),
+    path.join(base, 'index.tsx'),
+  ]) {
+    try {
+      await access(candidate);
+      return candidate;
+    } catch {
+      // Try the next TypeScript resolution candidate.
+    }
+  }
+  return null;
 }

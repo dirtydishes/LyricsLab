@@ -2,6 +2,8 @@ import { createHash } from 'node:crypto';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
+import { normalizeRhymeWord } from '../rhyme-data/phonology.mjs';
+
 const root = path.resolve('data/rhyme-sources');
 await mkdir(root, { recursive: true });
 const cmuPronunciations = loadLegacyCmuPronunciations(
@@ -22,13 +24,8 @@ const evidence = [
 ].map(([id, basis]) => ({ basis, id, kind: 'project-editorial', reviewedAt: '2026-07-12' }));
 
 const entries = [];
-const normalize = (surface) => surface
-  .normalize('NFC')
-  .toLowerCase()
-  .trim()
-  .replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu, '');
 const add = ({ surface, pronunciation, category, regions = ['national'], evidenceId, flags = ['rap'], id }) => {
-  const normalized = normalize(surface);
+  const normalized = normalizeRhymeWord(surface);
   entries.push({
     category,
     evidenceIds: [evidenceId],
@@ -55,16 +52,12 @@ const ingWords = `acting adding asking backing banging battling beating bending 
 
 for (const [index, target] of ingWords.entries()) {
   const stem = target.slice(0, -1);
-  const regions = index % 5 === 0 ? ['national', 'south']
-    : index % 5 === 1 ? ['national', 'northeast']
-      : index % 5 === 2 ? ['national', 'midwest']
-        : index % 5 === 3 ? ['national', 'west-coast'] : ['national'];
   const apostropheMarked = index % 2 === 0;
   add({
     surface: apostropheMarked ? `${stem}'` : stem,
     pronunciation: { kind: 'direct', phones: droppedIngPhones(target) },
     category: apostropheMarked ? 'apostrophe-variant' : 'dropped-sound',
-    regions,
+    regions: ['national'],
     evidenceId: apostropheMarked ? 'editorial.apostrophe' : 'editorial.dropped',
   });
 }
@@ -83,12 +76,12 @@ const shortenedForms = [
   ['schemin', { kind: 'direct', phones: droppedIngPhones('scheming') }], ["schemin'", { kind: 'direct', phones: droppedIngPhones('scheming') }],
 ];
 for (const [surface, pronunciation] of shortenedForms) {
-  if (entries.some((entry) => entry.normalized === normalize(surface))) continue;
+  if (entries.some((entry) => entry.normalized === normalizeRhymeWord(surface))) continue;
   add({ surface, pronunciation, category: surface.includes("'") ? 'apostrophe-variant' : 'dropped-sound', evidenceId: surface.includes("'") ? 'editorial.apostrophe' : 'editorial.dropped' });
 }
 
 const fused = {
-  gonna: 'G AH0 N AH0', wanna: 'W AA1 N AH0', gotta: 'G AA1 T AH0', lemme: 'L EH1 M IY0', gimme: 'G IH1 M IY0',
+  gonna: 'G AH1 N AH0', wanna: 'W AA1 N AH0', gotta: 'G AA1 T AH0', lemme: 'L EH1 M IY0', gimme: 'G IH1 M IY0',
   dunno: 'D AH0 N OW1', kinda: 'K AY1 N D AH0', sorta: 'S AO1 R T AH0', lotta: 'L AA1 T AH0', outta: 'AW1 T AH0',
   coulda: 'K UH1 D AH0', woulda: 'W UH1 D AH0', shoulda: 'SH UH1 D AH0', mighta: 'M AY1 T AH0', musta: 'M AH1 S T AH0',
   hafta: 'HH AE1 F T AH0', oughta: 'AO1 T AH0', whatcha: 'W AH1 CH AH0', gotcha: 'G AA1 CH AH0', betcha: 'B EH1 CH AH0',
@@ -108,8 +101,8 @@ for (const [surface, phones] of Object.entries(fused)) {
 
 const stylizedAliases = [
   ['luv', 'love'], ['nite', 'night'], ['thru', 'through'], ['tho', 'though'], ['doe', 'though'], ['dat', 'that'], ['dis', 'this'],
-  ['wit', 'with'], ['wuz', 'was'], ['iz', 'is'], ['ya', 'you'], ['ur', 'your'], ['fo', 'for'],
-  ['nite', 'night'], ['rite', 'right'], ['lite', 'light'],
+  ['wit', 'with'], ['wuz', 'was'], ['iz', 'is'], ['ur', 'your'],
+  ['rite', 'right'], ['lite', 'light'],
   ['werk', 'work'], ['werked', 'worked'], ['werkout', 'workout'], ['skool', 'school'], ['kool', 'cool'], ['kash', 'cash'],
   ['klassic', 'classic'], ['kwik', 'quick'], ['tru', 'true'],
 ];
@@ -124,7 +117,7 @@ const stylizedDirect = {
   lil: 'L IH1 L', lilest: 'L IH1 L AH0 S T', shorty: 'SH AO1 R T IY0', shawty: 'SH AO1 T IY0', dem: 'D EH1 M',
 };
 for (const [surface, phones] of Object.entries(stylizedDirect)) {
-  if (entries.some((entry) => entry.normalized === normalize(surface))) continue;
+  if (entries.some((entry) => entry.normalized === normalizeRhymeWord(surface))) continue;
   add({ surface, pronunciation: direct(phones), category: 'stylized-spelling', evidenceId: 'editorial.stylized' });
 }
 
@@ -201,7 +194,7 @@ const inflections = {
   bosses: 'B AO1 S IH0 Z', hustlers: 'HH AH1 S AH0 L ER0 Z', grinders: 'G R AY1 N D ER0 Z', trappers: 'T R AE1 P ER0 Z',
 };
 for (const [surface, phones] of Object.entries(inflections)) {
-  if (entries.some((entry) => entry.normalized === normalize(surface))) continue;
+  if (entries.some((entry) => entry.normalized === normalizeRhymeWord(surface))) continue;
   add({ surface, pronunciation: direct(phones), category: 'common-inflection', evidenceId: 'editorial.inflection' });
 }
 
@@ -361,11 +354,11 @@ const manifest = {
     },
     minimumEntries: 500,
     regionMinimums: {
-      midwest: 20,
+      midwest: 5,
       national: 450,
-      northeast: 20,
+      northeast: 10,
       south: 20,
-      'west-coast': 20,
+      'west-coast': 3,
     },
   },
   ownership: {
