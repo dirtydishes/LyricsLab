@@ -33,6 +33,7 @@ export type RhymeLexemeInput = {
   readonly lemma?: string;
   readonly normalizedWord?: string;
   readonly pronunciations: readonly RhymePronunciationInput[];
+  readonly suggestionEligible?: boolean;
   readonly word: string;
 };
 
@@ -77,6 +78,7 @@ type IndexedLexeme = {
   readonly lemma: string;
   readonly normalizedWord: string;
   readonly pronunciations: readonly IndexedPronunciation[];
+  readonly suggestionEligible: boolean;
   readonly word: string;
 };
 
@@ -133,7 +135,8 @@ export function createDiagnosticRhymeEngine(
         candidate.normalizedWord === anchor.normalizedWord ||
         candidate.lemma === anchor.lemma ||
         excludedWords.has(candidate.normalizedWord) ||
-        excludedLemmas.has(candidate.lemma)
+        excludedLemmas.has(candidate.lemma) ||
+        !candidate.suggestionEligible
       ) {
         continue;
       }
@@ -211,6 +214,9 @@ function indexLexemes(
       lemma: existing?.lemma ?? lemma,
       normalizedWord,
       pronunciations: combinedPronunciations,
+      suggestionEligible:
+        (existing?.suggestionEligible ?? true) &&
+        (input.suggestionEligible ?? true),
       word: chooseSurfaceWord(existing?.word, surfaceWord),
     });
   }

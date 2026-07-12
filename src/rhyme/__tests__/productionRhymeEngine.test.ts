@@ -203,6 +203,25 @@ TIN T IH1 N
     expect(suggestions.map(({ lemma }) => lemma)).not.toContain('run');
   });
 
+  it('keeps ineligible lexemes analyzable as anchors without returning them as candidates', () => {
+    const engine = createRhymeEngine([
+      lexeme('risk-anchor', ['R', 'IH1', 'S', 'K']),
+      lexeme('risk-candidate', ['R', 'IH1', 'S', 'K'], {
+        suggestionEligible: false,
+      }),
+      lexeme('brisk', ['B', 'R', 'IH1', 'S', 'K']),
+    ]);
+
+    expect(
+      engine.suggest({ anchor: 'risk-candidate' })
+        .map(({ normalizedWord }) => normalizedWord),
+    ).toContain('brisk');
+    expect(
+      engine.suggest({ anchor: 'risk-anchor' })
+        .map(({ normalizedWord }) => normalizedWord),
+    ).not.toContain('riskcandidate');
+  });
+
   it('keeps diagnostics out of the production engine runtime surface', () => {
     expect(Object.keys(createRhymeEngine(CORE_FIXTURE))).toEqual([
       'suggest',
@@ -288,7 +307,10 @@ TIN T IH1 N
 function lexeme(
   word: string,
   phones: readonly string[],
-  metadata: Pick<RhymeLexemeInput, 'commonness' | 'lemma'> = {},
+  metadata: Pick<
+    RhymeLexemeInput,
+    'commonness' | 'lemma' | 'suggestionEligible'
+  > = {},
 ): RhymeLexemeInput {
   return {
     ...metadata,

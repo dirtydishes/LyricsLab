@@ -9,6 +9,7 @@ import { createRhymeKeys, isValidArpabetPhone } from './rhyme-data/phonology.mjs
 
 const root = path.resolve(import.meta.dirname, '..');
 const fixtureDirectory = path.join(root, 'data/rhyme-fixture');
+const productionManifest = path.join(root, 'data/rhyme-production/manifest.json');
 const temporaryDirectory = await mkdtemp(
   path.join(os.tmpdir(), 'lyricslab-rhyme-data-test-'),
 );
@@ -23,12 +24,18 @@ try {
 }
 
 async function verifyDeterministicBuilds() {
-  const first = path.join(temporaryDirectory, 'first.rhymebin');
-  const second = path.join(temporaryDirectory, 'second.rhymebin');
-  const arguments_ = ['--manifest', path.join(fixtureDirectory, 'manifest.json')];
-  await buildRhymeData([...arguments_, '--output', first]);
-  await buildRhymeData([...arguments_, '--output', second]);
-  assert.deepEqual(await readFile(first), await readFile(second));
+  const fixtureFirst = path.join(temporaryDirectory, 'fixture-first.rhymebin');
+  const fixtureSecond = path.join(temporaryDirectory, 'fixture-second.rhymebin');
+  const fixtureArguments = ['--manifest', path.join(fixtureDirectory, 'manifest.json')];
+  await buildRhymeData([...fixtureArguments, '--output', fixtureFirst]);
+  await buildRhymeData([...fixtureArguments, '--output', fixtureSecond]);
+  assert.deepEqual(await readFile(fixtureFirst), await readFile(fixtureSecond));
+
+  const productionFirst = path.join(temporaryDirectory, 'production-first.rhymebin');
+  const productionSecond = path.join(temporaryDirectory, 'production-second.rhymebin');
+  await buildRhymeData(['--production', '--output', productionFirst]);
+  await buildRhymeData(['--production', '--output', productionSecond]);
+  assert.deepEqual(await readFile(productionFirst), await readFile(productionSecond));
 }
 
 async function verifyManifestFailures() {
@@ -112,9 +119,76 @@ async function verifyManifestFailures() {
   });
   await assertBuildRejects(manifestPath, /escapes its directory/u);
 
+  await verifyProductionManifestFailures();
+
   async function writeManifest(manifest) {
     await writeFile(manifestPath, JSON.stringify(manifest));
   }
+}
+
+async function verifyProductionManifestFailures() {
+  const manifestPath = path.join(temporaryDirectory, 'production-manifest.json');
+  const originalManifest = JSON.parse(await readFile(productionManifest, 'utf8'));
+  const subtlexIndex = originalManifest.sources.findIndex(
+    (source) => source.id === 'subtlex.package',
+  );
+  assert.notEqual(subtlexIndex, -1);
+
+  await writeFile(
+    manifestPath,
+    JSON.stringify({
+      ...originalManifest,
+      sources: originalManifest.sources.map((source, index) =>
+        index === subtlexIndex
+          ? { ...source, sha256: '0'.repeat(64) }
+          : source,
+      ),
+    }),
+  );
+  await assertBuildRejects(manifestPath, /Source hash mismatch/u);
+
+  await writeFile(
+    manifestPath,
+    JSON.stringify({
+      ...originalManifest,
+      externalPins: {
+        ...originalManifest.externalPins,
+        subtlex: {
+          ...originalManifest.externalPins.subtlex,
+          distIntegrity: 'sha512-invalid',
+        },
+      },
+    }),
+  );
+  await assertBuildRejects(manifestPath, /SUBTLEX SRI integrity/u);
+
+  await writeFile(
+    manifestPath,
+    JSON.stringify({
+      ...originalManifest,
+      externalPins: {
+        ...originalManifest.externalPins,
+        phase04Sources: {
+          ...originalManifest.externalPins.phase04Sources,
+          reviewedEntryCount: 617,
+        },
+      },
+    }),
+  );
+  await assertBuildRejects(manifestPath, /Phase 04 reviewed source count/u);
+
+  await writeFile(
+    manifestPath,
+    JSON.stringify({
+      ...originalManifest,
+      sources: originalManifest.sources.map((source) =>
+        source.id === 'cmudict.dict'
+          ? { ...source, path: '../cmudict.txt' }
+          : source,
+      ),
+    }),
+  );
+  await assertBuildRejects(manifestPath, /escapes its directory/u);
 }
 
 function verifyCompilerPhonology() {

@@ -9,6 +9,7 @@ describe('Phase 03 runtime boundary', () => {
     expect(provider).toContain('createLegacyRhymeEngineAdapter');
     expect(provider).not.toContain('rhymeData');
     expect(provider).not.toContain('fixture.rhymebin');
+    expect(provider).not.toContain('production.rhymebin');
   });
 
   it('keeps platform dependencies in the dormant Expo adapter only', () => {
@@ -53,13 +54,13 @@ describe('Phase 03 runtime boundary', () => {
     }
   });
 
-  it('does not activate the fixture runtime from normal app or editor source', () => {
+  it('does not activate fixture or production runtimes from normal app or editor source', () => {
     const roots = ['app', 'src/editor'].map((root) => path.join(process.cwd(), root));
     for (const root of roots) {
       for (const file of listTypeScriptFiles(root)) {
         const source = readFileSync(file, 'utf8');
         expect(source).not.toMatch(
-          /(?:rhymeData|createExpoRhymeEngineRuntime|fixture\.rhymebin)/u,
+          /(?:rhymeData|createExpoRhymeEngineRuntime|createProductionRhymeEngineRuntime|fixture\.rhymebin|production\.rhymebin)/u,
         );
       }
     }
