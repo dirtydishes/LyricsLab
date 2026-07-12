@@ -65,7 +65,11 @@ describe('rhyme public API', () => {
       phonemes: ['EY1', 'K'],
       startsAt: 2,
     });
-    expect(extractRhymeTail(['AH0', 'N', 'D'])).toBeNull();
+    expect(extractRhymeTail(['AH0', 'N', 'D'])).toEqual({
+      key: 'AH0 N D',
+      phonemes: ['AH0', 'N', 'D'],
+      startsAt: 0,
+    });
 
     const entries = parseCmuDictionary(`
 ;;; fixture comment

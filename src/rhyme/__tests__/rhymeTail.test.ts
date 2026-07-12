@@ -51,10 +51,10 @@ function parsePhoneToken(phoneme: string): ParsedPhoneToken {
 describe('rhyme tail extraction', () => {
   const entries = parseFixture();
 
-  it('extracts the tail from the last stressed vowel through the end', () => {
+  it('prefers the last primary stress over a later secondary stress', () => {
     expect(extractRhymeTail(phonesFor(entries, 'flow'))?.key).toBe('OW1');
     expect(extractRhymeTail(phonesFor(entries, 'late-night'))?.key).toBe(
-      'AY2 T',
+      'EY1 T N AY2 T',
     );
   });
 
@@ -72,8 +72,8 @@ describe('rhyme tail extraction', () => {
     });
   });
 
-  it('returns null when every vowel phone is unstressed', () => {
-    expect(extractRhymeTail(phonesFor(entries, 'the'))).toBeNull();
+  it('falls back to the final vowel nucleus when no stressed vowel exists', () => {
+    expect(extractRhymeTail(phonesFor(entries, 'the'))?.key).toBe('AH0');
   });
 
   it('does not treat stressed-looking consonants as vowel anchors', () => {
@@ -81,8 +81,8 @@ describe('rhyme tail extraction', () => {
       extractRhymeTail([
         { phone: 'B', stress: 1 },
         { phone: 'AH', stress: 0 },
-      ]),
-    ).toBeNull();
+      ])?.key,
+    ).toBe('AH0');
   });
 
   it('uses each alternate pronunciation independently', () => {

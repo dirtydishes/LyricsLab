@@ -94,4 +94,23 @@ describe('CMU fixture parser', () => {
     expect(getEntry(entries, "can't").phonemes).toEqual(['K', 'AE1', 'N', 'T']);
     expect(getEntry(entries, 'the').phonemes).toEqual(['DH', 'AH0']);
   });
+
+  it('rejects malformed lines without discarding valid neighbors', () => {
+    expect(
+      parseCmuDictionary(
+        [
+          'GOOD G UH1 D',
+          'NO_PHONES',
+          'LOWER B ae1 D',
+          'UNKNOWN B ZZQ D',
+          'STRESSED-CONSONANT B1 AE1 D',
+          'UNSTRESSED-VOWEL B AE D',
+          'BAD-ALTERNATE(X) B AE1 D',
+          'NESTED(2)(3) N EH1 S T IH0 D',
+          'ZERO(0) Z IY1 R OW0',
+          'ALSO-GOOD AO1 L S OW0',
+        ].join('\n'),
+      ).map((entry) => entry.normalizedWord),
+    ).toEqual(['good', 'also-good']);
+  });
 });
