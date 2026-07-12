@@ -32,7 +32,7 @@
       "ownership": "project-authored",
       "path": "evidence.json",
       "role": "evidence",
-      "sha256": "6f1c482158a2a4629169ea3a51d089102c6710e697f7c8a8eadf1a3e6be5f71c",
+      "sha256": "cd726b4d33933a6e64c5e493aa6bff7b58f84feb4b7308c61799e61d5a0cd05b",
       "version": "2026.07.12"
     },
     {
@@ -40,7 +40,7 @@
       "ownership": "project-authored",
       "path": "lexicon.json",
       "role": "lexicon",
-      "sha256": "dd611d0ae936bc5e59e933dd5a8ba6c2f1aa8c4210367ddc23d74a3e34bc6d2b",
+      "sha256": "ba9d0dad83a0017eaf4ae43205242fbe9023304bf59eaf448af417f4e53f26a9",
       "version": "2026.07.12"
     },
     {
@@ -56,7 +56,7 @@
       "ownership": "project-authored",
       "path": "proper-noun-policy.json",
       "role": "proper-noun-policy",
-      "sha256": "f802b484f8fd31284d9dc31e445b4fd7fed188d95e5d39b9038b194ca82a27b9",
+      "sha256": "795be09116340b4e65dccc963fcbb0cefa5ddca48439e53b0d15dd3063cc76a7",
       "version": "2026.07.12"
     }
   ]

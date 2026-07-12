@@ -1,6 +1,6 @@
 [
   {
-    "basis": "Project editorial review of productive final-NG omission in common -ing forms. Direct transcriptions were checked against the repository legacy CMU snapshot and must be revalidated against the exact Phase 04A pin; regional tags indicate relevance, not claimed origin.",
+    "basis": "Project editorial review of productive -ing to -in forms: the spelling represents an unstressed IH0 nucleus followed by alveolar N, not deletion of the nasal. Direct transcriptions were checked against the repository legacy CMU snapshot and must be revalidated against the exact Phase 04A pin; regional tags indicate relevance, not claimed origin.",
     "id": "editorial.dropped",
     "kind": "project-editorial",
     "reviewedAt": "2026-07-12"
@@ -50,6 +50,12 @@
   {
     "basis": "Project editorial review of US place names and regional acronyms relevant to hip-hop writing; inclusion does not imply origin claims.",
     "id": "editorial.proper",
+    "kind": "project-editorial",
+    "reviewedAt": "2026-07-12"
+  },
+  {
+    "basis": "Disclosed project editorial remediation after inspecting the immutable independent OOV evaluation. Additions were individually reviewed for the already accepted contemporary categories and standard ARPAbet; this evidence is intentionally not independent of the sealed acceptance set.",
+    "id": "editorial.post-seal-remediation",
     "kind": "project-editorial",
     "reviewedAt": "2026-07-12"
   }

@@ -15,7 +15,8 @@
         "AE1",
         "K",
         "T",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -69,7 +70,8 @@
       "phones": [
         "AE1",
         "D",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -78,6 +80,29 @@
     ],
     "reviewState": "reviewed",
     "surface": "addin"
+  },
+  {
+    "category": "fused-phrase",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.aight",
+    "normalized": "aight",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "AY1",
+        "T"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "aight"
   },
   {
     "category": "fused-phrase",
@@ -173,7 +198,8 @@
         "N",
         "IY0",
         "TH",
-        "IH2"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -198,7 +224,8 @@
         "ER0",
         "AY1",
         "V",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -224,7 +251,8 @@
         "AE1",
         "S",
         "K",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -422,7 +450,8 @@
         "B",
         "AE1",
         "K",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -523,7 +552,7 @@
         "AE1",
         "G",
         "IH0",
-        "NG"
+        "N"
       ]
     },
     "regions": [
@@ -624,7 +653,7 @@
         "AO1",
         "L",
         "IH0",
-        "NG"
+        "N"
       ]
     },
     "regions": [
@@ -780,7 +809,8 @@
         "B",
         "AE1",
         "NG",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -944,7 +974,8 @@
         "T",
         "AH0",
         "L",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -994,7 +1025,8 @@
         "B",
         "IY1",
         "T",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -1047,7 +1079,8 @@
         "L",
         "IY1",
         "V",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -1075,7 +1108,8 @@
         "L",
         "AO1",
         "NG",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -1102,7 +1136,8 @@
         "EH1",
         "N",
         "D",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -1230,7 +1265,8 @@
         "B",
         "EH1",
         "T",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -1265,6 +1301,33 @@
     "surface": "bitch"
   },
   {
+    "category": "proper-name",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "proper-noun",
+      "rap"
+    ],
+    "id": "rap.bk",
+    "normalized": "bk",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "B",
+        "IY1",
+        "K",
+        "EY1"
+      ]
+    },
+    "regions": [
+      "national",
+      "northeast"
+    ],
+    "reviewState": "reviewed",
+    "surface": "bk"
+  },
+  {
     "category": "ad-lib",
     "evidenceIds": [
       "editorial.adlib"
@@ -1288,6 +1351,33 @@
     ],
     "reviewState": "reviewed",
     "surface": "blam"
+  },
+  {
+    "category": "dropped-sound",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.blessin",
+    "normalized": "blessin",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "B",
+        "L",
+        "EH1",
+        "S",
+        "IH0",
+        "N"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "blessin"
   },
   {
     "category": "colloquialism",
@@ -1332,7 +1422,8 @@
         "L",
         "AA1",
         "K",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -1357,7 +1448,8 @@
         "B",
         "L",
         "OW1",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -1366,6 +1458,29 @@
     ],
     "reviewState": "reviewed",
     "surface": "blowin"
+  },
+  {
+    "category": "stylized-spelling",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.boi",
+    "normalized": "boi",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "B",
+        "OY1"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "boi"
   },
   {
     "category": "ad-lib",
@@ -1559,7 +1674,7 @@
         "AO1",
         "S",
         "IH0",
-        "NG"
+        "N"
       ]
     },
     "regions": [
@@ -1610,7 +1725,8 @@
         "AW1",
         "N",
         "S",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -1735,7 +1851,8 @@
         "R",
         "EY1",
         "K",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -1762,7 +1879,8 @@
         "R",
         "IY1",
         "DH",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -1818,7 +1936,8 @@
         "R",
         "IH1",
         "NG",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -1912,6 +2031,55 @@
     "surface": "brooklyn"
   },
   {
+    "category": "stylized-spelling",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.brotha",
+    "normalized": "brotha",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "B",
+        "R",
+        "AH1",
+        "DH",
+        "AH0"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "brotha"
+  },
+  {
+    "category": "ad-lib",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.brr",
+    "normalized": "brr",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "B",
+        "ER1"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "brr"
+  },
+  {
     "category": "ad-lib",
     "evidenceIds": [
       "editorial.adlib"
@@ -1933,6 +2101,30 @@
     ],
     "reviewState": "reviewed",
     "surface": "brrr"
+  },
+  {
+    "category": "ad-lib",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.brrt",
+    "normalized": "brrt",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "B",
+        "ER1",
+        "T"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "brrt"
   },
   {
     "category": "colloquialism",
@@ -2026,7 +2218,8 @@
         "IH1",
         "L",
         "D",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -2105,7 +2298,7 @@
         "M",
         "P",
         "IH0",
-        "NG"
+        "N"
       ]
     },
     "regions": [
@@ -2130,7 +2323,8 @@
         "B",
         "ER1",
         "N",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -2164,6 +2358,32 @@
     "surface": "burr"
   },
   {
+    "category": "colloquialism",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.bussin",
+    "normalized": "bussin",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "B",
+        "AH1",
+        "S",
+        "IH0",
+        "N"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "bussin"
+  },
+  {
     "category": "apostrophe-variant",
     "evidenceIds": [
       "editorial.apostrophe"
@@ -2178,7 +2398,8 @@
       "phones": [
         "B",
         "AY1",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -2203,7 +2424,8 @@
         "K",
         "AO1",
         "L",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -2212,6 +2434,33 @@
     ],
     "reviewState": "reviewed",
     "surface": "callin'"
+  },
+  {
+    "category": "apostrophe-variant",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.can-t-ve",
+    "normalized": "can't've",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "K",
+        "AE1",
+        "N",
+        "T",
+        "AH0",
+        "V"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "can't've"
   },
   {
     "category": "fused-phrase",
@@ -2330,7 +2579,7 @@
         "AE1",
         "P",
         "IH0",
-        "NG"
+        "N"
       ]
     },
     "regions": [
@@ -2356,7 +2605,8 @@
         "AE1",
         "R",
         "IY0",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -2382,7 +2632,8 @@
         "K",
         "AE1",
         "CH",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -2437,7 +2688,8 @@
         "R",
         "EY2",
         "T",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -2464,7 +2716,8 @@
         "EY1",
         "N",
         "JH",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -2489,7 +2742,8 @@
         "CH",
         "EY1",
         "S",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -2522,6 +2776,34 @@
     ],
     "reviewState": "reviewed",
     "surface": "cheese"
+  },
+  {
+    "category": "proper-name",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "proper-noun",
+      "rap"
+    ],
+    "id": "rap.chi-town",
+    "normalized": "chi-town",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "SH",
+        "AY1",
+        "T",
+        "AW2",
+        "N"
+      ]
+    },
+    "regions": [
+      "national",
+      "midwest"
+    ],
+    "reviewState": "reviewed",
+    "surface": "chi-town"
   },
   {
     "category": "proper-name",
@@ -2567,7 +2849,8 @@
         "CH",
         "IH1",
         "L",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -2619,7 +2902,8 @@
         "CH",
         "UW1",
         "Z",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -2628,6 +2912,33 @@
     ],
     "reviewState": "reviewed",
     "surface": "choosin'"
+  },
+  {
+    "category": "dropped-sound",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.clappin",
+    "normalized": "clappin",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "K",
+        "L",
+        "AE1",
+        "P",
+        "IH0",
+        "N"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "clappin"
   },
   {
     "category": "apostrophe-variant",
@@ -2646,7 +2957,8 @@
         "L",
         "AY1",
         "M",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -2724,7 +3036,8 @@
         "L",
         "OW1",
         "Z",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -2854,7 +3167,7 @@
         "AW1",
         "N",
         "IH0",
-        "NG"
+        "N"
       ]
     },
     "regions": [
@@ -2954,7 +3267,8 @@
         "K",
         "AH1",
         "M",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -3012,7 +3326,8 @@
         "EH1",
         "K",
         "T",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -3042,7 +3357,8 @@
         "R",
         "OW1",
         "L",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -3067,7 +3383,8 @@
         "K",
         "UH1",
         "K",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -3126,6 +3443,60 @@
     "surface": "coulda"
   },
   {
+    "category": "fused-phrase",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.couldja",
+    "normalized": "couldja",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "K",
+        "UH1",
+        "JH",
+        "AH0"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "couldja"
+  },
+  {
+    "category": "apostrophe-variant",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.couldn-t-ve",
+    "normalized": "couldn't've",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "K",
+        "UH1",
+        "D",
+        "AH0",
+        "N",
+        "T",
+        "AH0",
+        "V"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "couldn't've"
+  },
+  {
     "category": "dropped-sound",
     "evidenceIds": [
       "editorial.dropped"
@@ -3142,7 +3513,8 @@
         "AW1",
         "N",
         "T",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -3170,7 +3542,8 @@
         "IY0",
         "EY1",
         "T",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -3274,7 +3647,8 @@
         "R",
         "UW1",
         "Z",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -3326,7 +3700,8 @@
         "K",
         "R",
         "AY1",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -3352,7 +3727,8 @@
         "K",
         "AH1",
         "T",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -3505,7 +3881,8 @@
         "AE1",
         "N",
         "S",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -3607,7 +3984,8 @@
         "D",
         "IY1",
         "L",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -3635,7 +4013,8 @@
         "S",
         "AY1",
         "D",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -3664,7 +4043,8 @@
         "IH1",
         "V",
         "ER0",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -3685,10 +4065,9 @@
     "id": "rap.dem",
     "normalized": "dem",
     "pronunciation": {
-      "kind": "alias",
-      "target": "them",
-      "verifiedPhones": [
-        "DH",
+      "kind": "direct",
+      "phones": [
+        "D",
         "EH1",
         "M"
       ]
@@ -3698,6 +4077,30 @@
     ],
     "reviewState": "reviewed",
     "surface": "dem"
+  },
+  {
+    "category": "stylized-spelling",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.dese",
+    "normalized": "dese",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "D",
+        "IY1",
+        "Z"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "dese"
   },
   {
     "category": "proper-name",
@@ -3726,6 +4129,31 @@
     ],
     "reviewState": "reviewed",
     "surface": "detroit"
+  },
+  {
+    "category": "fused-phrase",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.didja",
+    "normalized": "didja",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "D",
+        "IH1",
+        "JH",
+        "AH0"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "didja"
   },
   {
     "category": "fused-phrase",
@@ -3770,7 +4198,8 @@
         "D",
         "IH1",
         "G",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -3853,7 +4282,8 @@
         "P",
         "IH1",
         "R",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -3930,7 +4360,8 @@
       "phones": [
         "D",
         "UW1",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -4029,7 +4460,8 @@
         "D",
         "R",
         "AO1",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -4055,7 +4487,8 @@
         "R",
         "IY1",
         "M",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -4111,7 +4544,8 @@
         "IH1",
         "NG",
         "K",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -4215,7 +4649,7 @@
         "IH1",
         "P",
         "IH0",
-        "NG"
+        "N"
       ]
     },
     "regions": [
@@ -4267,7 +4701,8 @@
         "R",
         "AY1",
         "V",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -4294,7 +4729,8 @@
         "R",
         "AA1",
         "P",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -4344,7 +4780,8 @@
       "phones": [
         "ER1",
         "N",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -4369,7 +4806,8 @@
       "phones": [
         "IY1",
         "T",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -4418,7 +4856,8 @@
         "EH1",
         "N",
         "D",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -4454,6 +4893,91 @@
     "surface": "energy"
   },
   {
+    "category": "fused-phrase",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.errbody",
+    "normalized": "errbody",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "EH1",
+        "R",
+        "B",
+        "AA2",
+        "D",
+        "IY0"
+      ]
+    },
+    "regions": [
+      "national",
+      "south"
+    ],
+    "reviewState": "reviewed",
+    "surface": "errbody"
+  },
+  {
+    "category": "fused-phrase",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.errybody",
+    "normalized": "errybody",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "EH1",
+        "R",
+        "IY0",
+        "B",
+        "AA2",
+        "D",
+        "IY0"
+      ]
+    },
+    "regions": [
+      "national",
+      "south"
+    ],
+    "reviewState": "reviewed",
+    "surface": "errybody"
+  },
+  {
+    "category": "fused-phrase",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.erybody",
+    "normalized": "erybody",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "EH1",
+        "R",
+        "IY0",
+        "B",
+        "AA2",
+        "D",
+        "IY0"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "erybody"
+  },
+  {
     "category": "dropped-sound",
     "evidenceIds": [
       "editorial.dropped"
@@ -4471,7 +4995,8 @@
         "K",
         "EY1",
         "P",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -4499,7 +5024,8 @@
         "R",
         "IY0",
         "TH",
-        "IH2"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -4528,7 +5054,8 @@
         "L",
         "EY1",
         "N",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -4577,7 +5104,8 @@
         "F",
         "EY1",
         "S",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -4629,7 +5157,8 @@
         "F",
         "EY1",
         "D",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -4655,7 +5184,8 @@
         "F",
         "AA1",
         "L",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -4705,7 +5235,8 @@
         "F",
         "IY1",
         "D",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -4730,7 +5261,8 @@
         "F",
         "IY1",
         "L",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -4756,7 +5288,8 @@
         "F",
         "AY1",
         "T",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -4782,7 +5315,8 @@
         "F",
         "IH1",
         "L",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -4809,7 +5343,8 @@
         "AY1",
         "N",
         "D",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -4837,7 +5372,8 @@
         "N",
         "IH0",
         "SH",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -4873,6 +5409,60 @@
     "surface": "finna"
   },
   {
+    "category": "fused-phrase",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.finta",
+    "normalized": "finta",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "F",
+        "IH1",
+        "N",
+        "T",
+        "AH0"
+      ]
+    },
+    "regions": [
+      "national",
+      "south"
+    ],
+    "reviewState": "reviewed",
+    "surface": "finta"
+  },
+  {
+    "category": "fused-phrase",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.fitna",
+    "normalized": "fitna",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "F",
+        "IH1",
+        "T",
+        "N",
+        "AH0"
+      ]
+    },
+    "regions": [
+      "national",
+      "south"
+    ],
+    "reviewState": "reviewed",
+    "surface": "fitna"
+  },
+  {
     "category": "dropped-sound",
     "evidenceIds": [
       "editorial.dropped"
@@ -4888,7 +5478,8 @@
         "F",
         "IH1",
         "T",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -5027,7 +5618,7 @@
         "K",
         "S",
         "IH0",
-        "NG"
+        "N"
       ]
     },
     "regions": [
@@ -5053,7 +5644,8 @@
         "L",
         "IH1",
         "P",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -5103,7 +5695,8 @@
         "F",
         "L",
         "OW1",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -5156,7 +5749,8 @@
         "F",
         "L",
         "AY1",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -5209,7 +5803,8 @@
         "K",
         "AH0",
         "S",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -5236,7 +5831,8 @@
         "OW1",
         "L",
         "D",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -5262,7 +5858,8 @@
         "AA1",
         "L",
         "OW0",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -5372,7 +5969,8 @@
         "R",
         "IY1",
         "Z",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -5409,6 +6007,35 @@
     ],
     "reviewState": "reviewed",
     "surface": "freshest"
+  },
+  {
+    "category": "apostrophe-variant",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.frontin",
+    "normalized": "frontin",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "F",
+        "R",
+        "AH1",
+        "N",
+        "T",
+        "IH0",
+        "N"
+      ]
+    },
+    "regions": [
+      "national",
+      "northeast"
+    ],
+    "reviewState": "reviewed",
+    "surface": "frontin'"
   },
   {
     "category": "colloquialism",
@@ -5527,7 +6154,8 @@
         "G",
         "EH1",
         "T",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -5633,7 +6261,7 @@
         "S",
         "T",
         "IH0",
-        "NG"
+        "N"
       ]
     },
     "regions": [
@@ -5683,7 +6311,8 @@
         "G",
         "IH1",
         "V",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -5720,6 +6349,32 @@
     "surface": "glizzy"
   },
   {
+    "category": "dropped-sound",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.glowin",
+    "normalized": "glowin",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "G",
+        "L",
+        "OW1",
+        "IH0",
+        "N"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "glowin"
+  },
+  {
     "category": "colloquialism",
     "evidenceIds": [
       "editorial.colloquial"
@@ -5744,6 +6399,32 @@
     "surface": "goat"
   },
   {
+    "category": "colloquialism",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.goated",
+    "normalized": "goated",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "G",
+        "OW1",
+        "T",
+        "IH0",
+        "D"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "goated"
+  },
+  {
     "category": "dropped-sound",
     "evidenceIds": [
       "editorial.dropped"
@@ -5758,7 +6439,8 @@
       "phones": [
         "G",
         "OW1",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -5767,6 +6449,30 @@
     ],
     "reviewState": "reviewed",
     "surface": "goin"
+  },
+  {
+    "category": "fused-phrase",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.gon",
+    "normalized": "gon",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "G",
+        "AH1",
+        "N"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "gon"
   },
   {
     "category": "fused-phrase",
@@ -5921,6 +6627,31 @@
     "surface": "gottabe"
   },
   {
+    "category": "ad-lib",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.grah",
+    "normalized": "grah",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "G",
+        "R",
+        "AA1"
+      ]
+    },
+    "regions": [
+      "national",
+      "northeast"
+    ],
+    "reviewState": "reviewed",
+    "surface": "grah"
+  },
+  {
     "category": "colloquialism",
     "evidenceIds": [
       "editorial.colloquial"
@@ -5992,7 +6723,8 @@
         "AY1",
         "N",
         "D",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -6017,7 +6749,8 @@
         "G",
         "R",
         "OW1",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -6041,6 +6774,7 @@
       "kind": "direct",
       "phones": [
         "G",
+        "R",
         "ER1"
       ]
     },
@@ -6049,6 +6783,55 @@
     ],
     "reviewState": "reviewed",
     "surface": "grr"
+  },
+  {
+    "category": "ad-lib",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.grrah",
+    "normalized": "grrah",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "G",
+        "R",
+        "AA1"
+      ]
+    },
+    "regions": [
+      "national",
+      "northeast"
+    ],
+    "reviewState": "reviewed",
+    "surface": "grrah"
+  },
+  {
+    "category": "ad-lib",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.grrr",
+    "normalized": "grrr",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "G",
+        "R",
+        "ER1"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "grrr"
   },
   {
     "category": "colloquialism",
@@ -6091,7 +6874,8 @@
         "G",
         "EH1",
         "S",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -6100,6 +6884,58 @@
     ],
     "reviewState": "reviewed",
     "surface": "guessin'"
+  },
+  {
+    "category": "stylized-spelling",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.gurl",
+    "normalized": "gurl",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "G",
+        "ER1",
+        "L"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "gurl"
+  },
+  {
+    "category": "proper-name",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "proper-noun",
+      "rap"
+    ],
+    "id": "rap.h-town",
+    "normalized": "h-town",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "EY1",
+        "CH",
+        "T",
+        "AW1",
+        "N"
+      ]
+    },
+    "regions": [
+      "national",
+      "south"
+    ],
+    "reviewState": "reviewed",
+    "surface": "h-town"
   },
   {
     "category": "ad-lib",
@@ -6191,7 +7027,8 @@
         "HH",
         "AE1",
         "NG",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -6245,7 +7082,8 @@
         "HH",
         "IY1",
         "R",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -6344,7 +7182,8 @@
         "HH",
         "AY1",
         "D",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -6395,7 +7234,8 @@
         "HH",
         "IH1",
         "T",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -6445,7 +7285,8 @@
         "OW1",
         "L",
         "D",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -6571,7 +7412,8 @@
         "HH",
         "OW1",
         "P",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -6609,6 +7451,58 @@
     ],
     "reviewState": "reviewed",
     "surface": "houston"
+  },
+  {
+    "category": "proper-name",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "proper-noun",
+      "rap"
+    ],
+    "id": "rap.hov",
+    "normalized": "hov",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "HH",
+        "OW1",
+        "V"
+      ]
+    },
+    "regions": [
+      "national",
+      "northeast"
+    ],
+    "reviewState": "reviewed",
+    "surface": "hov"
+  },
+  {
+    "category": "fused-phrase",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.howdya",
+    "normalized": "howdya",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "HH",
+        "AW1",
+        "D",
+        "Y",
+        "AH0"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "howdya"
   },
   {
     "category": "proper-name",
@@ -6709,7 +7603,8 @@
         "S",
         "AH0",
         "L",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -6767,6 +7662,30 @@
     ],
     "reviewState": "reviewed",
     "surface": "hyphy"
+  },
+  {
+    "category": "fused-phrase",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.i-ma",
+    "normalized": "i'ma",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "AY1",
+        "M",
+        "AH0"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "i'ma"
   },
   {
     "category": "colloquialism",
@@ -6861,7 +7780,8 @@
         "N",
         "AO1",
         "R",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -6869,6 +7789,30 @@
     ],
     "reviewState": "reviewed",
     "surface": "ignorin'"
+  },
+  {
+    "category": "fused-phrase",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.ima",
+    "normalized": "ima",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "AY1",
+        "M",
+        "AH0"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "ima"
   },
   {
     "category": "dropped-sound",
@@ -6889,7 +7833,8 @@
         "JH",
         "AH0",
         "N",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -6969,7 +7914,8 @@
         "R",
         "UW1",
         "V",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -7121,7 +8067,8 @@
         "JH",
         "OY1",
         "N",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -7172,7 +8119,8 @@
         "AH1",
         "M",
         "P",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -7223,7 +8171,8 @@
         "K",
         "IY1",
         "P",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -7248,7 +8197,8 @@
         "K",
         "IH1",
         "K",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -7284,6 +8234,31 @@
     "surface": "kike"
   },
   {
+    "category": "stylized-spelling",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.killa",
+    "normalized": "killa",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "K",
+        "IH1",
+        "L",
+        "AH0"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "killa"
+  },
+  {
     "category": "apostrophe-variant",
     "evidenceIds": [
       "editorial.apostrophe"
@@ -7299,7 +8274,8 @@
         "K",
         "IH1",
         "L",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -7402,7 +8378,8 @@
       "phones": [
         "N",
         "OW1",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -7553,7 +8530,8 @@
         "AE1",
         "N",
         "D",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -7579,7 +8557,8 @@
         "L",
         "AE1",
         "F",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -7604,7 +8583,8 @@
         "L",
         "IY1",
         "D",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -7630,7 +8610,8 @@
         "L",
         "ER1",
         "N",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -7656,7 +8637,8 @@
         "L",
         "IY1",
         "V",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -7817,7 +8799,8 @@
         "L",
         "EH1",
         "T",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -7843,7 +8826,8 @@
         "L",
         "AY1",
         "T",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -7993,7 +8977,8 @@
         "L",
         "IH1",
         "V",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -8046,7 +9031,8 @@
         "L",
         "UH1",
         "K",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -8101,7 +9087,8 @@
         "L",
         "UW1",
         "Z",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -8152,7 +9139,8 @@
         "L",
         "AH1",
         "V",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -8254,7 +9242,8 @@
       "phones": [
         "L",
         "AY1",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -8280,7 +9269,8 @@
         "M",
         "EY1",
         "K",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -8306,7 +9296,8 @@
         "AA1",
         "R",
         "CH",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -8331,7 +9322,8 @@
         "M",
         "IY1",
         "N",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -8357,7 +9349,8 @@
         "M",
         "IY1",
         "T",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -8463,7 +9456,8 @@
         "M",
         "IH1",
         "S",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -8490,7 +9484,8 @@
         "IH1",
         "K",
         "S",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -8605,6 +9600,31 @@
     "surface": "mo"
   },
   {
+    "category": "stylized-spelling",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.motha",
+    "normalized": "motha",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "M",
+        "AH1",
+        "DH",
+        "AH0"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "motha"
+  },
+  {
     "category": "colloquialism",
     "evidenceIds": [
       "editorial.colloquial"
@@ -8675,7 +9695,8 @@
         "M",
         "UW1",
         "V",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -8828,7 +9849,8 @@
         "N",
         "IY1",
         "D",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -8958,7 +9980,8 @@
         "N",
         "AH1",
         "TH",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -8966,6 +9989,32 @@
     ],
     "reviewState": "reviewed",
     "surface": "nothin"
+  },
+  {
+    "category": "fused-phrase",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.nuthin",
+    "normalized": "nuthin",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "N",
+        "AH1",
+        "TH",
+        "IH0",
+        "N"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "nuthin"
   },
   {
     "category": "proper-name",
@@ -9134,7 +10183,8 @@
         "P",
         "AH0",
         "N",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -9166,6 +10216,30 @@
     ],
     "reviewState": "reviewed",
     "surface": "opp"
+  },
+  {
+    "category": "colloquialism",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.opps",
+    "normalized": "opps",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "AA1",
+        "P",
+        "S"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "opps"
   },
   {
     "category": "colloquialism",
@@ -9332,7 +10406,8 @@
         "P",
         "AE1",
         "S",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -9357,7 +10432,8 @@
       "phones": [
         "P",
         "EY1",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -9434,7 +10510,8 @@
         "P",
         "IH1",
         "K",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -9461,7 +10538,8 @@
         "L",
         "AE1",
         "N",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -9487,7 +10565,8 @@
         "P",
         "L",
         "EY1",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -9513,7 +10592,8 @@
         "P",
         "AA1",
         "P",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -9590,7 +10670,8 @@
         "P",
         "AO1",
         "R",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -9623,6 +10704,34 @@
     "surface": "pow"
   },
   {
+    "category": "dropped-sound",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.prancin",
+    "normalized": "prancin",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "P",
+        "R",
+        "AE1",
+        "N",
+        "S",
+        "IH0",
+        "N"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "prancin"
+  },
+  {
     "category": "apostrophe-variant",
     "evidenceIds": [
       "editorial.apostrophe"
@@ -9638,7 +10747,8 @@
         "P",
         "R",
         "EY1",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -9691,7 +10801,8 @@
         "R",
         "EH1",
         "S",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -9716,7 +10827,8 @@
         "P",
         "UH1",
         "L",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -9742,7 +10854,8 @@
         "P",
         "UH1",
         "SH",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -9768,7 +10881,8 @@
         "P",
         "AH1",
         "T",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -9831,6 +10945,34 @@
     "surface": "queens"
   },
   {
+    "category": "proper-name",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "proper-noun",
+      "rap"
+    ],
+    "id": "rap.r-b",
+    "normalized": "r&b",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "AA1",
+        "R",
+        "AH0",
+        "N",
+        "B",
+        "IY1"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "r&b"
+  },
+  {
     "category": "apostrophe-variant",
     "evidenceIds": [
       "editorial.apostrophe"
@@ -9846,7 +10988,8 @@
         "R",
         "EY1",
         "S",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -9919,7 +11062,8 @@
         "R",
         "AE1",
         "P",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -9945,7 +11089,8 @@
         "R",
         "IY1",
         "CH",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -9971,7 +11116,8 @@
         "R",
         "IY1",
         "D",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -10052,7 +11198,8 @@
         "AO1",
         "R",
         "D",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -10082,7 +11229,8 @@
         "M",
         "B",
         "ER0",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -10110,7 +11258,8 @@
         "P",
         "IY1",
         "T",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -10119,6 +11268,33 @@
     ],
     "reviewState": "reviewed",
     "surface": "repeatin"
+  },
+  {
+    "category": "dropped-sound",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.reppin",
+    "normalized": "reppin",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "R",
+        "EH1",
+        "P",
+        "IH0",
+        "N"
+      ]
+    },
+    "regions": [
+      "national",
+      "northeast"
+    ],
+    "reviewState": "reviewed",
+    "surface": "reppin"
   },
   {
     "category": "apostrophe-variant",
@@ -10136,7 +11312,8 @@
         "R",
         "AY1",
         "D",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -10162,7 +11339,8 @@
         "R",
         "AY1",
         "Z",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -10292,7 +11470,7 @@
         "S",
         "T",
         "IH0",
-        "NG"
+        "N"
       ]
     },
     "regions": [
@@ -10368,7 +11546,7 @@
         "AA1",
         "K",
         "IH0",
-        "NG"
+        "N"
       ]
     },
     "regions": [
@@ -10393,7 +11571,8 @@
         "R",
         "OW1",
         "L",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -10444,7 +11623,8 @@
         "R",
         "AH1",
         "N",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -10546,7 +11726,8 @@
       "phones": [
         "S",
         "EY1",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -10573,7 +11754,8 @@
         "K",
         "IY1",
         "M",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -10625,7 +11807,8 @@
       "phones": [
         "S",
         "IY1",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -10651,7 +11834,8 @@
         "S",
         "EH1",
         "L",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -10677,7 +11861,8 @@
         "EH1",
         "N",
         "D",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -10703,7 +11888,8 @@
         "S",
         "ER1",
         "V",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -10738,6 +11924,32 @@
     "surface": "shade"
   },
   {
+    "category": "dropped-sound",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.shakin",
+    "normalized": "shakin",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "SH",
+        "EY1",
+        "K",
+        "IH0",
+        "N"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "shakin"
+  },
+  {
     "category": "stylized-spelling",
     "evidenceIds": [
       "editorial.stylized"
@@ -10752,7 +11964,6 @@
       "phones": [
         "SH",
         "AO1",
-        "R",
         "T",
         "IY0"
       ]
@@ -10803,7 +12014,8 @@
         "SH",
         "AY1",
         "N",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -10876,7 +12088,8 @@
         "SH",
         "UW1",
         "T",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -10885,6 +12098,32 @@
     ],
     "reviewState": "reviewed",
     "surface": "shootin'"
+  },
+  {
+    "category": "stylized-spelling",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.shordy",
+    "normalized": "shordy",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "SH",
+        "AO1",
+        "R",
+        "D",
+        "IY0"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "shordy"
   },
   {
     "category": "stylized-spelling",
@@ -10938,6 +12177,60 @@
     "surface": "shoulda"
   },
   {
+    "category": "fused-phrase",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.shouldja",
+    "normalized": "shouldja",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "SH",
+        "UH1",
+        "JH",
+        "AH0"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "shouldja"
+  },
+  {
+    "category": "apostrophe-variant",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.shouldn-t-ve",
+    "normalized": "shouldn't've",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "SH",
+        "UH1",
+        "D",
+        "AH0",
+        "N",
+        "T",
+        "AH0",
+        "V"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "shouldn't've"
+  },
+  {
     "category": "dropped-sound",
     "evidenceIds": [
       "editorial.dropped"
@@ -10952,7 +12245,8 @@
       "phones": [
         "SH",
         "OW1",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -10977,7 +12271,8 @@
         "S",
         "IH1",
         "NG",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -10986,6 +12281,32 @@
     ],
     "reviewState": "reviewed",
     "surface": "singin'"
+  },
+  {
+    "category": "stylized-spelling",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.sista",
+    "normalized": "sista",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "S",
+        "IH1",
+        "S",
+        "T",
+        "AH0"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "sista"
   },
   {
     "category": "dropped-sound",
@@ -11003,7 +12324,8 @@
         "S",
         "IH1",
         "T",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -11088,6 +12410,31 @@
     ],
     "reviewState": "reviewed",
     "surface": "skrrt"
+  },
+  {
+    "category": "ad-lib",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.skrt",
+    "normalized": "skrt",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "S",
+        "K",
+        "ER1",
+        "T"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "skrt"
   },
   {
     "category": "colloquialism",
@@ -11209,7 +12556,7 @@
         "AE1",
         "P",
         "IH0",
-        "NG"
+        "N"
       ]
     },
     "regions": [
@@ -11217,6 +12564,32 @@
     ],
     "reviewState": "reviewed",
     "surface": "slappin"
+  },
+  {
+    "category": "colloquialism",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.slatt",
+    "normalized": "slatt",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "S",
+        "L",
+        "AE1",
+        "T"
+      ]
+    },
+    "regions": [
+      "national",
+      "south"
+    ],
+    "reviewState": "reviewed",
+    "surface": "slatt"
   },
   {
     "category": "apostrophe-variant",
@@ -11235,7 +12608,8 @@
         "L",
         "IY1",
         "P",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -11262,7 +12636,8 @@
         "L",
         "AY1",
         "D",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -11314,7 +12689,8 @@
         "M",
         "OW1",
         "K",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -11393,7 +12769,7 @@
         "AE1",
         "P",
         "IH0",
-        "NG"
+        "N"
       ]
     },
     "regions": [
@@ -11419,7 +12795,8 @@
         "AH1",
         "M",
         "TH",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -11496,7 +12873,8 @@
         "P",
         "IY1",
         "K",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -11524,7 +12902,8 @@
         "EH1",
         "N",
         "D",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -11577,7 +12956,8 @@
         "P",
         "IH1",
         "N",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -11586,6 +12966,33 @@
     ],
     "reviewState": "reviewed",
     "surface": "spinnin"
+  },
+  {
+    "category": "dropped-sound",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.spittin",
+    "normalized": "spittin",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "S",
+        "P",
+        "IH1",
+        "T",
+        "IH0",
+        "N"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "spittin"
   },
   {
     "category": "fused-phrase",
@@ -11614,6 +13021,33 @@
     ],
     "reviewState": "reviewed",
     "surface": "sposedta"
+  },
+  {
+    "category": "fused-phrase",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.sposta",
+    "normalized": "sposta",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "S",
+        "P",
+        "OW1",
+        "S",
+        "T",
+        "AH0"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "sposta"
   },
   {
     "category": "colloquialism",
@@ -11738,7 +13172,7 @@
         "AE1",
         "K",
         "IH0",
-        "NG"
+        "N"
       ]
     },
     "regions": [
@@ -11765,7 +13199,8 @@
         "AE1",
         "N",
         "D",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -11793,7 +13228,8 @@
         "AA1",
         "R",
         "T",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -11818,7 +13254,8 @@
         "S",
         "T",
         "EY1",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -11845,7 +13282,8 @@
         "T",
         "EH1",
         "P",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -11854,6 +13292,35 @@
     ],
     "reviewState": "reviewed",
     "surface": "steppin"
+  },
+  {
+    "category": "proper-name",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "proper-noun",
+      "rap"
+    ],
+    "id": "rap.stl",
+    "normalized": "stl",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "EH1",
+        "S",
+        "T",
+        "IY1",
+        "EH1",
+        "L"
+      ]
+    },
+    "regions": [
+      "national",
+      "midwest"
+    ],
+    "reviewState": "reviewed",
+    "surface": "stl"
   },
   {
     "category": "apostrophe-variant",
@@ -11872,7 +13339,8 @@
         "T",
         "AA1",
         "P",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -11881,6 +13349,34 @@
     ],
     "reviewState": "reviewed",
     "surface": "stoppin'"
+  },
+  {
+    "category": "dropped-sound",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.stressin",
+    "normalized": "stressin",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "S",
+        "T",
+        "R",
+        "EH1",
+        "S",
+        "IH0",
+        "N"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "stressin"
   },
   {
     "category": "colloquialism",
@@ -11982,7 +13478,7 @@
         "N",
         "T",
         "IH0",
-        "NG"
+        "N"
       ]
     },
     "regions": [
@@ -11990,6 +13486,57 @@
     ],
     "reviewState": "reviewed",
     "surface": "stuntin"
+  },
+  {
+    "category": "fused-phrase",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.sumn",
+    "normalized": "sumn",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "S",
+        "AH1",
+        "M"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "sumn"
+  },
+  {
+    "category": "fused-phrase",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.sumthin",
+    "normalized": "sumthin",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "S",
+        "AH1",
+        "M",
+        "TH",
+        "IH0",
+        "N"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "sumthin"
   },
   {
     "category": "fused-phrase",
@@ -12054,7 +13601,8 @@
         "T",
         "AO1",
         "K",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -12063,6 +13611,63 @@
     ],
     "reviewState": "reviewed",
     "surface": "talkin"
+  },
+  {
+    "category": "fused-phrase",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.talkinbout",
+    "normalized": "talkinbout",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "T",
+        "AO1",
+        "K",
+        "IH0",
+        "N",
+        "B",
+        "AW2",
+        "T"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "talkinbout"
+  },
+  {
+    "category": "fused-phrase",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.talmbout",
+    "normalized": "talmbout",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "T",
+        "AO1",
+        "M",
+        "B",
+        "AW2",
+        "T"
+      ]
+    },
+    "regions": [
+      "national",
+      "south"
+    ],
+    "reviewState": "reviewed",
+    "surface": "talmbout"
   },
   {
     "category": "dropped-sound",
@@ -12080,7 +13685,8 @@
         "T",
         "EH1",
         "L",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -12088,6 +13694,34 @@
     ],
     "reviewState": "reviewed",
     "surface": "tellin"
+  },
+  {
+    "category": "dropped-sound",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.textin",
+    "normalized": "textin",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "T",
+        "EH1",
+        "K",
+        "S",
+        "T",
+        "IH0",
+        "N"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "textin"
   },
   {
     "category": "apostrophe-variant",
@@ -12106,7 +13740,8 @@
         "IH1",
         "NG",
         "K",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -12155,7 +13790,8 @@
         "TH",
         "R",
         "OW1",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -12255,7 +13891,8 @@
         "T",
         "AH1",
         "CH",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -12334,7 +13971,8 @@
         "R",
         "AE1",
         "P",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -12392,7 +14030,8 @@
         "V",
         "AH0",
         "L",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -12426,6 +14065,59 @@
     ],
     "reviewState": "reviewed",
     "surface": "trill"
+  },
+  {
+    "category": "stylized-spelling",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.trilli",
+    "normalized": "trilli",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "T",
+        "R",
+        "IH1",
+        "L",
+        "IY0"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "trilli"
+  },
+  {
+    "category": "apostrophe-variant",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.trippin",
+    "normalized": "trippin",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "T",
+        "R",
+        "IH1",
+        "P",
+        "IH0",
+        "N"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "trippin'"
   },
   {
     "category": "colloquialism",
@@ -12522,7 +14214,7 @@
         "OW1",
         "L",
         "IH0",
-        "NG"
+        "N"
       ]
     },
     "regions": [
@@ -12572,7 +14264,8 @@
         "T",
         "R",
         "AY1",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -12637,6 +14330,32 @@
     "surface": "trynaget"
   },
   {
+    "category": "fused-phrase",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.trynna",
+    "normalized": "trynna",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "T",
+        "R",
+        "AY1",
+        "N",
+        "AH0"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "trynna"
+  },
+  {
     "category": "apostrophe-variant",
     "evidenceIds": [
       "editorial.apostrophe"
@@ -12652,7 +14371,8 @@
         "T",
         "ER1",
         "N",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -13001,7 +14721,7 @@
         "AY1",
         "B",
         "IH0",
-        "NG"
+        "N"
       ]
     },
     "regions": [
@@ -13026,7 +14746,8 @@
         "W",
         "AO1",
         "K",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -13130,7 +14851,8 @@
         "W",
         "AA1",
         "CH",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -13256,7 +14978,7 @@
         "EY1",
         "V",
         "IH0",
-        "NG"
+        "N"
       ]
     },
     "regions": [
@@ -13306,7 +15028,8 @@
         "W",
         "EH1",
         "R",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -13315,6 +15038,33 @@
     ],
     "reviewState": "reviewed",
     "surface": "wearin"
+  },
+  {
+    "category": "proper-name",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "proper-noun",
+      "rap"
+    ],
+    "id": "rap.weezy",
+    "normalized": "weezy",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "W",
+        "IY1",
+        "Z",
+        "IY0"
+      ]
+    },
+    "regions": [
+      "national",
+      "south"
+    ],
+    "reviewState": "reviewed",
+    "surface": "weezy"
   },
   {
     "category": "stylized-spelling",
@@ -13425,6 +15175,32 @@
   {
     "category": "fused-phrase",
     "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.whaddya",
+    "normalized": "whaddya",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "W",
+        "AH1",
+        "D",
+        "Y",
+        "AH0"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "whaddya"
+  },
+  {
+    "category": "fused-phrase",
+    "evidenceIds": [
       "editorial.fused"
     ],
     "flags": [
@@ -13446,6 +15222,31 @@
     ],
     "reviewState": "reviewed",
     "surface": "whatcha"
+  },
+  {
+    "category": "fused-phrase",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.whatchu",
+    "normalized": "whatchu",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "W",
+        "AH1",
+        "CH",
+        "UW0"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "whatchu"
   },
   {
     "category": "ad-lib",
@@ -13541,6 +15342,33 @@
     "surface": "whoa"
   },
   {
+    "category": "dropped-sound",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.wildin",
+    "normalized": "wildin",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "W",
+        "AY1",
+        "L",
+        "D",
+        "IH0",
+        "N"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "wildin"
+  },
+  {
     "category": "apostrophe-variant",
     "evidenceIds": [
       "editorial.apostrophe"
@@ -13556,7 +15384,8 @@
         "W",
         "IH1",
         "N",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -13581,7 +15410,8 @@
         "W",
         "IH1",
         "SH",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -13780,7 +15610,8 @@
         "W",
         "ER1",
         "K",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -13816,6 +15647,60 @@
     "surface": "woulda"
   },
   {
+    "category": "fused-phrase",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.wouldja",
+    "normalized": "wouldja",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "W",
+        "UH1",
+        "JH",
+        "AH0"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "wouldja"
+  },
+  {
+    "category": "apostrophe-variant",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.wouldn-t-ve",
+    "normalized": "wouldn't've",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "W",
+        "UH1",
+        "D",
+        "AH0",
+        "N",
+        "T",
+        "AH0",
+        "V"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "wouldn't've"
+  },
+  {
     "category": "dropped-sound",
     "evidenceIds": [
       "editorial.dropped"
@@ -13831,7 +15716,8 @@
         "R",
         "AY1",
         "T",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -13840,6 +15726,30 @@
     ],
     "reviewState": "reviewed",
     "surface": "writin"
+  },
+  {
+    "category": "stylized-spelling",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.wut",
+    "normalized": "wut",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "W",
+        "AH1",
+        "T"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "wut"
   },
   {
     "category": "stylized-spelling",
@@ -13889,6 +15799,84 @@
     ],
     "reviewState": "reviewed",
     "surface": "y'all"
+  },
+  {
+    "category": "apostrophe-variant",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.y-all-d",
+    "normalized": "y'all'd",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "Y",
+        "AO1",
+        "L",
+        "D"
+      ]
+    },
+    "regions": [
+      "national",
+      "south"
+    ],
+    "reviewState": "reviewed",
+    "surface": "y'all'd"
+  },
+  {
+    "category": "apostrophe-variant",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.y-all-s",
+    "normalized": "y'all's",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "Y",
+        "AO1",
+        "L",
+        "Z"
+      ]
+    },
+    "regions": [
+      "national",
+      "south"
+    ],
+    "reviewState": "reviewed",
+    "surface": "y'all's"
+  },
+  {
+    "category": "apostrophe-variant",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.y-all-ve",
+    "normalized": "y'all've",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "Y",
+        "AO1",
+        "L",
+        "V"
+      ]
+    },
+    "regions": [
+      "national",
+      "south"
+    ],
+    "reviewState": "reviewed",
+    "surface": "y'all've"
   },
   {
     "category": "stylized-spelling",
@@ -14000,7 +15988,8 @@
         "Y",
         "EH1",
         "L",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [
@@ -14033,6 +16022,53 @@
     ],
     "reviewState": "reviewed",
     "surface": "yep"
+  },
+  {
+    "category": "ad-lib",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.yerr",
+    "normalized": "yerr",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "Y",
+        "ER1"
+      ]
+    },
+    "regions": [
+      "national",
+      "northeast"
+    ],
+    "reviewState": "reviewed",
+    "surface": "yerr"
+  },
+  {
+    "category": "ad-lib",
+    "evidenceIds": [
+      "editorial.post-seal-remediation"
+    ],
+    "flags": [
+      "rap"
+    ],
+    "id": "rap.yuh",
+    "normalized": "yuh",
+    "pronunciation": {
+      "kind": "direct",
+      "phones": [
+        "Y",
+        "AH1"
+      ]
+    },
+    "regions": [
+      "national"
+    ],
+    "reviewState": "reviewed",
+    "surface": "yuh"
   },
   {
     "category": "ad-lib",
@@ -14074,7 +16110,8 @@
         "Z",
         "OW1",
         "N",
-        "IH0"
+        "IH0",
+        "N"
       ]
     },
     "regions": [

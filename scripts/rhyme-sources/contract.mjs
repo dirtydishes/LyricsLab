@@ -36,6 +36,11 @@ export const REGIONS = Object.freeze([
 
 const FLAGS = Object.freeze(['proper-noun', 'rap', 'safety-blocked']);
 const REVIEW_STATES = Object.freeze(['reviewed']);
+const FINAL_N_CATEGORIES = new Set([
+  'apostrophe-variant',
+  'common-inflection',
+  'dropped-sound',
+]);
 const SOURCE_ROLES = Object.freeze([
   'evidence',
   'lexicon',
@@ -172,6 +177,7 @@ function validateEntries(value, evidence) {
     if (!REVIEW_STATES.includes(entry.reviewState)) throw new Error(`${label} has an invalid review state`);
     enumArray(entry.evidenceIds, [...evidence.keys()], `${label} evidenceIds`);
     validatePronunciation(entry.pronunciation, normalized, label);
+    validateDroppedFinalN(entry, label);
     if (!entry.flags.includes('rap')) throw new Error(`${label} must carry the rap flag`);
     if (entry.category === 'proper-name' !== entry.flags.includes('proper-noun')) throw new Error(`${label} proper-name flag is inconsistent`);
     if (entry.flags.includes('proper-noun') && entry.flags.includes('safety-blocked')) throw new Error(`${label} cannot combine proper-noun and safety-blocked flags`);
@@ -180,6 +186,18 @@ function validateEntries(value, evidence) {
     entries.push(entry);
   }
   return entries;
+}
+
+function validateDroppedFinalN(entry, label) {
+  if (!FINAL_N_CATEGORIES.has(entry.category) || !entry.normalized.endsWith('in')) {
+    return;
+  }
+  const phones = entry.pronunciation.kind === 'direct'
+    ? entry.pronunciation.phones
+    : entry.pronunciation.verifiedPhones;
+  if (phones.at(-2) !== 'IH0' || phones.at(-1) !== 'N') {
+    throw new Error(`${label} dropped -in pronunciation must end in IH0 N`);
+  }
 }
 
 function validatePronunciation(value, normalizedWord, label) {

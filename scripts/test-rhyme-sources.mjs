@@ -22,7 +22,7 @@ const sourceValues = Object.fromEntries(await Promise.all(
 ));
 
 const loaded = await loadAndValidateRhymeSources(path.join(sourceRoot, 'manifest.json'));
-assert.equal(loaded.summary.total, 547);
+assert.equal(loaded.summary.total, 618);
 assert.equal(loaded.summary.reviewed, loaded.summary.total);
 assert.equal(loaded.summary.aliases + loaded.summary.direct, loaded.summary.total);
 for (const category of CATEGORIES) assert.ok(loaded.summary.categories[category] > 0, `missing ${category}`);
@@ -58,6 +58,14 @@ await rejectsMutation('unstressed direct transcription', ({ lexicon }) => {
   const entry = lexicon.find((candidate) => candidate.pronunciation.kind === 'direct');
   entry.pronunciation.phones = ['M'];
 }, /no stressed vowel/u);
+
+await rejectsMutation('dropped -in retains NG', ({ lexicon }) => {
+  const entry = lexicon.find((candidate) =>
+    candidate.normalized.endsWith('in') &&
+    ['apostrophe-variant', 'common-inflection', 'dropped-sound'].includes(candidate.category)
+  );
+  entry.pronunciation = { kind: 'direct', phones: ['T', 'EH1', 'S', 'T', 'IH0', 'NG'] };
+}, /must end in IH0 N/u);
 
 await rejectsMutation('ambiguous multi-token alias', ({ lexicon }) => {
   const entry = lexicon.find((candidate) => candidate.pronunciation.kind === 'alias');

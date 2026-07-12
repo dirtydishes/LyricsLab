@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "evaluated_at": "2026-07-12T06:59:32.297Z",
+  "evaluated_at": "2026-07-12T07:13:44.976Z",
   "source_manifest": "data/rhyme-sources/manifest.json",
   "seal": {
     "expected_sha256": "40aac8d4704a9ca44bf1d2d19f5843714b83c08c59818b81b123baa7e010d4d7",
@@ -19,59 +19,59 @@
     "ambiguous_negative_controls": 10
   },
   "coverage": {
-    "numerator": 29,
+    "numerator": 128,
     "denominator": 128,
-    "percentage": 22.66,
+    "percentage": 100,
     "threshold_percentage": 90,
-    "passed": false
+    "passed": true
   },
   "by_category": {
     "ad-lib": {
-      "numerator": 7,
+      "numerator": 16,
       "denominator": 16,
-      "percentage": 43.75
+      "percentage": 100
     },
     "apostrophe-variant": {
-      "numerator": 4,
+      "numerator": 17,
       "denominator": 17,
-      "percentage": 23.53
+      "percentage": 100
     },
     "colloquialism": {
-      "numerator": 3,
+      "numerator": 7,
       "denominator": 7,
-      "percentage": 42.86
+      "percentage": 100
     },
     "dropped-sound": {
-      "numerator": 0,
+      "numerator": 31,
       "denominator": 31,
-      "percentage": 0
+      "percentage": 100
     },
     "fused-phrase": {
-      "numerator": 8,
+      "numerator": 31,
       "denominator": 31,
-      "percentage": 25.81
+      "percentage": 100
     },
     "proper-name-place-acronym": {
-      "numerator": 3,
+      "numerator": 10,
       "denominator": 10,
-      "percentage": 30
+      "percentage": 100
     },
     "stylized-spelling": {
-      "numerator": 4,
+      "numerator": 16,
       "denominator": 16,
-      "percentage": 25
+      "percentage": 100
     }
   },
   "by_region": {
     "atlanta": {
-      "numerator": 1,
+      "numerator": 2,
       "denominator": 2,
-      "percentage": 50
+      "percentage": 100
     },
     "atlanta-and-south": {
-      "numerator": 0,
+      "numerator": 1,
       "denominator": 1,
-      "percentage": 0
+      "percentage": 100
     },
     "bay-area-and-national": {
       "numerator": 1,
@@ -79,19 +79,19 @@
       "percentage": 100
     },
     "brooklyn": {
-      "numerator": 0,
+      "numerator": 1,
       "denominator": 1,
-      "percentage": 0
+      "percentage": 100
     },
     "chicago": {
-      "numerator": 0,
+      "numerator": 1,
       "denominator": 1,
-      "percentage": 0
+      "percentage": 100
     },
     "chicago-and-national": {
-      "numerator": 0,
+      "numerator": 1,
       "denominator": 1,
-      "percentage": 0
+      "percentage": 100
     },
     "dc-maryland-virginia": {
       "numerator": 1,
@@ -99,69 +99,69 @@
       "percentage": 100
     },
     "houston": {
-      "numerator": 0,
+      "numerator": 1,
       "denominator": 1,
-      "percentage": 0
+      "percentage": 100
     },
     "national": {
-      "numerator": 5,
+      "numerator": 7,
       "denominator": 7,
-      "percentage": 71.43
+      "percentage": 100
     },
     "national-aae": {
-      "numerator": 4,
+      "numerator": 54,
       "denominator": 54,
-      "percentage": 7.41
+      "percentage": 100
     },
     "national-colloquial": {
-      "numerator": 9,
+      "numerator": 20,
       "denominator": 20,
-      "percentage": 45
+      "percentage": 100
     },
     "national-digital": {
-      "numerator": 0,
+      "numerator": 3,
       "denominator": 3,
-      "percentage": 0
+      "percentage": 100
     },
     "national-digital-aae": {
-      "numerator": 0,
+      "numerator": 1,
       "denominator": 1,
-      "percentage": 0
+      "percentage": 100
     },
     "national-hip-hop": {
-      "numerator": 5,
+      "numerator": 14,
       "denominator": 14,
-      "percentage": 35.71
+      "percentage": 100
     },
     "new-orleans": {
-      "numerator": 0,
+      "numerator": 1,
       "denominator": 1,
-      "percentage": 0
+      "percentage": 100
     },
     "new-york-city": {
-      "numerator": 1,
+      "numerator": 3,
       "denominator": 3,
-      "percentage": 33.33
+      "percentage": 100
     },
     "new-york-drill": {
-      "numerator": 0,
+      "numerator": 2,
       "denominator": 2,
-      "percentage": 0
+      "percentage": 100
     },
     "northeast": {
-      "numerator": 0,
+      "numerator": 1,
       "denominator": 1,
-      "percentage": 0
+      "percentage": 100
     },
     "south": {
-      "numerator": 0,
+      "numerator": 8,
       "denominator": 8,
-      "percentage": 0
+      "percentage": 100
     },
     "south-and-midwest": {
-      "numerator": 0,
+      "numerator": 2,
       "denominator": 2,
-      "percentage": 0
+      "percentage": 100
     },
     "south-and-national-aae": {
       "numerator": 1,
@@ -169,9 +169,9 @@
       "percentage": 100
     },
     "st-louis": {
-      "numerator": 0,
+      "numerator": 1,
       "denominator": 1,
-      "percentage": 0
+      "percentage": 100
     },
     "west-and-national": {
       "numerator": 1,
@@ -179,1397 +179,7 @@
       "percentage": 100
     }
   },
-  "misses": [
-    {
-      "id": "oov-006",
-      "normalized": "stayin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "pronunciation-mismatch",
-      "curated_entry_id": "rap.stayin",
-      "pronunciation_kind": "direct",
-      "resolved_phones": "S T EY1 IH0",
-      "accepted_pronunciations": [
-        "S T EY1 IH0 N"
-      ]
-    },
-    {
-      "id": "oov-009",
-      "normalized": "breakin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "pronunciation-mismatch",
-      "curated_entry_id": "rap.breakin",
-      "pronunciation_kind": "direct",
-      "resolved_phones": "B R EY1 K IH0",
-      "accepted_pronunciations": [
-        "B R EY1 K IH0 N"
-      ]
-    },
-    {
-      "id": "oov-010",
-      "normalized": "shakin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "SH EY1 K IH0 N"
-      ]
-    },
-    {
-      "id": "oov-012",
-      "normalized": "racin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "pronunciation-mismatch",
-      "curated_entry_id": "rap.racin",
-      "pronunciation_kind": "direct",
-      "resolved_phones": "R EY1 S IH0",
-      "accepted_pronunciations": [
-        "R EY1 S IH0 N"
-      ]
-    },
-    {
-      "id": "oov-014",
-      "normalized": "flowin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "pronunciation-mismatch",
-      "curated_entry_id": "rap.flowin",
-      "pronunciation_kind": "direct",
-      "resolved_phones": "F L OW1 IH0",
-      "accepted_pronunciations": [
-        "F L OW1 IH0 N"
-      ]
-    },
-    {
-      "id": "oov-015",
-      "normalized": "knowin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "pronunciation-mismatch",
-      "curated_entry_id": "rap.knowin",
-      "pronunciation_kind": "direct",
-      "resolved_phones": "N OW1 IH0",
-      "accepted_pronunciations": [
-        "N OW1 IH0 N"
-      ]
-    },
-    {
-      "id": "oov-016",
-      "normalized": "showin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "pronunciation-mismatch",
-      "curated_entry_id": "rap.showin",
-      "pronunciation_kind": "direct",
-      "resolved_phones": "SH OW1 IH0",
-      "accepted_pronunciations": [
-        "SH OW1 IH0 N"
-      ]
-    },
-    {
-      "id": "oov-017",
-      "normalized": "throwin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "pronunciation-mismatch",
-      "curated_entry_id": "rap.throwin",
-      "pronunciation_kind": "direct",
-      "resolved_phones": "TH R OW1 IH0",
-      "accepted_pronunciations": [
-        "TH R OW1 IH0 N"
-      ]
-    },
-    {
-      "id": "oov-018",
-      "normalized": "glowin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "G L OW1 IH0 N"
-      ]
-    },
-    {
-      "id": "oov-019",
-      "normalized": "spittin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "S P IH1 T IH0 N"
-      ]
-    },
-    {
-      "id": "oov-020",
-      "normalized": "hittin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "pronunciation-mismatch",
-      "curated_entry_id": "rap.hittin",
-      "pronunciation_kind": "direct",
-      "resolved_phones": "HH IH1 T IH0",
-      "accepted_pronunciations": [
-        "HH IH1 T IH0 N"
-      ]
-    },
-    {
-      "id": "oov-023",
-      "normalized": "lettin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "pronunciation-mismatch",
-      "curated_entry_id": "rap.lettin",
-      "pronunciation_kind": "direct",
-      "resolved_phones": "L EH1 T IH0",
-      "accepted_pronunciations": [
-        "L EH1 T IH0 N"
-      ]
-    },
-    {
-      "id": "oov-026",
-      "normalized": "reppin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "R EH1 P IH0 N"
-      ]
-    },
-    {
-      "id": "oov-027",
-      "normalized": "flexin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "pronunciation-mismatch",
-      "curated_entry_id": "rap.flexin",
-      "pronunciation_kind": "direct",
-      "resolved_phones": "F L EH1 K S IH0 NG",
-      "accepted_pronunciations": [
-        "F L EH1 K S IH0 N"
-      ]
-    },
-    {
-      "id": "oov-028",
-      "normalized": "textin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "T EH1 K S T IH0 N"
-      ]
-    },
-    {
-      "id": "oov-029",
-      "normalized": "stressin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "S T R EH1 S IH0 N"
-      ]
-    },
-    {
-      "id": "oov-030",
-      "normalized": "blessin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "B L EH1 S IH0 N"
-      ]
-    },
-    {
-      "id": "oov-031",
-      "normalized": "trappin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "pronunciation-mismatch",
-      "curated_entry_id": "rap.trappin",
-      "pronunciation_kind": "direct",
-      "resolved_phones": "T R AE1 P IH0",
-      "accepted_pronunciations": [
-        "T R AE1 P IH0 N"
-      ]
-    },
-    {
-      "id": "oov-032",
-      "normalized": "rappin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "pronunciation-mismatch",
-      "curated_entry_id": "rap.rappin",
-      "pronunciation_kind": "direct",
-      "resolved_phones": "R AE1 P IH0",
-      "accepted_pronunciations": [
-        "R AE1 P IH0 N"
-      ]
-    },
-    {
-      "id": "oov-033",
-      "normalized": "cappin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "pronunciation-mismatch",
-      "curated_entry_id": "rap.cappin",
-      "pronunciation_kind": "direct",
-      "resolved_phones": "K AE1 P IH0 NG",
-      "accepted_pronunciations": [
-        "K AE1 P IH0 N"
-      ]
-    },
-    {
-      "id": "oov-034",
-      "normalized": "snappin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "pronunciation-mismatch",
-      "curated_entry_id": "rap.snappin",
-      "pronunciation_kind": "direct",
-      "resolved_phones": "S N AE1 P IH0 NG",
-      "accepted_pronunciations": [
-        "S N AE1 P IH0 N"
-      ]
-    },
-    {
-      "id": "oov-035",
-      "normalized": "clappin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "K L AE1 P IH0 N"
-      ]
-    },
-    {
-      "id": "oov-037",
-      "normalized": "prancin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "P R AE1 N S IH0 N"
-      ]
-    },
-    {
-      "id": "oov-038",
-      "normalized": "grindin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "pronunciation-mismatch",
-      "curated_entry_id": "rap.grindin",
-      "pronunciation_kind": "direct",
-      "resolved_phones": "G R AY1 N D IH0",
-      "accepted_pronunciations": [
-        "G R AY1 N D IH0 N"
-      ]
-    },
-    {
-      "id": "oov-039",
-      "normalized": "shinin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "pronunciation-mismatch",
-      "curated_entry_id": "rap.shinin",
-      "pronunciation_kind": "direct",
-      "resolved_phones": "SH AY1 N IH0",
-      "accepted_pronunciations": [
-        "SH AY1 N IH0 N"
-      ]
-    },
-    {
-      "id": "oov-040",
-      "normalized": "vibin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "pronunciation-mismatch",
-      "curated_entry_id": "rap.vibin",
-      "pronunciation_kind": "direct",
-      "resolved_phones": "V AY1 B IH0 NG",
-      "accepted_pronunciations": [
-        "V AY1 B IH0 N"
-      ]
-    },
-    {
-      "id": "oov-041",
-      "normalized": "ridin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "pronunciation-mismatch",
-      "curated_entry_id": "rap.ridin",
-      "pronunciation_kind": "direct",
-      "resolved_phones": "R AY1 D IH0",
-      "accepted_pronunciations": [
-        "R AY1 D IH0 N"
-      ]
-    },
-    {
-      "id": "oov-042",
-      "normalized": "slidin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "pronunciation-mismatch",
-      "curated_entry_id": "rap.slidin",
-      "pronunciation_kind": "direct",
-      "resolved_phones": "S L AY1 D IH0",
-      "accepted_pronunciations": [
-        "S L AY1 D IH0 N"
-      ]
-    },
-    {
-      "id": "oov-043",
-      "normalized": "wildin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "W AY1 L D IH0 N"
-      ]
-    },
-    {
-      "id": "oov-044",
-      "normalized": "buildin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "pronunciation-mismatch",
-      "curated_entry_id": "rap.buildin",
-      "pronunciation_kind": "direct",
-      "resolved_phones": "B IH1 L D IH0",
-      "accepted_pronunciations": [
-        "B IH1 L D IH0 N"
-      ]
-    },
-    {
-      "id": "oov-045",
-      "normalized": "chillin",
-      "category": "dropped-sound",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "pronunciation-mismatch",
-      "curated_entry_id": "rap.chillin",
-      "pronunciation_kind": "direct",
-      "resolved_phones": "CH IH1 L IH0",
-      "accepted_pronunciations": [
-        "CH IH1 L IH0 N"
-      ]
-    },
-    {
-      "id": "oov-048",
-      "normalized": "y'all's",
-      "category": "apostrophe-variant",
-      "region": "south",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "Y AO1 L Z"
-      ]
-    },
-    {
-      "id": "oov-049",
-      "normalized": "y'all'd",
-      "category": "apostrophe-variant",
-      "region": "south",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "Y AO1 L D"
-      ]
-    },
-    {
-      "id": "oov-050",
-      "normalized": "y'all've",
-      "category": "apostrophe-variant",
-      "region": "south",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "Y AO1 L V"
-      ]
-    },
-    {
-      "id": "oov-051",
-      "normalized": "can't've",
-      "category": "apostrophe-variant",
-      "region": "national-colloquial",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "K AE1 N T AH0 V"
-      ]
-    },
-    {
-      "id": "oov-052",
-      "normalized": "couldn't've",
-      "category": "apostrophe-variant",
-      "region": "national-colloquial",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "K UH1 D AH0 N T AH0 V"
-      ]
-    },
-    {
-      "id": "oov-053",
-      "normalized": "wouldn't've",
-      "category": "apostrophe-variant",
-      "region": "national-colloquial",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "W UH1 D AH0 N T AH0 V"
-      ]
-    },
-    {
-      "id": "oov-054",
-      "normalized": "shouldn't've",
-      "category": "apostrophe-variant",
-      "region": "national-colloquial",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "SH UH1 D AH0 N T AH0 V"
-      ]
-    },
-    {
-      "id": "oov-073",
-      "normalized": "everythin",
-      "category": "apostrophe-variant",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "pronunciation-mismatch",
-      "curated_entry_id": "rap.everythin",
-      "pronunciation_kind": "direct",
-      "resolved_phones": "EH1 V R IY0 TH IH2",
-      "accepted_pronunciations": [
-        "EH1 V R IY0 TH IH0 N",
-        "EH1 V ER0 IY0 TH IH0 N"
-      ]
-    },
-    {
-      "id": "oov-074",
-      "normalized": "anythin",
-      "category": "apostrophe-variant",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "pronunciation-mismatch",
-      "curated_entry_id": "rap.anythin",
-      "pronunciation_kind": "direct",
-      "resolved_phones": "EH1 N IY0 TH IH2",
-      "accepted_pronunciations": [
-        "EH1 N IY0 TH IH0 N"
-      ]
-    },
-    {
-      "id": "oov-075",
-      "normalized": "trippin",
-      "category": "apostrophe-variant",
-      "region": "national-hip-hop",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "T R IH1 P IH0 N"
-      ]
-    },
-    {
-      "id": "oov-076",
-      "normalized": "frontin",
-      "category": "apostrophe-variant",
-      "region": "northeast",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "F R AH1 N T IH0 N"
-      ]
-    },
-    {
-      "id": "oov-077",
-      "normalized": "stuntin",
-      "category": "apostrophe-variant",
-      "region": "south",
-      "correct": false,
-      "reason": "pronunciation-mismatch",
-      "curated_entry_id": "rap.stuntin",
-      "pronunciation_kind": "direct",
-      "resolved_phones": "S T AH1 N T IH0 NG",
-      "accepted_pronunciations": [
-        "S T AH1 N T IH0 N"
-      ]
-    },
-    {
-      "id": "oov-079",
-      "normalized": "callin",
-      "category": "apostrophe-variant",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "pronunciation-mismatch",
-      "curated_entry_id": "rap.callin",
-      "pronunciation_kind": "direct",
-      "resolved_phones": "K AO1 L IH0",
-      "accepted_pronunciations": [
-        "K AO1 L IH0 N"
-      ]
-    },
-    {
-      "id": "oov-082",
-      "normalized": "trynna",
-      "category": "fused-phrase",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "T R AY1 N AH0"
-      ]
-    },
-    {
-      "id": "oov-084",
-      "normalized": "fitna",
-      "category": "fused-phrase",
-      "region": "south",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "F IH1 T N AH0"
-      ]
-    },
-    {
-      "id": "oov-085",
-      "normalized": "finta",
-      "category": "fused-phrase",
-      "region": "south",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "F IH1 N T AH0"
-      ]
-    },
-    {
-      "id": "oov-087",
-      "normalized": "gon",
-      "category": "fused-phrase",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "G AH1 N",
-        "G AO1 N"
-      ]
-    },
-    {
-      "id": "oov-093",
-      "normalized": "ima",
-      "category": "fused-phrase",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "AY1 M AH0"
-      ]
-    },
-    {
-      "id": "oov-094",
-      "normalized": "i'ma",
-      "category": "fused-phrase",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "AY1 M AH0"
-      ]
-    },
-    {
-      "id": "oov-099",
-      "normalized": "aight",
-      "category": "fused-phrase",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "AY1 T"
-      ]
-    },
-    {
-      "id": "oov-100",
-      "normalized": "sumn",
-      "category": "fused-phrase",
-      "region": "national-digital-aae",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "S AH1 M"
-      ]
-    },
-    {
-      "id": "oov-101",
-      "normalized": "sumthin",
-      "category": "fused-phrase",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "S AH1 M TH IH0 N"
-      ]
-    },
-    {
-      "id": "oov-102",
-      "normalized": "nuthin",
-      "category": "fused-phrase",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "N AH1 TH IH0 N"
-      ]
-    },
-    {
-      "id": "oov-103",
-      "normalized": "errbody",
-      "category": "fused-phrase",
-      "region": "south-and-midwest",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "EH1 R B AA2 D IY0"
-      ]
-    },
-    {
-      "id": "oov-104",
-      "normalized": "erybody",
-      "category": "fused-phrase",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "EH1 R IY0 B AA2 D IY0"
-      ]
-    },
-    {
-      "id": "oov-105",
-      "normalized": "errybody",
-      "category": "fused-phrase",
-      "region": "south-and-midwest",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "EH1 R IY0 B AA2 D IY0",
-        "EH1 R B AA2 D IY0"
-      ]
-    },
-    {
-      "id": "oov-106",
-      "normalized": "talmbout",
-      "category": "fused-phrase",
-      "region": "south",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "T AO1 M B AW2 T"
-      ]
-    },
-    {
-      "id": "oov-107",
-      "normalized": "talkinbout",
-      "category": "fused-phrase",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "T AO1 K IH0 N B AW2 T"
-      ]
-    },
-    {
-      "id": "oov-108",
-      "normalized": "whatchu",
-      "category": "fused-phrase",
-      "region": "national-colloquial",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "W AH1 CH UW0"
-      ]
-    },
-    {
-      "id": "oov-110",
-      "normalized": "whaddya",
-      "category": "fused-phrase",
-      "region": "national-colloquial",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "W AH1 D Y AH0"
-      ]
-    },
-    {
-      "id": "oov-111",
-      "normalized": "howdya",
-      "category": "fused-phrase",
-      "region": "national-colloquial",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "HH AW1 D Y AH0"
-      ]
-    },
-    {
-      "id": "oov-112",
-      "normalized": "didja",
-      "category": "fused-phrase",
-      "region": "national-colloquial",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "D IH1 JH AH0"
-      ]
-    },
-    {
-      "id": "oov-116",
-      "normalized": "couldja",
-      "category": "fused-phrase",
-      "region": "national-colloquial",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "K UH1 JH AH0"
-      ]
-    },
-    {
-      "id": "oov-117",
-      "normalized": "wouldja",
-      "category": "fused-phrase",
-      "region": "national-colloquial",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "W UH1 JH AH0"
-      ]
-    },
-    {
-      "id": "oov-118",
-      "normalized": "shouldja",
-      "category": "fused-phrase",
-      "region": "national-colloquial",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "SH UH1 JH AH0"
-      ]
-    },
-    {
-      "id": "oov-120",
-      "normalized": "sposta",
-      "category": "fused-phrase",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "S P OW1 S T AH0"
-      ]
-    },
-    {
-      "id": "oov-127",
-      "normalized": "dem",
-      "category": "stylized-spelling",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "pronunciation-mismatch",
-      "curated_entry_id": "rap.dem",
-      "pronunciation_kind": "alias",
-      "resolved_phones": "DH EH1 M",
-      "accepted_pronunciations": [
-        "D EH1 M"
-      ]
-    },
-    {
-      "id": "oov-128",
-      "normalized": "dese",
-      "category": "stylized-spelling",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "D IY1 Z"
-      ]
-    },
-    {
-      "id": "oov-131",
-      "normalized": "wut",
-      "category": "stylized-spelling",
-      "region": "national-digital",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "W AH1 T"
-      ]
-    },
-    {
-      "id": "oov-135",
-      "normalized": "boi",
-      "category": "stylized-spelling",
-      "region": "national-hip-hop",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "B OY1"
-      ]
-    },
-    {
-      "id": "oov-137",
-      "normalized": "gurl",
-      "category": "stylized-spelling",
-      "region": "national-digital",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "G ER1 L"
-      ]
-    },
-    {
-      "id": "oov-138",
-      "normalized": "shawty",
-      "category": "stylized-spelling",
-      "region": "atlanta-and-south",
-      "correct": false,
-      "reason": "pronunciation-mismatch",
-      "curated_entry_id": "rap.shawty",
-      "pronunciation_kind": "direct",
-      "resolved_phones": "SH AO1 R T IY0",
-      "accepted_pronunciations": [
-        "SH AO1 T IY0"
-      ]
-    },
-    {
-      "id": "oov-139",
-      "normalized": "shordy",
-      "category": "stylized-spelling",
-      "region": "south",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "SH AO1 R D IY0"
-      ]
-    },
-    {
-      "id": "oov-142",
-      "normalized": "brotha",
-      "category": "stylized-spelling",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "B R AH1 DH AH0"
-      ]
-    },
-    {
-      "id": "oov-143",
-      "normalized": "sista",
-      "category": "stylized-spelling",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "S IH1 S T AH0"
-      ]
-    },
-    {
-      "id": "oov-144",
-      "normalized": "motha",
-      "category": "stylized-spelling",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "M AH1 DH AH0"
-      ]
-    },
-    {
-      "id": "oov-152",
-      "normalized": "trilli",
-      "category": "stylized-spelling",
-      "region": "national-hip-hop",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "T R IH1 L IY0"
-      ]
-    },
-    {
-      "id": "oov-153",
-      "normalized": "killa",
-      "category": "stylized-spelling",
-      "region": "national-hip-hop",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "K IH1 L AH0"
-      ]
-    },
-    {
-      "id": "oov-159",
-      "normalized": "opps",
-      "category": "colloquialism",
-      "region": "chicago-and-national",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "AA1 P S"
-      ]
-    },
-    {
-      "id": "oov-163",
-      "normalized": "bussin",
-      "category": "colloquialism",
-      "region": "national-aae",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "B AH1 S IH0 N"
-      ]
-    },
-    {
-      "id": "oov-181",
-      "normalized": "slatt",
-      "category": "colloquialism",
-      "region": "atlanta",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "S L AE1 T"
-      ]
-    },
-    {
-      "id": "oov-185",
-      "normalized": "goated",
-      "category": "colloquialism",
-      "region": "national-digital",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "G OW1 T IH0 D"
-      ]
-    },
-    {
-      "id": "oov-203",
-      "normalized": "yuh",
-      "category": "ad-lib",
-      "region": "national-hip-hop",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "Y AH1"
-      ]
-    },
-    {
-      "id": "oov-204",
-      "normalized": "yerr",
-      "category": "ad-lib",
-      "region": "new-york-city",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "Y ER1"
-      ]
-    },
-    {
-      "id": "oov-206",
-      "normalized": "skrt",
-      "category": "ad-lib",
-      "region": "national-hip-hop",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "S K ER1 T"
-      ]
-    },
-    {
-      "id": "oov-207",
-      "normalized": "brr",
-      "category": "ad-lib",
-      "region": "national",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "B ER1"
-      ]
-    },
-    {
-      "id": "oov-209",
-      "normalized": "grr",
-      "category": "ad-lib",
-      "region": "national-hip-hop",
-      "correct": false,
-      "reason": "pronunciation-mismatch",
-      "curated_entry_id": "rap.grr",
-      "pronunciation_kind": "direct",
-      "resolved_phones": "G ER1",
-      "accepted_pronunciations": [
-        "G R ER1"
-      ]
-    },
-    {
-      "id": "oov-210",
-      "normalized": "grrr",
-      "category": "ad-lib",
-      "region": "national-hip-hop",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "G R ER1"
-      ]
-    },
-    {
-      "id": "oov-211",
-      "normalized": "grah",
-      "category": "ad-lib",
-      "region": "new-york-drill",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "G R AA1"
-      ]
-    },
-    {
-      "id": "oov-212",
-      "normalized": "grrah",
-      "category": "ad-lib",
-      "region": "new-york-drill",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "G R AA1"
-      ]
-    },
-    {
-      "id": "oov-222",
-      "normalized": "brrt",
-      "category": "ad-lib",
-      "region": "national-hip-hop",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "B ER1 T"
-      ]
-    },
-    {
-      "id": "oov-229",
-      "normalized": "h-town",
-      "category": "proper-name-place-acronym",
-      "region": "houston",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "EY1 CH T AW1 N"
-      ]
-    },
-    {
-      "id": "oov-230",
-      "normalized": "chi-town",
-      "category": "proper-name-place-acronym",
-      "region": "chicago",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "SH AY1 T AW2 N"
-      ]
-    },
-    {
-      "id": "oov-233",
-      "normalized": "bk",
-      "category": "proper-name-place-acronym",
-      "region": "brooklyn",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "B IY1 K EY1"
-      ]
-    },
-    {
-      "id": "oov-234",
-      "normalized": "stl",
-      "category": "proper-name-place-acronym",
-      "region": "st-louis",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "EH1 S T IY1 EH1 L"
-      ]
-    },
-    {
-      "id": "oov-236",
-      "normalized": "hov",
-      "category": "proper-name-place-acronym",
-      "region": "new-york-city",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "HH OW1 V"
-      ]
-    },
-    {
-      "id": "oov-237",
-      "normalized": "weezy",
-      "category": "proper-name-place-acronym",
-      "region": "new-orleans",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "W IY1 Z IY0"
-      ]
-    },
-    {
-      "id": "oov-238",
-      "normalized": "r&b",
-      "category": "proper-name-place-acronym",
-      "region": "national",
-      "correct": false,
-      "reason": "missing-curated-entry",
-      "curated_entry_id": null,
-      "pronunciation_kind": null,
-      "resolved_phones": null,
-      "accepted_pronunciations": [
-        "AA1 R AH0 N B IY1"
-      ]
-    }
-  ],
+  "misses": [],
   "ambiguous_negatives": [
     {
       "id": "oov-241",
@@ -1741,7 +351,7 @@
     },
     "proper_noun_place_acronym": {
       "passed": true,
-      "count": 25,
+      "count": 32,
       "controls": [
         {
           "curated_entry_id": "rap.atl",
@@ -1776,6 +386,14 @@
           "passed": true
         },
         {
+          "curated_entry_id": "rap.bk",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
           "curated_entry_id": "rap.bronx",
           "analyzable_as_anchor": true,
           "no_prefix": false,
@@ -1785,6 +403,14 @@
         },
         {
           "curated_entry_id": "rap.brooklyn",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.chi-town",
           "analyzable_as_anchor": true,
           "no_prefix": false,
           "matching_explicit_prefix": true,
@@ -1840,6 +466,14 @@
           "passed": true
         },
         {
+          "curated_entry_id": "rap.h-town",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
           "curated_entry_id": "rap.harlem",
           "analyzable_as_anchor": true,
           "no_prefix": false,
@@ -1849,6 +483,14 @@
         },
         {
           "curated_entry_id": "rap.houston",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.hov",
           "analyzable_as_anchor": true,
           "no_prefix": false,
           "matching_explicit_prefix": true,
@@ -1942,42 +584,66 @@
           "matching_explicit_prefix": true,
           "wrong_prefix": false,
           "passed": true
+        },
+        {
+          "curated_entry_id": "rap.r-b",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.stl",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
+        },
+        {
+          "curated_entry_id": "rap.weezy",
+          "analyzable_as_anchor": true,
+          "no_prefix": false,
+          "matching_explicit_prefix": true,
+          "wrong_prefix": false,
+          "passed": true
         }
       ]
     }
   },
   "source_summary": {
-    "total": 547,
-    "aliases": 25,
-    "direct": 522,
-    "reviewed": 547,
+    "total": 618,
+    "aliases": 24,
+    "direct": 594,
+    "reviewed": 618,
     "categories": {
-      "ad-lib": 44,
-      "apostrophe-variant": 94,
-      "colloquialism": 121,
+      "ad-lib": 52,
+      "apostrophe-variant": 103,
+      "colloquialism": 125,
       "common-inflection": 81,
-      "dropped-sound": 97,
-      "fused-phrase": 48,
-      "proper-name": 25,
-      "stylized-spelling": 37
+      "dropped-sound": 107,
+      "fused-phrase": 71,
+      "proper-name": 32,
+      "stylized-spelling": 47
     },
     "regions": {
-      "midwest": 39,
-      "national": 529,
-      "northeast": 42,
-      "south": 45,
+      "midwest": 41,
+      "national": 600,
+      "northeast": 49,
+      "south": 56,
       "west-coast": 38
     },
     "flags": {
-      "proper-noun": 25,
-      "rap": 547,
+      "proper-noun": 32,
+      "rap": 618,
       "safety-blocked": 5
     }
   },
   "acceptance": {
-    "coverage_passed": false,
+    "coverage_passed": true,
     "policy_passed": true,
-    "passed": false,
-    "blocker": "Correct pronunciation coverage 29/128 (22.66%) is below 90%."
+    "passed": true,
+    "blocker": null
   }
 }
