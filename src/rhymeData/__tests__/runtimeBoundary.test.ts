@@ -4,11 +4,14 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 
 describe('Phase 03 runtime boundary', () => {
-  it('keeps the shipped editor provider on the legacy seam until Phase 05', () => {
-    const provider = readFileSync(path.join(process.cwd(), 'src/editor/bundledSuggestionProvider.ts'), 'utf8');
-    expect(provider).toContain('createLegacyRhymeEngineAdapter');
-    expect(provider).not.toContain('rhymeData');
-    expect(provider).not.toContain('fixture.rhymebin');
+  it('removes the legacy shipped provider from the Phase 05 app path', () => {
+    const editor = readFileSync(
+      path.join(process.cwd(), 'src/editor/LyricsEditorScreen.tsx'),
+      'utf8',
+    );
+    expect(editor).toContain('useProductionRhyme');
+    expect(editor).not.toContain('bundledSuggestionProvider');
+    expect(editor).not.toContain('createLegacyRhymeEngineAdapter');
   });
 
   it('keeps platform dependencies in the dormant Expo adapter only', () => {
@@ -65,7 +68,7 @@ describe('Phase 03 runtime boundary', () => {
     }
   });
 
-  it('packages the production artifact only through the dormant Phase 04A adapter', () => {
+  it('activates the production artifact only through the app-level Phase 05 provider', () => {
     const adapter = readFileSync(
       path.join(process.cwd(), 'src/platform/createProductionRhymeEngineRuntime.ts'),
       'utf8',
@@ -80,7 +83,15 @@ describe('Phase 03 runtime boundary', () => {
       { assets: ['./assets/rhyme/production.rhymebin'] },
     ]);
 
-    for (const root of ['app', 'src/editor', 'src/settings']) {
+    const appLayout = readFileSync(path.join(process.cwd(), 'app/_layout.tsx'), 'utf8');
+    const appProvider = readFileSync(
+      path.join(process.cwd(), 'src/platform/ProductionRhymeProvider.tsx'),
+      'utf8',
+    );
+    expect(appLayout).toContain('ProductionRhymeProvider');
+    expect(appProvider).toContain('createProductionRhymeEngineRuntime');
+
+    for (const root of ['src/editor', 'src/settings']) {
       for (const file of listTypeScriptFiles(path.join(process.cwd(), root))) {
         const source = readFileSync(file, 'utf8');
         expect(source).not.toMatch(

@@ -195,16 +195,24 @@ async function assertNoRuntimeActivation(modulePath, visited) {
   )].map((match) => match[1]);
 
   for (const specifier of specifiers) {
-    assert.doesNotMatch(
-      specifier,
-      /(?:^|\/)(?:data\/rhyme-sources|scripts\/rhyme-sources|src\/rhymeSources|rhymeSources)(?:\/|$)/u,
-      `Phase 04 source activated by ${absolutePath}`,
-    );
+    if (!specifier.endsWith('/rhymeSources/suggestionEligibility')) {
+      assert.doesNotMatch(
+        specifier,
+        /(?:^|\/)(?:data\/rhyme-sources|scripts\/rhyme-sources|src\/rhymeSources|rhymeSources)(?:\/|$)/u,
+        `Phase 04 source activated by ${absolutePath}`,
+      );
+    }
     if (!specifier.startsWith('.')) continue;
     const dependency = await resolveTypeScriptDependency(absolutePath, specifier);
     if (dependency) {
+      const rhymeSourceModule = dependency.includes(
+        `${path.sep}src${path.sep}rhymeSources${path.sep}`,
+      );
+      const reviewedPolicyBoundary = dependency.endsWith(
+        `${path.sep}src${path.sep}rhymeSources${path.sep}suggestionEligibility.ts`,
+      );
       assert.equal(
-        dependency.includes(`${path.sep}src${path.sep}rhymeSources${path.sep}`),
+        rhymeSourceModule && !reviewedPolicyBoundary,
         false,
         `Phase 04 source transitively activated by ${absolutePath}`,
       );

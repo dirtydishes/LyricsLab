@@ -239,6 +239,29 @@ describe('rhyme engine runtime', () => {
 
     expect(schedule).not.toHaveBeenCalled();
   });
+
+  it('publishes suggestion policy atomically with the last-good engine', async () => {
+    const first = decodedData('one', engineWithLabel('hat'));
+    const second = decodedData('two', engineWithLabel('night'));
+    const outcomes = [Promise.resolve(first), Promise.reject(new Error('reload failed')), Promise.resolve(second)];
+    const runtime = createRhymeEngineRuntime({
+      decode: () => outcomes.shift()!,
+      initialVersion: 'pending',
+      isSuggestionEligible: (decoded, word, prefix) =>
+        decoded.version === 'two' || (word === 'atl' && prefix === 'at'),
+      scheduleAfterFirstFrame: () => () => undefined,
+      source: { open: async () => createReader(Uint8Array.of(1)) },
+    });
+
+    expect(runtime.isSuggestionEligible('atl', 'at')).toBe(false);
+    await runtime.retry();
+    expect(runtime.isSuggestionEligible('atl', 'at')).toBe(true);
+    expect(runtime.isSuggestionEligible('atl', '')).toBe(false);
+    await runtime.retry();
+    expect(runtime.isSuggestionEligible('atl', 'at')).toBe(true);
+    await runtime.retry();
+    expect(runtime.isSuggestionEligible('anything', '')).toBe(true);
+  });
 });
 
 function createReader(bytes: Uint8Array, reads: number[] = []): RhymeArtifactReader {
