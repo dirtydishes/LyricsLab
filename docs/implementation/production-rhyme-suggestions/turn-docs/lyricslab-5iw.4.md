@@ -125,7 +125,10 @@ Evidence:
 
 ## PR And Commits
 
-The prepared worktree Git directory is `/home/delta/dev/lyricslab/.git/worktrees/lyricslab4` and is read-only in this task (`test -w` false). No commit, push, or PR mutation was attempted. The orchestrator must commit the completed working tree with a lowercase human message, push `lavender/production-rhyme-phase-04`, and create or update exactly one PR with explicit base `lavender/expo-clean-rebuild` and head `lavender/production-rhyme-phase-04` after checking whether one already exists.
+- Preparation commit: `6a79d72f` (`prepare production rhyme phase four`).
+- Curation commit: `19594887` (`curate production rhyme source corpus`), committed and pushed by the orchestrator after the delegated task returned the complete working tree.
+- PR [#26](https://github.com/dirtydishes/lyricslab/pull/26) is the only exact-head PR, opened with explicit base `lavender/expo-clean-rebuild` and head `lavender/production-rhyme-phase-04`.
+- The delegated worktree Git metadata was read-only; independent evaluation, strict review, and hosted reinspection remain orchestrator-owned.
 
 ## Beads Updates And Follow-Ups
 
@@ -147,4 +150,4 @@ Normal app startup remains unchanged. No source manifest, fixture, safety source
 
 ## Closeout
 
-Source-curation implementation and local evidence are complete. Git publication is an explicit orchestrator handoff because metadata is read-only. Canonical issue closeout remains blocked on the separate sealed evaluation and strict review tasks, not on additional curation work in this turn.
+Source curation, local evidence, commit, push, and explicit PR publication are complete. Canonical issue closeout remains pending the separate sealed evaluation and strict review tasks, not additional curation work.
