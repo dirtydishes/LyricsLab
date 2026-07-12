@@ -125,7 +125,10 @@ Hosted CI evidence:
 - PR: `https://github.com/dirtydishes/lyricslab/pull/21`
 - Reviewer pre-push `gh pr view 21 --repo dirtydishes/lyricslab --json url,number,state,isDraft,mergeable,baseRefName,headRefName,headRefOid,statusCheckRollup,title`: open, non-draft, base `lavender/expo-clean-rebuild`, head `lavender/offline-rhyme-phase-06`, mergeable `MERGEABLE`, `statusCheckRollup` empty.
 - Reviewer pre-push `gh pr checks 21 --repo dirtydishes/lyricslab`: no checks reported on the branch.
-- Final PR state, hosted checks, and merge-tree evidence recorded after reviewer commit/push.
+- Reviewer post-repair push `gh pr view 21 --repo dirtydishes/lyricslab --json url,number,state,isDraft,mergeable,baseRefName,headRefName,headRefOid,statusCheckRollup,title`: open, non-draft, base `lavender/expo-clean-rebuild`, head `lavender/offline-rhyme-phase-06`, head `fafbe7bef21083163915898f8cbdeaa09ca24a4b`, mergeable `MERGEABLE`, `statusCheckRollup` empty.
+- Reviewer post-repair push `gh pr checks 21 --repo dirtydishes/lyricslab`: no checks reported on the branch.
+- GitHub combined status for `fafbe7bef21083163915898f8cbdeaa09ca24a4b`: `statuses` empty.
+- Final-head merge-tree evidence for repair commit: `git merge-tree --write-tree origin/lavender/expo-clean-rebuild HEAD` exited 0 and produced tree `da88c3844afd4536556dbdcb48c356be236dcff9`.
 
 ## PR And Commits
 
@@ -134,8 +137,9 @@ Hosted CI evidence:
 - Expected base: `lavender/expo-clean-rebuild`
 - Implementation commit: `38fa93465f7c9afdf1af0aa3b2f07b108c375b5a add slant rhyme ranking guard`
 - Turn-doc / PR-detail commit: `record phase six pr details`
-- Review repair commit: reviewer closeout commit on `lavender/offline-rhyme-phase-06`.
-- Reviewer-observed PR state: repaired, pending final post-push evidence.
+- Review repair commit: `fafbe7bef21083163915898f8cbdeaa09ca24a4b repair phase six review findings`
+- Review evidence commit: final turn-doc evidence commit on `lavender/offline-rhyme-phase-06`.
+- Reviewer-observed PR state: repaired, open, non-draft, correct base/head, mergeable, hosted checks absent.
 
 ## Beads Updates
 
