@@ -143,3 +143,11 @@ Physical-iPhone evidence and explicit writer sign-off are mandatory completion g
 ## Closeout
 
 Independent thermonuclear review is repaired and locally approved with no remaining automatable finding. Phase acceptance remains **blocked** on exactly two truthful manual gates: a completed/signed 60-case human writer review (including top-three acceptance and any resulting regression corrections), and a complete physical-iPhone diagnostics Release run with airplane mode, all 25 checklist cases, accessibility, interaction, measured device latency, artifact/build identity, evidence files, and human attestations. CI is terminally `ci-unavailable-with-evidence`; publishing repairs, manual evidence, PR update/merge, and Beads closeout remain orchestrator-owned.
+
+## Post-device launch repair — 2026-07-13
+
+- A physical-iPhone diagnostics Release build was reported to exit immediately. Loading the same diagnostics surface through the Expo dev client rendered successfully but left the production engine at `loading` with no error.
+- The minimized repro showed that `createAfterFirstFrameScheduler` allowed the native idle scheduler to control startup without a backstop. A host exception escaped the runtime load error boundary, while an idle callback that never arrived left the artifact unopened and the snapshot permanently at `loading`.
+- Startup now races the idle callback against a cancellable 250 ms timer after the existing two-frame defer. Unsupported idle scheduling is contained, starvation falls back to the timer, late callbacks cannot double-start the load, and cancellation clears both paths.
+- Regression coverage exercises both the scheduler and the real Expo production-runtime `start()` call path. Focused tests passed 8/8; the full root suite passed 26/26 suites and 215/215 tests; typecheck, editor tests, diagnostics config/export separation, production runtime, and production artifact freshness all passed.
+- Physical-device confirmation still requires rebuilding and relaunching the signed diagnostics app. This host is Debian and cannot claim that iPhone evidence.

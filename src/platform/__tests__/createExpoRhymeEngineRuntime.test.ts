@@ -35,6 +35,10 @@ describe('Expo rhyme data adapter', () => {
     installTimerGlobals();
   });
 
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
   it('resolves only a bundled module and closes its read-only handle after loading', async () => {
     let offset = 0;
     const handle = {
@@ -95,6 +99,54 @@ describe('Expo rhyme data adapter', () => {
       errorMessage: 'size failed',
       state: 'error',
     });
+  });
+
+  it('finishes deferred startup when the native idle scheduler is unsupported', async () => {
+    jest.useFakeTimers();
+    const frames: Array<() => void> = [];
+    let offset = 0;
+    const handle = {
+      size: artifact.length,
+      close: jest.fn(),
+      readBytes: jest.fn((length: number) => {
+        const chunk = artifact.subarray(offset, offset + length);
+        offset += chunk.length;
+        return chunk;
+      }),
+    };
+    mockFromModule.mockReturnValue({
+      downloadAsync: jest.fn(async () => undefined),
+      localUri: 'file:///fixture.rhymebin',
+    });
+    mockFile.mockImplementation(() => ({ open: jest.fn(() => handle) }));
+    Object.assign(globalThis, {
+      requestAnimationFrame: jest.fn((callback: () => void) => {
+        frames.push(callback);
+        return frames.length;
+      }),
+      requestIdleCallback: jest.fn(() => {
+        throw new Error(
+          'requestIdleCallback is not supported in legacy runtime scheduler',
+        );
+      }),
+    });
+    const runtime = createExpoRhymeEngineRuntime({
+      artifactModuleId: 42,
+      expectedManifestSha256: manifestHash,
+      initialVersion: 'pending',
+    });
+
+    runtime.start();
+    frames.shift()?.();
+    expect(() => frames.shift()?.()).not.toThrow();
+    await jest.advanceTimersByTimeAsync(250);
+    await jest.runAllTimersAsync();
+
+    expect(runtime.getSnapshot()).toMatchObject({
+      state: 'ready',
+      version: 'fixture-1',
+    });
+    expect(handle.close).toHaveBeenCalledTimes(1);
   });
 });
 
