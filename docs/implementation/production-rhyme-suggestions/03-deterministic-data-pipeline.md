@@ -1,4 +1,4 @@
-# Phase 03: Deterministic Data Pipeline
+# Phase 03: Deterministic Pipeline Framework
 
 Canonical Beads issue: `lyricslab-5iw.3`
 
@@ -8,7 +8,7 @@ Status is tracked in Beads. This document preserves accepted intent and is decis
 
 ## Outcome
 
-Compile pinned CMU, SUBTLEX-US, project rap, safety, and proper-noun sources into a committed versioned binary artifact with source hashes, licensing, reproducible generation, and bounded asynchronous runtime loading.
+Build and verify the manifest-driven versioned binary compiler, decoder, and bounded asynchronous loader using only project-owned fixture inputs. This phase proves the production-capable format and loading behavior without claiming that the final production corpus exists.
 
 ## Why This Phase Exists
 
@@ -18,23 +18,23 @@ Production suggestion quality and speed require deterministic compact indexes wi
 
 Allowed:
 
-- Pinned inputs, licenses/NOTICE, compiler, binary format, source hashes, committed artifact, freshness/reproducibility commands, corruption/version tests, and Expo Asset/FileSystem loader.
+- A manifest contract, project-owned fixture inputs, compiler, binary format, source hashes, committed fixture artifact, freshness/reproducibility commands, corruption/version tests, and Expo Asset/FileSystem loader.
 - Numeric phone/word tables, pronunciation mappings/offsets, exact-tail indexes, compact slant buckets, rank, lemma, safety/proper-noun/rap flags, format version, and hashes.
 
 Out of scope:
 
-- Expanding lexicon editorial content beyond fixtures needed to prove the pipeline or integrating final UI behavior.
+- Acquiring or embedding CMU/SUBTLEX-US production bytes, authoring the Phase 04 project corpus, assembling the final production artifact, or integrating final UI behavior.
 
 ## Constraints
 
-- `npm run build:rhyme-data` regenerates; `npm run check:rhyme-data` fails on byte/hash divergence.
+- `npm run build:rhyme-data` accepts an explicit manifest/output and regenerates the committed project-owned fixture artifact by default; `npm run check:rhyme-data` regenerates to a temporary output and fails on byte/hash divergence.
 - CI regenerates into a temporary location.
 - Load after the first interactive frame, decode in bounded chunks, publish atomically.
 - Never parse raw CMU, query SQLite, or statically parse large JSON on the typing path.
 
 ## Settled Decisions
 
-SUBTLEX-US is the commonness source and requires its ISC attribution. The artifact is committed with pinned source versions and hashes.
+The format must represent all already accepted production tables and flags, but Phase 03 inputs are project-owned fixtures with explicit provenance. Phase 04A—not Phase 03—must establish the exact CMU pin and pin `words/subtlex-word-frequencies` release `2.0.0`, retaining its published ISC notice, Brysbaert & New citation, and the caveat that the Ghent original download page does not itself state ISC; Phase 04A also owns the complete NOTICE and final production source hashes.
 
 ## Open Questions
 
@@ -47,7 +47,7 @@ None.
 
 ## Acceptance Evidence
 
-Two clean regenerations are byte/hash identical; license and source pins are reviewable; version mismatch/corruption fail safely; bounded asynchronous loading publishes only a complete ready engine; hot-path exclusions are verified.
+Two clean fixture regenerations are byte/hash identical; the manifest and fixture provenance are reviewable; version mismatch, truncation, section-bounds errors, and corruption fail safely; bounded asynchronous loading publishes only a complete ready engine; retry retains the last good state; hot-path exclusions are verified.
 
 ## Quality Gates
 
@@ -55,7 +55,7 @@ Two clean regenerations are byte/hash identical; license and source pins are rev
 
 ## Replanning Triggers
 
-Any source cannot be legally redistributed, deterministic bytes cannot be achieved, the accepted data cannot fit the bounded mobile loading model, or Expo SDK APIs differ materially from plan assumptions.
+The generic format cannot represent the accepted production tables/flags, deterministic bytes cannot be achieved, the data cannot fit the bounded mobile loading model, or Expo SDK APIs differ materially from plan assumptions.
 
 ## Implementation Hypotheses
 

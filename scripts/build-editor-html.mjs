@@ -1,0 +1,190 @@
+import { readFileSync } from 'node:fs';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const scriptDir = path.dirname(fileURLToPath(import.meta.url));
+const repoRoot = path.resolve(scriptDir, '..');
+const editorPackageDir = path.join(repoRoot, 'packages/editor-web');
+const editorDistDir = path.join(editorPackageDir, 'dist');
+const editorHtmlPath = path.join(editorDistDir, 'index.html');
+const generatedDir = path.join(repoRoot, 'src/editor/generated');
+const generatedFilePath = path.join(generatedDir, 'editorHtml.ts');
+const checkMode = parseArgs(process.argv.slice(2));
+
+const assetRefs = [];
+const html = await readFile(editorHtmlPath, 'utf8');
+const bundledHtml = inlineStylesheets(inlineScripts(html));
+
+assertNoExternalDistAssets(bundledHtml);
+
+const generatedModule = createGeneratedModule(bundledHtml);
+
+if (checkMode) {
+  await checkGeneratedModule(generatedModule);
+} else {
+  await mkdir(generatedDir, { recursive: true });
+  await writeFile(generatedFilePath, generatedModule, 'utf8');
+
+  console.log(
+    `Wrote ${path.relative(repoRoot, generatedFilePath)} with ${assetRefs.length} inlined assets.`,
+  );
+}
+
+function parseArgs(args) {
+  if (args.length === 0) {
+    return false;
+  }
+
+  if (args.length === 1 && args[0] === '--check') {
+    return true;
+  }
+
+  console.error('Usage: node scripts/build-editor-html.mjs [--check]');
+  process.exit(1);
+}
+
+async function checkGeneratedModule(expectedModule) {
+  const relativeGeneratedFilePath = path.relative(repoRoot, generatedFilePath);
+  let currentModule;
+
+  try {
+    currentModule = await readFile(generatedFilePath, 'utf8');
+  } catch (error) {
+    if (error?.code === 'ENOENT') {
+      console.error(
+        `Generated editor HTML is missing: ${relativeGeneratedFilePath}. Run \`npm run build:editor-html\` to create it.`,
+      );
+      process.exit(1);
+    }
+
+    throw error;
+  }
+
+  if (currentModule !== expectedModule) {
+    console.error(
+      `Generated editor HTML is stale: ${relativeGeneratedFilePath}. Run \`npm run build:editor-html\` to refresh it.`,
+    );
+    process.exit(1);
+  }
+
+  console.log(`Generated editor HTML is fresh: ${relativeGeneratedFilePath}.`);
+}
+
+function inlineScripts(sourceHtml) {
+  return sourceHtml.replace(
+    /<script\b([^>]*)\bsrc=(["'])([^"']+)\2([^>]*)>\s*<\/script>/gi,
+    (_match, beforeSrc, _quote, rawSrc, afterSrc) => {
+      const assetPath = resolveDistAsset(rawSrc);
+      const script = escapeInlineScript(
+        stripSourceMapComment(readAsset(assetPath)),
+      );
+      assetRefs.push(assetSummary(rawSrc, script));
+      return `<script${scriptAttributes(beforeSrc, afterSrc)}>\n${script}\n</script>`;
+    },
+  );
+}
+
+function inlineStylesheets(sourceHtml) {
+  return sourceHtml.replace(/<link\b[^>]*>/gi, (tag) => {
+    if (!/\brel=(["'])stylesheet\1/i.test(tag)) {
+      return tag;
+    }
+
+    const href = tag.match(/\bhref=(["'])([^"']+)\1/i)?.[2];
+
+    if (!href) {
+      throw new Error(`Stylesheet tag is missing href: ${tag}`);
+    }
+
+    const assetPath = resolveDistAsset(href);
+    const stylesheet = readAsset(assetPath);
+    assetRefs.push(assetSummary(href, stylesheet));
+    return `<style>\n${stylesheet}\n</style>`;
+  });
+}
+
+function scriptAttributes(beforeSrc, afterSrc) {
+  const normalized = `${beforeSrc} ${afterSrc}`
+    .replace(/\s*\bcrossorigin(=(["'])[^"']*\2)?/gi, '')
+    .trim()
+    .replace(/\s+/g, ' ');
+
+  return normalized ? ` ${normalized}` : '';
+}
+
+function resolveDistAsset(rawAssetPath) {
+  const normalizedAssetPath = rawAssetPath.replace(/^\//, '');
+  const assetPath = path.join(editorDistDir, normalizedAssetPath);
+  const relativePath = path.relative(editorDistDir, assetPath);
+
+  if (relativePath.startsWith('..') || path.isAbsolute(relativePath)) {
+    throw new Error(`Refusing to inline asset outside dist: ${rawAssetPath}`);
+  }
+
+  return assetPath;
+}
+
+function readAsset(assetPath) {
+  return readFileSync(assetPath, 'utf8');
+}
+
+function stripSourceMapComment(script) {
+  return script.replace(/\n?\/\/# sourceMappingURL=.*\s*$/u, '');
+}
+
+function escapeInlineScript(script) {
+  return script.replace(/<\/script/giu, '<\\/script');
+}
+
+function assetSummary(rawPath, content) {
+  return {
+    bytes: Buffer.byteLength(content, 'utf8'),
+    path: rawPath.replace(/^\//, ''),
+  };
+}
+
+function assertNoExternalDistAssets(sourceHtml) {
+  const remainingAssetReference = sourceHtml.match(
+    /\b(?:src|href)=(["'])\/?assets\/[^"']+\1/i,
+  );
+
+  if (remainingAssetReference) {
+    throw new Error(
+      `Editor HTML still references an external dist asset: ${remainingAssetReference[0]}`,
+    );
+  }
+}
+
+function createGeneratedModule(sourceHtml) {
+  const htmlChunks = chunkString(sourceHtml, 2000)
+    .map((chunk) => `  ${JSON.stringify(chunk)},`)
+    .join('\n');
+
+  return `// Generated by scripts/build-editor-html.mjs from packages/editor-web/dist.
+// Do not edit directly. Run \`npm --prefix packages/editor-web run build\`, then \`node scripts/build-editor-html.mjs\`.
+
+export const editorHtmlBuildInfo = ${JSON.stringify(
+    {
+      inlinedAssets: assetRefs,
+      source: 'packages/editor-web/dist/index.html',
+    },
+    null,
+    2,
+  )} as const;
+
+export const editorHtml = [
+${htmlChunks}
+].join('');
+`;
+}
+
+function chunkString(value, chunkSize) {
+  const chunks = [];
+
+  for (let index = 0; index < value.length; index += chunkSize) {
+    chunks.push(value.slice(index, index + chunkSize));
+  }
+
+  return chunks;
+}
