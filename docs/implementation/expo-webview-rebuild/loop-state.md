@@ -4,7 +4,7 @@ Canonical tracker: Beads epic `lyricslab-jd5`
 
 This file is a compact resume aid only. If this file disagrees with Beads, Beads wins.
 
-Status: active
+Status: complete
 
 Stream: `expo-webview-rebuild`
 
@@ -16,7 +16,7 @@ Current Beads issue: none
 
 Current PR: none
 
-Last completed phase: none
+Last completed phase: Phase 6 - Offline bundle and viability gate (`lyricslab-jd5.6`)
 
 Blocked: no
 
@@ -26,6 +26,7 @@ Blocked: no
 - Use a WebView-hosted Tiptap editor for lyric body editing.
 - Keep the first stream focused on editor viability and basic songs flow.
 - Defer rhyme highlighting, iCloud, IAP, audio, AI, and theme parity.
+- Phase 6 implementation recommendation: continue the Expo/WebView rebuild with follow-ups. Offline/local editor loading passed automated Chromium smoke without a dev server; real-device Expo runtime checklist remains required before Swift removal or main-lane migration cleanup.
 
 ## Context To Keep
 
@@ -37,18 +38,22 @@ Blocked: no
 - WebView owns body editing/cursor/selection/editor JSON.
 - Store `bodyJson` and `bodyText`; do not store HTML as canonical state.
 - Do not delete or restructure the Swift app in this stream.
+- Continue the implementation stream from branch `lavender/expo-webview-rebuild-test`.
+- `feat/expo-webview-rebuild` is only the original loop-doc base after the Phase 1 merge was moved off it.
+- Phase 6 generated offline HTML lives at `apps/mobile/src/editor/generated/editorHtml.ts` and is rebuilt with `npm --prefix apps/mobile run build:editor-html`.
+- Phase 6 follow-ups filed: `lyricslab-bhs` real-device checklist, `lyricslab-xoc` generated HTML freshness guard, and `lyricslab-gg4` offline rhyme-backed suggestions.
 
 ## Phase Ledger
 
 | Phase | Beads Issue | Status | PR | Turn Doc |
 |---|---|---|---|---|
-| 1 | `lyricslab-jd5.1` | pending | none | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.1.md` |
-| 2 | `lyricslab-jd5.2` | pending | none | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.2.md` |
-| 3 | `lyricslab-jd5.3` | pending | none | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.3.md` |
-| 4 | `lyricslab-jd5.4` | pending | none | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.4.md` |
-| 5 | `lyricslab-jd5.5` | pending | none | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.5.md` |
-| 6 | `lyricslab-jd5.6` | pending | none | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.6.md` |
+| 1 | `lyricslab-jd5.1` | closed; review repaired; CI unavailable with evidence; replayed on `lavender/expo-webview-rebuild-test` | https://github.com/dirtydishes/lyricslab/pull/10 | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.1.md` |
+| 2 | `lyricslab-jd5.2` | closed; review repaired; CI unavailable with evidence; merged into `lavender/expo-webview-rebuild-test` | https://github.com/dirtydishes/lyricslab/pull/11 | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.2.md` |
+| 3 | `lyricslab-jd5.3` | closed; review repaired; CI unavailable with evidence; merged into `lavender/expo-webview-rebuild-test` | https://github.com/dirtydishes/lyricslab/pull/12 | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.3.md` |
+| 4 | `lyricslab-jd5.4` | closed; review repaired; CI unavailable with evidence; merged into `lavender/expo-webview-rebuild-test` | https://github.com/dirtydishes/lyricslab/pull/13 | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.4.md` |
+| 5 | `lyricslab-jd5.5` | closed; review repaired; CI unavailable with evidence; merged into `lavender/expo-webview-rebuild-test` | https://github.com/dirtydishes/lyricslab/pull/14 | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.5.md` |
+| 6 | `lyricslab-jd5.6` | closed; review repaired; CI unavailable with evidence; merged into `lavender/expo-webview-rebuild-test` | https://github.com/dirtydishes/lyricslab/pull/15 | `docs/implementation/expo-webview-rebuild/turn-docs/lyricslab-jd5.6.md` |
 
 ## Last Coordinator Update
 
-Loop created and phased. Corrected workflow to `orchestrator-callback`; implementation not started.
+2026-06-29: Storyboard closeout generated `docs/implementation/expo-webview-rebuild/storyboard-post-run-06-29-2026.html` after all six phases and the epic were closed. `impeccable` was unavailable and skipped. `@pierre/diffs` was installed under `apps/editor-web`, and the storyboard was verified with six server-rendered diff blocks from `@pierre/diffs/ssr`.

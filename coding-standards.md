@@ -1,26 +1,34 @@
-# coding-standards.md — Swift/SwiftUI conventions
+# coding-standards.md - Expo/TypeScript Conventions
 
-## Swift formatting
-- Use SwiftFormat/SwiftLint if desired; otherwise keep style consistent:
-  - 2-space indentation not standard; use Xcode default (4 spaces)
-  - Keep functions focused; avoid massive view bodies
+## TypeScript
 
-## SwiftUI performance
-- Minimize `@State` churn; prefer `@StateObject` view models.
-- Debounce text-driven heavy work (rhyme analysis).
-- Avoid expensive modifiers (large-area blur/material) inside scrolling containers.
+- Keep strict, explicit domain types at module boundaries.
+- Prefer pure functions for parsing, ranking, persistence policy, and bridge shaping.
+- Avoid `any`; if data crosses the WebView bridge, parse it as unknown and narrow it.
+- Keep route files thin. Put reusable logic under `src/`.
 
-## Concurrency
-- CMU parsing and rhyme analysis run off-main.
-- UI updates applied on main actor.
-- Prefer structured concurrency; avoid unbounded Tasks.
+## React Native
 
-## Error handling
-- Fail gracefully:
-  - if dictionary not loaded, show suggestions as empty and retry load
-  - never block typing
+- Keep typing paths cheap. Debounce expensive analysis and avoid broad state churn.
+- Do not put generated HTML or large editor payloads into React state unless required.
+- Keep keyboard-related dimensions stable so the writing surface does not jump.
+- Prefer small, boring components until the core writing loop is proven on device.
 
-## Logging
-- Use `os.Logger` with categories:
-  - `persistence`, `rhyme`, `editor`, `audio`, `iap`
-- Avoid logging user lyrics content in production builds.
+## WebView Editor
+
+- `packages/editor-web` is the source for the Tiptap editor.
+- `src/editor/generated/editorHtml.ts` is generated. Do not edit it by hand.
+- Bridge messages must stay versioned and tested.
+- Native stores `bodyJson` and `bodyText`, never HTML.
+
+## Persistence
+
+- Keep repository interfaces narrow.
+- Do not log lyric contents.
+- Keep local/offline behavior working before adding sync or remote services.
+
+## Scope
+
+- MVP-first.
+- AI, external rhyme APIs, IAP, iCloud, and audio are explicit follow-up scopes.
+- If a change affects typing latency, cursor behavior, or suggestion insertion, treat it as product-critical.

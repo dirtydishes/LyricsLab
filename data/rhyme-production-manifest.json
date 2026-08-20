@@ -1,0 +1,123 @@
+{
+  "schema": "lyricslab.rhyme-data-manifest",
+  "schemaVersion": 1,
+  "artifact": {
+    "id": "lyricslab-production-rhyme-data",
+    "version": "cmudict-74790861-subtlex-2.0.0-phase04-2026.07.12"
+  },
+  "provenance": {
+    "owner": "dirtydishes/lyricslab",
+    "production": true,
+    "purpose": "Complete production rhyme data from pinned CMUdict, pinned SUBTLEX-US package counts, and reviewed Phase 04 project sources"
+  },
+  "sources": [
+    {
+      "id": "cmusphinx.cmudict.dictionary",
+      "kind": "cmudict-dictionary",
+      "version": "74790861f652b15e4ac49015a90074ad62a27690",
+      "path": "rhyme-production/cmudict.dict",
+      "sha256": "81917843c7f44ce2b094ac63873c2c7a4cf802040792c455ba3ca406891c3d22",
+      "license": "CMUdict",
+      "ownership": "third-party-pinned"
+    },
+    {
+      "id": "cmusphinx.cmudict.license",
+      "kind": "cmudict-license",
+      "version": "74790861f652b15e4ac49015a90074ad62a27690",
+      "path": "rhyme-production/CMUDICT-LICENSE.txt",
+      "sha256": "bd4ce8e44170a5f9f481310ca85c51de3c4f851a65e679b40e603b143bd3542a",
+      "license": "CMUdict",
+      "ownership": "third-party-pinned"
+    },
+    {
+      "id": "cmusphinx.cmudict.readme",
+      "kind": "cmudict-acknowledgement",
+      "version": "74790861f652b15e4ac49015a90074ad62a27690",
+      "path": "rhyme-production/CMUDICT-README.txt",
+      "sha256": "00c34e7564f1f6a68de02e12c123d801471da92bc3091f7d89b605f238bf8554",
+      "license": "CMUdict",
+      "ownership": "third-party-pinned"
+    },
+    {
+      "id": "npm.subtlex-word-frequencies",
+      "kind": "subtlex-npm-package",
+      "version": "2.0.0",
+      "path": "rhyme-production/subtlex-word-frequencies-2.0.0.tgz",
+      "sha256": "442a0e90c3f783c008c4721f035be7a003531185233584ea27c80af6c3d0654e",
+      "license": "ISC",
+      "ownership": "third-party-pinned"
+    },
+    {
+      "id": "lyricslab.production.provenance",
+      "kind": "production-provenance",
+      "version": "1",
+      "path": "rhyme-production/provenance.json",
+      "sha256": "245cb0878ab7cb78cd23a58e8a17dfb04708424adfd130591aa21f09a4a547eb",
+      "license": "project-metadata",
+      "ownership": "project-authored"
+    },
+    {
+      "id": "lyricslab.production.notice",
+      "kind": "production-notice",
+      "version": "1",
+      "path": "rhyme-production/NOTICE.md",
+      "sha256": "361a6229004ebaae003101241641b8c8f70f6bcdfcebe288517c55e62fd690de",
+      "license": "notice-aggregation",
+      "ownership": "project-authored"
+    },
+    {
+      "id": "lyricslab.production.readme",
+      "kind": "production-readme",
+      "version": "1",
+      "path": "rhyme-production/README.md",
+      "sha256": "940177e118ab712d424f41841af40e993ba6028e7751cf691feec2292145b36e",
+      "license": "project-documentation",
+      "ownership": "project-authored"
+    },
+    {
+      "id": "lyricslab.phase04.manifest",
+      "kind": "project-rhyme-manifest",
+      "version": "2026.07.12",
+      "path": "rhyme-sources/manifest.json",
+      "sha256": "d8e2acb3b352a2589da8f71dd9ab082bc50c495698ab4359ad21d6c095fc9b29",
+      "license": "project-owned-data",
+      "ownership": "project-authored"
+    },
+    {
+      "id": "lyricslab.phase04.evidence",
+      "kind": "project-rhyme-evidence",
+      "version": "2026.07.12",
+      "path": "rhyme-sources/evidence.json",
+      "sha256": "cd726b4d33933a6e64c5e493aa6bff7b58f84feb4b7308c61799e61d5a0cd05b",
+      "license": "project-owned-data",
+      "ownership": "project-authored"
+    },
+    {
+      "id": "lyricslab.phase04.lexicon",
+      "kind": "project-rhyme-lexicon",
+      "version": "2026.07.12",
+      "path": "rhyme-sources/lexicon.json",
+      "sha256": "dcaf5bf7848716a0cbf62e92dd4d70ab6c3252cbd81e571318327496bb0b6965",
+      "license": "project-owned-data",
+      "ownership": "project-authored"
+    },
+    {
+      "id": "lyricslab.phase04.safety-policy",
+      "kind": "project-safety-policy",
+      "version": "2026.07.12",
+      "path": "rhyme-sources/safety-policy.json",
+      "sha256": "4a177bbac96385a13a81f2541b1a09ccf27887a81abb1aee2e01b0a13ee2bbd5",
+      "license": "project-owned-data",
+      "ownership": "project-authored"
+    },
+    {
+      "id": "lyricslab.phase04.proper-noun-policy",
+      "kind": "project-proper-noun-policy",
+      "version": "2026.07.12",
+      "path": "rhyme-sources/proper-noun-policy.json",
+      "sha256": "795be09116340b4e65dccc963fcbb0cefa5ddca48439e53b0d15dd3063cc76a7",
+      "license": "project-owned-data",
+      "ownership": "project-authored"
+    }
+  ]
+}

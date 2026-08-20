@@ -1,0 +1,72 @@
+{
+  "schema": "lyricslab.rhyme-production-provenance",
+  "schemaVersion": 1,
+  "cmudict": {
+    "repository": "https://github.com/cmusphinx/cmudict.git",
+    "branch": "master",
+    "revision": "74790861f652b15e4ac49015a90074ad62a27690",
+    "committedAt": "2025-10-24T13:40:26-04:00",
+    "files": [
+      {
+        "path": "cmudict.dict",
+        "bytes": 3618488,
+        "lines": 135166,
+        "sha256": "81917843c7f44ce2b094ac63873c2c7a4cf802040792c455ba3ca406891c3d22"
+      },
+      {
+        "path": "LICENSE",
+        "bytes": 1754,
+        "lines": 33,
+        "sha256": "bd4ce8e44170a5f9f481310ca85c51de3c4f851a65e679b40e603b143bd3542a"
+      },
+      {
+        "path": "README",
+        "bytes": 1412,
+        "lines": 32,
+        "sha256": "00c34e7564f1f6a68de02e12c123d801471da92bc3091f7d89b605f238bf8554"
+      }
+    ],
+    "license": "CMUdict license, Copyright (C) 1993-2015 Carnegie Mellon University",
+    "acknowledgement": "Carnegie Mellon University and the Carnegie Mellon Speech Group are acknowledged as the origin of CMUdict."
+  },
+  "subtlex": {
+    "name": "subtlex-word-frequencies",
+    "version": "2.0.0",
+    "registry": "https://registry.npmjs.org/",
+    "tarball": "https://registry.npmjs.org/subtlex-word-frequencies/-/subtlex-word-frequencies-2.0.0.tgz",
+    "publishedAt": "2020-02-13T08:21:39.120Z",
+    "bytes": 434552,
+    "shasum": "4db4b01acf768d27162edbc3fe0930da19a5ca9a",
+    "sha256": "442a0e90c3f783c008c4721f035be7a003531185233584ea27c80af6c3d0654e",
+    "sha512": "37ff2e0c3578cc3f8f64d3822af8417ce7d2428d8200a6ff89c291b16429441370f678743edf8fb7f7d0211684a5a6b05483d29724de91ff731d7ff3422d3e62",
+    "integrity": "sha512-N/8uDDV4zD+PZNOCKvhBfOfSQo2CAKb/icKRsWQpRBNw9nh0Pt+Pt/fQIRaEpaawVIPSlyTekf9zHX/zQi0+Yg==",
+    "entries": 74286,
+    "internalFiles": [
+      {
+        "path": "package/index.json",
+        "bytes": 3611586,
+        "sha256": "271c5a5fbf332f60762cfa34b11394427c220099d96c589751b6bc77e5b32c1a"
+      },
+      {
+        "path": "package/license",
+        "bytes": 768,
+        "sha256": "91e895a27ad580d04ab7b2e14774756c684bf341f4e3bd8b488e9fd612b709e6"
+      },
+      {
+        "path": "package/package.json",
+        "bytes": 1492,
+        "sha256": "3f72dea8a87a647c538c8b4babe0244f6bc7927531b3d617d8231d1401823d4c"
+      },
+      {
+        "path": "package/readme.md",
+        "bytes": 2062,
+        "sha256": "cc4e190964273b286bd47c7cb6e24c340547a1aa10586a4f9635be5a51913301"
+      }
+    ],
+    "license": "ISC",
+    "copyright": "Copyright (c) 2015 Zeke Sikelianos <zeke@sikelianos.com>",
+    "citation": "Brysbaert, M., & New, B. (2009). Moving beyond Kucera and Francis: A critical evaluation of current word frequency norms and the introduction of a new and improved word frequency measure for American English. Behavior Research Methods, 41, 977-990. https://doi.org/10.3758/BRM.41.4.977",
+    "upstream": "https://www.ugent.be/pp/experimentele-psychologie/en/research/documents/subtlexus",
+    "upstreamCaveat": "Ghent University's original SUBTLEX-US page identifies the 51-million-word corpus, the 74,286-word download, and the Brysbaert & New source, but the page itself does not state an ISC license. LyricsLab relies on the pinned third-party npm package release and retains that package's ISC notice without representing the Ghent page as the ISC grant."
+  }
+}

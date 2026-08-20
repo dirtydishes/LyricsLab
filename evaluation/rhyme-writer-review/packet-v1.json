@@ -1,0 +1,794 @@
+{
+  "schemaVersion": "lyricslab.rhyme-writer-packet/v1",
+  "version": "writer-packet-2026.07.12",
+  "seed": 600613,
+  "immutable": true,
+  "instructions": "Review only the production-rendered results for each synthetic prompt in the diagnostics build. Append uniquely attributed decisions to the separate log. Never copy returned words or edit this packet.",
+  "cases": [
+    {
+      "id": "writer-01",
+      "category": "exact",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 0,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "cat",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-02",
+      "category": "exact",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 1,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "light",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-03",
+      "category": "exact",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 2,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "dream",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-04",
+      "category": "exact",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 3,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "beat",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-05",
+      "category": "near",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 4,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "bet",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-06",
+      "category": "near",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 5,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "flow",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-07",
+      "category": "near",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 6,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "gold",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-08",
+      "category": "near",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 7,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "voice",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-09",
+      "category": "slant",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 8,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "move",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-10",
+      "category": "slant",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 9,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "truth",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-11",
+      "category": "slant",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 10,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "room",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-12",
+      "category": "slant",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 11,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "fire",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-13",
+      "category": "rap-oov",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 12,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "drip",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-14",
+      "category": "rap-oov",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 13,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "finna",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-15",
+      "category": "rap-oov",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 14,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "cap",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-16",
+      "category": "rap-oov",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 15,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "lit",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-17",
+      "category": "safety",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 16,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "think",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-18",
+      "category": "safety",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 17,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "clean",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-19",
+      "category": "safety",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 18,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "calm",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-20",
+      "category": "safety",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 19,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "bright",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-21",
+      "category": "proper-prefix",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 20,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "bell",
+        "prefix": "at"
+      }
+    },
+    {
+      "id": "writer-22",
+      "category": "proper-prefix",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 21,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "york",
+        "prefix": "new"
+      }
+    },
+    {
+      "id": "writer-23",
+      "category": "proper-prefix",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 22,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "francisco",
+        "prefix": "san"
+      }
+    },
+    {
+      "id": "writer-24",
+      "category": "proper-prefix",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 23,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "angeles",
+        "prefix": "los"
+      }
+    },
+    {
+      "id": "writer-25",
+      "category": "repetition",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 24,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "night",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-26",
+      "category": "repetition",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 25,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "time",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-27",
+      "category": "repetition",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 26,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "mind",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-28",
+      "category": "repetition",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 27,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "flow",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-29",
+      "category": "casing",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 28,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "time",
+        "prefix": "FL"
+      }
+    },
+    {
+      "id": "writer-30",
+      "category": "casing",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 29,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "night",
+        "prefix": "BR"
+      }
+    },
+    {
+      "id": "writer-31",
+      "category": "casing",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 30,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "dream",
+        "prefix": "SE"
+      }
+    },
+    {
+      "id": "writer-32",
+      "category": "casing",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 31,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "city",
+        "prefix": "PR"
+      }
+    },
+    {
+      "id": "writer-33",
+      "category": "prefix",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 32,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "mind",
+        "prefix": "k"
+      }
+    },
+    {
+      "id": "writer-34",
+      "category": "prefix",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 33,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "light",
+        "prefix": "br"
+      }
+    },
+    {
+      "id": "writer-35",
+      "category": "prefix",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 34,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "cat",
+        "prefix": "h"
+      }
+    },
+    {
+      "id": "writer-36",
+      "category": "prefix",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 35,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "time",
+        "prefix": "fl"
+      }
+    },
+    {
+      "id": "writer-37",
+      "category": "selection",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 36,
+        "selectionEmpty": false,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "fire",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-38",
+      "category": "selection",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 37,
+        "selectionEmpty": false,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "truth",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-39",
+      "category": "selection",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 38,
+        "selectionEmpty": false,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "room",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-40",
+      "category": "selection",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 39,
+        "selectionEmpty": false,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "dream",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-41",
+      "category": "loading-error-retry",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 40,
+        "selectionEmpty": true,
+        "state": "loading",
+        "theme": "system",
+        "anchor": "dream",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-42",
+      "category": "loading-error-retry",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 41,
+        "selectionEmpty": true,
+        "state": "error",
+        "theme": "system",
+        "anchor": "beat",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-43",
+      "category": "loading-error-retry",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 42,
+        "selectionEmpty": true,
+        "state": "retry",
+        "theme": "system",
+        "anchor": "light",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-44",
+      "category": "loading-error-retry",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 43,
+        "selectionEmpty": true,
+        "state": "error",
+        "theme": "system",
+        "anchor": "flow",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-45",
+      "category": "theme-accessibility",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 44,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "beat",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-46",
+      "category": "theme-accessibility",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 45,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "light",
+        "anchor": "bell",
+        "prefix": "at"
+      }
+    },
+    {
+      "id": "writer-47",
+      "category": "theme-accessibility",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 46,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "dark",
+        "anchor": "voice",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-48",
+      "category": "theme-accessibility",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 47,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "think",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-49",
+      "category": "recognized",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 48,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "cat",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-50",
+      "category": "recognized",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 49,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "drip",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-51",
+      "category": "recognized",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 50,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "alive",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-52",
+      "category": "recognized",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 51,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "bell",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-53",
+      "category": "unrecognized",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 52,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "zzqv",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-54",
+      "category": "unrecognized",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 53,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "qzxk",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-55",
+      "category": "unrecognized",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 54,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "vvqj",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-56",
+      "category": "unrecognized",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 55,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "xqzz",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-57",
+      "category": "exact",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 56,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "city",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-58",
+      "category": "near",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 57,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "alive",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-59",
+      "category": "slant",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 58,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "mind",
+        "prefix": ""
+      }
+    },
+    {
+      "id": "writer-60",
+      "category": "rap-oov",
+      "prompt": {
+        "synthetic": true,
+        "seedOffset": 59,
+        "selectionEmpty": true,
+        "state": "ready",
+        "theme": "system",
+        "anchor": "vibe",
+        "prefix": ""
+      }
+    }
+  ],
+  "seal": {
+    "algorithm": "sha256",
+    "packetContentSha256": "525cd7157c3a6a64a3f56e8a6be9a1c6b6ae235dbe0c69968e3b8aa4de8b98a7",
+    "corpusSha256": "a562926907eaad9a29be467196ff926100ce3947f6a06037f7786e481d8498c4"
+  }
+}

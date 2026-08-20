@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "sealed_at": "2026-07-12T06:55:31Z",
+  "gold_path": "evaluation/rhyme-sources/oov-gold-v1.json",
+  "gold_sha256": "40aac8d4704a9ca44bf1d2d19f5843714b83c08c59818b81b123baa7e010d4d7",
+  "sealed_mode": "0444",
+  "case_counts": {
+    "all": 250,
+    "positive_candidates": 240,
+    "valid_positive_oov": 129,
+    "positive_present_in_legacy_cmu": 111,
+    "ambiguous_negative_controls": 10
+  },
+  "legacy_baseline": {
+    "path": "data/cmudict.txt",
+    "method": "Single-space CMU parsing, alternate suffix removal, and Phase 02 token normalization. The initial double-space parser attempt produced an invalid zero-hit result and was discarded before sealing.",
+    "replacement_policy": "No case was replaced after baseline inspection; legacy-present cases remain explicitly marked in the sealed corpus."
+  },
+  "independence": {
+    "phase04_turn_doc_read_before_seal": false,
+    "phase04_sources_or_scripts_read_before_seal": false,
+    "phase04_diff_or_pr_read_before_seal": false,
+    "prior_phase04_task_context_consumed": false
+  }
+}

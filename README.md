@@ -1,189 +1,79 @@
-<pre style="line-height: 1.1;">
-<span style="color: #ff5ea8;">    __               _           __          __  </span>
-<span style="color: #ff5ea8;">   / /   __  _______(_)_________/ /   ____ _/ /_ </span>
-<span style="color: #ff5ea8;">  / /   / / / / ___/ / ___/ ___/ /   / __ `/ __ \</span>
-<span style="color: #b45cff;"> / /___/ /_/ / /  / / /__(__  ) /___/ /_/ / /_/ /</span>
-<span style="color: #b45cff;">/_____/\__, /_/  /_/\___/____/_____/\__,_/_.___/ </span>
-<span style="color: #b45cff;">      /____/                                     </span>
-</pre>
-
 # LyricsLab
 
-I'm a musical artist, and for a decade I've been unsatisfied with every single songwriting tool I've found.
-So I'm building the app I always wanted: a fast, offline-first writing workspace for hip hop artists and songwriters.
-By an artist, for artists - built by somebody who understands real workflows through personal experience and years of working with other artists.
+LyricsLab is an offline-first lyric writing workspace for rappers, songwriters, and lyric-driven musicians. The active app is now the Expo/React Native rebuild with a WebView-hosted Tiptap editor.
 
-LyricsLab is focused on the craft fundamentals: writing quickly, seeing rhyme structure clearly, and getting rhyme suggestions without breaking your flow.
+This branch is the clean Expo working surface. The old Swift/Xcode implementation was removed from this branch so day-to-day work starts from the app that is being rebuilt, not from the prototype graveyard.
 
----
+## Status
 
-## Current Status
+Current state: Expo rebuild foundation, not production-ready yet.
 
-Core writing MVP is working end-to-end.
+Already present:
+- Expo Router app shell at the repo root.
+- Local song list, creation, deletion, title/body persistence, and search.
+- SQLite-backed local song repository.
+- Tiptap editor bundle in `packages/editor-web`.
+- WebView bridge for editor readiness, body changes, cursor context, and suggestion insertion.
+- Offline generated editor HTML at `src/editor/generated/editorHtml.ts`.
+- Native suggestion bar placeholder wired to insert at the WebView cursor.
+- Dev-client oriented iOS config, including bundle id and local-network permissions.
 
-Core Writing MVP
-<progress value="6" max="6"></progress>
+Still required before replacing the old Swift lane in spirit:
+- Real-device Expo runtime validation.
+- Generated editor HTML freshness guard.
+- Offline rhyme-backed suggestions and highlighting.
+- Theme, audio, iCloud, IAP, and AI decisions for the Expo architecture.
 
-- [x] Home: compositions list + create/delete
-- [x] Search: matches titles + lyrics via `searchBlob`
-- [x] Editor: robust `UITextView`-backed editing (caret stability, selection, IME-safe insert)
-- [x] Rhyme highlighting: end rhymes + internal rhymes + near rhymes (low-noise)
-- [x] Suggestions bar: rhyme suggestions pinned above the keyboard
-- [x] Settings: theme picker + iCloud Sync toggle
+## Repo Layout
 
-Full Vision (selected milestones)
-<progress value="7" max="16"></progress>
+- `app/` - Expo Router routes.
+- `src/songs/` - song types, repository interface, SQLite implementation, list screen.
+- `src/editor/` - editor screen, WebView wrapper, bridge helpers, suggestion bar, generated HTML.
+- `packages/editor-web/` - Vite/Tiptap package that builds the editor loaded by the WebView.
+- `data/cmudict.txt` - neutral CMU dictionary source for the upcoming offline rhyme engine.
+- `scripts/build-editor-html.mjs` - inlines the editor web build into `src/editor/generated/editorHtml.ts`.
+- `docs/implementation/expo-webview-rebuild/` - archived execution notes from the viability lane.
 
-- [x] Offline-first rhyme engine using bundled `cmudict.txt`
-- [x] CMU dictionary parsing + on-disk cache
-- [x] Internal rhyme mode (suggestions can target last completed token)
-- [x] Theme system (including artist theme support)
-- [ ] User dictionary (global + per-song) + pronunciation/syllable overrides
-- [ ] Tokenization + normalization improvements for rap writing (hyphens, numbers, slang spellings)
-- [ ] Multi-syllable rhyme targets (tail2/tail3) and optional phrase-end rhyme analysis
-- [ ] Smarter ranking: frequency + context + personalization + diversity + stability (hysteresis)
-- [ ] Syllable grid + cursor-in-bar position (16-step ruler)
-- [ ] 4/8 bar section detection + editable structure brackets
-- [ ] Audio module (local playback + loop A/B) for writing to a beat
-- [ ] IAP gating + paywall card (StoreKit 2 later)
-- [ ] External rhyme APIs (opt-in, cached)
-- [ ] AI co-writer mode (post-MVP, clearly labeled)
+## Development
 
-Research notes for the next phase live in:
-- `rhyme-flow-research.md`
-- `scrolling-positioning-research.md`
+Install dependencies:
 
----
-
-## What It Does Today
-
-- Write lyrics in a real editor (UIKit-backed) with stable selection and predictable scrolling.
-- Automatically highlight rhyme structure:
-  - End rhymes (stronger highlight)
-  - Internal rhymes (lighter treatment)
-  - Near rhymes (low-noise; only when they form real groups and aren't already exact)
-- Suggest rhymes above the keyboard:
-  - Targets the active end-rhyme key inferred from recent line endings
-  - If the cursor is mid-line, can target internal-rhyme building based on the last completed token
-- Store compositions locally (SwiftData) and optionally sync via iCloud (restart required after toggling).
-- Theme the full UI with consistent color tokens.
-
-Built-in themes (currently):
-- `RetroFuturistic` (default)
-- `Plain Light`
-- `Plain Dark`
-- `dirtydishes` (calm lavender, catppuccin mocha inspired)
-- `Davy Dolla$` (money-green paper vibe, gold accents; title becomes `Lyric$Lab`)
-
----
-
-## Next Phase (Rap/Flow Tools)
-
-These are explicitly post-MVP and are being designed to stay deterministic, debuggable, and offline-first:
-
-1) Make suggestions feel personal
-- Global + per-song lexicon
-- Recency penalties + diversity caps + caching/hysteresis (avoid "shuffling")
-
-2) Syllables + a basic bar ruler
-- CMUdict-backed syllable counts (heuristics only as a fallback with low-confidence UI)
-- Caret -> syllable index -> 16-step grid highlight
-
-3) Multi-syllable rhyme keys
-- Tail keys (`tail2`/`tail3`/`tail4`) for punchier rap rhymes
-- Optional end-rhyme target toggle (1-syllable vs 2-syllable)
-
-4) Context-aware ranking (offline)
-- `NLEmbedding`-based context scoring layered on top of rhyme-first gating
-
-5) Structure detection
-- 4/8 bar brackets inferred from blank lines + syllable consistency + repetition
-- User overrides to lock the structure
-
----
-
-## How It Works (Architecture)
-
-High level
-- SwiftUI app shell + navigation (`NavigationStack`)
-- SwiftData persistence (`Composition` model)
-- Rhyme engine powered by CMU Pronouncing Dictionary data (`cmudict.txt`)
-- A UIKit editor surface where SwiftUI is not enough (attributed highlights + reliable caret)
-
-Key modules (folders)
-- `LyricsLab/Features/Home/` - compositions list + search
-- `LyricsLab/Features/Editor/` - editor UI and keyboard-pinned suggestions
-- `LyricsLab/Features/Settings/` - theme + iCloud toggle
-- `LyricsLab/RhymeEngine/` - CMU parsing/index, rhyme analysis, suggestions
-- `LyricsLab/DesignSystem/` - themes
-- `LyricsLab/Persistence/` - SwiftData models + container factory
-
-Editor implementation notes
-- `EditorTextViewController` uses a `UITextView` and hosts `EditorSuggestionsBar` pinned to `view.keyboardLayoutGuide`.
-- Suggestion insertion avoids full `textView.text` replacement and avoids interfering with IME (`markedTextRange`).
-- The caret/scroll behavior is treated as product-critical; details and invariants are documented in `scrolling-positioning-research.md`.
-
-Rhyme engine implementation notes
-- `cmudict.txt` is parsed into a compact index and cached on disk (`CMUDictionaryStore`).
-- Baseline rhyme key: last stressed vowel to end (ARPAbet tail).
-- Internal rhyme grouping is local (bounded by a 4-line window) to prevent visual noise.
-
----
-
-## Getting Started (Development)
-
-Prereqs
-- macOS + Xcode (project currently targets iOS 26.0)
-
-Run in Xcode
-1) Open `LyricsLab.xcodeproj`
-2) Select the `LyricsLab` scheme
-3) Run on a physical device only (no simulator). If no device is connected, pause and connect one.
-
-Run from CLI (build)
 ```bash
-xcodebuild -scheme LyricsLab -configuration Debug -destination "generic/platform=iOS" build
+npm ci
+npm --prefix packages/editor-web ci
 ```
 
-Run tests
+Rebuild the offline editor HTML after changing `packages/editor-web`:
+
 ```bash
-xcodebuild -scheme LyricsLab -destination "platform=iOS,id=YOUR_DEVICE_ID" test
+npm run build:editor-html
 ```
 
----
+Run checks:
 
-## Project Docs
+```bash
+npm test
+npm run typecheck
+npm run editor:test
+npm run editor:build
+```
 
-If you're trying to understand the project quickly:
-- `plan.md` - MVP plan + milestones (including post-MVP rap/flow phases)
-- `requirements.md` - current MVP requirements
-- `architecture.md` - architectural overview
-- `testing.md` - lean test strategy
-- `scrolling.md` - earlier editor scrolling/caret notes
-- `scrolling-positioning-research.md` - "bulletproof" scrolling/caret + pinned suggestions bar research
-- `rhyme-flow-research.md` - rhyme/suggestions/flow research + phased plan
+Run on iOS with the Expo dev client path:
 
----
+```bash
+npm run ios
+```
 
-## Known Gaps (Intentional)
+Generated native folders stay ignored. If `npm run ios` creates `ios/` or `android/`, treat them as local build output unless a specific task says to commit native project files.
 
-These are not "bugs" as much as "not implemented yet":
-- No audio module yet (no local beat playback/looping inside the editor)
-- No user dictionary / pronunciation + syllable overrides yet
-- Suggestion ranking is currently rhyme-first (no full frequency/context/personalization pipeline yet)
-- No multi-syllable rhyme target toggle yet (tail2/tail3)
-- Tokenization is conservative; stylized tokens/numbers/rap spellings are a next-phase improvement
-- No syllable bar ruler or 4/8 bar section brackets yet
+## Product Rules
 
----
+- MVP-first. Do not widen into AI, external APIs, IAP, or audio unless explicitly scoped.
+- Offline-first. The local app remains useful without network access.
+- Store lyric body as editor JSON plus plain text. Do not make HTML canonical.
+- Keep typing, cursor behavior, keyboard layout, and suggestion insertion product-critical.
+- Do not log user lyric content.
 
-## Contributing / Direction
+## Current Decision
 
-This repo is opinionated: the writing experience comes first.
-If you change something that affects typing latency, caret stability, or highlight stability, treat it like a product-critical change.
-
-Good next contributions tend to be:
-- deterministic (and stable) candidate ranking for suggestions
-- user dictionary + per-song vocabulary + pronunciation overrides
-- multi-syllable rhyme keys and better rap-oriented tokenization
-- syllable counting + bar/section tooling
+Keep the same GitHub repo and use this clean branch/worktree as the Expo app surface. The Swift implementation remains recoverable through Git history and older branches, but it is no longer part of this branch's working tree.
